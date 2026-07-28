@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Brilliant AI — design tokens
+   Dark, sleek base + a single bright accent (electric violet).
+--------------------------------------------------------------------------- */
+@theme {
+  --color-ink-950: #05060b;
+  --color-ink-900: #090b14;
+  --color-ink-850: #0d1020;
+  --color-ink-800: #12162a;
+  --color-ink-700: #1c2138;
+  --color-ink-600: #2a3050;
+
+  --color-mist-100: #f5f6ff;
+  --color-mist-300: #c7cbe6;
+  --color-mist-400: #9aa0c4;
+  --color-mist-500: #6f76a0;
+
+  --color-accent-300: #b39dff;
+  --color-accent-400: #9b7dff;
+  --color-accent-500: #7c5cff;
+  --color-accent-600: #6039f0;
+
+  --color-glow-cyan: #38e1ff;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+
+  --radius-xl2: 1.25rem;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background-color: var(--color-ink-950);
+  color: var(--color-mist-100);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Focus ring — visible, on-brand, keyboard friendly */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-accent-400);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* --- Scroll-reveal primitive ------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* --- Ambient gradient glow --------------------------------------------- */
+.glow-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Slow float used by hero visual; disabled for reduced-motion */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+@keyframes riseFree {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.15;
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-120px) scale(0.6);
+    opacity: 0;
+  }
+}
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.animate-drift {
+  animation: drift 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift,
+  .particle,
+  .pulse-ring {
+    animation: none !important;
+  }
+}
+
+.gradient-text {
+  background: linear-gradient(
+    100deg,
+    var(--color-mist-100) 0%,
+    var(--color-accent-300) 55%,
+    var(--color-glow-cyan) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hairline {
+  border-color: color-mix(in srgb, var(--color-mist-400) 14%, transparent);
+}
