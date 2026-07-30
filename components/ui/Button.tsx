@@ -9,7 +9,7 @@ const base =
 
 const variants: Record<Variant, string> = {
   primary:
-    "rounded-full bg-accent-500 text-white shadow-[0_10px_40px_-12px_var(--color-accent-500)] hover:bg-accent-400 hover:-translate-y-0.5 active:translate-y-0",
+    "rounded-full bg-accent-500 text-ink-950 shadow-[0_10px_40px_-12px_var(--color-accent-500)] hover:bg-accent-400 hover:-translate-y-0.5 active:translate-y-0",
   ghost:
     "rounded-full border border-[color-mix(in_srgb,var(--color-mist-400)_28%,transparent)] text-mist-100 hover:border-accent-400 hover:text-white hover:-translate-y-0.5",
   link: "text-mist-300 underline-offset-4 hover:text-white hover:underline",

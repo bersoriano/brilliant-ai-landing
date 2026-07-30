@@ -165,7 +165,7 @@ export function RoiCalculator() {
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-mist-400">
                   Capacity you get back
                 </h3>
-                <span className="rounded-full bg-glow-cyan/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-wider text-glow-cyan">
+                <span className="rounded-full bg-glow-amber/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-wider text-glow-amber">
                   Live
                 </span>
               </div>

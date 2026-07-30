@@ -31,7 +31,7 @@ export function Hero() {
           height: 380,
           bottom: -160,
           left: -120,
-          background: "radial-gradient(circle,var(--color-glow-cyan),transparent 70%)",
+          background: "radial-gradient(circle,var(--color-glow-amber),transparent 70%)",
           opacity: 0.2,
         }}
       />
@@ -39,7 +39,7 @@ export function Hero() {
       <div className="relative grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="min-h-[calc(100svh-9rem)] flex flex-col justify-center lg:min-h-0">
           <span className="inline-flex w-fit items-center gap-2 rounded-full border hairline bg-ink-850/60 px-3 py-1.5 text-xs font-medium text-mist-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-glow-cyan" />
+            <span className="h-1.5 w-1.5 rounded-full bg-glow-amber" />
             AI automation, built for the team you already have
           </span>
 

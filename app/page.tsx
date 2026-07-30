@@ -7,6 +7,7 @@ import { Services } from "@/components/sections/Services";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Results } from "@/components/sections/Results";
 import { WhyBrilliant } from "@/components/sections/WhyBrilliant";
+import { PastExperience } from "@/components/sections/PastExperience";
 import { RoiCalculator } from "@/components/sections/RoiCalculator";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
@@ -25,6 +26,7 @@ export default function Home() {
         <HowItWorks />
         <Results />
         <WhyBrilliant />
+        <PastExperience />
         <RoiCalculator />
         <Faq />
         <FinalCta />

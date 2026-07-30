@@ -41,7 +41,7 @@ export function HeroVisual() {
             background:
               i % 2 === 0
                 ? "var(--color-accent-400)"
-                : "var(--color-glow-cyan)",
+                : "var(--color-glow-amber)",
             boxShadow: "0 0 18px var(--color-accent-500)",
             animation: `riseFree ${3.4 + (i % 4) * 0.6}s ease-in ${i * 0.5}s infinite`,
           }}
@@ -56,7 +56,7 @@ export function HeroVisual() {
             style={{ animation: "pulseRing 3.2s ease-out infinite" }}
           />
           <span
-            className="pulse-ring absolute inset-0 rounded-full border border-glow-cyan/40"
+            className="pulse-ring absolute inset-0 rounded-full border border-glow-amber/40"
             style={{ animation: "pulseRing 3.2s ease-out 1.6s infinite" }}
           />
           <span className="grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-accent-400 to-accent-600 shadow-[0_0_40px_-4px_var(--color-accent-500)]">

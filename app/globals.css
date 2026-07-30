@@ -2,27 +2,31 @@
 
 /* ---------------------------------------------------------------------------
    Brilliant AI — design tokens
-   Dark, sleek base + a single bright accent (electric violet).
+   Dark, sleek base + a single bright accent (mechanical orange).
+   Neutrals are warm graphite so nothing competes with the accent.
 --------------------------------------------------------------------------- */
 @theme {
-  --color-ink-950: #05060b;
-  --color-ink-900: #090b14;
-  --color-ink-850: #0d1020;
-  --color-ink-800: #12162a;
-  --color-ink-700: #1c2138;
-  --color-ink-600: #2a3050;
+  --color-ink-950: #08080a;
+  --color-ink-900: #0d0d11;
+  --color-ink-850: #131318;
+  --color-ink-800: #1a1a21;
+  --color-ink-700: #26262f;
+  --color-ink-600: #36363f;
 
-  --color-mist-100: #f5f6ff;
-  --color-mist-300: #c7cbe6;
-  --color-mist-400: #9aa0c4;
-  --color-mist-500: #6f76a0;
+  --color-mist-100: #f7f6f4;
+  --color-mist-300: #d3cfc9;
+  --color-mist-400: #a6a29a;
+  --color-mist-500: #7c776e;
 
-  --color-accent-300: #b39dff;
-  --color-accent-400: #9b7dff;
-  --color-accent-500: #7c5cff;
-  --color-accent-600: #6039f0;
+  --color-accent-200: #ffd0b3;
+  --color-accent-300: #ffb083;
+  --color-accent-400: #ff8b3d;
+  --color-accent-500: #f96b16;
+  --color-accent-600: #d4530a;
 
-  --color-glow-cyan: #38e1ff;
+  /* Secondary signal colour — hotter, lighter than the accent. Used sparingly
+     for live/status cues (hero pulse, ROI badge). */
+  --color-glow-amber: #ffcf5c;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -141,7 +145,7 @@ body {
     100deg,
     var(--color-mist-100) 0%,
     var(--color-accent-300) 55%,
-    var(--color-glow-cyan) 100%
+    var(--color-accent-500) 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
