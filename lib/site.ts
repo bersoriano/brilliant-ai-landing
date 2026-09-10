@@ -1,16 +1,14 @@
-/** Single source of truth for the primary conversion path + nav. */
+/** Public contact settings. Set these before deploying to your own domain. */
+export const CONTACT_EMAIL =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@brilliant.ai";
+const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL;
+export const DISCOVERY_CALL_HREF =
+  bookingUrl && /^https:\/\//.test(bookingUrl) ? bookingUrl : "#contact";
+export const PRIMARY_CTA = "Let’s talk";
 export const CALCULATOR_ANCHOR = "#roi-calculator";
-
-/** One primary ask, repeated verbatim everywhere it appears. */
-export const PRIMARY_CTA = "Calculate your ROI";
-
-/** Secondary ask — text link, under the hero CTA only. */
-export const DISCOVERY_CALL_HREF = "#"; // TODO: link to your scheduling page
-
 export const NAV_LINKS = [
-  { label: "How it works", href: "#how-it-works" },
+  { label: "Solutions", href: "#solutions" },
   { label: "Services", href: "#services" },
-  { label: "Results", href: "#results" },
-  { label: "Resources", href: "#faq" },
-  { label: "About", href: "#why" },
+  { label: "Our approach", href: "#how-it-works" },
+  { label: "ROI calculator", href: CALCULATOR_ANCHOR },
 ];

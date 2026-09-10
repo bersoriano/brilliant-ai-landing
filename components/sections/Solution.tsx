@@ -1,128 +1,236 @@
-import { SectionWrapper } from "../ui/SectionWrapper";
-import { Eyebrow } from "../ui/Eyebrow";
-import { Reveal } from "../ui/Reveal";
-
-const pillars = [
-  {
-    title: "Reclaim your team&rsquo;s time",
-    body: "Automate the repetitive so your people spend their days on judgment, relationships, and the creative calls only humans make.",
-    icon: "clock",
+"use client";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { useState } from "react";
+import { Icon } from "../ui/Icon";
+import { WORKFLOWS, type Industry } from "@/lib/workflows";
+import { useInquiry } from "../inquiry/InquiryContext";
+const industries = {
+  finance: {
+    label: "Finance",
+    icon: "bank",
+    title: "Give finance a cleaner\nstart to the day.",
+    description:
+      "Less collecting, checking, and chasing. More time to understand what the numbers mean.",
   },
-  {
-    title: "Systems that don&rsquo;t sleep",
-    body: "Your automations run 24/7 &mdash; no errors from a long day, no bottleneck when one person is out, no dropped steps when it&rsquo;s busy.",
-    icon: "bolt",
+  healthcare: {
+    label: "Healthcare",
+    icon: "heart",
+    title: "Keep the admin moving.\nKeep care personal.",
+    description:
+      "Help your administrative team keep up with intake, referrals, and follow-ups.",
   },
-  {
-    title: "Grow without the hiring wall",
-    body: "Take on more volume without the same rise in cost. Say yes to the next deal because you finally have the capacity to deliver it.",
-    icon: "trend",
-  },
-  {
-    title: "Built for your business",
-    body: "Bespoke to your tools and handed over already running. No engineering team required on your side to keep it going.",
-    icon: "blocks",
-  },
-];
-
+};
 export function Solution() {
+  const { t } = useLanguage();
+  const [active, setActive] = useState<Industry>("finance");
+  const [selectedIds, setSelectedIds] = useState({
+    finance: "invoice-approvals",
+    healthcare: "referral-routing",
+  });
+  const { selectWorkflow } = useInquiry();
+  const industry = industries[active];
+  const examples = WORKFLOWS.filter((workflow) => workflow.industry === active);
+  const selected =
+    examples.find((workflow) => workflow.id === selectedIds[active]) ||
+    examples[0];
   return (
-    <SectionWrapper id="solution" width="wide" className="py-24 sm:py-32">
-      <div className="mx-auto max-w-3xl text-center">
-        <Eyebrow className="justify-center">Here&rsquo;s the better way</Eyebrow>
-        <Reveal>
-          <h2 className="mt-5 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-            Your team is already brilliant. The work is what&rsquo;s holding them
-            back.
+    <section id="solutions" className="section shell industries-section">
+      <div className="section-heading">
+        <div>
+          <span className="eyebrow">{t("Start with a job you recognize")}</span>
+          <h2>
+            {t("Real workflows.")}
+            <br />
+            {t("Room to do more.")}
           </h2>
-        </Reveal>
-        <Reveal delay={80}>
-          <p className="mt-6 text-lg leading-relaxed text-mist-300">
-            We don&rsquo;t replace what your people do. We take the work that was
-            never worth their time &mdash; so they can do the work only they can
-            do.
-          </p>
-        </Reveal>
+        </div>
+        <p>
+          {t("Choose a task below to see what we could build.")}
+          <br className="desktop-break" />
+          {t("Each example connects the trigger, the work,")}
+          <br className="desktop-break" />
+          {t("and the moment your team takes over.")}
+        </p>
       </div>
-
-      <div className="mt-16 grid gap-5 sm:grid-cols-2">
-        {pillars.map((p, i) => (
-          <Reveal key={p.title} delay={i * 80}>
-            <article className="h-full rounded-2xl border hairline bg-gradient-to-b from-ink-900/80 to-ink-950 p-7">
-              <span
-                aria-hidden
-                className="mb-5 inline-grid h-11 w-11 place-items-center rounded-xl bg-accent-500/12 text-accent-300 ring-1 ring-accent-400/25"
-              >
-                <PillarIcon name={p.icon} />
-              </span>
-              <h3
-                className="text-xl font-semibold"
-                dangerouslySetInnerHTML={{ __html: p.title }}
-              />
-              <p
-                className="mt-2.5 leading-relaxed text-mist-400"
-                dangerouslySetInnerHTML={{ __html: p.body }}
-              />
-            </article>
-          </Reveal>
+      <div
+        className="industry-tabs"
+        role="tablist"
+        aria-label={t("Industry solutions")}
+      >
+        {Object.entries(industries).map(([key, data], index) => (
+          <button
+            key={key}
+            id={`tab-${key}`}
+            type="button"
+            role="tab"
+            aria-selected={key === active}
+            tabIndex={key === active ? 0 : -1}
+            aria-controls="industry-panel"
+            onClick={() => setActive(key as Industry)}
+            onKeyDown={(event) => {
+              if (
+                ["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)
+              ) {
+                event.preventDefault();
+                const next =
+                  event.key === "Home"
+                    ? "finance"
+                    : event.key === "End"
+                      ? "healthcare"
+                      : index === 0
+                        ? "healthcare"
+                        : "finance";
+                setActive(next);
+                document.getElementById(`tab-${next}`)?.focus();
+              }
+            }}
+          >
+            <Icon name={data.icon} />
+            {t(data.label)}
+            <Icon name="diagonal" size={16} />
+          </button>
         ))}
       </div>
-
-      {/* The bridge — stated explicitly, never assumed. */}
-      <Reveal delay={100}>
-        <div className="mx-auto mt-16 max-w-3xl rounded-2xl border border-accent-400/25 bg-accent-500/[0.06] p-8 text-center">
-          <p className="text-balance text-lg leading-relaxed text-mist-100 sm:text-xl">
-            The capacity comes from freeing your people, not replacing them. You
-            couldn&rsquo;t take that deal because your best people were buried in
-            work a system should have handled.{" "}
-            <span className="text-accent-300">Free them, and the ceiling lifts.</span>
+      <div
+        className="industry-panel workflow-explorer"
+        id="industry-panel"
+        role="tabpanel"
+        aria-labelledby={`tab-${active}`}
+        tabIndex={0}
+      >
+        <div className="industry-copy">
+          <span className="small-label">
+            {t(
+              active === "finance"
+                ? "Finance operations"
+                : "Healthcare operations",
+            )}
+          </span>
+          <h3>{t(industry.title)}</h3>
+          <p>{t(industry.description)}</p>
+          <div
+            className="workflow-options"
+            role="group"
+            aria-label={t("{industry} workflow examples", {
+              industry: t(industry.label),
+            })}
+          >
+            {examples.map((workflow) => (
+              <button
+                key={workflow.id}
+                type="button"
+                className="workflow-option"
+                aria-pressed={selected.id === workflow.id}
+                aria-controls="workflow-preview"
+                onClick={() =>
+                  setSelectedIds((previous) => ({
+                    ...previous,
+                    [active]: workflow.id,
+                  }))
+                }
+              >
+                <span className="workflow-option-icon">
+                  <Icon name={workflow.icon} size={19} />
+                </span>
+                <span>
+                  <strong>{t(workflow.title)}</strong>
+                  <small>{t(workflow.shortDescription)}</small>
+                </span>
+                <Icon name="arrow" size={16} />
+              </button>
+            ))}
+          </div>
+          <p className="workflow-custom-note">
+            {t("Something else slowing you down?")}
+            <br />
+            <a
+              href="#contact"
+              className="text-link"
+              onClick={() => selectWorkflow(null)}
+            >
+              {t("Bring us your process")} <Icon name="arrow" size={15} />
+            </a>
           </p>
         </div>
-      </Reveal>
-    </SectionWrapper>
+        <div
+          className="industry-demo workflow-preview"
+          id="workflow-preview"
+          role="region"
+          aria-labelledby="workflow-preview-title"
+        >
+          <div className="demo-top">
+            <span>
+              <span className="status-dot" />
+              {t("A workflow we can scope")}
+            </span>
+            <span>{t("Illustrative example")}</span>
+          </div>
+          <h3 id="workflow-preview-title">{t(selected.title)}</h3>
+          <div className="workflow-trigger">
+            <Icon name="clock" size={14} />
+            <span>{t(selected.trigger)}</span>
+          </div>
+          <div className="workflow-tools" aria-label={t("Example systems")}>
+            {selected.tools.map((tool, i) => (
+              <span key={tool}>
+                <span>{t(tool)}</span>
+                {i < selected.tools.length - 1 && (
+                  <Icon name="arrow" size={12} />
+                )}
+              </span>
+            ))}
+          </div>
+          <div className="demo-document">
+            <div className="document-title">
+              <span className="document-symbol">
+                <Icon name={selected.icon} size={23} />
+              </span>
+              <div>
+                <strong>{t(selected.document)}</strong>
+                <small>{selected.reference}</small>
+              </div>
+              <span className="review-badge">{t("For review")}</span>
+            </div>
+            <div className="document-lines">
+              <span>{t(selected.field)}</span>
+              <strong>{t(selected.value)}</strong>
+            </div>
+          </div>
+          <div className="demo-flow">
+            {selected.stages.map((text, i) => (
+              <div key={text}>
+                <span className={i === 3 ? "flow-review" : "flow-check"}>
+                  <Icon name={i === 3 ? "people" : "check"} size={13} />
+                </span>
+                <span>{t(text)}</span>
+              </div>
+            ))}
+          </div>
+          <div className="workflow-outcome">
+            <span>{t("What your team gets")}</span>
+            <p>{t(selected.outcome)}</p>
+          </div>
+          <p className="workflow-approval">
+            <Icon name="shield" size={16} />
+            {t(selected.approval)}
+          </p>
+          <a
+            className="button workflow-inquiry"
+            href="#contact"
+            onClick={() => selectWorkflow(selected)}
+          >
+            {t("Discuss this workflow")} <Icon name="diagonal" size={17} />
+          </a>
+        </div>
+      </div>
+      <p className="workflow-scope-note">
+        {t(
+          "Examples show possible scopes, not ready-to-install products. We confirm system access, data requirements, and approval rules during discovery.",
+        )}
+      </p>
+      <p role="status" className="sr-only">
+        {t("Selected example:")} {t(selected.title)}.
+      </p>
+    </section>
   );
-}
-
-function PillarIcon({ name }: { name: string }) {
-  const common = {
-    width: 22,
-    height: 22,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 2,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-  switch (name) {
-    case "clock":
-      return (
-        <svg {...common}>
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 7v5l3 2" />
-        </svg>
-      );
-    case "bolt":
-      return (
-        <svg {...common}>
-          <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
-        </svg>
-      );
-    case "trend":
-      return (
-        <svg {...common}>
-          <path d="M3 17l6-6 4 4 8-8" />
-          <path d="M17 7h4v4" />
-        </svg>
-      );
-    default:
-      return (
-        <svg {...common}>
-          <rect x="3" y="3" width="7" height="7" rx="1" />
-          <rect x="14" y="3" width="7" height="7" rx="1" />
-          <rect x="3" y="14" width="7" height="7" rx="1" />
-          <rect x="14" y="14" width="7" height="7" rx="1" />
-        </svg>
-      );
-  }
 }

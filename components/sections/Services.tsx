@@ -1,118 +1,130 @@
-import { SectionWrapper } from "../ui/SectionWrapper";
-import { Eyebrow } from "../ui/Eyebrow";
-import { Reveal } from "../ui/Reveal";
-
+"use client";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { Icon } from "../ui/Icon";
 const services = [
   {
-    title: "AI Automation Audit",
-    line: "We map your week and find the repetitive work worth handing to a system first.",
     icon: "search",
+    title: "Automation discovery",
+    text: "Find the bottlenecks worth fixing. Leave with a prioritized roadmap, a clear scope, and a business case.",
+    tag: "Start with the right problem",
   },
   {
-    title: "Custom AI Agents",
-    line: "Assistants built for your process &mdash; drafting, sorting, answering, deciding within your rules.",
     icon: "spark",
+    title: "Custom AI agents",
+    text: "Purpose-built assistants that extract, classify, and draft. Grounded in your information, guided by your rules.",
+    tag: "Intelligence with boundaries",
   },
   {
-    title: "Workflow Automation",
-    line: "The manual hand-offs between your tools, wired to run on their own.",
     icon: "flow",
+    title: "Connected workflows",
+    text: "Turn disconnected steps into one reliable process. From the first request to the final handoff.",
+    tag: "Make the whole process work",
   },
   {
-    title: "AI Integration",
-    line: "AI dropped into the tools you already use, so nothing changes about how your team works.",
     icon: "plug",
-  },
-  {
-    title: "Ongoing Optimization",
-    line: "We keep your systems sharp as your business grows and your needs shift.",
-    icon: "gauge",
+    title: "Integration & ongoing care",
+    text: "Connect to your existing stack. Monitor performance, handle exceptions, and improve as your needs change.",
+    tag: "Built to keep working",
   },
 ];
-
 export function Services() {
+  const { t } = useLanguage();
   return (
-    <SectionWrapper id="services" width="wide" className="py-24 sm:py-32">
-      <div className="max-w-2xl">
-        <Eyebrow>What we do</Eyebrow>
-        <Reveal>
-          <h2 className="mt-5 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
-            Five ways we take the work off your team.
-          </h2>
-        </Reveal>
-      </div>
-
-      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {services.map((s, i) => (
-          <Reveal key={s.title} delay={i * 70}>
-            <article className="group h-full rounded-2xl border hairline bg-ink-900/50 p-6 transition-colors hover:border-accent-400/40">
-              <span
-                aria-hidden
-                className="mb-4 inline-grid h-10 w-10 place-items-center rounded-xl bg-ink-800 text-accent-300"
+    <section id="services" className="section services-section">
+      <div className="shell">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">
+              {t("From possibility to production")}
+            </span>
+            <h2>
+              {t("Practical AI.")}
+              <br />
+              {t("Real work, taken care of.")}
+            </h2>
+          </div>
+          <p>
+            {t("Strategy, implementation, and ongoing support.")}
+            <br className="desktop-break" />
+            {t("One partner to get it working—and keep it that way.")}
+          </p>
+        </div>
+        <div className="services-grid">
+          {services.map((s, i) => (
+            <article key={s.title} className="service-card">
+              <div
+                className={`service-illustration service-illustration-${i}`}
+                aria-hidden="true"
               >
-                <ServiceIcon name={s.icon} />
-              </span>
-              <h3 className="text-lg font-semibold">{s.title}</h3>
-              <p
-                className="mt-2 text-sm leading-relaxed text-mist-400"
-                dangerouslySetInnerHTML={{ __html: s.line }}
-              />
+                {i === 0 ? (
+                  <>
+                    <div className="scan-line" />
+                    <div className="scan-row">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                    <div className="scan-row">
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+                    <div className="scan-highlight">
+                      <Icon name="search" size={19} />
+                      <span>{t("Opportunity identified")}</span>
+                      <Icon name="check" size={14} />
+                    </div>
+                  </>
+                ) : i === 1 ? (
+                  <>
+                    <span className="agent-chip">
+                      <Icon name="document" />
+                    </span>
+                    <span className="agent-connection" />
+                    <span className="agent-core">
+                      <Icon name="spark" size={32} />
+                    </span>
+                    <span className="agent-connection" />
+                    <span className="agent-chip">
+                      <Icon name="check" />
+                    </span>
+                  </>
+                ) : i === 2 ? (
+                  <>
+                    <span className="flow-pill">{t("Trigger")}</span>
+                    <span className="agent-connection" />
+                    <span className="flow-pill flow-pill-accent">
+                      {t("Process")}
+                    </span>
+                    <span className="agent-connection" />
+                    <span className="flow-pill">
+                      {t("Done")} <Icon name="check" size={12} />
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <div className="mini-chart">
+                      {[25, 43, 36, 55, 48, 63, 71, 64, 82, 95].map((h, n) => (
+                        <span key={n} style={{ height: `${h}%` }} />
+                      ))}
+                    </div>
+                    <span className="monitoring-label">
+                      <span className="status-dot" />
+                      {t("Continuous improvement")}
+                    </span>
+                  </>
+                )}
+              </div>
+              <div className="service-text">
+                <Icon name={s.icon} size={21} />
+                <h3>{t(s.title)}</h3>
+                <p>{t(s.text)}</p>
+                <span>{t(s.tag)}</span>
+              </div>
             </article>
-          </Reveal>
-        ))}
+          ))}
+        </div>
       </div>
-    </SectionWrapper>
+    </section>
   );
-}
-
-function ServiceIcon({ name }: { name: string }) {
-  const c = {
-    width: 20,
-    height: 20,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 2,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-  switch (name) {
-    case "search":
-      return (
-        <svg {...c}>
-          <circle cx="11" cy="11" r="7" />
-          <path d="M21 21l-4-4" />
-        </svg>
-      );
-    case "spark":
-      return (
-        <svg {...c}>
-          <path d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15l-1.8-4.2L5.5 9l4.7-1.3L12 3z" />
-        </svg>
-      );
-    case "flow":
-      return (
-        <svg {...c}>
-          <rect x="3" y="4" width="6" height="4" rx="1" />
-          <rect x="15" y="16" width="6" height="4" rx="1" />
-          <path d="M6 8v5a3 3 0 0 0 3 3h6" />
-        </svg>
-      );
-    case "plug":
-      return (
-        <svg {...c}>
-          <path d="M9 2v6M15 2v6" />
-          <path d="M6 8h12v3a6 6 0 0 1-12 0V8z" />
-          <path d="M12 20v2" />
-        </svg>
-      );
-    default:
-      return (
-        <svg {...c}>
-          <path d="M12 14a4 4 0 1 0-3.5-6" />
-          <path d="M12 14l4-4" />
-          <path d="M4 20a8 8 0 0 1 16 0" />
-        </svg>
-      );
-  }
 }
