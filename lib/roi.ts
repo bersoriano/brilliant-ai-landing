@@ -1,3 +1,5 @@
+import type { Locale } from "./locale";
+import { translate } from "./i18n";
 /**
  * Pure ROI math. No promises are asserted here — every number is derived
  * directly from the user's own inputs and their visible, editable assumptions.
@@ -70,7 +72,8 @@ export function computeRoi(raw: RoiInputs): RoiResults {
     teamWeeklyHours > 0 ? (hoursReclaimedWeek / teamWeeklyHours) * 100 : 0;
 
   const revenueOpportunity =
-    clampNonNeg(raw.opportunitiesDeclined) * clampNonNeg(raw.avgOpportunityValue);
+    clampNonNeg(raw.opportunitiesDeclined) *
+    clampNonNeg(raw.avgOpportunityValue);
 
   const valueRedeployed = hoursReclaimedYear * hourlyValue;
 
@@ -90,15 +93,15 @@ export function computeRoi(raw: RoiInputs): RoiResults {
   };
 }
 
-export const fmtCurrency = (n: number) =>
-  new Intl.NumberFormat("en-US", {
+export const fmtCurrency = (n: number, locale: Locale = "en") =>
+  new Intl.NumberFormat(locale === "es" ? "es-MX" : "en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 0,
   }).format(Math.round(n));
 
-export const fmtNumber = (n: number, digits = 0) =>
-  new Intl.NumberFormat("en-US", {
+export const fmtNumber = (n: number, digits = 0, locale: Locale = "en") =>
+  new Intl.NumberFormat(locale === "es" ? "es-MX" : "en-US", {
     maximumFractionDigits: digits,
   }).format(n);
 
@@ -107,36 +110,56 @@ export const fmtNumber = (n: number, digits = 0) =>
  * the raw result object, so the labels a recipient reads are the same
  * capacity-first labels shown on the page — capacity leads, money follows.
  */
-export function buildBreakdown(inputs: RoiInputs, r: RoiResults) {
+export function buildBreakdown(
+  inputs: RoiInputs,
+  r: RoiResults,
+  locale: Locale = "en",
+) {
+  const t = (source: string, variables?: Record<string, string | number>) =>
+    translate(source, locale, variables);
+  const number = (n: number, digits = 0) => fmtNumber(n, digits, locale);
+  const currency = (n: number) => fmtCurrency(n, locale);
   const lines: { label: string; value: string }[] = [
-    { label: "Hours reclaimed per week", value: `${fmtNumber(r.hoursReclaimedWeek)} hrs` },
-    { label: "Hours reclaimed per year", value: `${fmtNumber(r.hoursReclaimedYear)} hrs` },
     {
-      label: "More volume the same team can carry",
-      value: `+${fmtNumber(r.extraVolumePct)}%`,
+      label: t("Hours reclaimed per week"),
+      value: t("{count} hrs", { count: number(r.hoursReclaimedWeek) }),
     },
     {
-      label: "Full-time capacity you didn't have to hire for",
-      value: `${fmtNumber(r.capacityNotHiredFor, 1)}×`,
+      label: t("Hours reclaimed per year"),
+      value: t("{count} hrs", { count: number(r.hoursReclaimedYear) }),
+    },
+    {
+      label: t("Share of weekly team capacity reclaimed"),
+      value: `+${number(r.extraVolumePct)}%`,
+    },
+    {
+      label: t("Weekly capacity reclaimed ({hours}-hour weeks)", {
+        hours: number(inputs.hoursPerFullWeek),
+      }),
+      value: t("{count} weeks", { count: number(r.capacityNotHiredFor, 1) }),
     },
   ];
 
   if (r.revenueOpportunity > 0) {
     lines.push({
-      label: `Revenue on the ${fmtNumber(inputs.opportunitiesDeclined)} opportunities you declined`,
-      value: fmtCurrency(r.revenueOpportunity),
+      label: t("Revenue on the {count} opportunities you declined", {
+        count: number(inputs.opportunitiesDeclined),
+      }),
+      value: currency(r.revenueOpportunity),
     });
   }
 
   lines.push({
-    label: "Value of capacity redeployed (per year)",
-    value: fmtCurrency(r.valueRedeployed),
+    label: t("Value of capacity redeployed (per year)"),
+    value: currency(r.valueRedeployed),
   });
 
   if (r.paybackMonths !== null) {
     lines.push({
-      label: `Simple payback on a ${fmtCurrency(inputs.engagementCost)} engagement`,
-      value: `${fmtNumber(r.paybackMonths, 1)} months`,
+      label: t("Simple payback on a {cost} engagement", {
+        cost: currency(inputs.engagementCost),
+      }),
+      value: t("{count} months", { count: number(r.paybackMonths, 1) }),
     });
   }
 
@@ -144,13 +167,22 @@ export function buildBreakdown(inputs: RoiInputs, r: RoiResults) {
     lines,
     assumptions: [
       {
-        label: "Share of that work assumed automatable",
+        label: t("Share of that work assumed automatable"),
         value: `${Math.round(inputs.automatableShare * 100)}%`,
       },
-      { label: "Working weeks per year", value: fmtNumber(inputs.workingWeeksPerYear) },
-      { label: "Hours in one full week", value: fmtNumber(inputs.hoursPerFullWeek) },
-      { label: "Value of one hour of team time", value: fmtCurrency(inputs.hourlyValue) },
+      {
+        label: t("Working weeks per year"),
+        value: number(inputs.workingWeeksPerYear),
+      },
+      {
+        label: t("Hours in one full week"),
+        value: number(inputs.hoursPerFullWeek),
+      },
+      {
+        label: t("Value of one hour of team time"),
+        value: currency(inputs.hourlyValue),
+      },
     ],
-    note: "These are your numbers, not our promises.",
+    note: t("These are your numbers, not our promises."),
   };
 }

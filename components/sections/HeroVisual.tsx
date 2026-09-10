@@ -1,74 +1,98 @@
-/**
- * Abstract, non-literal representation of trapped, repetitive work being
- * released into open capacity. Pure CSS/SVG — no images, no libraries.
- * All motion is disabled under prefers-reduced-motion (see globals.css).
- */
+"use client";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { Icon } from "../ui/Icon";
 export function HeroVisual() {
-  const particles = Array.from({ length: 7 });
+  const { t } = useLanguage();
   return (
     <div
-      aria-hidden
-      className="relative mx-auto aspect-square w-full max-w-md"
+      className="hero-visual"
+      role="img"
+      aria-label={t(
+        "Illustrative invoice workflow: a supplier invoice arrives in Outlook, Brilliant AI checks the details, and your finance team reviews the entry before it reaches QuickBooks.",
+      )}
     >
-      {/* the "trap" — a bounded grid of repetitive units at the base */}
-      <div className="absolute bottom-6 left-1/2 w-[74%] -translate-x-1/2 rounded-2xl border hairline bg-ink-850/70 p-4 backdrop-blur">
-        <div className="mb-3 flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-mist-500/50" />
-          <span className="h-2 w-2 rounded-full bg-mist-500/50" />
-          <span className="h-2 w-2 rounded-full bg-mist-500/50" />
-          <span className="ml-2 text-[0.6rem] uppercase tracking-widest text-mist-500">
-            repetitive work
-          </span>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <span
-              key={i}
-              className="h-5 rounded-md bg-gradient-to-br from-ink-700 to-ink-600"
-            />
-          ))}
-        </div>
+      <div className="visual-grid" />
+      <div className="orbit orbit-outer" />
+      <div className="orbit orbit-middle" />
+      <div className="orbit orbit-inner" />
+      <div className="visual-caption">
+        <span className="status-dot" />
+        {t("Example: invoice to approval")}
       </div>
-
-      {/* freed capacity rising up and out */}
-      {particles.map((_, i) => (
-        <span
-          key={i}
-          className="particle absolute h-3 w-3 rounded-md"
-          style={{
-            left: `${18 + i * 10}%`,
-            bottom: "42%",
-            background:
-              i % 2 === 0
-                ? "var(--color-accent-400)"
-                : "var(--color-glow-amber)",
-            boxShadow: "0 0 18px var(--color-accent-500)",
-            animation: `riseFree ${3.4 + (i % 4) * 0.6}s ease-in ${i * 0.5}s infinite`,
-          }}
+      <svg
+        className="workflow-wires"
+        viewBox="0 0 560 550"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M123 163v64q0 22 22 22h135v75M416 125v102q0 22-22 22H280M280 299v90q0 24 24 24h120"
+          stroke="#575044"
+          strokeWidth="1.4"
         />
-      ))}
-
-      {/* the destination — an open ring of capacity/potential */}
-      <div className="absolute left-1/2 top-6 -translate-x-1/2">
-        <div className="relative grid h-28 w-28 place-items-center">
-          <span
-            className="pulse-ring absolute inset-0 rounded-full border border-accent-400/50"
-            style={{ animation: "pulseRing 3.2s ease-out infinite" }}
-          />
-          <span
-            className="pulse-ring absolute inset-0 rounded-full border border-glow-amber/40"
-            style={{ animation: "pulseRing 3.2s ease-out 1.6s infinite" }}
-          />
-          <span className="grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-accent-400 to-accent-600 shadow-[0_0_40px_-4px_var(--color-accent-500)]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 2l2.4 6 6.1 2.3-6.1 2.3L12 19l-2.4-6.4L3.5 10.3 9.6 8 12 2z"
-                fill="white"
-              />
-            </svg>
-          </span>
+        <path
+          d="M123 163v64q0 22 22 22h135v75"
+          stroke="#ff9465"
+          strokeWidth="2"
+          strokeDasharray="5 210"
+        />
+        <circle cx="280" cy="249" r="3" fill="#f5976d" />
+      </svg>
+      <div className="visual-node document-node">
+        <span className="node-icon">
+          <Icon name="document" size={22} />
+        </span>
+        <div>
+          <strong>{t("Invoice received")}</strong>
+          <small>{t("Outlook / shared inbox")}</small>
+        </div>
+        <span className="node-status" />
+      </div>
+      <div className="visual-node approval-node">
+        <span className="avatar-stack">
+          <span>JD</span>
+          <span>MK</span>
+        </span>
+        <div>
+          <strong>{t("Finance, in control")}</strong>
+          <small>{t("Exceptions stay visible")}</small>
         </div>
       </div>
+      <div className="ai-core">
+        <div className="core-face">
+          <Icon name="spark" size={47} />
+        </div>
+        <span>brilliant ai</span>
+      </div>
+      <div className="visual-node completed-node">
+        <div className="completed-heading">
+          <span className="completion-icon">
+            <Icon name="check" size={17} />
+          </span>
+          <strong>{t("Ready for your review.")}</strong>
+          <span className="mini-dots">···</span>
+        </div>
+        <div className="completed-row">
+          <span>{t("Invoice details checked")}</span>
+          <Icon name="check" size={14} />
+        </div>
+        <div className="completed-row">
+          <span>{t("Exceptions highlighted")}</span>
+          <Icon name="check" size={14} />
+        </div>
+        <div className="completed-row">
+          <span>{t("Approval request prepared")}</span>
+          <Icon name="check" size={14} />
+        </div>
+        <div className="completion-track">
+          <span />
+        </div>
+      </div>
+      <div className="time-note">
+        <Icon name="spark" size={16} />
+        {t("Your team approves the next step")}
+      </div>
+      <span className="visual-example">{t("Illustrative workflow")}</span>
     </div>
   );
 }
