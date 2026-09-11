@@ -56,8 +56,10 @@ provider configuration. No credentials are required for the current email flow.
 - FAQs use native disclosure controls. Mobile navigation supports Escape and
   returns focus to the toggle. Anchor links account for the sticky header.
 - Focus indicators, a skip link, and reduced-motion preferences are supported.
-- `/privacy` explains the actual site behavior. A favicon and social preview
-  image are included, along with page and social metadata.
+- `/privacy` explains the actual site behavior. A favicon, social preview
+  image, robots.txt, sitemap, hreflang tags, and structured data are included.
+  English targets the United States and Canada; Mexican Spanish targets Mexico
+  at `/es`.
 
 ## Structure
 
@@ -65,7 +67,9 @@ provider configuration. No credentials are required for the current email flow.
 - `app/globals.css`: colors, typography, layout, and responsive styles.
 - `components/sections`: page sections and interactive components.
 - `components/ui/Icon.tsx`: shared icons and brand mark.
-- `lib/site.ts`: contact settings and navigation.
+- `lib/site.ts`: contact settings, public URL, and navigation.
+- `lib/seo.ts`: metadata, hreflang, and JSON-LD.
+- `app/sitemap.ts` / `app/robots.ts`: crawl files.
 - `lib/roi.ts`: calculator mathematics, formatting, and export labels.
 - `public/fonts`: locally served Manrope fonts and their OFL license.
 
@@ -80,15 +84,22 @@ compliance certifications are invented.
 
 ### English and Mexican Spanish
 
-The header includes an EN / ES switch. Manual selection updates the page immediately,
-preserves calculator/form state, and saves `brilliant-language=en|es` in a first-party
-cookie for one year (Path=/, SameSite=Lax, Secure on HTTPS). Clearing the cookie restores
-automatic detection. With cookies blocked, selection lasts for the current page session.
+English is served at `/` (United States and Canada). Mexican Spanish is served at `/es`
+(Mexico). `/privacy` and `/es/privacy` follow the same split. The sitemap and `hreflang`
+tags advertise `en-US`, `en-CA`, `es-MX`, and `x-default`. Search-engine crawlers receive
+the URL they request and are not redirected by language or location.
 
-Initial HTML and metadata are rendered per request, in this order:
+The header includes an EN / ES switch. Manual selection updates the page immediately,
+preserves calculator/form state, changes the URL to `/` or `/es`, and saves
+`brilliant-language=en|es` in a first-party cookie for one year (Path=/, SameSite=Lax,
+Secure on HTTPS). Footer English / Español links use `?lang=en|es`, which sets the cookie
+and redirects to the clean language URL. Clearing the cookie restores automatic detection
+for human visitors. With cookies blocked, selection lasts for the current page session.
+
+For human visitors on an English URL, the first matching signal chooses Spanish:
 1. Valid saved language cookie.
-2. Spanish for a trusted country code in North, Central, or South America or the
-   Caribbean, including Canada and Brazil, excluding the US. Territories are included.
+2. A trusted country code for Spanish-speaking Latin America and the Caribbean,
+   including Mexico. The United States, Canada, and Brazil stay on English.
 3. The highest-priority supported English/Spanish browser language from Accept-Language
    (quality values honored; q=0 ignored).
 4. English fallback.

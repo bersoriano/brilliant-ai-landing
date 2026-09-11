@@ -21,7 +21,7 @@ export function Hero() {
         </h1>
         <p>
           {t(
-            "We build and manage AI workflows for finance and healthcare—processing documents, preparing reports, and keeping follow-ups moving inside your existing systems.",
+            "We build and manage AI workflows for finance and healthcare teams in the United States, Canada, and Mexico—processing documents, preparing reports, and keeping follow-ups moving inside your existing systems.",
           )}
         </p>
         <div className="hero-actions">

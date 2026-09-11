@@ -126,9 +126,12 @@ export function Icon({
   );
 }
 export function Brand({ footer = false }: { footer?: boolean }) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   return (
-    <a href="/#top" className={`brand${footer ? " brand-footer" : ""}`}>
+    <a
+      href={locale === "es" ? "/es#top" : "/#top"}
+      className={`brand${footer ? " brand-footer" : ""}`}
+    >
       <span className="brand-mark">
         <Icon name="spark" size={25} />
       </span>

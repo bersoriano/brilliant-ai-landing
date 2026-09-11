@@ -2,8 +2,9 @@
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { Brand, Icon } from "../ui/Icon";
 import { CONTACT_EMAIL } from "@/lib/site";
+import { localePath } from "@/lib/locale";
 export function Footer() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   return (
     <footer className="site-footer">
       <div className="shell">
@@ -15,6 +16,11 @@ export function Footer() {
               <br />
               {t("More human potential.")}
             </p>
+            <p className="footer-markets">
+              {t(
+                "AI automation for finance and healthcare teams in the United States, Canada, and Mexico.",
+              )}
+            </p>
           </div>
           <div className="footer-links">
             <div>
@@ -22,6 +28,7 @@ export function Footer() {
               <a href="#solutions">{t("Industry solutions")}</a>
               <a href="#services">{t("Our services")}</a>
               <a href="#how-it-works">{t("Our approach")}</a>
+              <a href="#onsite-consulting">{t("Onsite consulting")}</a>
             </div>
             <div>
               <h3>{t("Get started")}</h3>
@@ -47,7 +54,18 @@ export function Footer() {
             © {new Date().getFullYear()}{" "}
             {t("Brilliant AI. All rights reserved.")}
           </span>
-          <a href="/privacy">{t("Privacy notice")}</a>
+          <nav
+            className="footer-languages"
+            aria-label={t("Language")}
+          >
+            <a href="/?lang=en" hrefLang="en" lang="en">
+              English
+            </a>
+            <a href="/?lang=es" hrefLang="es-MX" lang="es-MX">
+              Español
+            </a>
+          </nav>
+          <a href={localePath(locale, "/privacy")}>{t("Privacy notice")}</a>
           <a href="#top">{t("Back to top ↑")}</a>
         </div>
       </div>

@@ -13,8 +13,18 @@ require.extensions[".ts"] = (module, filename) =>
     }).outputText,
     filename,
   );
-const { resolveLocale, AMERICAS_EXCEPT_US } = require("../lib/locale.ts");
-const { translate } = require("../lib/i18n.ts");
+const {
+  resolveLocale,
+  SPANISH_DEFAULT_COUNTRIES,
+  isSpanishPath,
+  localePath,
+  localeFromPathname,
+  stripLocalePrefix,
+  languageAlternatePaths,
+  isSearchBot,
+} = require("../lib/locale.ts");
+const { pageTitle, pageDescription, translate } = require("../lib/i18n.ts");
+const { FAQS } = require("../lib/faq.ts");
 const { WORKFLOWS } = require("../lib/workflows.ts");
 const { buildInquiryHref } = require("../lib/inquiry.ts");
 const { buildBreakdown, computeRoi, DEFAULT_INPUTS } = require("../lib/roi.ts");
@@ -39,12 +49,21 @@ test("English fallback; Spanish browser preference with quality handling", () =>
   ])
     assert.equal(resolveLocale({ acceptLanguage }), "es");
 });
-test("Every included Americas country selects Spanish, including Canada and Brazil", () => {
-  assert(!AMERICAS_EXCEPT_US.has("US"));
-  for (const country of AMERICAS_EXCEPT_US)
+test("Spanish geo default is Mexico and Spanish-speaking Latin America, not Canada, Brazil, or the US", () => {
+  assert(SPANISH_DEFAULT_COUNTRIES.has("MX"));
+  assert(!SPANISH_DEFAULT_COUNTRIES.has("US"));
+  assert(!SPANISH_DEFAULT_COUNTRIES.has("CA"));
+  assert(!SPANISH_DEFAULT_COUNTRIES.has("BR"));
+  for (const country of SPANISH_DEFAULT_COUNTRIES)
     assert.equal(
       resolveLocale({ country, acceptLanguage: "en-US" }),
       "es",
+      country,
+    );
+  for (const country of ["US", "CA", "BR", "DE"])
+    assert.equal(
+      resolveLocale({ country, acceptLanguage: "en-US" }),
+      "en",
       country,
     );
   assert.equal(resolveLocale({ country: " mx " }), "es");
@@ -58,7 +77,37 @@ test("Manual choice wins over browser and country; invalid cookie ignored", () =
     resolveLocale({ saved: "es", country: "US", acceptLanguage: "en-US" }),
     "es",
   );
-  assert.equal(resolveLocale({ saved: "invalid", country: "CA" }), "es");
+  assert.equal(resolveLocale({ saved: "invalid", country: "CA" }), "en");
+});
+test("Locale prefixes map English and Mexican Spanish onto stable URLs", () => {
+  assert.equal(localeFromPathname("/"), "en");
+  assert.equal(localeFromPathname("/privacy"), "en");
+  assert.equal(localeFromPathname("/es"), "es");
+  assert.equal(localeFromPathname("/es/privacy"), "es");
+  assert.equal(isSpanishPath("/es/privacy"), true);
+  assert.equal(stripLocalePrefix("/es/privacy"), "/privacy");
+  assert.equal(localePath("es", "/"), "/es");
+  assert.equal(localePath("es", "/privacy#main"), "/es/privacy#main");
+  assert.equal(localePath("en", "/es/privacy"), "/privacy");
+  const home = languageAlternatePaths("/");
+  assert.equal(home["en-US"], "/");
+  assert.equal(home["en-CA"], "/");
+  assert.equal(home["es-MX"], "/es");
+  assert.equal(home["x-default"], "/");
+});
+test("Home metadata names the US, Canada, and Mexico; FAQ copy is translated", () => {
+  assert.match(pageTitle("en"), /Finance & Healthcare/);
+  assert.match(pageTitle("es"), /finanzas y salud/);
+  assert.match(pageDescription("en"), /United States, Canada, and Mexico/);
+  assert.match(pageDescription("es"), /México, Estados Unidos y Canadá/);
+  const [question, answer] = FAQS[0];
+  assert.match(question, /United States, Canada, and Mexico/);
+  assert.notEqual(translate(question, "es"), question);
+  assert.notEqual(translate(answer, "es"), answer);
+});
+test("Search-engine user agents are detected so language URLs stay stable for crawlers", () => {
+  assert.equal(isSearchBot("Mozilla/5.0 (compatible; Googlebot/2.1)"), true);
+  assert.equal(isSearchBot("Mozilla/5.0 (Macintosh) Chrome/120.0.0.0"), false);
 });
 test("All workflow prose has Spanish translations, while product names and IDs stay stable", () => {
   for (const workflow of WORKFLOWS) {
@@ -127,6 +176,13 @@ test("Spanish breakdown translates every label without converting USD values", (
     es.lines.find((l) => l.label.startsWith("Valor de la capacidad")).value,
     /117,300/,
   );
+});
+test("SEO copy and FAQs have Spanish dictionary entries", () => {
+  const { HOME_DESCRIPTION, PRIVACY_DESCRIPTION } = require("../lib/i18n.ts");
+  for (const key of [HOME_DESCRIPTION, PRIVACY_DESCRIPTION, ...FAQS.flat()]) {
+    const normalized = key.replace(/\s+/g, " ").trim();
+    assert.ok(dictionary[normalized], normalized);
+  }
 });
 test("Every literal translation call in active UI has a Spanish dictionary entry", () => {
   const files = fs

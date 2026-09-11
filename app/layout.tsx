@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { getRequestLocale } from "@/lib/locale.server";
-import { pageTitle, translate } from "@/lib/i18n";
+import { getRequestLocale, getRequestPath } from "@/lib/locale.server";
+import { htmlLang } from "@/lib/locale";
+import { buildJsonLd, buildMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { LanguageProvider, SkipLink } from "@/components/i18n/LanguageProvider";
 const manrope = localFont({
   src: [
@@ -20,45 +21,26 @@ const manrope = localFont({
   variable: "--font-manrope",
   display: "swap",
 });
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getRequestLocale();
-  const t = (source: string) => translate(source, locale);
-  return {
-    metadataBase: new URL(siteUrl),
-    title: pageTitle(locale),
-    description: t(
-      "Done-for-you AI automation for finance and healthcare. Explore invoice approvals, intake, referrals, and reporting workflows. Start with a 20-minute workflow review.",
-    ),
-    openGraph: {
-      title: pageTitle(locale),
-      description: t(
-        "Practical AI automation for finance and healthcare. Better systems. More human potential.",
-      ),
-      type: "website",
-      locale: locale === "es" ? "es_MX" : "en_US",
-      siteName: "Brilliant AI",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: pageTitle(locale),
-      description: t("AI automation for finance and healthcare teams."),
-    },
-  };
+export async function generateMetadata() {
+  const [locale, path] = await Promise.all([
+    getRequestLocale(),
+    getRequestPath(),
+  ]);
+  return buildMetadata(locale, path);
 }
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const locale = await getRequestLocale();
+  const [locale, path] = await Promise.all([
+    getRequestLocale(),
+    getRequestPath(),
+  ]);
   return (
-    <html lang={locale === "es" ? "es-MX" : "en"}>
+    <html lang={htmlLang(locale)}>
       <body className={manrope.variable}>
+        <JsonLd data={buildJsonLd(locale, path)} />
         <LanguageProvider initialLocale={locale}>
           <SkipLink />
           {children}
