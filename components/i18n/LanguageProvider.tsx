@@ -1,12 +1,63 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { LANGUAGE_COOKIE, type Locale } from "@/lib/locale";
-import { pageTitle, translate } from "@/lib/i18n";
+import {
+  LANGUAGE_COOKIE,
+  htmlLang,
+  localePath,
+  ogLocale,
+  stripLocalePrefix,
+  type Locale,
+} from "@/lib/locale";
+import { pageDescription, pageTitle, translate } from "@/lib/i18n";
 const LanguageContext = createContext<{
   locale: Locale;
   setLocale: (locale: Locale) => void;
 } | null>(null);
+
+function isPrivacyPath(pathname: string) {
+  return stripLocalePrefix(pathname) === "/privacy";
+}
+
+function syncDocumentSeo(locale: Locale, pathname: string) {
+  const privacy = isPrivacyPath(pathname);
+  const title = pageTitle(locale, privacy);
+  const description = pageDescription(locale, privacy);
+  const canonicalPath = localePath(locale, stripLocalePrefix(pathname));
+  const origin = window.location.origin;
+  const canonicalUrl = `${origin}${canonicalPath === "/" ? "" : canonicalPath}`;
+  const imageUrl = `${origin}${locale === "es" ? "/es/og" : "/og"}`;
+  document.documentElement.lang = htmlLang(locale);
+  document.title = title;
+  document
+    .querySelector('meta[name="description"]')
+    ?.setAttribute("content", description);
+  for (const selector of [
+    'meta[property="og:title"]',
+    'meta[name="twitter:title"]',
+  ])
+    document.querySelector(selector)?.setAttribute("content", title);
+  for (const selector of [
+    'meta[property="og:description"]',
+    'meta[name="twitter:description"]',
+  ])
+    document.querySelector(selector)?.setAttribute("content", description);
+  document
+    .querySelector('meta[property="og:locale"]')
+    ?.setAttribute("content", ogLocale(locale));
+  document
+    .querySelector('meta[property="og:url"]')
+    ?.setAttribute("content", canonicalUrl);
+  document
+    .querySelector('link[rel="canonical"]')
+    ?.setAttribute("href", canonicalUrl);
+  for (const selector of [
+    'meta[property="og:image"]',
+    'meta[name="twitter:image"]',
+  ])
+    document.querySelector(selector)?.setAttribute("content", imageUrl);
+}
+
 export function LanguageProvider({
   initialLocale,
   children,
@@ -17,32 +68,10 @@ export function LanguageProvider({
   const [locale, updateLocale] = useState(initialLocale);
   const pathname = usePathname();
   useEffect(() => {
-    document.documentElement.lang = locale === "es" ? "es-MX" : "en";
-    document.title = pageTitle(locale, pathname === "/privacy");
-    const description = translate(
-      pathname === "/privacy"
-        ? "How the Brilliant AI website handles contact details and calculator inputs."
-        : "Done-for-you AI automation for finance and healthcare. Explore invoice approvals, intake, referrals, and reporting workflows. Start with a 20-minute workflow review.",
-      locale,
-    );
-    document
-      .querySelector('meta[name="description"]')
-      ?.setAttribute("content", description);
-    for (const selector of [
-      'meta[property="og:title"]',
-      'meta[name="twitter:title"]',
-    ])
-      document
-        .querySelector(selector)
-        ?.setAttribute("content", pageTitle(locale, pathname === "/privacy"));
-    for (const selector of [
-      'meta[property="og:description"]',
-      'meta[name="twitter:description"]',
-    ])
-      document.querySelector(selector)?.setAttribute("content", description);
-    document
-      .querySelector('meta[property="og:locale"]')
-      ?.setAttribute("content", locale === "es" ? "es_MX" : "en_US");
+    updateLocale(initialLocale);
+  }, [initialLocale]);
+  useEffect(() => {
+    syncDocumentSeo(locale, pathname);
   }, [locale, pathname]);
   function setLocale(next: Locale) {
     updateLocale(next);
@@ -51,6 +80,9 @@ export function LanguageProvider({
     } catch {
       /* Keep the choice in memory when cookies are unavailable. */
     }
+    const nextPath =
+      localePath(next, stripLocalePrefix(pathname)) + window.location.hash;
+    window.history.replaceState(window.history.state, "", nextPath);
   }
   return (
     <LanguageContext.Provider value={{ locale, setLocale }}>

@@ -9,6 +9,7 @@ import { PastExperience } from "@/components/sections/PastExperience";
 import { WhyBrilliant } from "@/components/sections/WhyBrilliant";
 import { RoiCalculator } from "@/components/sections/RoiCalculator";
 import { Faq } from "@/components/sections/Faq";
+import { OnsiteConsulting } from "@/components/sections/OnsiteConsulting";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
           <PastExperience />
           <RoiCalculator />
           <Faq />
+          <OnsiteConsulting />
           <FinalCta />
         </main>
       </InquiryProvider>

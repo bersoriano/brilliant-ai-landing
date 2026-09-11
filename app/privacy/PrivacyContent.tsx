@@ -5,8 +5,9 @@ import {
 } from "@/components/i18n/LanguageProvider";
 import { Brand } from "@/components/ui/Icon";
 import { CONTACT_EMAIL } from "@/lib/site";
+import { localePath } from "@/lib/locale";
 export default function PrivacyContent() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   return (
     <>
       <header className="shell legal-header">
@@ -14,7 +15,7 @@ export default function PrivacyContent() {
         <LanguageSwitch />
       </header>
       <main id="main" className="shell legal-page">
-        <a className="text-link" href="/">
+        <a className="text-link" href={localePath(locale, "/")}>
           {t("← Back to home")}
         </a>
         <h1>{t("Website privacy notice")}</h1>
@@ -38,7 +39,7 @@ export default function PrivacyContent() {
         <h2>{t("Language preference")}</h2>
         <p>
           {t(
-            "We use your browser language and, when available, a country code provided by our hosting provider to choose the initial language. We do not request your precise location. Choosing English or Español saves a language-only cookie for one year. You can change it using the language switch or remove it in your browser settings.",
+            "English is served at the main address and Mexican Spanish at /es. We may use your browser language and, when available, a country code from our hosting provider to send first-time visitors to the matching language URL. Search engines receive the URL they request. We do not request your precise location. Choosing English or Español updates the URL and saves a language-only cookie for one year.",
           )}
         </p>
         <h2>{t("Website services")}</h2>
