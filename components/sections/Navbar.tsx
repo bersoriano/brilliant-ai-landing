@@ -4,7 +4,7 @@ import {
   LanguageSwitch,
 } from "@/components/i18n/LanguageProvider";
 import { useEffect, useRef, useState } from "react";
-import { DISCOVERY_CALL_HREF, NAV_LINKS } from "@/lib/site";
+import { DISCOVERY_CALL_HREF, NAV_LINKS, PRIMARY_CTA } from "@/lib/site";
 import { Brand, Icon } from "../ui/Icon";
 export function Navbar() {
   const { t } = useLanguage();
@@ -33,7 +33,7 @@ export function Navbar() {
         </div>
         <LanguageSwitch />
         <a href={DISCOVERY_CALL_HREF} className="button button-nav">
-          {t("Let’s talk")} <Icon name="diagonal" size={16} />
+          {t(PRIMARY_CTA)} <Icon name="diagonal" size={16} />
         </a>
         <button
           ref={toggle}
@@ -60,7 +60,7 @@ export function Navbar() {
             </a>
           ))}
           <a href={DISCOVERY_CALL_HREF} onClick={() => setOpen(false)}>
-            {t("Let’s talk")} <Icon name="diagonal" size={16} />
+            {t(PRIMARY_CTA)} <Icon name="diagonal" size={16} />
           </a>
         </nav>
       )}

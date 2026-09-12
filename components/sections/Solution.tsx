@@ -3,6 +3,7 @@ import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { useState } from "react";
 import { Icon } from "../ui/Icon";
 import { WORKFLOWS, type Industry } from "@/lib/workflows";
+import { PRIMARY_CTA } from "@/lib/site";
 import { useInquiry } from "../inquiry/InquiryContext";
 const industries = {
   finance: {
@@ -148,7 +149,7 @@ export function Solution() {
               className="text-link"
               onClick={() => selectWorkflow(null)}
             >
-              {t("Bring us your process")} <Icon name="arrow" size={15} />
+              {t(PRIMARY_CTA)} <Icon name="arrow" size={15} />
             </a>
           </p>
         </div>
@@ -219,7 +220,7 @@ export function Solution() {
             href="#contact"
             onClick={() => selectWorkflow(selected)}
           >
-            {t("Discuss this workflow")} <Icon name="diagonal" size={17} />
+            {t(PRIMARY_CTA)} <Icon name="diagonal" size={17} />
           </a>
         </div>
       </div>

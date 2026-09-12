@@ -3,7 +3,7 @@ import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { useEffect, useState } from "react";
 import { useInquiry } from "../inquiry/InquiryContext";
 import { buildInquiryHref } from "@/lib/inquiry";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { CONTACT_EMAIL, PRIMARY_CTA } from "@/lib/site";
 import { Icon } from "../ui/Icon";
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -201,11 +201,7 @@ export function FinalCta() {
             type="submit"
             disabled={status === "sending"}
           >
-            {t(
-              status === "sending"
-                ? "Sending…"
-                : "Request a workflow review",
-            )}{" "}
+            {t(status === "sending" ? "Sending…" : PRIMARY_CTA)}{" "}
             <Icon name="diagonal" size={17} />
           </button>
           <p className="form-note">

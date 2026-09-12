@@ -1,6 +1,6 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
-import { DISCOVERY_CALL_HREF } from "@/lib/site";
+import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 import { FAQS } from "@/lib/faq";
 import { Icon } from "../ui/Icon";
 export function Faq() {
@@ -20,7 +20,7 @@ export function Faq() {
           {t("with an honest conversation.")}
         </p>
         <a href={DISCOVERY_CALL_HREF} className="text-link">
-          {t("Ask us something else")} <Icon name="arrow" size={17} />
+          {t(PRIMARY_CTA)} <Icon name="arrow" size={17} />
         </a>
       </div>
       <div className="faq-list">

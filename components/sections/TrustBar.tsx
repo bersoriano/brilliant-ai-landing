@@ -7,9 +7,9 @@ export function TrustBar() {
     <section className="integrations" aria-label={t("Tools we can connect")}>
       <div className="shell integration-inner">
         <p>
-          {t("Your tools.")}
+          {t("Integrates with")}
           <br />
-          <strong>{t("Working better together.")}</strong>
+          <strong>{t("the tools you already use.")}</strong>
         </p>
         <div className="tool-logos">
           <span>

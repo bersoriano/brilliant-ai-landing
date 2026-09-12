@@ -5,7 +5,14 @@ export const CONTACT_EMAIL =
 const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL;
 export const DISCOVERY_CALL_HREF =
   bookingUrl && /^https:\/\//.test(bookingUrl) ? bookingUrl : "#contact";
-export const PRIMARY_CTA = "Let’s talk";
+/**
+ * One named offer, repeated verbatim. Every control whose destination is the
+ * conversion (booking link or the inquiry form) uses PRIMARY_CTA so the ask is
+ * recognisable rather than reworded a dozen ways. ONSITE_CTA is the single
+ * exception: a different service, deliberately kept on the same noun.
+ */
+export const PRIMARY_CTA = "Book a workflow review";
+export const ONSITE_CTA = "Book an onsite review";
 export const CALCULATOR_ANCHOR = "#roi-calculator";
 export const NAV_LINKS = [
   { label: "Solutions", href: "#solutions" },

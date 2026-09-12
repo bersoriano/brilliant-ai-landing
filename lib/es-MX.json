@@ -373,5 +373,17 @@
   "{count} mo": "{count} meses",
   "Simple payback on that budget": "Retorno simple con ese presupuesto",
   "More capacity, same team": "Más capacidad, mismo equipo",
-  "Plus {amount} of work you turned away.": "Más {amount} de trabajo que rechazaste."
+  "Plus {amount} of work you turned away.": "Más {amount} de trabajo que rechazaste.",
+  "Book a workflow review": "Agenda una revisión de procesos",
+  "Book an onsite review": "Agenda una revisión presencial",
+  "We plan for the people, not just the systems. Your team shapes the workflow and keeps every decision that matters. We build it, run it, and keep it working.": "Pensamos en las personas, no solo en los sistemas. Tu equipo da forma al proceso y conserva cada decisión que importa. Nosotros lo construimos, lo operamos y lo mantenemos funcionando.",
+  "The workflows, documentation, and IP are yours. We operate and maintain them; ownership and third-party dependencies are agreed in your scope.": "Los procesos, la documentación y la propiedad intelectual son tuyos. Nosotros los operamos y les damos mantenimiento; la propiedad y las dependencias de terceros se acuerdan en tu alcance.",
+  "We monitor the workflow, handle the exceptions, and keep it current as your business changes. Your team gets documentation and training on how to use it—running it stays with us.": "Monitoreamos el proceso, atendemos las excepciones y lo mantenemos al día conforme cambia tu negocio. Tu equipo recibe documentación y capacitación para usarlo; operarlo queda de nuestro lado.",
+  "A managed workflow, not a handover": "Un proceso administrado, no una entrega",
+  "You need someone who knows the process and can review the results. We handle the discovery, the build, and the running of it. Your team defines what good looks like, approves access, and signs off on the output—not the infrastructure behind it.": "Necesitas a alguien que conozca el proceso y pueda revisar los resultados. Nosotros nos encargamos del diagnóstico, el desarrollo y la operación. Tu equipo define los resultados esperados, autoriza los accesos y aprueba las salidas, no la infraestructura que hay detrás.",
+  "Integrates with": "Se integra con",
+  "the tools you already use.": "las herramientas que ya usas.",
+  "Consulting arm — Southeast Asia": "Brazo de consultoría — Sudeste Asiático",
+  "We work with finance and healthcare teams in the United States, Canada, and Mexico, and we provide onsite AI consulting in these countries. Our consulting arm in Malaysia serves clients across Southeast Asia. Work directly with our team to review your processes and plan your next steps in automation.": "Trabajamos con equipos de finanzas y salud en México, Estados Unidos y Canadá, y ofrecemos consultoría presencial en IA en estos países. Nuestro brazo de consultoría en Malasia atiende a clientes del Sudeste Asiático. Trabaja directamente con nuestro equipo para revisar tus procesos y planear los siguientes pasos de automatización.",
+  "Yes. We work with finance and healthcare teams in the United States, Canada, and Mexico, and onsite consulting can be arranged in those countries. We also run a consulting arm in Malaysia serving clients across Southeast Asia. English and Mexican Spanish are available on this site.": "Sí. Trabajamos con equipos de finanzas y salud en México, Estados Unidos y Canadá, y se puede coordinar consultoría presencial en esos países. También operamos un brazo de consultoría en Malasia que atiende a clientes del Sudeste Asiático. Este sitio está en inglés y en español de México."
 }

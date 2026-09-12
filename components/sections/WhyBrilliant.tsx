@@ -15,7 +15,7 @@ export function WhyBrilliant() {
           </h2>
           <p>
             {t(
-              "We plan for the people, not just the systems. Your team helps shape the workflow and learns how to own it.",
+              "We plan for the people, not just the systems. Your team shapes the workflow and keeps every decision that matters. We build it, run it, and keep it working.",
             )}
           </p>
         </div>
@@ -34,7 +34,7 @@ export function WhyBrilliant() {
             [
               "shield",
               "You own what we build",
-              "Documented workflows and a clear handover. Ownership and third-party dependencies are agreed in your scope.",
+              "The workflows, documentation, and IP are yours. We operate and maintain them; ownership and third-party dependencies are agreed in your scope.",
             ],
           ].map(([icon, title, body]) => (
             <div key={title}>

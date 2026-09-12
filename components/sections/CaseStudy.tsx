@@ -6,6 +6,7 @@ import {
   shouldRenderCaseStudy,
 } from "@/lib/caseStudy";
 import { Icon } from "../ui/Icon";
+import { PRIMARY_CTA } from "@/lib/site";
 
 export function CaseStudy() {
   const { t, locale } = useLanguage();
@@ -65,7 +66,7 @@ export function CaseStudy() {
           </blockquote>
         )}
         <a href="#contact" className="text-link case-link">
-          {t("Discuss a workflow like this")} <Icon name="arrow" size={16} />
+          {t(PRIMARY_CTA)} <Icon name="arrow" size={16} />
         </a>
       </div>
     </section>

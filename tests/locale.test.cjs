@@ -28,6 +28,7 @@ const { FAQS } = require("../lib/faq.ts");
 const { WORKFLOWS } = require("../lib/workflows.ts");
 const { buildInquiryHref } = require("../lib/inquiry.ts");
 const { buildBreakdown, computeRoi, DEFAULT_INPUTS } = require("../lib/roi.ts");
+const { PRIMARY_CTA, ONSITE_CTA } = require("../lib/site.ts");
 const {
   CASE_STUDY,
   caseStudyCopy,
@@ -256,4 +257,29 @@ test("Payback is reported whenever an engagement budget is supplied", () => {
       .lines.some((l) => l.label.startsWith("Simple payback")),
     false,
   );
+});
+
+test("CTA constants are translated and used in place of ad-hoc labels", () => {
+  // Passed to t() as identifiers, so the literal scanner cannot see them.
+  for (const cta of [PRIMARY_CTA, ONSITE_CTA])
+    assert.ok(dictionary[cta.replace(/\s+/g, " ").trim()], cta);
+  // The retired one-off labels must not creep back into the sections.
+  const retired = [
+    "Get a workflow review",
+    "Discuss this workflow",
+    "Bring us your process",
+    "Ask us something else",
+    "Explore what\u2019s possible",
+    "Discuss a workflow like this",
+    "Discuss an onsite visit",
+    "Request a workflow review",
+    "Let\u2019s talk",
+  ];
+  const sections = fs
+    .readdirSync("components/sections")
+    .filter((f) => f.endsWith(".tsx"))
+    .map((f) => fs.readFileSync(`components/sections/${f}`, "utf8"))
+    .join("\n");
+  for (const label of retired)
+    assert.ok(!sections.includes(`"${label}"`), `retired CTA still present: ${label}`);
 });

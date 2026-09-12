@@ -1,7 +1,7 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { HeroVisual } from "./HeroVisual";
-import { DISCOVERY_CALL_HREF } from "@/lib/site";
+import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 import { Icon } from "../ui/Icon";
 export function Hero() {
   const { t } = useLanguage();
@@ -26,7 +26,7 @@ export function Hero() {
         </p>
         <div className="hero-actions">
           <a href={DISCOVERY_CALL_HREF} className="button">
-            {t("Get a workflow review")} <Icon name="diagonal" size={18} />
+            {t(PRIMARY_CTA)} <Icon name="diagonal" size={18} />
           </a>
           <a href="#solutions" className="text-link">
             {t("See what we can automate")} <Icon name="arrow" size={16} />

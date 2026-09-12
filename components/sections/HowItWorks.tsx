@@ -14,8 +14,8 @@ const steps = [
   },
   {
     title: "Keep it working, together",
-    body: "We agree on monitoring and support, train your team, and hand over the documentation. Ongoing care keeps the workflow useful as your business changes.",
-    deliverable: "Your system, ready for everyday work",
+    body: "We monitor the workflow, handle the exceptions, and keep it current as your business changes. Your team gets documentation and training on how to use it—running it stays with us.",
+    deliverable: "A managed workflow, not a handover",
   },
 ];
 export function HowItWorks() {

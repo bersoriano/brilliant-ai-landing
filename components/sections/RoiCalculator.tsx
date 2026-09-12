@@ -10,7 +10,7 @@ import {
   type RoiInputs,
 } from "@/lib/roi";
 import { Icon } from "../ui/Icon";
-import { DISCOVERY_CALL_HREF } from "@/lib/site";
+import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 export function RoiCalculator() {
   const { t, locale } = useLanguage();
   // Opportunity figures start empty so nothing is claimed on the visitor's
@@ -270,7 +270,7 @@ export function RoiCalculator() {
           </p>
           <div className="calculator-actions">
             <a href={DISCOVERY_CALL_HREF} className="button">
-              {t("Explore what’s possible")} <Icon name="diagonal" size={16} />
+              {t(PRIMARY_CTA)} <Icon name="diagonal" size={16} />
             </a>
             <button
               type="button"
