@@ -1,7 +1,7 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { Brand, Icon } from "../ui/Icon";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { CONTACT_EMAIL, PRIMARY_CTA } from "@/lib/site";
 import { localePath } from "@/lib/locale";
 export function Footer() {
   const { t, locale } = useLanguage();
@@ -35,7 +35,7 @@ export function Footer() {
               <a href="#roi-calculator">{t("ROI calculator")}</a>
               <a href="#faq">{t("Common questions")}</a>
               <a href="#contact">
-                {t("Let’s talk")} <Icon name="diagonal" size={13} />
+                {t(PRIMARY_CTA)} <Icon name="diagonal" size={13} />
               </a>
             </div>
             <div>

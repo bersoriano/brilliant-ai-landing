@@ -1,7 +1,7 @@
 export const FAQS: [question: string, answer: string][] = [
   [
     "Do you work with teams in the United States, Canada, and Mexico?",
-    "Yes. We work with finance and healthcare teams in the United States, Canada, and Mexico. English and Mexican Spanish are available on this site, and onsite consulting can be arranged in those countries.",
+    "Yes. We work with finance and healthcare teams in the United States, Canada, and Mexico, and onsite consulting can be arranged in those countries. We also run a consulting arm in Malaysia serving clients across Southeast Asia. English and Mexican Spanish are available on this site.",
   ],
   [
     "What happens in the first workflow review?",
@@ -9,7 +9,7 @@ export const FAQS: [question: string, answer: string][] = [
   ],
   [
     "Do we need an AI specialist on our team?",
-    "You need someone who knows the process and can review the results. We handle the technical discovery, build, and agreed support. Your team helps define what good looks like, approves access, and learns how to manage the finished workflow.",
+    "You need someone who knows the process and can review the results. We handle the discovery, the build, and the running of it. Your team defines what good looks like, approves access, and signs off on the output—not the infrastructure behind it.",
   ],
   [
     "How long does an implementation take?",

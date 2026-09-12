@@ -3,32 +3,52 @@ import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { useEffect, useState } from "react";
 import { useInquiry } from "../inquiry/InquiryContext";
 import { buildInquiryHref } from "@/lib/inquiry";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { CONTACT_EMAIL, PRIMARY_CTA } from "@/lib/site";
 import { Icon } from "../ui/Icon";
+type Status = "idle" | "sending" | "sent" | "error";
+
 export function FinalCta() {
   const { t, locale } = useLanguage();
-  const [prepared, setPrepared] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [fallbackHref, setFallbackHref] = useState("");
   const [industry, setIndustry] = useState("");
   const { selectedWorkflow, selectWorkflow } = useInquiry();
   useEffect(() => {
     if (selectedWorkflow) setIndustry(selectedWorkflow.industry);
-    setPrepared(false);
+    setStatus("idle");
   }, [selectedWorkflow]);
-  function prepareEmail(event: React.FormEvent<HTMLFormElement>) {
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    window.location.href = buildInquiryHref(
-      CONTACT_EMAIL,
-      {
-        name: String(data.get("name") || ""),
-        email: String(data.get("email") || ""),
-        industry,
-        message: String(data.get("workflow") || ""),
-        workflowTitle: selectedWorkflow?.title,
-      },
-      locale,
-    );
-    setPrepared(true);
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const details = {
+      name: String(data.get("name") || ""),
+      email: String(data.get("email") || ""),
+      industry,
+      message: String(data.get("workflow") || ""),
+      workflowTitle: selectedWorkflow?.title,
+    };
+    // Prepared up front so the fallback is ready the moment delivery fails.
+    setFallbackHref(buildInquiryHref(CONTACT_EMAIL, details, locale));
+    setStatus("sending");
+    try {
+      const response = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          ...details,
+          company: String(data.get("company") || ""),
+          locale,
+        }),
+      });
+      if (!response.ok) throw new Error(String(response.status));
+      setStatus("sent");
+      form.reset();
+      selectWorkflow(null);
+      setIndustry("");
+    } catch {
+      setStatus("error");
+    }
   }
   return (
     <section id="contact" className="contact-section">
@@ -73,8 +93,8 @@ export function FinalCta() {
         </div>
         <form
           className="contact-form"
-          onSubmit={prepareEmail}
-          onChange={() => setPrepared(false)}
+          onSubmit={submit}
+          onChange={() => setStatus((prev) => (prev === "sending" ? prev : "idle"))}
         >
           <h3>{t("What would you like to automate?")}</h3>
           {selectedWorkflow && (
@@ -167,21 +187,48 @@ export function FinalCta() {
             required={!selectedWorkflow}
             maxLength={2000}
           />
-          <button className="button contact-submit" type="submit">
-            {t("Request a workflow review")} <Icon name="diagonal" size={17} />
+          <div className="form-honeypot" aria-hidden="true">
+            <label htmlFor="contact-company">{t("Company")}</label>
+            <input
+              id="contact-company"
+              name="company"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
+          <button
+            className="button contact-submit"
+            type="submit"
+            disabled={status === "sending"}
+          >
+            {t(status === "sending" ? "Sending…" : PRIMARY_CTA)}{" "}
+            <Icon name="diagonal" size={17} />
           </button>
           <p className="form-note">
             {t(
-              "Opens a draft in your email app for you to send. Please don’t include patient records or sensitive financial data.",
+              "Sent straight to us — no email app needed. Share enough to have the conversation; please leave out patient records and account numbers.",
             )}
           </p>
-          {prepared && (
-            <p role="status" className="form-status">
+          {status === "sent" && (
+            <p role="status" className="form-status form-status-sent">
+              <Icon name="check" size={16} />
               {t(
-                "Email draft requested. Send it from your email app to reach us. No app opened? Email",
-              )}{" "}
-              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>{" "}
-              {t("directly.")}
+                "Got it — your request is with us. We’ll be in touch shortly.",
+              )}
+            </p>
+          )}
+          {status === "error" && (
+            <p role="alert" className="form-status form-status-error">
+              {t("That didn’t go through.")}{" "}
+              {fallbackHref && (
+                <>
+                  <a href={fallbackHref}>{t("Send it as an email instead")}</a>
+                  {", "}
+                  {t("or write to")}{" "}
+                </>
+              )}
+              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+              {t(" directly.")}
             </p>
           )}
         </form>
