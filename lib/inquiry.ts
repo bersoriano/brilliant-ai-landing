@@ -17,6 +17,8 @@ export function buildInquiryHref(
   const industryLabels: Record<string, string> = {
     finance: "Finance",
     healthcare: "Healthcare",
+    operations: "Operations",
+    sales: "Sales",
     other: "Another industry",
   };
   const industry = translate(

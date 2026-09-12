@@ -25,7 +25,7 @@ const {
 } = require("../lib/locale.ts");
 const { pageTitle, pageDescription, translate } = require("../lib/i18n.ts");
 const { FAQS } = require("../lib/faq.ts");
-const { WORKFLOWS } = require("../lib/workflows.ts");
+const { WORKFLOWS, INDUSTRIES, INDUSTRY_ORDER } = require("../lib/workflows.ts");
 const { buildInquiryHref } = require("../lib/inquiry.ts");
 const { buildBreakdown, computeRoi, DEFAULT_INPUTS } = require("../lib/roi.ts");
 const { PRIMARY_CTA, ONSITE_CTA } = require("../lib/site.ts");
@@ -142,8 +142,31 @@ test("All workflow prose has Spanish translations, while product names and IDs s
   assert.equal(translate("Bank of America", "es"), "Bank of America");
   assert.equal(
     translate("Give finance a cleaner\nstart to the day.", "es"),
-    "Un mejor inicio de día\npara finanzas.",
+    "Que finanzas empiece el día\ncon todo en orden.",
   );
+  assert.equal(
+    translate("Get invoices ready to approve", "es"),
+    "Prepara las facturas para ser aprobadas",
+  );
+});
+test("Each industry has three examples and translated industry copy", () => {
+  assert.deepEqual(INDUSTRY_ORDER, [
+    "finance",
+    "healthcare",
+    "operations",
+    "sales",
+  ]);
+  for (const key of INDUSTRY_ORDER) {
+    const meta = INDUSTRIES[key];
+    const examples = WORKFLOWS.filter((workflow) => workflow.industry === key);
+    assert.equal(examples.length, 3, key);
+    for (const field of ["label", "title", "description", "operationsLabel"])
+      assert.notEqual(
+        translate(meta[field], "es"),
+        meta[field],
+        `${key}.${field}`,
+      );
+  }
 });
 test("Spanish draft translates labels and selected workflow while preserving user input", () => {
   const url = new URL(
@@ -165,7 +188,10 @@ test("Spanish draft translates labels and selected workflow while preserving use
   );
   const body = url.searchParams.get("body");
   assert.match(body, /Soy Ana Pérez/);
-  assert.match(body, /Punto de partida: Prepara facturas para aprobación/);
+  assert.match(
+    body,
+    /Punto de partida: Prepara las facturas para ser aprobadas/,
+  );
   assert.match(body, /Mi proceso & <dato>/);
   assert.doesNotMatch(body, /Starting point|Workflow review|Work email/);
 });

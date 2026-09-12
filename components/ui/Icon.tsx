@@ -87,6 +87,13 @@ export function Icon({
         <path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M17 14a5 5 0 0 1 4 5v2" />
       </>
     ),
+    briefcase: (
+      <>
+        <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+        <rect x="3" y="7" width="18" height="13" rx="2" />
+        <path d="M3 12h18" />
+      </>
+    ),
     lock: (
       <>
         <rect x="5" y="10" width="14" height="11" rx="2" />
