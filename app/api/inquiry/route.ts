@@ -16,7 +16,13 @@ import { NextResponse } from "next/server";
  */
 
 const MAX = { name: 100, email: 254, message: 2000, workflow: 120 };
-const INDUSTRIES = new Set(["finance", "healthcare", "other"]);
+const INDUSTRIES = new Set([
+  "finance",
+  "healthcare",
+  "operations",
+  "sales",
+  "other",
+]);
 const EMAIL = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
 
 /** Defence in depth: keep CR/LF out of anything placed in a subject line. */

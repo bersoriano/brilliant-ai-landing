@@ -659,6 +659,7 @@ h1 {
 }
 .industry-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 19px;
 }
@@ -2022,6 +2023,13 @@ summary::-webkit-details-marker {
   .footer-links {
     gap: 22px;
   }
+  .industry-tabs button {
+    width: auto;
+    flex: 1 1 140px;
+    min-width: 140px;
+    padding: 12px 14px;
+    font-size: 11px;
+  }
 }
 @media (max-width: 700px) {
   html {
@@ -2201,13 +2209,18 @@ summary::-webkit-details-marker {
     max-width: 350px;
   }
   .industry-tabs {
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
     margin-bottom: 15px;
   }
   .industry-tabs button {
-    flex: 1;
+    width: auto;
     padding: 12px 14px;
     font-size: 11px;
+  }
+  .industry-tabs button > svg:last-child {
+    display: none;
   }
   .industry-panel {
     grid-template-columns: 1fr;

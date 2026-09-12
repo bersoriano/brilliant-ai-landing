@@ -42,9 +42,10 @@ provider configuration. No credentials are required for the current email flow.
 
 ## Page behavior
 
-- Finance/healthcare tabs each offer three selectable workflow examples, including
-  their trigger, example tools, deliverable, and human approval point. Arrow keys,
-  Home, and End switch industries; workflow buttons expose their selected state.
+- Finance, healthcare, operations, and sales tabs each offer three selectable
+  workflow examples, including their trigger, example tools, deliverable, and
+  human approval point. Arrow keys, Home, and End switch industries; workflow
+  buttons expose their selected state.
 - “Discuss this workflow” carries the chosen example into the contact form without
   navigation, network requests, or browser storage. Existing name, email, and notes
   remain intact. Visitors can clear the selection or change industry; the email

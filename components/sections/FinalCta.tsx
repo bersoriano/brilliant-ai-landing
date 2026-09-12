@@ -168,6 +168,8 @@ export function FinalCta() {
             </option>
             <option value="finance">{t("Finance")}</option>
             <option value="healthcare">{t("Healthcare")}</option>
+            <option value="operations">{t("Operations")}</option>
+            <option value="sales">{t("Sales")}</option>
             <option value="other">{t("Another industry")}</option>
           </select>
           <label htmlFor="contact-workflow">

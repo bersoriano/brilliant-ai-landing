@@ -2,34 +2,25 @@
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { useState } from "react";
 import { Icon } from "../ui/Icon";
-import { WORKFLOWS, type Industry } from "@/lib/workflows";
+import {
+  INDUSTRIES,
+  INDUSTRY_ORDER,
+  WORKFLOWS,
+  type Industry,
+} from "@/lib/workflows";
 import { PRIMARY_CTA } from "@/lib/site";
 import { useInquiry } from "../inquiry/InquiryContext";
-const industries = {
-  finance: {
-    label: "Finance",
-    icon: "bank",
-    title: "Give finance a cleaner\nstart to the day.",
-    description:
-      "Less collecting, checking, and chasing. More time to understand what the numbers mean.",
-  },
-  healthcare: {
-    label: "Healthcare",
-    icon: "heart",
-    title: "Keep the admin moving.\nKeep care personal.",
-    description:
-      "Help your administrative team keep up with intake, referrals, and follow-ups.",
-  },
-};
+
+const defaultSelectedIds = Object.fromEntries(
+  INDUSTRY_ORDER.map((key) => [key, INDUSTRIES[key].defaultWorkflowId]),
+) as Record<Industry, string>;
+
 export function Solution() {
   const { t } = useLanguage();
   const [active, setActive] = useState<Industry>("finance");
-  const [selectedIds, setSelectedIds] = useState({
-    finance: "invoice-approvals",
-    healthcare: "referral-routing",
-  });
+  const [selectedIds, setSelectedIds] = useState(defaultSelectedIds);
   const { selectWorkflow } = useInquiry();
-  const industry = industries[active];
+  const industry = INDUSTRIES[active];
   const examples = WORKFLOWS.filter((workflow) => workflow.industry === active);
   const selected =
     examples.find((workflow) => workflow.id === selectedIds[active]) ||
@@ -40,17 +31,17 @@ export function Solution() {
         <div>
           <span className="eyebrow">{t("Start with a job you recognize")}</span>
           <h2>
-            {t("Real workflows.")}
+            {t("Everyday work.")}
             <br />
             {t("Room to do more.")}
           </h2>
         </div>
         <p>
-          {t("Choose a task below to see what we could build.")}
+          {t("Pick a task you already know.")}
           <br className="desktop-break" />
-          {t("Each example connects the trigger, the work,")}
+          {t("We’ll show the first step, what gets prepared,")}
           <br className="desktop-break" />
-          {t("and the moment your team takes over.")}
+          {t("and where your team steps in.")}
         </p>
       </div>
       <div
@@ -58,39 +49,47 @@ export function Solution() {
         role="tablist"
         aria-label={t("Industry solutions")}
       >
-        {Object.entries(industries).map(([key, data], index) => (
-          <button
-            key={key}
-            id={`tab-${key}`}
-            type="button"
-            role="tab"
-            aria-selected={key === active}
-            tabIndex={key === active ? 0 : -1}
-            aria-controls="industry-panel"
-            onClick={() => setActive(key as Industry)}
-            onKeyDown={(event) => {
-              if (
-                ["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)
-              ) {
+        {INDUSTRY_ORDER.map((key, index) => {
+          const data = INDUSTRIES[key];
+          return (
+            <button
+              key={key}
+              id={`tab-${key}`}
+              type="button"
+              role="tab"
+              aria-selected={key === active}
+              tabIndex={key === active ? 0 : -1}
+              aria-controls="industry-panel"
+              onClick={() => setActive(key)}
+              onKeyDown={(event) => {
+                if (
+                  !["ArrowRight", "ArrowLeft", "Home", "End"].includes(
+                    event.key,
+                  )
+                )
+                  return;
                 event.preventDefault();
-                const next =
+                const last = INDUSTRY_ORDER.length - 1;
+                const nextIndex =
                   event.key === "Home"
-                    ? "finance"
+                    ? 0
                     : event.key === "End"
-                      ? "healthcare"
-                      : index === 0
-                        ? "healthcare"
-                        : "finance";
+                      ? last
+                      : event.key === "ArrowRight"
+                        ? (index + 1) % INDUSTRY_ORDER.length
+                        : (index - 1 + INDUSTRY_ORDER.length) %
+                          INDUSTRY_ORDER.length;
+                const next = INDUSTRY_ORDER[nextIndex];
                 setActive(next);
                 document.getElementById(`tab-${next}`)?.focus();
-              }
-            }}
-          >
-            <Icon name={data.icon} />
-            {t(data.label)}
-            <Icon name="diagonal" size={16} />
-          </button>
-        ))}
+              }}
+            >
+              <Icon name={data.icon} />
+              {t(data.label)}
+              <Icon name="diagonal" size={16} />
+            </button>
+          );
+        })}
       </div>
       <div
         className="industry-panel workflow-explorer"
@@ -100,13 +99,7 @@ export function Solution() {
         tabIndex={0}
       >
         <div className="industry-copy">
-          <span className="small-label">
-            {t(
-              active === "finance"
-                ? "Finance operations"
-                : "Healthcare operations",
-            )}
-          </span>
+          <span className="small-label">{t(industry.operationsLabel)}</span>
           <h3>{t(industry.title)}</h3>
           <p>{t(industry.description)}</p>
           <div
@@ -162,16 +155,16 @@ export function Solution() {
           <div className="demo-top">
             <span>
               <span className="status-dot" />
-              {t("A workflow we can scope")}
+              {t("An example we could set up")}
             </span>
-            <span>{t("Illustrative example")}</span>
+            <span>{t("Example only")}</span>
           </div>
           <h3 id="workflow-preview-title">{t(selected.title)}</h3>
           <div className="workflow-trigger">
             <Icon name="clock" size={14} />
             <span>{t(selected.trigger)}</span>
           </div>
-          <div className="workflow-tools" aria-label={t("Example systems")}>
+          <div className="workflow-tools" aria-label={t("Tools in this example")}>
             {selected.tools.map((tool, i) => (
               <span key={tool}>
                 <span>{t(tool)}</span>
@@ -190,7 +183,7 @@ export function Solution() {
                 <strong>{t(selected.document)}</strong>
                 <small>{selected.reference}</small>
               </div>
-              <span className="review-badge">{t("For review")}</span>
+              <span className="review-badge">{t("Ready to review")}</span>
             </div>
             <div className="document-lines">
               <span>{t(selected.field)}</span>
@@ -208,7 +201,7 @@ export function Solution() {
             ))}
           </div>
           <div className="workflow-outcome">
-            <span>{t("What your team gets")}</span>
+            <span>{t("What this gives your team")}</span>
             <p>{t(selected.outcome)}</p>
           </div>
           <p className="workflow-approval">
@@ -226,7 +219,7 @@ export function Solution() {
       </div>
       <p className="workflow-scope-note">
         {t(
-          "Examples show possible scopes, not ready-to-install products. We confirm system access, data requirements, and approval rules during discovery.",
+          "These are examples of what we could set up, not products you install. We confirm system access, data needs, and who approves what before any work begins.",
         )}
       </p>
       <p role="status" className="sr-only">
