@@ -28,6 +28,11 @@ const { FAQS } = require("../lib/faq.ts");
 const { WORKFLOWS } = require("../lib/workflows.ts");
 const { buildInquiryHref } = require("../lib/inquiry.ts");
 const { buildBreakdown, computeRoi, DEFAULT_INPUTS } = require("../lib/roi.ts");
+const {
+  CASE_STUDY,
+  caseStudyCopy,
+  shouldRenderCaseStudy,
+} = require("../lib/caseStudy.ts");
 const dictionary = require("../lib/es-MX.json");
 
 test("English fallback; Spanish browser preference with quality handling", () => {
@@ -187,7 +192,7 @@ test("SEO copy and FAQs have Spanish dictionary entries", () => {
 test("Every literal translation call in active UI has a Spanish dictionary entry", () => {
   const files = fs
     .readdirSync("components/sections")
-    .filter((f) => f.endsWith(".tsx") && f !== "Problem.tsx")
+    .filter((f) => f.endsWith(".tsx"))
     .map((f) => `components/sections/${f}`)
     .concat([
       "components/ui/Icon.tsx",
@@ -217,4 +222,38 @@ test("Every literal translation call in active UI has a Spanish dictionary entry
     }
     visit(ast);
   }
+});
+
+test("Unapproved case study figures never render in a production build", () => {
+  if (!CASE_STUDY.approved) {
+    assert.equal(shouldRenderCaseStudy(true), false);
+    assert.equal(shouldRenderCaseStudy(false), true);
+  } else {
+    assert.equal(shouldRenderCaseStudy(true), true);
+  }
+});
+test("Case study ships its own Spanish copy rather than relying on the dictionary", () => {
+  const en = caseStudyCopy("en");
+  const es = caseStudyCopy("es");
+  for (const field of ["sector", "client", "workflow", "before", "after"])
+    assert.notEqual(es[field], en[field], field);
+  assert.notEqual(es.headline.label, en.headline.label);
+  assert.equal(es.metrics.length, en.metrics.length);
+  for (let i = 0; i < en.metrics.length; i++)
+    assert.notEqual(es.metrics[i].label, en.metrics[i].label, `metric ${i}`);
+  if (en.quote) assert.notEqual(es.quote.text, en.quote.text);
+});
+test("Payback is reported whenever an engagement budget is supplied", () => {
+  const withBudget = computeRoi(DEFAULT_INPUTS);
+  assert.ok(DEFAULT_INPUTS.engagementCost > 0);
+  assert.ok(withBudget.paybackMonths > 0);
+  const breakdown = buildBreakdown(DEFAULT_INPUTS, withBudget, "en");
+  assert.ok(breakdown.lines.some((l) => l.label.startsWith("Simple payback")));
+  const noBudget = computeRoi({ ...DEFAULT_INPUTS, engagementCost: 0 });
+  assert.equal(noBudget.paybackMonths, null);
+  assert.equal(
+    buildBreakdown({ ...DEFAULT_INPUTS, engagementCost: 0 }, noBudget, "en")
+      .lines.some((l) => l.label.startsWith("Simple payback")),
+    false,
+  );
 });

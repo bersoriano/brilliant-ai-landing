@@ -13,11 +13,12 @@ import { Icon } from "../ui/Icon";
 import { DISCOVERY_CALL_HREF } from "@/lib/site";
 export function RoiCalculator() {
   const { t, locale } = useLanguage();
+  // Opportunity figures start empty so nothing is claimed on the visitor's
+  // behalf; the engagement budget is seeded so payback is visible immediately.
   const [inputs, setInputs] = useState<RoiInputs>({
     ...DEFAULT_INPUTS,
     opportunitiesDeclined: 0,
     avgOpportunityValue: 0,
-    engagementCost: 0,
   });
   const [downloaded, setDownloaded] = useState(false);
   const result = useMemo(() => computeRoi(inputs), [inputs]);
@@ -156,6 +157,41 @@ export function RoiCalculator() {
                 }
               />
             </label>
+            <MoneyField
+              id="engagement-cost"
+              label={t("Budget you have in mind")}
+              hint={t("Your figure, not our price. Drives the payback line.")}
+              ariaLabel={t("Budget you have in mind, in US dollars")}
+              max={1000000}
+              step={1000}
+              value={inputs.engagementCost}
+              onChange={(v) => set("engagementCost", v)}
+            />
+            <div className="opportunity-fields">
+              <p className="opportunity-intro">
+                {t("Turned work away this year? Add it (optional).")}
+              </p>
+              <Range
+                name="declined"
+                label={t("Opportunities you declined")}
+                min={0}
+                max={50}
+                value={inputs.opportunitiesDeclined}
+                display={t("{count} declined", {
+                  count: inputs.opportunitiesDeclined,
+                })}
+                onChange={(v) => set("opportunitiesDeclined", v)}
+              />
+              <MoneyField
+                id="opportunity-value"
+                label={t("Average value of one")}
+                ariaLabel={t("Average value of one opportunity, in US dollars")}
+                max={10000000}
+                step={500}
+                value={inputs.avgOpportunityValue}
+                onChange={(v) => set("avgOpportunityValue", v)}
+              />
+            </div>
           </details>
           <p className="assumptions-note">
             {t(
@@ -192,7 +228,29 @@ export function RoiCalculator() {
                 <strong>{fmtCurrency(result.valueRedeployed, locale)}</strong>
                 <span>{t("Annual capacity value")}</span>
               </div>
+              {result.paybackMonths !== null && (
+                <div className="result-stat-accent">
+                  <strong>
+                    {t("{count} mo", {
+                      count: fmtNumber(result.paybackMonths, 1, locale),
+                    })}
+                  </strong>
+                  <span>{t("Simple payback on that budget")}</span>
+                </div>
+              )}
+              <div>
+                <strong>+{fmtNumber(result.extraVolumePct, 0, locale)}%</strong>
+                <span>{t("More capacity, same team")}</span>
+              </div>
             </div>
+            {result.revenueOpportunity > 0 && (
+              <p className="result-opportunity">
+                <Icon name="chart" size={15} />
+                {t("Plus {amount} of work you turned away.", {
+                  amount: fmtCurrency(result.revenueOpportunity, locale),
+                })}
+              </p>
+            )}
           </div>
           <div className="result-visual" aria-hidden="true">
             {Array.from({ length: 38 }, (_, i) => (
@@ -226,6 +284,50 @@ export function RoiCalculator() {
         </div>
       </div>
     </section>
+  );
+}
+function MoneyField({
+  id,
+  label,
+  hint,
+  ariaLabel,
+  max,
+  step,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  hint?: string;
+  ariaLabel: string;
+  max: number;
+  step: number;
+  value: number;
+  onChange: (n: number) => void;
+}) {
+  return (
+    <div className="hourly-field">
+      <div>
+        <label htmlFor={id}>{label}</label>
+        {hint && <p>{hint}</p>}
+      </div>
+      <div>
+        <span>$</span>
+        <input
+          id={id}
+          type="number"
+          inputMode="decimal"
+          min="0"
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) =>
+            onChange(Math.min(max, Math.max(0, Number(e.target.value))))
+          }
+          aria-label={ariaLabel}
+        />
+      </div>
+    </div>
   );
 }
 function Range({
