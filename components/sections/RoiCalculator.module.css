@@ -101,9 +101,13 @@
   gap: 40px;
   padding-left: 24px;
 }
+/* The money column is wider: "USD 117,300" (es-MX) is ~5.7em. Numerals scale
+   with the row (container units) so even the largest possible value
+   ("USD 552,000,000") fits, wrapping only at the space after the code. */
 .numerals {
+  container-type: inline-size;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.6fr);
   gap: var(--col-gap);
   margin: 0;
 }
@@ -120,6 +124,7 @@
 }
 .stat dd {
   margin: 0;
+  font-size: min(clamp(48px, 5vw, 72px), 6.8cqi);
   color: var(--text);
 }
 .statLabel {
@@ -195,6 +200,9 @@
 @media (max-width: 700px) {
   .numerals {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .stat dd {
+    font-size: clamp(40px, 12vw, 56px);
   }
   .actions {
     flex-direction: column;

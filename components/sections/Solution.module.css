@@ -38,6 +38,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  min-width: 0;
 }
 .custom {
   display: flex;
@@ -129,6 +130,7 @@
 @media (max-width: 700px) {
   .controlRow {
     flex-direction: column;
+    flex-wrap: nowrap;
     align-items: stretch;
     gap: 10px;
   }
