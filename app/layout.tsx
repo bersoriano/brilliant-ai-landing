@@ -22,8 +22,8 @@ export default async function RootLayout({
     getRequestPath(),
   ]);
   return (
-    <html lang={htmlLang(locale)}>
-      <body className={fontVariables}>
+    <html lang={htmlLang(locale)} className={fontVariables}>
+      <body>
         <JsonLd data={buildJsonLd(locale, path)} />
         <LanguageProvider initialLocale={locale}>
           <SkipLink />

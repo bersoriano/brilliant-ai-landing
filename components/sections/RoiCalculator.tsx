@@ -204,7 +204,9 @@ export function RoiCalculator() {
                 <div className={styles.stat}>
                   <dt className={styles.statLabel}>{t("Annual capacity value")}</dt>
                   <dd className="numeral">
-                    {fmtCurrency(result.valueRedeployed, locale)}
+                    {/* es-MX joins "USD" to the amount with a no-break space;
+                        a normal space lets the large numeral wrap there. */}
+                    {fmtCurrency(result.valueRedeployed, locale).replace(/\u00a0/g, " ")}
                   </dd>
                 </div>
               </dl>
