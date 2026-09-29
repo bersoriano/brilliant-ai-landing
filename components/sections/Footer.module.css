@@ -40,7 +40,7 @@
 .columns a {
   display: inline-flex;
   align-items: center;
-  min-height: 36px;
+  min-height: 44px;
   font-size: 15px;
   color: var(--text-2);
   transition: color 0.15s ease;
