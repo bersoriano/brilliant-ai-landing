@@ -5,10 +5,10 @@ import {
 } from "@/components/i18n/LanguageProvider";
 import { useEffect, useRef, useState } from "react";
 import { DISCOVERY_CALL_HREF, NAV_LINKS, PRIMARY_CTA } from "@/lib/site";
-import { Icon } from "../ui/Icon";
+import { Brand, Icon } from "../ui/Icon";
 import styles from "./Navbar.module.css";
 export function Navbar() {
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -26,7 +26,7 @@ export function Navbar() {
       <div className={styles.utility}>
         <div className={`shell ${styles.utilityInner}`}>
           <span className="label">{t("United States · Canada · México")}</span>
-          <LanguageSwitch className={styles.language} />
+          <LanguageSwitch />
         </div>
       </div>
       <header className={styles.header}>
@@ -34,13 +34,7 @@ export function Navbar() {
           className={`shell ${styles.inner}`}
           aria-label={t("Main navigation")}
         >
-          <a
-            href={locale === "es" ? "/es#top" : "/#top"}
-            className={styles.wordmark}
-          >
-            Brilliant<span className={styles.period}>.</span>
-            <span className="sr-only"> {t("home")}</span>
-          </a>
+          <Brand />
           <div className={styles.links}>
             {NAV_LINKS.map((link) => (
               <a href={link.href} key={link.href}>

@@ -1,6 +1,7 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import type { CSSProperties } from "react";
+import brandStyles from "./Brand.module.css";
 export function Icon({
   name,
   size = 20,
@@ -132,20 +133,15 @@ export function Icon({
     </svg>
   );
 }
-export function Brand({ footer = false }: { footer?: boolean }) {
+/** B5 wordmark: "Brilliant" in Bodoni italic with an upright teal period. */
+export function Brand({ className = "" }: { className?: string }) {
   const { t, locale } = useLanguage();
   return (
     <a
       href={locale === "es" ? "/es#top" : "/#top"}
-      className={`brand${footer ? " brand-footer" : ""}`}
+      className={`${brandStyles.wordmark} ${className}`.trim()}
     >
-      <span className="brand-mark">
-        <Icon name="spark" size={25} />
-      </span>
-      <span>
-        brilliant<span className="brand-ai"> ai</span>
-        <span className="brand-period">.</span>
-      </span>
+      Brilliant<span className={brandStyles.period}>.</span>
       <span className="sr-only"> {t("home")}</span>
     </a>
   );

@@ -3,34 +3,31 @@ import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 import { FAQS } from "@/lib/faq";
 import { Icon } from "../ui/Icon";
+import { Kicker } from "../ui/Kicker";
+import styles from "./Faq.module.css";
 export function Faq() {
   const { t } = useLanguage();
   return (
-    <section id="faq" className="section shell faq-section">
-      <div className="faq-intro">
-        <span className="eyebrow">{t("A little more clarity")}</span>
-        <h2>
+    <section id="faq" className="section shell grid-12">
+      <div className={styles.intro}>
+        <Kicker>{t("A little more clarity")}</Kicker>
+        <h2 className="h2-sm">
           {t("Good questions.")}
           <br />
-          {t("Straight answers.")}
+          <em>{t("Straight answers.")}</em>
         </h2>
-        <p>
-          {t("Thoughtful automation starts")}
-          <br />
-          {t("with an honest conversation.")}
-        </p>
         <a href={DISCOVERY_CALL_HREF} className="text-link">
-          {t(PRIMARY_CTA)} <Icon name="arrow" size={17} />
+          {t(PRIMARY_CTA)} <Icon name="arrow" size={16} />
         </a>
       </div>
-      <div className="faq-list">
+      <div className={styles.list}>
         {FAQS.map(([q, a]) => (
-          <details key={q}>
+          <details key={q} className={styles.item}>
             <summary>
               {t(q)}
               <span aria-hidden="true">+</span>
             </summary>
-            <p>{t(a)}</p>
+            <p className="body">{t(a)}</p>
           </details>
         ))}
       </div>

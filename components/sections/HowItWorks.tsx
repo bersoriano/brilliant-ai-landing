@@ -1,61 +1,55 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
-import { Icon } from "../ui/Icon";
+import { Kicker } from "../ui/Kicker";
+import styles from "./HowItWorks.module.css";
 const steps = [
   {
     title: "Walk us through the work",
     body: "Bring a routine task to a 20-minute workflow review. We map the handoffs, discuss where AI fits, and identify a useful first step.",
     deliverable: "A practical starting point",
+    duration: "20 min",
   },
   {
     title: "We build your first workflow",
     body: "We scope a pilot, connect your approved tools, and test with representative data. You review the results alongside your current process.",
     deliverable: "A working pilot, reviewed by you",
+    duration: "Pilot",
   },
   {
     title: "Keep it working, together",
     body: "We monitor the workflow, handle the exceptions, and keep it current as your business changes. Your team gets documentation and training on how to use it—running it stays with us.",
     deliverable: "A managed workflow, not a handover",
+    duration: "Ongoing",
   },
 ];
+const NUMERALS = ["i.", "ii.", "iii."];
 export function HowItWorks() {
   const { t } = useLanguage();
   return (
-    <section id="how-it-works" className="section shell">
-      <div className="section-heading">
-        <div>
-          <span className="eyebrow">{t("A clear path forward")}</span>
-          <h2>
-            {t("Start small.")}
-            <br />
-            {t("Make room for more.")}
-          </h2>
-        </div>
-        <p>
-          {t("You know the process. We handle the build.")}
-          <br className="desktop-break" />
-          {t(
-            "Start with one useful workflow, then expand from what you learn.",
-          )}
+    <section id="how-it-works" className="section shell grid-12">
+      <div className={styles.intro}>
+        <Kicker>{t("A clear path forward")}</Kicker>
+        <h2 className="h2-sm">
+          {t("Start small.")} <em>{t("Make room for more.")}</em>
+        </h2>
+        <p className="body">
+          {t("You know the process. We handle the build.")}{" "}
+          {t("Start with one useful workflow, then expand from what you learn.")}
         </p>
       </div>
-      <div className="steps-grid">
+      <ol className={`rule-list ${styles.steps}`}>
         {steps.map((s, i) => (
-          <article key={s.title} className="step">
-            <div className="step-line">
-              <span>0{i + 1}</span>
-              <div />
-              <Icon name="arrow" size={19} />
+          <li key={s.title} className={styles.step}>
+            <span className="roman roman--lg">{NUMERALS[i]}</span>
+            <div className={styles.copy}>
+              <h3 className="h3">{t(s.title)}</h3>
+              <p className="body">{t(s.body)}</p>
+              <p className="caption">{t(s.deliverable)}</p>
             </div>
-            <h3>{t(s.title)}</h3>
-            <p>{t(s.body)}</p>
-            <div className="step-deliverable">
-              <Icon name="check" size={15} />
-              {t(s.deliverable)}
-            </div>
-          </article>
+            <span className={`label ${styles.duration}`}>{t(s.duration)}</span>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
   );
 }

@@ -1,4 +1,3 @@
-import "./legacy.css";
 import "./globals.css";
 import { fontVariables } from "@/lib/fonts";
 import { getRequestLocale, getRequestPath } from "@/lib/locale.server";

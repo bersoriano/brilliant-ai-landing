@@ -5,6 +5,8 @@ import { useInquiry } from "../inquiry/InquiryContext";
 import { buildInquiryHref } from "@/lib/inquiry";
 import { CONTACT_EMAIL, PRIMARY_CTA } from "@/lib/site";
 import { Icon } from "../ui/Icon";
+import { Kicker } from "../ui/Kicker";
+import styles from "./FinalCta.module.css";
 type Status = "idle" | "sending" | "sent" | "error";
 
 export function FinalCta() {
@@ -51,106 +53,105 @@ export function FinalCta() {
     }
   }
   return (
-    <section id="contact" className="contact-section">
-      <div className="shell contact-inner">
-        <div className="contact-copy">
-          <span className="contact-tag">
-            <span />
-            {t("Start with a workflow review")}
-          </span>
-          <h2>
-            {t("One workflow.")}
-            <br />
-            {t("A practical way forward.")}
-          </h2>
-          <p>
-            {t("Bring the task that keeps coming back.")}
-            <br />
-            {t(
-              "We’ll talk through how it works today and where automation could help.",
-            )}
-          </p>
-          <div className="contact-promises">
-            <span>
-              <Icon name="check" size={16} />
-              {t("Map the task and the tools involved")}
-            </span>
-            <span>
-              <Icon name="check" size={16} />
-              {t("Identify the approvals and exceptions")}
-            </span>
-            <span>
-              <Icon name="check" size={16} />
-              {t("Agree on a useful next step")}
-            </span>
-          </div>
-          <p className="contact-review-note">
-            {t("A focused 20-minute conversation. No technical brief needed.")}
-          </p>
-          <a className="contact-email" href={`mailto:${CONTACT_EMAIL}`}>
-            {CONTACT_EMAIL} <Icon name="diagonal" size={18} />
-          </a>
-        </div>
-        <form
-          className="contact-form"
-          onSubmit={submit}
-          onChange={() => setStatus((prev) => (prev === "sending" ? prev : "idle"))}
-        >
-          <h3>{t("What would you like to automate?")}</h3>
-          {selectedWorkflow && (
-            <div className="inquiry-selection" role="status">
-              <Icon name={selectedWorkflow.icon} size={21} />
-              <div>
-                <span>{t("Your starting point")}</span>
-                <strong>{t(selectedWorkflow.title)}</strong>
-              </div>
-              <button
-                type="button"
-                aria-label={t("Clear selected workflow")}
-                onClick={() => {
-                  selectWorkflow(null);
-                  document.getElementById("contact-workflow")?.focus();
-                }}
-              >
-                <Icon name="close" size={16} />
-              </button>
-            </div>
+    <section id="contact" className="section shell grid-12">
+      <div className={styles.copy}>
+        <Kicker>{t("Start with a workflow review")}</Kicker>
+        <h2 className="h2">
+          {t("One workflow.")}
+          <br />
+          <em>{t("A practical way forward.")}</em>
+        </h2>
+        <p className="lead">
+          {t("Bring the task that keeps coming back.")}{" "}
+          {t(
+            "We’ll talk through how it works today and where automation could help.",
           )}
-          {selectedWorkflow && (
+        </p>
+        <ul className={`rule-list ${styles.promises}`}>
+          <li>
+            <Icon name="check" size={16} />
+            {t("Map the task and the tools involved")}
+          </li>
+          <li>
+            <Icon name="check" size={16} />
+            {t("Identify the approvals and exceptions")}
+          </li>
+          <li>
+            <Icon name="check" size={16} />
+            {t("Agree on a useful next step")}
+          </li>
+        </ul>
+        <p className="caption">
+          {t("A focused 20-minute conversation. No technical brief needed.")}
+        </p>
+        <a className="text-link" href={`mailto:${CONTACT_EMAIL}`}>
+          {CONTACT_EMAIL} <Icon name="arrow" size={16} />
+        </a>
+      </div>
+      <form
+        className={styles.form}
+        onSubmit={submit}
+        onChange={() => setStatus((prev) => (prev === "sending" ? prev : "idle"))}
+      >
+        <h3 className="h3">{t("What would you like to automate?")}</h3>
+        {selectedWorkflow && (
+          <div className={styles.selection} role="status">
+            <div>
+              <span className="label">{t("Your starting point")}</span>
+              <strong>{t(selectedWorkflow.title)}</strong>
+            </div>
+            <button
+              type="button"
+              className={styles.clear}
+              aria-label={t("Clear selected workflow")}
+              onClick={() => {
+                selectWorkflow(null);
+                document.getElementById("contact-workflow")?.focus();
+              }}
+            >
+              <Icon name="close" size={16} />
+            </button>
+          </div>
+        )}
+        {selectedWorkflow && (
+          <input
+            type="hidden"
+            name="workflowExample"
+            value={selectedWorkflow.id}
+          />
+        )}
+        <div className={styles.row}>
+          <div className="field">
+            <label htmlFor="contact-name">{t("Your name")}</label>
             <input
-              type="hidden"
-              name="workflowExample"
-              value={selectedWorkflow.id}
+              id="contact-name"
+              className="input"
+              name="name"
+              placeholder={t("Alex Morgan")}
+              autoComplete="name"
+              required
+              maxLength={100}
             />
-          )}
-          <div className="form-row">
-            <div>
-              <label htmlFor="contact-name">{t("Your name")}</label>
-              <input
-                id="contact-name"
-                name="name"
-                placeholder={t("Alex Morgan")}
-                autoComplete="name"
-                required
-                maxLength={100}
-              />
-            </div>
-            <div>
-              <label htmlFor="contact-email">{t("Work email")}</label>
-              <input
-                id="contact-email"
-                name="email"
-                type="email"
-                placeholder={t("alex@company.com")}
-                autoComplete="email"
-                required
-                maxLength={254}
-              />
-            </div>
           </div>
+          <div className="field">
+            <label htmlFor="contact-email">{t("Work email")}</label>
+            <input
+              id="contact-email"
+              className="input"
+              name="email"
+              type="email"
+              placeholder={t("alex@company.com")}
+              autoComplete="email"
+              required
+              maxLength={254}
+            />
+          </div>
+        </div>
+        <div className="field">
           <label htmlFor="contact-industry">{t("Your industry")}</label>
           <select
             id="contact-industry"
+            className="select"
             name="industry"
             value={industry}
             onChange={(event) => {
@@ -172,6 +173,8 @@ export function FinalCta() {
             <option value="sales">{t("Sales")}</option>
             <option value="other">{t("Another industry")}</option>
           </select>
+        </div>
+        <div className="field">
           <label htmlFor="contact-workflow">
             {t(
               selectedWorkflow
@@ -181,6 +184,7 @@ export function FinalCta() {
           </label>
           <textarea
             id="contact-workflow"
+            className="textarea"
             name="workflow"
             placeholder={t(
               "The process, the bottleneck, or the work that keeps piling up…",
@@ -189,52 +193,51 @@ export function FinalCta() {
             required={!selectedWorkflow}
             maxLength={2000}
           />
-          <div className="form-honeypot" aria-hidden="true">
-            <label htmlFor="contact-company">{t("Company")}</label>
-            <input
-              id="contact-company"
-              name="company"
-              tabIndex={-1}
-              autoComplete="off"
-            />
-          </div>
-          <button
-            className="button contact-submit"
-            type="submit"
-            disabled={status === "sending"}
-          >
-            {t(status === "sending" ? "Sending…" : PRIMARY_CTA)}{" "}
-            <Icon name="diagonal" size={17} />
-          </button>
-          <p className="form-note">
+        </div>
+        <div className={styles.honeypot} aria-hidden="true">
+          <label htmlFor="contact-company">{t("Company")}</label>
+          <input
+            id="contact-company"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
+        <button
+          className={`button ${styles.submit}`}
+          type="submit"
+          disabled={status === "sending"}
+        >
+          {t(status === "sending" ? "Sending…" : PRIMARY_CTA)}
+        </button>
+        <p className="caption">
+          {t(
+            "Sent straight to us — no email app needed. Share enough to have the conversation; please leave out patient records and account numbers.",
+          )}
+        </p>
+        {status === "sent" && (
+          <p role="status" className={`${styles.status} ${styles.sent}`}>
+            <Icon name="check" size={16} />
             {t(
-              "Sent straight to us — no email app needed. Share enough to have the conversation; please leave out patient records and account numbers.",
+              "Got it — your request is with us. We’ll be in touch shortly.",
             )}
           </p>
-          {status === "sent" && (
-            <p role="status" className="form-status form-status-sent">
-              <Icon name="check" size={16} />
-              {t(
-                "Got it — your request is with us. We’ll be in touch shortly.",
-              )}
-            </p>
-          )}
-          {status === "error" && (
-            <p role="alert" className="form-status form-status-error">
-              {t("That didn’t go through.")}{" "}
-              {fallbackHref && (
-                <>
-                  <a href={fallbackHref}>{t("Send it as an email instead")}</a>
-                  {", "}
-                  {t("or write to")}{" "}
-                </>
-              )}
-              <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-              {t(" directly.")}
-            </p>
-          )}
-        </form>
-      </div>
+        )}
+        {status === "error" && (
+          <p role="alert" className={styles.status}>
+            {t("That didn’t go through.")}{" "}
+            {fallbackHref && (
+              <>
+                <a href={fallbackHref}>{t("Send it as an email instead")}</a>
+                {", "}
+                {t("or write to")}{" "}
+              </>
+            )}
+            <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            {t(" directly.")}
+          </p>
+        )}
+      </form>
     </section>
   );
 }

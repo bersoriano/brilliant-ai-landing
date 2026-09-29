@@ -65,14 +65,15 @@ provider configuration. No credentials are required for the current email flow.
 ## Structure
 
 - `app/page.tsx`: page composition.
-- `app/globals.css`: colors, typography, layout, and responsive styles.
-- `components/sections`: page sections and interactive components.
-- `components/ui/Icon.tsx`: shared icons and brand mark.
+- `app/globals.css`: B5 "Ink" design tokens, type classes, and shared primitives (buttons, chips, exhibits, forms).
+- `components/sections`: page sections and interactive components, each with a co-located `*.module.css` for its layout.
+- `components/ui`: primitives (`Kicker`, `Exhibit`, `StackedBar`, `RichTemplate`) plus `Icon.tsx` (icons and the wordmark).
+- `lib/fonts.ts`: Bodoni Moda (display), Geist (UI), and Geist Mono (labels), all served locally.
 - `lib/site.ts`: contact settings, public URL, and navigation.
 - `lib/seo.ts`: metadata, hreflang, and JSON-LD.
 - `app/sitemap.ts` / `app/robots.ts`: crawl files.
 - `lib/roi.ts`: calculator mathematics, formatting, and export labels.
-- `public/fonts`: locally served Manrope fonts and their OFL license.
+- `public/fonts`: locally served Bodoni Moda and Geist fonts with their OFL licenses; `public/fonts/og` holds static cuts for the Open Graph image.
 
 ## Before publishing
 

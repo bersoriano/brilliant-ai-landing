@@ -1,0 +1,16 @@
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 44px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.period {
+  font-style: normal;
+  color: var(--accent);
+}
