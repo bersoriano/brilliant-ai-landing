@@ -1,0 +1,91 @@
+.draft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+  padding: 12px 16px;
+  border: 1px solid var(--caution);
+  color: var(--caution);
+}
+.title {
+  margin-top: 28px;
+}
+.exhibit {
+  margin-top: 48px;
+}
+.headline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-block: 32px;
+}
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--col-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.metrics li {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 2px solid var(--line-strong);
+}
+.metricLabel {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.cells {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 28px;
+  background: var(--surface);
+  border-top: 2px solid var(--line-strong);
+}
+.cellAccent {
+  border-top-color: var(--accent);
+}
+.text {
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.quote {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 30em;
+  margin: 56px 0 32px;
+}
+.quote p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 32px;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+@media (max-width: 900px) {
+  .cells {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .quote p {
+    font-size: 26px;
+  }
+}
