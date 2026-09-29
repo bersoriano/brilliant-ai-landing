@@ -121,6 +121,27 @@ input[type="range"] {
   border: 0;
 }
 
+/* Light "briefing paper" band (document exhibit, Trust). Redefines the tokens,
+   so every primitive inside keeps working; all text pairs are >= 4.5:1. The
+   accent is a deeper shade of the same teal, legible on paper. */
+.band-paper {
+  --bg: #efede6;
+  --surface: #e5e2d9;
+  --line: #d6d2c7;
+  --line-strong: #b8b3a6;
+  --text: #0b1520;
+  --text-2: #1f2d3b;
+  --muted: #3d4a57;
+  --faint: #55616c;
+  --accent: #2a6863;
+  --accent-hover: #1f5550;
+  --on-accent: #f4f2ec;
+  --caution: #7a5712;
+  color-scheme: light;
+  background: var(--bg);
+  color: var(--text);
+}
+
 /* ---------- Layout primitives ---------- */
 .shell {
   width: 100%;
@@ -157,7 +178,7 @@ input[type="range"] {
 .h2 {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(40px, 5.6vw, 80px);
+  font-size: clamp(34px, 4.4vw, 64px);
   line-height: 0.98;
   letter-spacing: -0.03em;
   text-wrap: balance;
@@ -165,8 +186,8 @@ input[type="range"] {
 .h2-sm {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(34px, 4.45vw, 64px);
-  line-height: 1;
+  font-size: clamp(30px, 3.4vw, 48px);
+  line-height: 1.02;
   letter-spacing: -0.03em;
   text-wrap: balance;
 }

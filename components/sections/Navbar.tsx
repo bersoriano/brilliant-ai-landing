@@ -4,7 +4,7 @@ import {
   LanguageSwitch,
 } from "@/components/i18n/LanguageProvider";
 import { useEffect, useRef, useState } from "react";
-import { DISCOVERY_CALL_HREF, NAV_LINKS, PRIMARY_CTA } from "@/lib/site";
+import { DISCOVERY_CALL_HREF, NAV_CTA, NAV_LINKS, PRIMARY_CTA } from "@/lib/site";
 import { Brand, Icon } from "../ui/Icon";
 import styles from "./Navbar.module.css";
 export function Navbar() {
@@ -46,7 +46,7 @@ export function Navbar() {
             href={DISCOVERY_CALL_HREF}
             className={`button button--outline ${styles.cta}`}
           >
-            {t(PRIMARY_CTA)}
+            {t(NAV_CTA)}
           </a>
           <button
             ref={toggle}

@@ -7,6 +7,7 @@ import {
   DEFAULT_INPUTS,
   fmtCurrency,
   fmtNumber,
+  type Currency,
   type RoiInputs,
 } from "@/lib/roi";
 import { Icon } from "../ui/Icon";
@@ -14,24 +15,47 @@ import { RichTemplate } from "../ui/RichTemplate";
 import { StackedBar } from "../ui/StackedBar";
 import styles from "./RoiCalculator.module.css";
 import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
+/**
+ * Conservative starting point: 4 people × 8 repetitive hours a week. The hourly
+ * value and budget are editable assumptions in whichever currency is shown;
+ * switching currency swaps them for that currency's defaults (no FX rate).
+ */
+const START: Record<Currency, Pick<RoiInputs, "hourlyValue" | "engagementCost">> = {
+  USD: { hourlyValue: 60, engagementCost: 30000 },
+  MXN: { hourlyValue: 1000, engagementCost: 500000 },
+};
+
 export function RoiCalculator() {
   const { t, locale } = useLanguage();
   // Opportunity figures start empty so nothing is claimed on the visitor's
   // behalf; the engagement budget is seeded so payback is visible immediately.
+  const [currency, setCurrency] = useState<Currency>("USD");
   const [inputs, setInputs] = useState<RoiInputs>({
     ...DEFAULT_INPUTS,
+    people: 4,
+    hoursPerWeek: 8,
+    ...START.USD,
     opportunitiesDeclined: 0,
     avgOpportunityValue: 0,
   });
   const [downloaded, setDownloaded] = useState(false);
+  const [shared, setShared] = useState<"idle" | "copied" | "failed">("idle");
   const result = useMemo(() => computeRoi(inputs), [inputs]);
+  const money = (n: number) => fmtCurrency(n, locale, currency);
   const set = (key: keyof RoiInputs, value: number) => {
     setInputs((prev) => ({ ...prev, [key]: value }));
     setDownloaded(false);
+    setShared("idle");
   };
-  function download() {
-    const breakdown = buildBreakdown(inputs, result, locale);
-    const text = [
+  function chooseCurrency(next: Currency) {
+    if (next === currency) return;
+    setCurrency(next);
+    setInputs((prev) => ({ ...prev, ...START[next], avgOpportunityValue: 0 }));
+    setShared("idle");
+  }
+  function summary() {
+    const breakdown = buildBreakdown(inputs, result, locale, currency);
+    return [
       t("Brilliant AI — Automation capacity estimate"),
       "",
       ...breakdown.lines.map((l) => `${l.label}: ${l.value}`),
@@ -46,10 +70,12 @@ export function RoiCalculator() {
       t(
         "Illustrative estimate, not a forecast or guaranteed saving. The value of reclaimed capacity is not cash savings. Implementation and ongoing costs are excluded.",
       ),
-      "USD",
+      currency,
     ].join("\n");
+  }
+  function download() {
     const url = URL.createObjectURL(
-      new Blob([text], { type: "text/plain;charset=utf-8" }),
+      new Blob([summary()], { type: "text/plain;charset=utf-8" }),
     );
     const a = document.createElement("a");
     a.href = url;
@@ -61,6 +87,17 @@ export function RoiCalculator() {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     setDownloaded(true);
   }
+  async function copySummary() {
+    try {
+      await navigator.clipboard.writeText(summary());
+      setShared("copied");
+    } catch {
+      setShared("failed");
+    }
+  }
+  const emailHref = `mailto:?subject=${encodeURIComponent(
+    t("Brilliant AI — Automation capacity estimate"),
+  )}&body=${encodeURIComponent(summary())}`;
   const totalHours = inputs.people * inputs.hoursPerWeek;
   const handledHours = result.hoursReclaimedWeek;
   const hrs = (n: number) => fmtNumber(n, 1, locale);
@@ -79,6 +116,26 @@ export function RoiCalculator() {
         </h2>
         <div className={`grid-12 ${styles.calculator}`}>
           <div className={styles.inputs}>
+            <div
+              className={styles.currency}
+              role="group"
+              aria-label={t("Currency")}
+            >
+              <span className="label" aria-hidden="true">
+                {t("Currency")}
+              </span>
+              {(["USD", "MXN"] as const).map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  className="chip"
+                  aria-pressed={currency === code}
+                  onClick={() => chooseCurrency(code)}
+                >
+                  {code}
+                </button>
+              ))}
+            </div>
             <Range
               label={t("People doing repetitive work")}
               name="people"
@@ -101,7 +158,7 @@ export function RoiCalculator() {
               id="hourly-value"
               label={t("Value of one hour of team time")}
               hint={t("What an hour of productive work is worth.")}
-              ariaLabel={t("Value of one hour of team time in US dollars")}
+              ariaLabel={t("Value of one hour of team time, in {currency}", { currency })}
               max={10000}
               step={5}
               value={inputs.hourlyValue}
@@ -147,7 +204,7 @@ export function RoiCalculator() {
                   id="engagement-cost"
                   label={t("Budget you have in mind")}
                   hint={t("Your figure, not our price. Drives the payback line.")}
-                  ariaLabel={t("Budget you have in mind, in US dollars")}
+                  ariaLabel={t("Budget you have in mind, in {currency}", { currency })}
                   max={1000000}
                   step={1000}
                   value={inputs.engagementCost}
@@ -170,7 +227,7 @@ export function RoiCalculator() {
                 <MoneyField
                   id="opportunity-value"
                   label={t("Average value of one")}
-                  ariaLabel={t("Average value of one opportunity, in US dollars")}
+                  ariaLabel={t("Average value of one opportunity, in {currency}", { currency })}
                   max={10000000}
                   step={500}
                   value={inputs.avgOpportunityValue}
@@ -180,10 +237,11 @@ export function RoiCalculator() {
             </details>
             <p className="caption">
               {t(
-                "Based on {share}% automation and {weeks} working weeks. All amounts in USD.",
+                "Based on {share}% automation and {weeks} working weeks. All amounts in {currency}.",
                 {
                   share: Math.round(inputs.automatableShare * 100),
                   weeks: inputs.workingWeeksPerYear,
+                  currency,
                 },
               )}
             </p>
@@ -206,7 +264,7 @@ export function RoiCalculator() {
                   <dd className="numeral">
                     {/* es-MX joins "USD" to the amount with a no-break space;
                         a normal space lets the large numeral wrap there. */}
-                    {fmtCurrency(result.valueRedeployed, locale).replace(/\u00a0/g, " ")}
+                    {money(result.valueRedeployed).replace(/\u00a0/g, " ")}
                   </dd>
                 </div>
               </dl>
@@ -265,7 +323,7 @@ export function RoiCalculator() {
                       count: fmtNumber(inputs.opportunitiesDeclined, 0, locale),
                     })}
                   </dt>
-                  <dd>{fmtCurrency(result.revenueOpportunity, locale)}</dd>
+                  <dd>{money(result.revenueOpportunity)}</dd>
                 </div>
               )}
               {result.paybackMonths !== null && (
@@ -279,24 +337,48 @@ export function RoiCalculator() {
                 </div>
               )}
             </dl>
-            <p className="caption">
+            <p className={styles.disclaimer}>
+              <strong>{t("An illustrative estimate, not a guarantee.")}</strong>{" "}
               {t(
-                "An illustrative estimate, not a guarantee. Capacity value is not cash savings; implementation and ongoing costs are excluded.",
+                "The $ figure is capacity value, not cash savings. Implementation cost is scoped after the review.",
               )}
             </p>
             <div className={styles.actions}>
               <a href={DISCOVERY_CALL_HREF} className="button">
                 {t(PRIMARY_CTA)}
               </a>
-              <button
-                type="button"
-                className={`text-link ${styles.download}`}
-                onClick={download}
-              >
-                <Icon name={downloaded ? "check" : "download"} size={16} />
-                <span>{t(downloaded ? "Downloaded" : "Save estimate")}</span>
-              </button>
+              <div className={styles.share}>
+                <button
+                  type="button"
+                  className={`text-link ${styles.download}`}
+                  onClick={copySummary}
+                >
+                  <Icon name={shared === "copied" ? "check" : "document"} size={16} />
+                  <span>
+                    {t(shared === "copied" ? "Summary copied" : "Copy summary")}
+                  </span>
+                </button>
+                <a className="text-link" href={emailHref}>
+                  <Icon name="mail" size={16} />
+                  <span>{t("Email this estimate")}</span>
+                </a>
+                <button
+                  type="button"
+                  className={`text-link ${styles.download}`}
+                  onClick={download}
+                >
+                  <Icon name={downloaded ? "check" : "download"} size={16} />
+                  <span>{t(downloaded ? "Downloaded" : "Save estimate")}</span>
+                </button>
+              </div>
             </div>
+            <p className="sr-only" role="status">
+              {shared === "copied"
+                ? t("Summary copied")
+                : shared === "failed"
+                  ? t("Couldn’t copy. Use Save estimate instead.")
+                  : ""}
+            </p>
           </div>
         </div>
       </div>

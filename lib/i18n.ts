@@ -40,17 +40,44 @@ export function translate(
     String(variables[name] ?? match),
   );
 }
-export function pageTitle(locale: Locale, privacy = false) {
-  if (privacy)
-    return locale === "es"
-      ? "Aviso de privacidad del sitio web | Brilliant AI"
-      : "Website privacy notice | Brilliant AI";
-  return locale === "es"
-    ? "Automatización con IA para finanzas y salud | Brilliant AI"
-    : "AI Automation for Finance & Healthcare | Brilliant AI";
+export const SECURITY_DESCRIPTION =
+  "How Brilliant AI handles financial and patient data: scoped access, human approval gates, your agreements, and your data-residency requirements.";
+export const ABOUT_DESCRIPTION =
+  "Brilliant AI builds and runs AI workflows for finance and healthcare operations teams in the United States, Canada, and Mexico.";
+
+export type PageKey = "home" | "privacy" | "security" | "about";
+const TITLES: Record<PageKey, [en: string, es: string]> = {
+  home: [
+    "AI Automation for Finance & Healthcare | Brilliant AI",
+    "Automatización con IA para finanzas y salud | Brilliant AI",
+  ],
+  privacy: [
+    "Website privacy notice | Brilliant AI",
+    "Aviso de privacidad del sitio web | Brilliant AI",
+  ],
+  security: [
+    "Security and data handling | Brilliant AI",
+    "Seguridad y manejo de datos | Brilliant AI",
+  ],
+  about: ["About | Brilliant AI", "Quiénes somos | Brilliant AI"],
+};
+const DESCRIPTIONS: Record<PageKey, string> = {
+  home: HOME_DESCRIPTION,
+  privacy: PRIVACY_DESCRIPTION,
+  security: SECURITY_DESCRIPTION,
+  about: ABOUT_DESCRIPTION,
+};
+/** `true` is accepted for the privacy page (the original boolean signature). */
+const pageKey = (page: PageKey | boolean) =>
+  page === true ? "privacy" : page === false ? "home" : page;
+export function pageTitle(locale: Locale, page: PageKey | boolean = "home") {
+  return TITLES[pageKey(page)][locale === "es" ? 1 : 0];
 }
-export function pageDescription(locale: Locale, privacy = false) {
-  return translate(privacy ? PRIVACY_DESCRIPTION : HOME_DESCRIPTION, locale);
+export function pageDescription(
+  locale: Locale,
+  page: PageKey | boolean = "home",
+) {
+  return translate(DESCRIPTIONS[pageKey(page)], locale);
 }
 export function pageKeywords(locale: Locale) {
   return locale === "es" ? HOME_KEYWORDS_ES : HOME_KEYWORDS;

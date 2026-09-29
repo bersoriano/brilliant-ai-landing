@@ -107,3 +107,20 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Other ways to reach us: WhatsApp, calendar (when configured), email */
+.channels {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.channels .label {
+  margin-bottom: 4px;
+}
+.channels .caption {
+  margin-left: 4px;
+}

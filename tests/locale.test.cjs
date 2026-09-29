@@ -28,7 +28,12 @@ const { FAQS } = require("../lib/faq.ts");
 const { WORKFLOWS, INDUSTRIES, INDUSTRY_ORDER } = require("../lib/workflows.ts");
 const { buildInquiryHref } = require("../lib/inquiry.ts");
 const { buildBreakdown, computeRoi, DEFAULT_INPUTS } = require("../lib/roi.ts");
-const { PRIMARY_CTA, ONSITE_CTA } = require("../lib/site.ts");
+const {
+  PRIMARY_CTA,
+  NAV_CTA,
+  ONSITE_CTA,
+  WHATSAPP_CTA,
+} = require("../lib/site.ts");
 const {
   CASE_STUDY,
   caseStudyCopy,
@@ -146,7 +151,7 @@ test("All workflow prose has Spanish translations, while product names and IDs s
   );
   assert.equal(
     translate("Get invoices ready to approve", "es"),
-    "Prepara las facturas para ser aprobadas",
+    "Preparar facturas para aprobación",
   );
 });
 test("Each industry has three examples and translated industry copy", () => {
@@ -190,7 +195,7 @@ test("Spanish draft translates labels and selected workflow while preserving use
   assert.match(body, /Soy Ana Pérez/);
   assert.match(
     body,
-    /Punto de partida: Prepara las facturas para ser aprobadas/,
+    /Punto de partida: Preparar facturas para aprobación/,
   );
   assert.match(body, /Mi proceso & <dato>/);
   assert.doesNotMatch(body, /Starting point|Workflow review|Work email/);
@@ -223,7 +228,10 @@ test("Every literal translation call in active UI has a Spanish dictionary entry
     .map((f) => `components/sections/${f}`)
     .concat([
       "components/ui/Icon.tsx",
+      "components/ui/DocumentScene.tsx",
       "app/privacy/PrivacyContent.tsx",
+      "app/security/SecurityContent.tsx",
+      "app/about/AboutContent.tsx",
       "components/i18n/LanguageProvider.tsx",
     ]);
   for (const file of files) {
@@ -287,7 +295,7 @@ test("Payback is reported whenever an engagement budget is supplied", () => {
 
 test("CTA constants are translated and used in place of ad-hoc labels", () => {
   // Passed to t() as identifiers, so the literal scanner cannot see them.
-  for (const cta of [PRIMARY_CTA, ONSITE_CTA])
+  for (const cta of [PRIMARY_CTA, NAV_CTA, ONSITE_CTA, WHATSAPP_CTA])
     assert.ok(dictionary[cta.replace(/\s+/g, " ").trim()], cta);
   // The retired one-off labels must not creep back into the sections.
   const retired = [
@@ -308,4 +316,44 @@ test("CTA constants are translated and used in place of ad-hoc labels", () => {
     .join("\n");
   for (const label of retired)
     assert.ok(!sections.includes(`"${label}"`), `retired CTA still present: ${label}`);
+});
+
+test("Mexican Spanish addresses the visitor as usted, never tú", () => {
+  const informal =
+    /(^|[^\p{L}])(tu|tus|te|ti|contigo|tienes|puedes|necesitas|quieres|usas|rechazaste|abres|trae|descubre|cuéntanos|elige|escríbenos|envíalo|prepara|explora|ajusta|ayúdanos|evita|escribe|selecciona|agrégalo|envías)(?=[^\p{L}]|$)/iu;
+  for (const [key, value] of Object.entries(dictionary))
+    assert.doesNotMatch(value, informal, key);
+});
+
+test("Every scene string and homepage data string has a Spanish entry", () => {
+  const { SCENES, HERO_STEPS } = require("../lib/scenes.ts");
+  const { HOMEPAGE_INDUSTRIES } = require("../lib/workflows.ts");
+  assert.deepEqual(HOMEPAGE_INDUSTRIES, ["finance", "healthcare"]);
+  const strings = [...HERO_STEPS];
+  for (const workflow of WORKFLOWS.filter((w) =>
+    HOMEPAGE_INDUSTRIES.includes(w.industry),
+  )) {
+    const scene = SCENES[workflow.id];
+    assert.ok(scene, `scene for ${workflow.id}`);
+    const { inbound, card } = scene;
+    strings.push(inbound.channel, inbound.subject, inbound.title, inbound.flag);
+    for (const [label, value] of inbound.lines) strings.push(label, value);
+    strings.push(card.channel, card.title, card.attachments, card.status, card.action);
+    for (const check of card.checks) strings.push(check.label);
+  }
+  // Amounts and counts (no letters) are the same in both languages.
+  for (const s of strings.filter((x) => /\p{L}/u.test(x)))
+    assert.notEqual(translate(s, "es"), s, `missing Spanish: ${s}`);
+});
+
+test("Employer names stay off the homepage; they live on /about with the hedge", () => {
+  const home = fs
+    .readdirSync("components/sections")
+    .filter((f) => f.endsWith(".tsx"))
+    .map((f) => fs.readFileSync(`components/sections/${f}`, "utf8"))
+    .join("\n");
+  for (const name of ["Boston Consulting Group", "Bank of America", "Banorte", "Mellon", "Accenture", "IBM"])
+    assert.ok(!home.includes(name), `employer on homepage: ${name}`);
+  const about = fs.readFileSync("app/about/AboutContent.tsx", "utf8");
+  assert.match(about, /not current Brilliant AI clients or partners/);
 });

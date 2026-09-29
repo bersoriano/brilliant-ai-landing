@@ -8,6 +8,8 @@ export type Workflow = {
   icon: string;
   trigger: string;
   tools: [string, string, string];
+  /** Tool names shown to the Mexico (es) market when they differ. */
+  toolsMx?: [string, string, string];
   document: string;
   reference: string;
   field: string;
@@ -31,6 +33,12 @@ export const INDUSTRY_ORDER: Industry[] = [
   "operations",
   "sales",
 ];
+
+/**
+ * The homepage speaks to two buyers only. Operations and sales examples stay
+ * in the data (and in the contact form as "Other") but are not homepage tabs.
+ */
+export const HOMEPAGE_INDUSTRIES: Industry[] = ["finance", "healthcare"];
 
 export const INDUSTRIES: Record<Industry, IndustryMeta> = {
   finance: {
@@ -80,6 +88,7 @@ export const WORKFLOWS: Workflow[] = [
     icon: "document",
     trigger: "When a supplier invoice arrives",
     tools: ["Outlook", "QuickBooks", "Teams"],
+    toolsMx: ["Outlook", "CONTPAQi", "Teams"],
     document: "Supplier invoice",
     reference: "INV–2026–084",
     field: "Purchase order",
@@ -103,6 +112,7 @@ export const WORKFLOWS: Workflow[] = [
     icon: "chart",
     trigger: "On your month-end schedule",
     tools: ["Accounting system", "Close checklist", "Teams"],
+    toolsMx: ["SAP", "Close checklist", "Teams"],
     document: "Month-end brief",
     reference: "PERIOD–2026–08",
     field: "Review area",

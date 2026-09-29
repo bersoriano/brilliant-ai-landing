@@ -6,6 +6,7 @@ import {
   htmlLang,
   localePath,
   ogLocale,
+  pageFromPath,
   stripLocalePrefix,
   type Locale,
 } from "@/lib/locale";
@@ -16,14 +17,10 @@ const LanguageContext = createContext<{
   setLocale: (locale: Locale) => void;
 } | null>(null);
 
-function isPrivacyPath(pathname: string) {
-  return stripLocalePrefix(pathname) === "/privacy";
-}
-
 function syncDocumentSeo(locale: Locale, pathname: string) {
-  const privacy = isPrivacyPath(pathname);
-  const title = pageTitle(locale, privacy);
-  const description = pageDescription(locale, privacy);
+  const page = pageFromPath(pathname);
+  const title = pageTitle(locale, page);
+  const description = pageDescription(locale, page);
   const canonicalPath = localePath(locale, stripLocalePrefix(pathname));
   const origin = window.location.origin;
   const canonicalUrl = `${origin}${canonicalPath === "/" ? "" : canonicalPath}`;

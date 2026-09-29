@@ -22,19 +22,14 @@
   flex: 0 0 auto;
 }
 .countries {
-  display: grid;
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .countries li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 12px;
-}
-.countries .label {
   color: var(--text-2);
 }
 

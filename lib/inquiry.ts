@@ -3,6 +3,9 @@ import { translate } from "./i18n";
 export type InquiryDetails = {
   name: string;
   email: string;
+  organization?: string;
+  country?: string;
+  phone?: string;
   industry: string;
   message: string;
   workflowTitle?: string;
@@ -19,7 +22,7 @@ export function buildInquiryHref(
     healthcare: "Healthcare",
     operations: "Operations",
     sales: "Sales",
-    other: "Another industry",
+    other: "Other",
   };
   const industry = translate(
     industryLabels[details.industry] || details.industry,
@@ -34,6 +37,15 @@ export function buildInquiryHref(
       : `I'm ${details.name.trim()}. I'd like to discuss automation for our team. Industry: ${industry}.`,
     "",
     `${es ? "Correo de trabajo" : "Work email"}: ${details.email.trim()}`,
+    ...(details.organization?.trim()
+      ? [`${es ? "Organización" : "Organization"}: ${details.organization.trim()}`]
+      : []),
+    ...(details.country?.trim()
+      ? [`${es ? "País" : "Country"}: ${details.country.trim()}`]
+      : []),
+    ...(details.phone?.trim()
+      ? [`${es ? "Teléfono o WhatsApp" : "Phone or WhatsApp"}: ${details.phone.trim()}`]
+      : []),
     ...(details.workflowTitle
       ? [
           `${es ? "Punto de partida" : "Starting point"}: ${translate(details.workflowTitle, locale)}`,

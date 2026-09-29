@@ -96,3 +96,14 @@ export function resolveLocale({
     ? "es"
     : "en";
 }
+
+/** Which page a (locale-prefixed or plain) path is, for titles and metadata. */
+export function pageFromPath(
+  pathname: string,
+): "home" | "privacy" | "security" | "about" {
+  const path = stripLocalePrefix(pathname);
+  if (path === "/privacy") return "privacy";
+  if (path === "/security") return "security";
+  if (path === "/about") return "about";
+  return "home";
+}

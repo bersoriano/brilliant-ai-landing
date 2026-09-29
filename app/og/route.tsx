@@ -95,7 +95,7 @@ export async function GET() {
               color: "#EEF0EE",
             }}
           >
-            Brilliant<span style={{ color: "#86C5C0", fontStyle: "normal" }}>.</span>
+            Brilliant AI<span style={{ color: "#86C5C0", fontStyle: "normal" }}>.</span>
           </span>
         </div>
       </div>

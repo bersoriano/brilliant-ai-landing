@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { languageAlternatePaths, localePath } from "@/lib/locale";
 import { absoluteUrl } from "@/lib/site";
 
-const pages = ["/", "/privacy"] as const;
+const pages = ["/", "/security", "/about", "/privacy"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return pages.flatMap((path) => {
@@ -12,8 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
         absoluteUrl(href),
       ]),
     );
-    const changeFrequency = path === "/" ? "weekly" : "yearly";
-    const priority = path === "/" ? 1 : 0.4;
+    const changeFrequency = path === "/" ? "weekly" : "monthly";
+    const priority = path === "/" ? 1 : path === "/privacy" ? 0.3 : 0.6;
     return (["en", "es"] as const).map((locale) => ({
       url: absoluteUrl(localePath(locale, path)),
       changeFrequency,
