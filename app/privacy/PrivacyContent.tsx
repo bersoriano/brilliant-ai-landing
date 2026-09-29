@@ -28,7 +28,7 @@ export default function PrivacyContent() {
         <h2>{t("Contacting us")}</h2>
         <p>
           {t(
-            "The contact form prepares an email using your device’s email application. The form does not send your entries to our server or store them in a website database. Your name, email address, industry, and message are included in the draft. If you send it, your email provider and ours process that message. We use information you send to respond to your inquiry and discuss the services you request.",
+            "The contact form sends your name, work email, industry, message, and language to our server, which forwards them to our team through an email delivery provider. Submissions are not stored in a website database, and their contents are not logged. If delivery fails, the form offers to prepare the same message in your device’s email application instead. We use information you send to respond to your inquiry and discuss the services you request.",
           )}
         </p>
         <h2>{t("Calculator inputs")}</h2>
