@@ -18,7 +18,9 @@ export const bodoni = localFont({
   ],
   variable: "--font-bodoni",
   display: "swap",
-  fallback: ["Bodoni 72", "Didot", "Times New Roman", "serif"],
+  // "Bodoni 72" stays in globals.css only: next/font emits fallbacks unquoted,
+  // and an unquoted name with a number invalidates the whole font-family.
+  fallback: ["Didot", "Times New Roman", "serif"],
   adjustFontFallback: "Times New Roman",
 });
 

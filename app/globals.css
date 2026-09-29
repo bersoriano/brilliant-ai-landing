@@ -4,7 +4,7 @@
    Section-specific layout lives in components/sections/*.module.css. */
 @import "tailwindcss";
 
-@theme {
+@theme static {
   --color-ink-950: #0b1520;
   --color-ink-900: #111d2a;
   --color-ink-800: #1f2d3b;
