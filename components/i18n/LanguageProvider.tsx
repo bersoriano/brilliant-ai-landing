@@ -10,6 +10,7 @@ import {
   type Locale,
 } from "@/lib/locale";
 import { pageDescription, pageTitle, translate } from "@/lib/i18n";
+import switchStyles from "./LanguageSwitch.module.css";
 const LanguageContext = createContext<{
   locale: Locale;
   setLocale: (locale: Locale) => void;
@@ -99,10 +100,14 @@ export function useLanguage() {
       translate(source, context.locale, variables),
   };
 }
-export function LanguageSwitch() {
+export function LanguageSwitch({ className = "" }: { className?: string }) {
   const { locale, setLocale, t } = useLanguage();
   return (
-    <div className="language-switch" role="group" aria-label={t("Language")}>
+    <div
+      className={`${switchStyles.switch} ${className}`.trim()}
+      role="group"
+      aria-label={t("Language")}
+    >
       <button
         type="button"
         lang="en"

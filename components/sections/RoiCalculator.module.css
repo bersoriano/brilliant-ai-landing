@@ -1,0 +1,204 @@
+/* Continues the --surface band that Problem starts */
+.band {
+  padding-top: clamp(56px, 6vw, 88px);
+  padding-bottom: var(--section-y);
+  background: var(--surface);
+}
+.title {
+  max-width: 15em;
+}
+.calculator {
+  margin-top: 56px;
+  align-items: start;
+}
+
+/* Inputs */
+.inputs {
+  grid-column: 1 / span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-right: 24px;
+  border-right: 1px solid var(--line-strong);
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fieldHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 15px;
+  color: var(--text-2);
+}
+.value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+.range {
+  --fill: 0%;
+  appearance: none;
+  height: 44px;
+  margin: 0;
+  background: linear-gradient(
+      to right,
+      var(--accent) var(--fill),
+      var(--line-strong) var(--fill)
+    )
+    center / 100% 3px no-repeat;
+}
+.range::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 0;
+  background: var(--accent);
+  border: 0;
+}
+.range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 0;
+  background: var(--accent);
+  border: 0;
+}
+.money {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--muted);
+}
+.assumptions summary {
+  justify-content: space-between;
+  width: 100%;
+}
+.assumptions summary span {
+  color: var(--accent);
+  font-size: 20px;
+  transition: transform 0.15s ease;
+}
+.assumptions[open] summary span {
+  transform: rotate(45deg);
+}
+.assumptionFields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-top: 16px;
+}
+
+/* Results: capacity first, money follows */
+.results {
+  grid-column: 5 / span 8;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-left: 24px;
+}
+.numerals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--col-gap);
+  margin: 0;
+}
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 2px solid var(--line-strong);
+}
+.stat:first-child {
+  border-top-color: var(--accent);
+}
+.stat dd {
+  margin: 0;
+  color: var(--text);
+}
+.statLabel {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.chartTitle {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+}
+.bar {
+  margin-block: 18px 8px;
+}
+.secondary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  margin: 0;
+}
+.secondary > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.secondary dt {
+  font-size: 15px;
+  color: var(--muted);
+}
+.secondary dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 32px;
+}
+.download {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+@media (max-width: 900px) {
+  .inputs {
+    padding-right: 0;
+    padding-bottom: 40px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .results {
+    padding-left: 0;
+  }
+  .secondary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .numerals {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+}

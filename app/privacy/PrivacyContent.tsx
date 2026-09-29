@@ -6,19 +6,20 @@ import {
 import { Brand } from "@/components/ui/Icon";
 import { CONTACT_EMAIL } from "@/lib/site";
 import { localePath } from "@/lib/locale";
+import styles from "./Privacy.module.css";
 export default function PrivacyContent() {
   const { t, locale } = useLanguage();
   return (
     <>
-      <header className="shell legal-header">
+      <header className={`shell ${styles.header}`}>
         <Brand />
         <LanguageSwitch />
       </header>
-      <main id="main" className="shell legal-page">
+      <main id="main" className={`shell ${styles.page}`}>
         <a className="text-link" href={localePath(locale, "/")}>
           {t("← Back to home")}
         </a>
-        <h1>{t("Website privacy notice")}</h1>
+        <h1 className="h2">{t("Website privacy notice")}</h1>
         <p>
           {t(
             "This notice describes how the features on this website handle information.",

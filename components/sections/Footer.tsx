@@ -1,63 +1,53 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
-import { Brand, Icon } from "../ui/Icon";
+import styles from "./Footer.module.css";
 import { CONTACT_EMAIL, PRIMARY_CTA } from "@/lib/site";
 import { localePath } from "@/lib/locale";
 export function Footer() {
   const { t, locale } = useLanguage();
   return (
-    <footer className="site-footer">
+    <footer className={styles.footer}>
       <div className="shell">
-        <div className="footer-main">
-          <div>
-            <Brand footer />
-            <p>
-              {t("Less repetitive work.")}
-              <br />
-              {t("More human potential.")}
+        <div className={styles.main}>
+          <div className={styles.brand}>
+            <p className={styles.tagline}>
+              {t("Less repetitive work.")} <em>{t("More human potential.")}</em>
             </p>
-            <p className="footer-markets">
+            <p className="caption">
               {t(
                 "AI automation for finance and healthcare teams in the United States, Canada, and Mexico.",
               )}
             </p>
           </div>
-          <div className="footer-links">
+          <div className={styles.columns}>
             <div>
-              <h3>{t("Explore")}</h3>
+              <h3 className="label">{t("Explore")}</h3>
               <a href="#solutions">{t("Industry solutions")}</a>
               <a href="#services">{t("Our services")}</a>
               <a href="#how-it-works">{t("Our approach")}</a>
               <a href="#onsite-consulting">{t("Onsite consulting")}</a>
             </div>
             <div>
-              <h3>{t("Get started")}</h3>
+              <h3 className="label">{t("Get started")}</h3>
               <a href="#roi-calculator">{t("ROI calculator")}</a>
               <a href="#faq">{t("Common questions")}</a>
-              <a href="#contact">
-                {t(PRIMARY_CTA)} <Icon name="diagonal" size={13} />
-              </a>
+              <a href="#contact">{t(PRIMARY_CTA)}</a>
             </div>
             <div>
-              <h3>{t("Say hello")}</h3>
+              <h3 className="label">{t("Say hello")}</h3>
               <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-              <span>
-                {t("Finance. Healthcare.")}
-                <br />
-                {t("People-first automation.")}
+              <span className="caption">
+                {t("Finance. Healthcare.")} {t("People-first automation.")}
               </span>
             </div>
           </div>
         </div>
-        <div className="footer-bottom">
-          <span>
+        <div className={styles.legal}>
+          <span className="caption">
             © {new Date().getFullYear()}{" "}
             {t("Brilliant AI. All rights reserved.")}
           </span>
-          <nav
-            className="footer-languages"
-            aria-label={t("Language")}
-          >
+          <nav className={styles.languages} aria-label={t("Language")}>
             <a href="/?lang=en" hrefLang="en" lang="en">
               English
             </a>

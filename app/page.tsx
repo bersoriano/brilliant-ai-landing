@@ -22,8 +22,8 @@ export default function Home() {
         <main id="main">
           <Hero />
           <TrustBar />
-          <Problem />
           <Solution />
+          <Problem />
           <RoiCalculator />
           <CaseStudy />
           <Services />

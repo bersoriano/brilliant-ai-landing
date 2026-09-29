@@ -1,0 +1,51 @@
+/* Top of the --surface band (continues into RoiCalculator): no bottom padding */
+.band {
+  padding-top: var(--section-y);
+  background: var(--surface);
+}
+.title {
+  max-width: 14em;
+  margin-top: 28px;
+}
+.leads {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--col-gap);
+  margin-top: 40px;
+}
+.leads .lead {
+  max-width: none;
+}
+.pains {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--col-gap);
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.pains li {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-strong);
+}
+.painTitle {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+}
+.closer {
+  max-width: 44em;
+  margin-top: 40px;
+  color: var(--text-2);
+}
+
+@media (max-width: 900px) {
+  .leads,
+  .pains {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

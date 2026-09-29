@@ -1,15 +1,22 @@
 import { getRequestLocale } from "@/lib/locale.server";
+import { translate } from "@/lib/i18n";
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const size = { width: 1200, height: 630 };
+const ogFont = (file: string) =>
+  readFile(join(process.cwd(), "public/fonts/og", file));
 
 export async function GET() {
-  const es = (await getRequestLocale()) === "es";
-  const font = await readFile(
-    join(process.cwd(), "public/fonts/manrope-regular.ttf"),
-  );
+  const locale = await getRequestLocale();
+  const t = (source: string) => translate(source, locale);
+  const [bodoni, bodoniItalic, geist, geistMono] = await Promise.all([
+    ogFont("BodoniModa-500.woff"),
+    ogFont("BodoniModa-400-Italic.woff"),
+    ogFont("Geist-Regular.ttf"),
+    ogFont("GeistMono-Regular.ttf"),
+  ]);
   return new ImageResponse(
     (
       <div
@@ -18,68 +25,89 @@ export async function GET() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          background: "#151815",
-          color: "#f2f3eb",
+          background: "#0B1520",
+          color: "#EEF0EE",
           padding: "64px 76px",
-          fontFamily: "Manrope",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            fontSize: 32,
-            color: "#ff8a57",
-          }}
-        >
-          <svg width="32" height="32" viewBox="0 0 24 24">
-            <path
-              d="m12 2 2.6 7.4L22 12l-7.4 2.6L12 22l-2.6-7.4L2 12l7.4-2.6Z"
-              fill="#ff8a57"
-            />
-          </svg>
-          <span style={{ color: "#f2f3eb", marginLeft: 14 }}>brilliant ai.</span>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ width: 32, height: 4, background: "#86C5C0" }} />
+          <span
+            style={{
+              marginTop: 18,
+              fontFamily: "Geist Mono",
+              fontSize: 20,
+              letterSpacing: 3,
+              textTransform: "uppercase",
+              color: "#86C5C0",
+            }}
+          >
+            {t("Done-for-you AI automation")}
+          </span>
         </div>
         <div
           style={{
             display: "flex",
-            marginTop: 52,
-            fontSize: 76,
-            lineHeight: 1.12,
-            letterSpacing: -4,
             flexDirection: "column",
+            marginTop: 44,
+            fontSize: locale === "es" ? 82 : 104,
+            lineHeight: 1,
+            letterSpacing: -3,
           }}
         >
-          <span>{es ? "IA que te libera del" : "AI that takes busywork"}</span>
-          <span>{es ? "trabajo repetitivo." : "off your plate."}</span>
+          <span style={{ fontFamily: "Bodoni Moda", fontWeight: 500 }}>
+            {t("Busywork in.")}
+          </span>
+          <span
+            style={{
+              fontFamily: "Bodoni Moda",
+              fontStyle: "italic",
+              fontWeight: 400,
+              color: "#86C5C0",
+            }}
+          >
+            {t("Finished work out.")}
+          </span>
         </div>
         <div
           style={{
             display: "flex",
             marginTop: "auto",
-            paddingTop: 27,
-            borderTop: "1px solid #454c3e",
+            paddingTop: 24,
+            borderTop: "1px solid #2C3C4D",
             justifyContent: "space-between",
-            fontSize: es ? 18 : 22,
-            color: "#b4bdab",
+            alignItems: "baseline",
+            fontFamily: "Geist",
+            fontSize: 22,
+            color: "#A9B3BC",
           }}
         >
           <span>
-            {es
+            {locale === "es"
               ? "IA para finanzas y salud en México, EE. UU. y Canadá"
               : "AI for finance & healthcare in the US, Canada & Mexico"}
           </span>
-          <span style={{ color: "#ff8a57" }}>
-            {es
-              ? "Más espacio para tu mejor trabajo."
-              : "Make room for brilliant work."}
+          <span
+            style={{
+              fontFamily: "Bodoni Moda",
+              fontStyle: "italic",
+              fontSize: 30,
+              color: "#EEF0EE",
+            }}
+          >
+            Brilliant<span style={{ color: "#86C5C0", fontStyle: "normal" }}>.</span>
           </span>
         </div>
       </div>
     ),
     {
       ...size,
-      fonts: [{ name: "Manrope", data: font, style: "normal", weight: 400 }],
+      fonts: [
+        { name: "Bodoni Moda", data: bodoni, style: "normal", weight: 500 },
+        { name: "Bodoni Moda", data: bodoniItalic, style: "italic", weight: 400 },
+        { name: "Geist", data: geist, style: "normal", weight: 400 },
+        { name: "Geist Mono", data: geistMono, style: "normal", weight: 400 },
+      ],
     },
   );
 }
