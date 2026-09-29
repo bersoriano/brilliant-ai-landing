@@ -1,0 +1,139 @@
+/* Utility bar: not sticky, sits above the header */
+.utility {
+  border-bottom: 1px solid var(--line);
+}
+.utilityInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 40px;
+}
+.language {
+  display: flex;
+  gap: 4px;
+}
+.language button {
+  min-width: 44px;
+  min-height: 40px;
+  padding: 0 6px;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.language button:hover {
+  color: var(--text-2);
+}
+.language button[aria-pressed="true"] {
+  color: var(--text);
+}
+
+/* Sticky header */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: var(--header-h);
+}
+.wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  min-height: 44px;
+  align-self: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 44px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.period {
+  font-style: normal;
+  color: var(--accent);
+}
+.links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-inline: auto;
+}
+.links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-2);
+  transition: color 0.15s ease;
+}
+.links a:hover {
+  color: var(--text);
+}
+.toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--text);
+}
+
+/* Mobile panel */
+.panel {
+  position: absolute;
+  inset: 100% 0 auto;
+  max-height: calc(100dvh - var(--header-h));
+  overflow-y: auto;
+  padding-block: 8px 32px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.panelLink {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.panelCta {
+  width: 100%;
+  margin-top: 28px;
+}
+
+@media (max-width: 900px) {
+  .links,
+  .cta {
+    display: none;
+  }
+  .toggle {
+    display: inline-flex;
+  }
+}
+@media (min-width: 901px) {
+  .panel {
+    display: none;
+  }
+}

@@ -2,6 +2,8 @@
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { useState } from "react";
 import { Icon } from "../ui/Icon";
+import { Kicker } from "../ui/Kicker";
+import { RichTemplate, lowerFirst } from "../ui/RichTemplate";
 import {
   INDUSTRIES,
   INDUSTRY_ORDER,
@@ -10,10 +12,12 @@ import {
 } from "@/lib/workflows";
 import { PRIMARY_CTA } from "@/lib/site";
 import { useInquiry } from "../inquiry/InquiryContext";
+import styles from "./Solution.module.css";
 
 const defaultSelectedIds = Object.fromEntries(
   INDUSTRY_ORDER.map((key) => [key, INDUSTRIES[key].defaultWorkflowId]),
 ) as Record<Industry, string>;
+const NUMERALS = ["i.", "ii.", "iii.", "iv."];
 
 export function Solution() {
   const { t } = useLanguage();
@@ -26,84 +30,81 @@ export function Solution() {
     examples.find((workflow) => workflow.id === selectedIds[active]) ||
     examples[0];
   return (
-    <section id="solutions" className="section shell industries-section">
-      <div className="section-heading">
-        <div>
-          <span className="eyebrow">{t("Start with a job you recognize")}</span>
-          <h2>
-            {t("Everyday work.")}
-            <br />
-            {t("Room to do more.")}
-          </h2>
-        </div>
-        <p>
-          {t("Pick a task you already know.")}
-          <br className="desktop-break" />
-          {t("We’ll show the first step, what gets prepared,")}
-          <br className="desktop-break" />
-          {t("and where your team steps in.")}
-        </p>
-      </div>
-      <div
-        className="industry-tabs"
-        role="tablist"
-        aria-label={t("Industry solutions")}
-      >
-        {INDUSTRY_ORDER.map((key, index) => {
-          const data = INDUSTRIES[key];
-          return (
-            <button
-              key={key}
-              id={`tab-${key}`}
-              type="button"
-              role="tab"
-              aria-selected={key === active}
-              tabIndex={key === active ? 0 : -1}
-              aria-controls="industry-panel"
-              onClick={() => setActive(key)}
-              onKeyDown={(event) => {
-                if (
-                  !["ArrowRight", "ArrowLeft", "Home", "End"].includes(
-                    event.key,
+    <section id="solutions" className={`section shell ${styles.solution}`}>
+      <Kicker>{t("Start with a job you recognize")}</Kicker>
+      <h2 className={`h2 ${styles.sentence}`}>
+        <RichTemplate
+          template={t("We’re on the {industry} team.")}
+          values={{ industry: <em>{t(active)}</em> }}
+        />{" "}
+        <RichTemplate
+          template={t("Help us {task}.")}
+          values={{ task: <em>{t(lowerFirst(selected.title))}</em> }}
+        />
+      </h2>
+      <div className={styles.controls}>
+        <div className={styles.controlRow}>
+          <span className="label" aria-hidden="true">
+            {t("Team")}
+          </span>
+          <div
+            className={styles.chips}
+            role="tablist"
+            aria-label={t("Industry solutions")}
+          >
+            {INDUSTRY_ORDER.map((key, index) => (
+              <button
+                key={key}
+                id={`tab-${key}`}
+                type="button"
+                role="tab"
+                className="chip"
+                aria-selected={key === active}
+                tabIndex={key === active ? 0 : -1}
+                aria-controls="industry-panel"
+                onClick={() => setActive(key)}
+                onKeyDown={(event) => {
+                  if (
+                    !["ArrowRight", "ArrowLeft", "Home", "End"].includes(
+                      event.key,
+                    )
                   )
-                )
-                  return;
-                event.preventDefault();
-                const last = INDUSTRY_ORDER.length - 1;
-                const nextIndex =
-                  event.key === "Home"
-                    ? 0
-                    : event.key === "End"
-                      ? last
-                      : event.key === "ArrowRight"
-                        ? (index + 1) % INDUSTRY_ORDER.length
-                        : (index - 1 + INDUSTRY_ORDER.length) %
-                          INDUSTRY_ORDER.length;
-                const next = INDUSTRY_ORDER[nextIndex];
-                setActive(next);
-                document.getElementById(`tab-${next}`)?.focus();
-              }}
-            >
-              <Icon name={data.icon} />
-              {t(data.label)}
-              <Icon name="diagonal" size={16} />
-            </button>
-          );
-        })}
+                    return;
+                  event.preventDefault();
+                  const last = INDUSTRY_ORDER.length - 1;
+                  const nextIndex =
+                    event.key === "Home"
+                      ? 0
+                      : event.key === "End"
+                        ? last
+                        : event.key === "ArrowRight"
+                          ? (index + 1) % INDUSTRY_ORDER.length
+                          : (index - 1 + INDUSTRY_ORDER.length) %
+                            INDUSTRY_ORDER.length;
+                  const next = INDUSTRY_ORDER[nextIndex];
+                  setActive(next);
+                  document.getElementById(`tab-${next}`)?.focus();
+                }}
+              >
+                {t(INDUSTRIES[key].label)}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
       <div
-        className="industry-panel workflow-explorer"
+        className={styles.panel}
         id="industry-panel"
         role="tabpanel"
         aria-labelledby={`tab-${active}`}
         tabIndex={0}
       >
-        <div className="industry-copy">
-          <span className="small-label">{t(industry.operationsLabel)}</span>
-          <h3>{t(industry.title)}</h3>
-          <p>{t(industry.description)}</p>
+        <div className={`${styles.controlRow} ${styles.taskRow}`}>
+          <span className="label" aria-hidden="true">
+            {t("Task")}
+          </span>
           <div
-            className="workflow-options"
+            className={styles.chips}
             role="group"
             aria-label={t("{industry} workflow examples", {
               industry: t(industry.label),
@@ -113,7 +114,7 @@ export function Solution() {
               <button
                 key={workflow.id}
                 type="button"
-                className="workflow-option"
+                className="chip"
                 aria-pressed={selected.id === workflow.id}
                 aria-controls="workflow-preview"
                 onClick={() =>
@@ -123,20 +124,14 @@ export function Solution() {
                   }))
                 }
               >
-                <span className="workflow-option-icon">
-                  <Icon name={workflow.icon} size={19} />
-                </span>
-                <span>
-                  <strong>{t(workflow.title)}</strong>
-                  <small>{t(workflow.shortDescription)}</small>
-                </span>
-                <Icon name="arrow" size={16} />
+                {t(workflow.title)}
               </button>
             ))}
           </div>
-          <p className="workflow-custom-note">
-            {t("Something else slowing you down?")}
-            <br />
+          <p className={styles.custom}>
+            <span className="caption">
+              {t("Something else slowing you down?")}
+            </span>
             <a
               href="#contact"
               className="text-link"
@@ -146,82 +141,69 @@ export function Solution() {
             </a>
           </p>
         </div>
-        <div
-          className="industry-demo workflow-preview"
+        <figure
+          className={`grid-12 ${styles.exhibit}`}
           id="workflow-preview"
-          role="region"
           aria-labelledby="workflow-preview-title"
         >
-          <div className="demo-top">
-            <span>
-              <span className="status-dot" />
-              {t("An example we could set up")}
+          <div className={styles.aside}>
+            <span className="exhibit__label">
+              {t("Exhibit {number}", { number: 2 })}
             </span>
-            <span>{t("Example only")}</span>
+            <h3 id="workflow-preview-title" className={styles.title}>
+              {t("{workflow}, step by step", { workflow: t(selected.title) })}
+            </h3>
+            <p className="label">
+              {t(industry.label)} · {t("Example only")}
+            </p>
+            <a
+              className="text-link text-link--accent"
+              href="#contact"
+              onClick={() => selectWorkflow(selected)}
+            >
+              {t(PRIMARY_CTA)} <Icon name="arrow" size={15} />
+            </a>
           </div>
-          <h3 id="workflow-preview-title">{t(selected.title)}</h3>
-          <div className="workflow-trigger">
-            <Icon name="clock" size={14} />
-            <span>{t(selected.trigger)}</span>
-          </div>
-          <div className="workflow-tools" aria-label={t("Tools in this example")}>
-            {selected.tools.map((tool, i) => (
-              <span key={tool}>
-                <span>{t(tool)}</span>
-                {i < selected.tools.length - 1 && (
-                  <Icon name="arrow" size={12} />
+          <div className={styles.main}>
+            <div className={styles.cells}>
+              <div className={styles.cell}>
+                <p className="label">{t("Starts when")}</p>
+                <p className={styles.trigger}>{t(selected.trigger)}</p>
+              </div>
+              <div className={styles.cell}>
+                <p className="label">{t("What we handle")}</p>
+                <ol className={styles.stages}>
+                  {selected.stages.map((stage, i) => (
+                    <li key={stage}>
+                      <span className="roman">{NUMERALS[i]}</span>
+                      <span>{t(stage)}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              <div className={`${styles.cell} ${styles.cellAccent}`}>
+                <p className="label">{t("What you get")}</p>
+                <p className={styles.text}>{t(selected.outcome)}</p>
+              </div>
+              <div className={styles.cell}>
+                <p className="label">{t("Who decides")}</p>
+                <p className={styles.text}>{t(selected.approval)}</p>
+              </div>
+            </div>
+            <figcaption className={`caption ${styles.caption}`}>
+              <span>
+                {t("Tools in this example")}:{" "}
+                {selected.tools.map((tool) => t(tool)).join(" → ")}
+              </span>
+              <span>
+                {t(
+                  "These are examples of what we could set up, not products you install. We confirm system access, data needs, and who approves what before any work begins.",
                 )}
               </span>
-            ))}
+            </figcaption>
           </div>
-          <div className="demo-document">
-            <div className="document-title">
-              <span className="document-symbol">
-                <Icon name={selected.icon} size={23} />
-              </span>
-              <div>
-                <strong>{t(selected.document)}</strong>
-                <small>{selected.reference}</small>
-              </div>
-              <span className="review-badge">{t("Ready to review")}</span>
-            </div>
-            <div className="document-lines">
-              <span>{t(selected.field)}</span>
-              <strong>{t(selected.value)}</strong>
-            </div>
-          </div>
-          <div className="demo-flow">
-            {selected.stages.map((text, i) => (
-              <div key={text}>
-                <span className={i === 3 ? "flow-review" : "flow-check"}>
-                  <Icon name={i === 3 ? "people" : "check"} size={13} />
-                </span>
-                <span>{t(text)}</span>
-              </div>
-            ))}
-          </div>
-          <div className="workflow-outcome">
-            <span>{t("What this gives your team")}</span>
-            <p>{t(selected.outcome)}</p>
-          </div>
-          <p className="workflow-approval">
-            <Icon name="shield" size={16} />
-            {t(selected.approval)}
-          </p>
-          <a
-            className="button workflow-inquiry"
-            href="#contact"
-            onClick={() => selectWorkflow(selected)}
-          >
-            {t(PRIMARY_CTA)} <Icon name="diagonal" size={17} />
-          </a>
-        </div>
+        </figure>
       </div>
-      <p className="workflow-scope-note">
-        {t(
-          "These are examples of what we could set up, not products you install. We confirm system access, data needs, and who approves what before any work begins.",
-        )}
-      </p>
       <p role="status" className="sr-only">
         {t("Selected example:")} {t(selected.title)}.
       </p>

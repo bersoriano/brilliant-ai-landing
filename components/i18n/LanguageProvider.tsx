@@ -99,10 +99,14 @@ export function useLanguage() {
       translate(source, context.locale, variables),
   };
 }
-export function LanguageSwitch() {
+export function LanguageSwitch({
+  className = "language-switch",
+}: {
+  className?: string;
+}) {
   const { locale, setLocale, t } = useLanguage();
   return (
-    <div className="language-switch" role="group" aria-label={t("Language")}>
+    <div className={className} role="group" aria-label={t("Language")}>
       <button
         type="button"
         lang="en"
