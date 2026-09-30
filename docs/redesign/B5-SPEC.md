@@ -36,7 +36,7 @@ In `app/layout.tsx`, replace the Manrope `localFont` with `fontVariables` from `
 | `--surface` | `#111D2A` | ROI band, exhibit cells, cards |
 | `--line` / `--line-strong` | `#1F2D3B` / `#2C3C4D` | rules, chip borders, chart track |
 | `--text` / `--text-2` | `#EEF0EE` / `#C9D0D6` | headings / secondary text |
-| `--muted` / `--faint` | `#A9B3BC` / `#7D8995` | body / captions, labels (both ≥ 4.5:1) |
+| `--muted` / `--faint` | `#BAC3CB` / `#8C98A3` | body / captions, labels (both ≥ 4.5:1) |
 | `--accent` / `--on-accent` | `#86C5C0` / `#0B1520` | see principle 2 |
 | `--caution` | `#E2C48A` | "Needs review" only |
 
