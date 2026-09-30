@@ -33,16 +33,17 @@ content is the in-page anchor `#review`.
   directly below it, never below other headlines.
 - One scene per finance/healthcare workflow. All names and numbers are
   invented and captioned "Illustrative". Spanish scenes use Mexican nouns
-  (CFDI, OC, RFC, provisiones, preautorización, aseguradora); `toolsMx` swaps
+  (CFDI, OC, RFC, provisiones, preautorización, aseguradora), in the *tú*
+  register; `toolsMx` swaps
   QuickBooks → CONTPAQi and the close system → SAP on `/es`.
 - The paper document is always light, whatever band it sits in.
 
 ### Calculator currency (`components/sections/RoiCalculator.tsx`)
 
-- USD | MXN toggle (`aria-pressed` chips). There is **no FX rate**: switching
-  currency swaps the hourly value and budget for that currency's editable
-  defaults (USD 60/h and 30,000; MXN 1,000/h and 500,000). Formatting comes
-  from `fmtCurrency(n, locale, currency)`.
+- The currency follows the language: **USD in English, MXN in Spanish**. There
+  is no FX rate. Each currency has its own editable defaults (USD 60/h and
+  30,000; MXN 1,000/h and 500,000), and switching language reseeds them.
+  Formatting comes from `fmtCurrency(n, locale, currency)`.
 - Defaults are 4 people × 8 repetitive hours a week. Hours lead, money follows.
 - The disclaimer is a visible callout: "The $ figure is capacity value, not
   cash savings. Implementation cost is scoped after the review."
@@ -53,7 +54,7 @@ content is the in-page anchor `#review`.
 
 - Only at ≤ 700px. Appears after 40% of the page, and steps aside while
   `#contact` is on screen (IntersectionObserver).
-- Uses `NAV_CTA` ("Book review" / "Agendar revisión"). It is out of the tab
+- Uses `NAV_CTA` ("Book review" / "Agenda tu revisión"). It is out of the tab
   order and `aria-hidden` while hidden. The footer reserves room for it.
 
 ### Paper band (`.band-paper` in `app/globals.css`)
@@ -68,8 +69,9 @@ the hero, calculator and close.
 - **Proof:** the case study stays gated by `shouldRenderCaseStudy`. Until it
   is approved, the proof block is the fallback line "Built by operators who
   have worked on finance and technology systems at global banks and consulting
-  firms", linking to `/about`. There is no logo row. Employer names appear
-  only on `/about`, with the "not clients or partners" hedge.
+  firms", linking to `/about`. There is no logo row. Employer names (including
+  Merrill Lynch) appear only on `/about`, with the "not clients or partners"
+  hedge.
 - **Security:** terms are set by each client, so the page describes a process
   the client controls: providers and training terms, scoped/logged/revocable
   access, BAA/DPA/NDA as the client requires, HIPAA via BAA, and LFPDPPP and
@@ -93,7 +95,7 @@ in Chrome at 360 / 390 / 700 / 900 / 1150 / 1440px, EN and ES.
 | **Logo honesty** | Test "Employer names stay off the homepage…"; names only on `/about` with the hedge | Pass |
 | **HIPAA / LFPDPPP presence** | `/security` has "Healthcare in the United States (HIPAA)" and "Mexico: personal data and residency (LFPDPPP)"; no certification claims | Pass |
 | **Mexico noun test** | `/es`: CFDI, OC, RFC, provisiones, preautorización, aseguradora, CONTPAQi/SAP in tools; "Revisión en sitio en México" | Pass |
-| **Usted** | Test "Mexican Spanish addresses the visitor as usted, never tú" over the whole dictionary | Pass |
+| **Register** | Test "Mexican Spanish uses tú with the visitor, not usted or Spain forms" over the whole dictionary (the visitor addressing us stays "ustedes") | Pass |
 | **CTA friction** | One primary ask everywhere ("Book a 20-minute workflow review"); WhatsApp and email as alternates; the form asks for 5 required fields + optional phone; "No technical brief" stated in the hero micro-copy, Review step, and form | Pass |
 | Overflow | No horizontal scroll on `/`, `/es`, `/security`, `/about` (EN/ES) at any width | Pass |
 | Keyboard | Tabs respond to arrow/Home/End keys; all 61 focusable controls show a focus indicator; mobile nav Escape returns focus | Pass |

@@ -211,15 +211,6 @@
   }
 }
 
-/* Currency toggle (no FX: amounts are entered in the chosen currency) */
-.currency {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.currency > .label {
-  margin-right: auto;
-}
 /* The capacity-not-cash note is part of the result, not a footnote. */
 .disclaimer {
   padding: 14px 16px;

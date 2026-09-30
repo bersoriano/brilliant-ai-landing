@@ -1,6 +1,6 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
-import { useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
   buildBreakdown,
   computeRoi,
@@ -16,9 +16,9 @@ import { StackedBar } from "../ui/StackedBar";
 import styles from "./RoiCalculator.module.css";
 import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 /**
- * Conservative starting point: 4 people × 8 repetitive hours a week. The hourly
- * value and budget are editable assumptions in whichever currency is shown;
- * switching currency swaps them for that currency's defaults (no FX rate).
+ * Conservative starting point: 4 people × 8 repetitive hours a week. The
+ * currency follows the language (USD in English, MXN in Spanish); the hourly
+ * value and budget are editable defaults in that currency (no FX rate).
  */
 const START: Record<Currency, Pick<RoiInputs, "hourlyValue" | "engagementCost">> = {
   USD: { hourlyValue: 60, engagementCost: 30000 },
@@ -29,12 +29,12 @@ export function RoiCalculator() {
   const { t, locale } = useLanguage();
   // Opportunity figures start empty so nothing is claimed on the visitor's
   // behalf; the engagement budget is seeded so payback is visible immediately.
-  const [currency, setCurrency] = useState<Currency>("USD");
+  const currency: Currency = locale === "es" ? "MXN" : "USD";
   const [inputs, setInputs] = useState<RoiInputs>({
     ...DEFAULT_INPUTS,
     people: 4,
     hoursPerWeek: 8,
-    ...START.USD,
+    ...START[currency],
     opportunitiesDeclined: 0,
     avgOpportunityValue: 0,
   });
@@ -47,12 +47,14 @@ export function RoiCalculator() {
     setDownloaded(false);
     setShared("idle");
   };
-  function chooseCurrency(next: Currency) {
-    if (next === currency) return;
-    setCurrency(next);
-    setInputs((prev) => ({ ...prev, ...START[next], avgOpportunityValue: 0 }));
+  // Switching language switches currency: reseed the money inputs for it.
+  const seeded = useRef(currency);
+  useEffect(() => {
+    if (seeded.current === currency) return;
+    seeded.current = currency;
+    setInputs((prev) => ({ ...prev, ...START[currency], avgOpportunityValue: 0 }));
     setShared("idle");
-  }
+  }, [currency]);
   function summary() {
     const breakdown = buildBreakdown(inputs, result, locale, currency);
     return [
@@ -116,26 +118,6 @@ export function RoiCalculator() {
         </h2>
         <div className={`grid-12 ${styles.calculator}`}>
           <div className={styles.inputs}>
-            <div
-              className={styles.currency}
-              role="group"
-              aria-label={t("Currency")}
-            >
-              <span className="label" aria-hidden="true">
-                {t("Currency")}
-              </span>
-              {(["USD", "MXN"] as const).map((code) => (
-                <button
-                  key={code}
-                  type="button"
-                  className="chip"
-                  aria-pressed={currency === code}
-                  onClick={() => chooseCurrency(code)}
-                >
-                  {code}
-                </button>
-              ))}
-            </div>
             <Range
               label={t("People doing repetitive work")}
               name="people"

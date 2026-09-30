@@ -11,6 +11,7 @@ import styles from "./Page.module.css";
 const ORGANIZATIONS = [
   "Boston Consulting Group",
   "Bank of America",
+  "Merrill Lynch",
   "Banorte",
   "BNY Mellon",
   "Accenture",

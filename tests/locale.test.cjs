@@ -318,11 +318,20 @@ test("CTA constants are translated and used in place of ad-hoc labels", () => {
     assert.ok(!sections.includes(`"${label}"`), `retired CTA still present: ${label}`);
 });
 
-test("Mexican Spanish addresses the visitor as usted, never tú", () => {
-  const informal =
-    /(^|[^\p{L}])(tu|tus|te|ti|contigo|tienes|puedes|necesitas|quieres|usas|rechazaste|abres|trae|descubre|cuéntanos|elige|escríbenos|envíalo|prepara|explora|ajusta|ayúdanos|evita|escribe|selecciona|agrégalo|envías)(?=[^\p{L}]|$)/iu;
-  for (const [key, value] of Object.entries(dictionary))
-    assert.doesNotMatch(value, informal, key);
+test("Mexican Spanish uses tú with the visitor, not usted or Spain forms", () => {
+  // Formal singular forms we must not slip back into ("ustedes" for the
+  // visitor addressing us — "Ayúdennos", "¿Trabajan…?" — is standard Mexican).
+  // Phrases, not bare verbs: "empiece"/"envíe" are also third-person subjunctive.
+  const formal =
+    /(^|[^\p{L}])(usted|empiece con|traiga|elija|seleccione|comparta|envíela|envíelo|escriba a|escríbanos|agende|ajuste los|agréguelo|cuéntenos|muéstrenos|evite|designe|envíenos|su equipo|su proceso|su control|tiene en mente)(?=[^\p{L}]|$)/iu;
+  // Spain-only vocabulary and vosotros forms.
+  const spain =
+    /(^|[^\p{L}])(vosotros|vosotras|os|ordenador|fichero|coger|tenéis|podéis|queréis|habéis)(?=[^\p{L}]|$)/iu;
+  for (const [key, value] of Object.entries(dictionary)) {
+    assert.doesNotMatch(value, formal, key);
+    assert.doesNotMatch(value, spain, key);
+  }
+  assert.equal(translate(PRIMARY_CTA, "es"), "Agenda una revisión de 20 minutos");
 });
 
 test("Every scene string and homepage data string has a Spanish entry", () => {
@@ -352,7 +361,7 @@ test("Employer names stay off the homepage; they live on /about with the hedge",
     .filter((f) => f.endsWith(".tsx"))
     .map((f) => fs.readFileSync(`components/sections/${f}`, "utf8"))
     .join("\n");
-  for (const name of ["Boston Consulting Group", "Bank of America", "Banorte", "Mellon", "Accenture", "IBM"])
+  for (const name of ["Boston Consulting Group", "Bank of America", "Merrill Lynch", "Banorte", "Mellon", "Accenture", "IBM"])
     assert.ok(!home.includes(name), `employer on homepage: ${name}`);
   const about = fs.readFileSync("app/about/AboutContent.tsx", "utf8");
   assert.match(about, /not current Brilliant AI clients or partners/);
