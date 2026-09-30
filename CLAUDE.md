@@ -19,6 +19,7 @@ Next.js 15 (App Router), React 19, TypeScript, Tailwind 4 (imported, but styling
   - Tokens, type classes and primitives live in `app/globals.css`; section layout goes in co-located `*.module.css`.
   - Fonts are local via `lib/fonts.ts`; don't add third-party font or image requests.
   - Radius 0, one teal accent, no gradients or shadows.
+  - Legibility: Bodoni is pinned to its text optical size (`"opsz" 11` on `html`) and headings use weight 600; its display sizes have hairlines that vanish on navy. Don't re-enable `font-optical-sizing: auto` or `-webkit-font-smoothing: antialiased`.
   - Light sections use `.band-paper` (redefines the tokens; every pair ≥ 4.5:1). Keep navy for hero, calculator and close.
   - Spec: `docs/redesign/B5-SPEC.md`.
 - **Keep a11y behavior:** tab keyboard handling, `aria-pressed` / `aria-selected`, native `<details>`, skip link, focus return in the mobile nav.

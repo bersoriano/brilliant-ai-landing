@@ -32,8 +32,8 @@
   /* Text (all ≥ 4.5:1 on --bg and --surface) */
   --text: #eef0ee;
   --text-2: #c9d0d6;
-  --muted: #a9b3bc;
-  --faint: #7d8995;
+  --muted: #bac3cb;
+  --faint: #8c98a3;
 
   /* Accent: calm teal. Never used for errors or warnings. */
   --accent: #86c5c0;
@@ -56,6 +56,10 @@
   box-sizing: border-box;
 }
 html {
+  /* Bodoni Moda's display optical sizes (opsz 24–96) have hairlines that
+     vanish on screen, worst light-on-navy. Pin the sturdier text cut. */
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 11;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-h) + 16px);
   -webkit-text-size-adjust: 100%;
@@ -67,7 +71,6 @@ body {
   font-family: var(--font-sans);
   font-size: 17px;
   line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 h1,
@@ -169,7 +172,7 @@ input[type="range"] {
 /* ---------- Type ---------- */
 .display {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   font-size: clamp(54px, 8.2vw, 118px);
   line-height: 0.92;
   letter-spacing: -0.035em;
@@ -177,7 +180,7 @@ input[type="range"] {
 }
 .h2 {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   font-size: clamp(34px, 4.4vw, 64px);
   line-height: 0.98;
   letter-spacing: -0.03em;
@@ -185,7 +188,7 @@ input[type="range"] {
 }
 .h2-sm {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   font-size: clamp(30px, 3.4vw, 48px);
   line-height: 1.02;
   letter-spacing: -0.03em;
@@ -193,7 +196,7 @@ input[type="range"] {
 }
 .statement {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   font-size: clamp(44px, 7.2vw, 104px);
   line-height: 0.95;
   letter-spacing: -0.035em;
@@ -202,7 +205,7 @@ input[type="range"] {
 /* Italic accent phrase inside any display heading */
 :is(.display, .h2, .h2-sm, .statement) em {
   font-style: italic;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--accent);
 }
 :is(.display, .h2, .h2-sm, .statement) em.quiet {
