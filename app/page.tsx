@@ -1,19 +1,17 @@
 import { InquiryProvider } from "@/components/inquiry/InquiryContext";
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
-import { Problem } from "@/components/sections/Problem";
-import { TrustBar } from "@/components/sections/TrustBar";
 import { Solution } from "@/components/sections/Solution";
-import { Services } from "@/components/sections/Services";
-import { HowItWorks } from "@/components/sections/HowItWorks";
-import { PastExperience } from "@/components/sections/PastExperience";
-import { WhyBrilliant } from "@/components/sections/WhyBrilliant";
+import { Problem } from "@/components/sections/Problem";
 import { RoiCalculator } from "@/components/sections/RoiCalculator";
-import { CaseStudy } from "@/components/sections/CaseStudy";
+import { HowItWorks } from "@/components/sections/HowItWorks";
+import { Trust } from "@/components/sections/Trust";
+import { Proof } from "@/components/sections/Proof";
 import { Faq } from "@/components/sections/Faq";
 import { OnsiteConsulting } from "@/components/sections/OnsiteConsulting";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
+import { StickyCta } from "@/components/sections/StickyCta";
 export default function Home() {
   return (
     <>
@@ -21,21 +19,19 @@ export default function Home() {
       <InquiryProvider>
         <main id="main">
           <Hero />
-          <TrustBar />
           <Solution />
           <Problem />
           <RoiCalculator />
-          <CaseStudy />
-          <Services />
           <HowItWorks />
-          <WhyBrilliant />
-          <PastExperience />
+          <Trust />
+          <Proof />
           <Faq />
           <OnsiteConsulting />
           <FinalCta />
         </main>
       </InquiryProvider>
       <Footer />
+      <StickyCta />
     </>
   );
 }

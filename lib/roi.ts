@@ -93,10 +93,16 @@ export function computeRoi(raw: RoiInputs): RoiResults {
   };
 }
 
-export const fmtCurrency = (n: number, locale: Locale = "en") =>
+export type Currency = "USD" | "MXN";
+
+export const fmtCurrency = (
+  n: number,
+  locale: Locale = "en",
+  currency: Currency = "USD",
+) =>
   new Intl.NumberFormat(locale === "es" ? "es-MX" : "en-US", {
     style: "currency",
-    currency: "USD",
+    currency,
     maximumFractionDigits: 0,
   }).format(Math.round(n));
 
@@ -114,11 +120,12 @@ export function buildBreakdown(
   inputs: RoiInputs,
   r: RoiResults,
   locale: Locale = "en",
+  currencyCode: Currency = "USD",
 ) {
   const t = (source: string, variables?: Record<string, string | number>) =>
     translate(source, locale, variables);
   const number = (n: number, digits = 0) => fmtNumber(n, digits, locale);
-  const currency = (n: number) => fmtCurrency(n, locale);
+  const currency = (n: number) => fmtCurrency(n, locale, currencyCode);
   const lines: { label: string; value: string }[] = [
     {
       label: t("Hours reclaimed per week"),

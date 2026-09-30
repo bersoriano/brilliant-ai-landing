@@ -1,17 +1,35 @@
 .hero {
   align-items: center;
-  padding-top: 112px;
-  padding-bottom: 104px;
+  padding-top: clamp(56px, 5.5vw, 88px);
+  padding-bottom: clamp(64px, 7vw, 96px);
 }
 .copy {
-  grid-column: 1 / span 7;
+  grid-column: 1 / span 6;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 32px;
+  gap: 22px;
 }
+/* The buyer line: the job, in the buyer's nouns. */
 .title {
-  margin-top: 8px;
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(32px, 3.1vw, 46px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+/* The old headline, demoted to a kicker line. */
+.line {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.2;
+  color: var(--text-2);
+}
+.line em {
+  font-style: italic;
+  color: var(--accent);
 }
 .actions {
   display: flex;
@@ -22,37 +40,16 @@
 
 /* Exhibit 1 */
 .exhibit {
-  grid-column: 8 / span 5;
-}
-.rows {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.row {
-  display: grid;
-  grid-template-columns: 44px 1fr auto;
-  align-items: baseline;
-  gap: 12px;
-  padding: 16px 0;
-}
-.stage {
-  font-size: 16px;
-  line-height: 1.4;
-  color: var(--text);
-}
-.row[data-tone="review"] .numeral {
-  color: var(--caution);
-}
-.row[data-tone="ready"] .numeral {
-  color: var(--accent);
+  grid-column: 7 / span 6;
 }
 
-@media (max-width: 900px) {
-  .hero {
-    padding-top: 72px;
-    padding-bottom: 72px;
-    row-gap: 64px;
+@media (max-width: 1150px) {
+  .copy {
+    grid-column: 1 / span 12;
+  }
+  .exhibit {
+    grid-column: 1 / span 12;
+    margin-top: 16px;
   }
 }
 @media (max-width: 700px) {

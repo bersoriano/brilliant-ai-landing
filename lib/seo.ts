@@ -12,23 +12,24 @@ import {
   languageAlternatePaths,
   localePath,
   ogLocale,
+  pageFromPath,
   stripLocalePrefix,
   type Locale,
 } from "./locale";
 import { absoluteUrl, CONTACT_EMAIL, getSiteUrl, SITE_NAME } from "./site";
 
 export function buildMetadata(locale: Locale, path: string): Metadata {
-  const privacy = stripLocalePrefix(path) === "/privacy";
+  const page = pageFromPath(path);
   const canonicalPath = localePath(locale, stripLocalePrefix(path));
-  const title = pageTitle(locale, privacy);
-  const description = pageDescription(locale, privacy);
+  const title = pageTitle(locale, page);
+  const description = pageDescription(locale, page);
   const imagePath = locale === "es" ? "/es/og" : "/og";
 
   return {
     metadataBase: new URL(getSiteUrl()),
     title,
     description,
-    keywords: privacy ? undefined : pageKeywords(locale),
+    keywords: page === "home" ? pageKeywords(locale) : undefined,
     authors: [{ name: SITE_NAME, url: getSiteUrl() }],
     creator: SITE_NAME,
     publisher: SITE_NAME,
@@ -80,7 +81,7 @@ export function buildJsonLd(locale: Locale, path: string) {
   const t = (source: string) => translate(source, locale);
   const siteUrl = getSiteUrl();
   const canonical = absoluteUrl(localePath(locale, stripLocalePrefix(path)));
-  const privacy = stripLocalePrefix(path) === "/privacy";
+  const page = pageFromPath(path);
   const inLanguage = htmlLang(locale);
   const organizationId = `${siteUrl}/#organization`;
 
@@ -126,11 +127,16 @@ export function buildJsonLd(locale: Locale, path: string) {
   };
 
   const webPage = {
-    "@type": privacy ? "PrivacyPolicy" : "WebPage",
+    "@type":
+      page === "privacy"
+        ? "PrivacyPolicy"
+        : page === "about"
+          ? "AboutPage"
+          : "WebPage",
     "@id": `${canonical}#webpage`,
     url: canonical,
-    name: pageTitle(locale, privacy),
-    description: pageDescription(locale, privacy),
+    name: pageTitle(locale, page),
+    description: pageDescription(locale, page),
     inLanguage,
     isPartOf: { "@id": `${siteUrl}/#website` },
     about: { "@id": organizationId },
@@ -138,7 +144,7 @@ export function buildJsonLd(locale: Locale, path: string) {
 
   const graph: Record<string, unknown>[] = [organization, website, webPage];
 
-  if (!privacy) {
+  if (page === "home") {
     graph.push({
       "@type": "FAQPage",
       "@id": `${canonical}#faq`,

@@ -3,22 +3,46 @@ import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { useEffect, useState } from "react";
 import { useInquiry } from "../inquiry/InquiryContext";
 import { buildInquiryHref } from "@/lib/inquiry";
-import { CONTACT_EMAIL, PRIMARY_CTA } from "@/lib/site";
+import {
+  CONTACT_EMAIL,
+  DISCOVERY_CALL_HREF,
+  PRIMARY_CTA,
+  WHATSAPP_CTA,
+  WHATSAPP_HREF,
+  WHATSAPP_NUMBER,
+} from "@/lib/site";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
 import styles from "./FinalCta.module.css";
 type Status = "idle" | "sending" | "sent" | "error";
+
+const COUNTRIES = [
+  ["US", "United States"],
+  ["MX", "Mexico"],
+  ["CA", "Canada"],
+  ["other", "Another country"],
+];
+/** Homepage buyers are finance and healthcare; everything else is "Other". */
+const SECTORS = [
+  ["finance", "Finance"],
+  ["healthcare", "Healthcare"],
+  ["other", "Other"],
+];
 
 export function FinalCta() {
   const { t, locale } = useLanguage();
   const [status, setStatus] = useState<Status>("idle");
   const [fallbackHref, setFallbackHref] = useState("");
   const [industry, setIndustry] = useState("");
-  const { selectedWorkflow, selectWorkflow } = useInquiry();
+  const { selectedWorkflow, selectWorkflow, sectorHint } = useInquiry();
+  const bookingIsExternal = DISCOVERY_CALL_HREF.startsWith("https://");
   useEffect(() => {
     if (selectedWorkflow) setIndustry(selectedWorkflow.industry);
     setStatus("idle");
   }, [selectedWorkflow]);
+  useEffect(() => {
+    if (sectorHint) setIndustry(sectorHint.sector);
+  }, [sectorHint]);
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -26,6 +50,9 @@ export function FinalCta() {
     const details = {
       name: String(data.get("name") || ""),
       email: String(data.get("email") || ""),
+      organization: String(data.get("organization") || ""),
+      country: String(data.get("country") || ""),
+      phone: String(data.get("phone") || ""),
       industry,
       message: String(data.get("workflow") || ""),
       workflowTitle: selectedWorkflow?.title,
@@ -84,16 +111,27 @@ export function FinalCta() {
         <p className="caption">
           {t("A focused 20-minute conversation. No technical brief needed.")}
         </p>
-        <a className="text-link" href={`mailto:${CONTACT_EMAIL}`}>
-          {CONTACT_EMAIL} <Icon name="arrow" size={16} />
-        </a>
+        <div className={styles.channels}>
+          <p className="label">{t("Prefer another channel?")}</p>
+          <a className="text-link" href={WHATSAPP_HREF} rel="noopener">
+            {t(WHATSAPP_CTA)} <span className="caption">{WHATSAPP_NUMBER}</span>
+          </a>
+          {bookingIsExternal ? (
+            <a className="text-link" href={DISCOVERY_CALL_HREF} rel="noopener">
+              {t("Pick a time on the calendar")} <Icon name="arrow" size={16} />
+            </a>
+          ) : null}
+          <a className="text-link" href={`mailto:${CONTACT_EMAIL}`}>
+            {CONTACT_EMAIL} <Icon name="arrow" size={16} />
+          </a>
+        </div>
       </div>
       <form
         className={styles.form}
         onSubmit={submit}
         onChange={() => setStatus((prev) => (prev === "sending" ? prev : "idle"))}
       >
-        <h3 className="h3">{t("What would you like to automate?")}</h3>
+        <h3 className="h3">{t("What task should we look at?")}</h3>
         {selectedWorkflow && (
           <div className={styles.selection} role="status">
             <div>
@@ -127,7 +165,6 @@ export function FinalCta() {
               id="contact-name"
               className="input"
               name="name"
-              placeholder={t("Alex Morgan")}
               autoComplete="name"
               required
               maxLength={100}
@@ -140,15 +177,47 @@ export function FinalCta() {
               className="input"
               name="email"
               type="email"
-              placeholder={t("alex@company.com")}
+              placeholder={t("name@organization.com")}
               autoComplete="email"
               required
               maxLength={254}
             />
           </div>
         </div>
+        <div className={styles.row}>
+          <div className="field">
+            <label htmlFor="contact-organization">{t("Organization")}</label>
+            <input
+              id="contact-organization"
+              className="input"
+              name="organization"
+              autoComplete="organization"
+              required
+              maxLength={120}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="contact-country">{t("Country")}</label>
+            <select
+              id="contact-country"
+              className="select"
+              name="country"
+              defaultValue={locale === "es" ? "MX" : ""}
+              required
+            >
+              <option value="" disabled>
+                {t("Select a country")}
+              </option>
+              {COUNTRIES.map(([value, label]) => (
+                <option key={value} value={value}>
+                  {t(label)}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
         <div className="field">
-          <label htmlFor="contact-industry">{t("Your industry")}</label>
+          <label htmlFor="contact-industry">{t("Sector")}</label>
           <select
             id="contact-industry"
             className="select"
@@ -165,13 +234,13 @@ export function FinalCta() {
             required
           >
             <option value="" disabled>
-              {t("Select your industry")}
+              {t("Select a sector")}
             </option>
-            <option value="finance">{t("Finance")}</option>
-            <option value="healthcare">{t("Healthcare")}</option>
-            <option value="operations">{t("Operations")}</option>
-            <option value="sales">{t("Sales")}</option>
-            <option value="other">{t("Another industry")}</option>
+            {SECTORS.map(([value, label]) => (
+              <option key={value} value={value}>
+                {t(label)}
+              </option>
+            ))}
           </select>
         </div>
         <div className="field">
@@ -179,7 +248,7 @@ export function FinalCta() {
             {t(
               selectedWorkflow
                 ? "Anything to add about your process? (optional)"
-                : "What would you like to take off your plate?",
+                : "What task should we look at?",
             )}
           </label>
           <textarea
@@ -192,6 +261,19 @@ export function FinalCta() {
             rows={3}
             required={!selectedWorkflow}
             maxLength={2000}
+          />
+        </div>
+        <div className="field">
+          <label htmlFor="contact-phone">
+            {t("Phone or WhatsApp (optional)")}
+          </label>
+          <input
+            id="contact-phone"
+            className="input"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            maxLength={40}
           />
         </div>
         <div className={styles.honeypot} aria-hidden="true">
@@ -212,7 +294,7 @@ export function FinalCta() {
         </button>
         <p className="caption">
           {t(
-            "Sent straight to us — no email app needed. Share enough to have the conversation; please leave out patient records and account numbers.",
+            "Share enough to have the conversation. Do not send patient records or account numbers.",
           )}
         </p>
         {status === "sent" && (

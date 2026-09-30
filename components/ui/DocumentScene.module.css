@@ -1,0 +1,240 @@
+/* Two panels: inbound reality | what the team receives. Stacks at <= 700px
+   with the inbound first and the approval card directly below it. */
+.scene {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 16px;
+}
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.email,
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: var(--surface);
+  border-top: 2px solid var(--line-strong);
+}
+.card {
+  flex: 1;
+  border-top-color: var(--accent);
+}
+.channel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.from {
+  font-size: 13px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.subject {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+.attachment {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+/* The document itself: always paper, whatever band it sits in. */
+.paper {
+  padding: 16px 16px 14px;
+  background: #f7f5ef;
+  color: #0b1520;
+  border: 1px solid #d6d2c7;
+}
+.paperTitle {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #d6d2c7;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+}
+.lines {
+  display: grid;
+  margin: 0;
+}
+.lines > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px dashed #d6d2c7;
+  font-size: 13px;
+}
+.lines dt {
+  color: #3d4a57;
+}
+.lines dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  text-align: right;
+}
+.lines > [data-flagged] dd {
+  padding: 0 4px;
+  background: #f3e3bd;
+  color: #5e420b;
+}
+.flag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b4c0f;
+}
+.flag span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid currentColor;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+.checks {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 4px;
+  padding: 0;
+  list-style: none;
+}
+.checks li {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  align-items: start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-2);
+}
+.mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 1px solid var(--line-strong);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.checks [data-state="ok"] .mark {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.checks [data-state="flag"] .mark {
+  border-color: var(--caution);
+  color: var(--caution);
+}
+.checks [data-state="flag"] {
+  color: var(--text);
+}
+.attachments {
+  font-size: 12.5px;
+  color: var(--faint);
+}
+.cardFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px dashed var(--line-strong);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--faint);
+  cursor: not-allowed;
+}
+.waits {
+  font-size: 12px;
+  color: var(--faint);
+  text-align: right;
+}
+
+/* Optional hero motion: the four steps tick once, left to right. */
+.steps {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.steps li {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 2px solid var(--line-strong);
+  font-size: 13px;
+  color: var(--faint);
+  animation: tick 0.4s ease forwards;
+}
+.steps li span {
+  font-family: var(--font-display);
+  font-style: italic;
+}
+.steps li:last-child {
+  animation-name: tick-last;
+}
+@keyframes tick {
+  to {
+    border-top-color: var(--accent);
+    color: var(--text-2);
+  }
+}
+@keyframes tick-last {
+  to {
+    border-top-color: var(--caution);
+    color: var(--text);
+  }
+}
+
+@media (max-width: 700px) {
+  .scene {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

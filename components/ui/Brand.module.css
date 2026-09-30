@@ -14,3 +14,8 @@
   font-style: normal;
   color: var(--accent);
 }
+.ai {
+  font-style: normal;
+  font-weight: 500;
+  white-space: pre;
+}

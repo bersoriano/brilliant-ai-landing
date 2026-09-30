@@ -24,6 +24,13 @@
 .tagline em {
   color: var(--accent);
 }
+.identity {
+  font-size: 14px;
+  color: var(--text-2);
+}
+.identity a {
+  color: var(--accent);
+}
 .columns {
   display: grid;
   grid-template-columns: repeat(3, auto);
@@ -91,5 +98,11 @@
   }
   .legal > :first-child {
     flex-basis: 100%;
+  }
+}
+/* Leave room for the sticky mobile CTA bar. */
+@media (max-width: 700px) {
+  .footer {
+    padding-bottom: 88px;
   }
 }

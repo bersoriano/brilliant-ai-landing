@@ -1,7 +1,7 @@
 export const FAQS: [question: string, answer: string][] = [
   [
     "Do you work with teams in the United States, Canada, and Mexico?",
-    "Yes. We work with finance and healthcare teams in the United States, Canada, and Mexico, and onsite consulting can be arranged in those countries. We also run a consulting arm in Malaysia serving clients across Southeast Asia. English and Mexican Spanish are available on this site.",
+    "Yes. We work with finance and healthcare teams in the United States, Canada, and Mexico. Onsite reviews can be arranged in all three, including Mexico City. This site is available in English and Mexican Spanish.",
   ],
   [
     "What happens in the first workflow review?",
@@ -21,7 +21,7 @@ export const FAQS: [question: string, answer: string][] = [
   ],
   [
     "How do you approach sensitive financial or patient data?",
-    "We begin by defining what data the workflow needs, who can access it, where it is processed, and how long it is retained. Security, vendor agreements, and any applicable regulatory requirements must be reviewed with your team before sensitive data is connected. An automation does not by itself establish compliance.",
+    "On your terms. We start by defining what data the workflow needs, who can access it, where it is processed, and how long it is kept. Which model providers may process it, and the BAA, DPA, or NDA we work under, are agreed with your team before sensitive data is connected. An automation does not by itself establish compliance.",
   ],
   [
     "What if an AI output is wrong?",
@@ -29,6 +29,6 @@ export const FAQS: [question: string, answer: string][] = [
   ],
   [
     "What does it cost, and what happens after launch?",
-    "Pricing follows the scope: the workflow, required integrations, and level of support. Your proposal separates implementation from third-party and ongoing costs. We also agree on documentation, handover, monitoring, and support responsibilities before work begins.",
+    "The workflow review is free and takes 20 minutes. A pilot covers one workflow with a fixed scope, typically 3–6 weeks, and is priced after discovery. After launch, a monthly operating retainer keeps the workflow monitored and current. Every proposal separates implementation, third-party and API costs, and ongoing care.",
   ],
 ];

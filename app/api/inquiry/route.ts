@@ -15,7 +15,15 @@ import { NextResponse } from "next/server";
  * descriptions of internal processes.
  */
 
-const MAX = { name: 100, email: 254, message: 2000, workflow: 120 };
+const MAX = {
+  name: 100,
+  email: 254,
+  message: 2000,
+  workflow: 120,
+  organization: 120,
+  country: 20,
+  phone: 40,
+};
 const INDUSTRIES = new Set([
   "finance",
   "healthcare",
@@ -31,6 +39,9 @@ const oneLine = (value: string) => value.replace(/[\r\n]+/g, " ").trim();
 type Submission = {
   name: string;
   email: string;
+  organization: string;
+  country: string;
+  phone: string;
   industry: string;
   message: string;
   workflow: string;
@@ -57,6 +68,9 @@ function parse(body: unknown): Submission | null {
   return {
     name,
     email,
+    organization: oneLine(text("organization", MAX.organization)),
+    country: oneLine(text("country", MAX.country)),
+    phone: oneLine(text("phone", MAX.phone)),
     industry,
     message,
     workflow,
@@ -98,6 +112,9 @@ function render(submission: Submission) {
   const lines = [
     `Name: ${submission.name}`,
     `Work email: ${submission.email}`,
+    ...(submission.organization ? [`Organization: ${submission.organization}`] : []),
+    ...(submission.country ? [`Country: ${submission.country}`] : []),
+    ...(submission.phone ? [`Phone / WhatsApp: ${submission.phone}`] : []),
     `Industry: ${submission.industry}`,
     `Language: ${submission.locale}`,
     ...(submission.workflow ? [`Starting point: ${submission.workflow}`] : []),

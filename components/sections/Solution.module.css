@@ -1,11 +1,11 @@
+/* Sits in the light "briefing paper" band (.band-paper on the section). */
 .solution {
   display: flex;
   flex-direction: column;
 }
 .sentence {
   max-width: 1240px;
-  margin-top: 40px;
-  font-size: clamp(40px, 5vw, 72px);
+  margin-top: 36px;
 }
 .sentence em {
   border-bottom: 2px solid var(--accent);
@@ -13,7 +13,7 @@
 
 /* Ruled control band: Team row (tablist) + Task row (inside the tabpanel) */
 .controls {
-  margin-top: 56px;
+  margin-top: 48px;
   padding-top: 20px;
   border-top: 1px solid var(--line);
 }
@@ -28,8 +28,11 @@
 .controlRow > .label {
   flex: 0 0 56px;
 }
+.other {
+  margin-left: auto;
+  font-size: 15px;
+}
 .taskRow {
-  flex-wrap: wrap;
   margin-top: 12px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--line);
@@ -40,16 +43,10 @@
   gap: 12px;
   min-width: 0;
 }
-.custom {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 12px;
-}
 
 /* Exhibit 2 */
 .exhibit {
-  margin-top: 48px;
+  margin-top: 40px;
 }
 .aside {
   grid-column: 1 / span 3;
@@ -61,54 +58,48 @@
 .title {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 34px;
+  font-size: 30px;
   line-height: 1.12;
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
+.facts {
+  display: grid;
+  gap: 14px;
+  margin: 8px 0 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.facts > div {
+  display: grid;
+  gap: 4px;
+}
+.facts dd {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
 .main {
   grid-column: 4 / span 9;
-}
-.cells {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-.cell {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 28px;
-  background: var(--surface);
-  border-top: 2px solid var(--line-strong);
-}
-.cellAccent {
-  border-top-color: var(--accent);
-}
-.trigger {
-  font-size: 20px;
-  line-height: 1.4;
-  color: var(--text);
-}
-.text {
-  font-size: 17px;
-  line-height: 1.55;
-  color: var(--text-2);
+  min-width: 0;
 }
 .stages {
   display: grid;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--line);
   list-style: none;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.4;
   color: var(--text-2);
 }
 .stages li {
   display: grid;
-  grid-template-columns: 40px 1fr;
-  align-items: baseline;
+  align-content: start;
+  gap: 6px;
 }
 .stages .roman {
   font-size: 18px;
@@ -119,16 +110,26 @@
   padding-top: 16px;
 }
 
+@media (max-width: 1150px) {
+  .other {
+    margin-left: 0;
+  }
+  /* Team row only: lets the "Operations or sales" link drop below the tabs. */
+  .controls > .controlRow {
+    flex-wrap: wrap;
+  }
+}
 @media (max-width: 900px) {
   .exhibit {
-    row-gap: 32px;
+    row-gap: 28px;
   }
-  .cells {
-    grid-template-columns: minmax(0, 1fr);
+  .stages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 @media (max-width: 700px) {
-  .controlRow {
+  .controlRow,
+  .controls > .controlRow {
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
@@ -146,7 +147,7 @@
   .chips > * {
     scroll-snap-align: start;
   }
-  .cell {
-    padding: 22px;
+  .stages {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

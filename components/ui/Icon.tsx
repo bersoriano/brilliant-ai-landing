@@ -133,7 +133,7 @@ export function Icon({
     </svg>
   );
 }
-/** B5 wordmark: "Brilliant" in Bodoni italic with an upright teal period. */
+/** Wordmark: "Brilliant AI" in Bodoni italic with an upright teal period. */
 export function Brand({ className = "" }: { className?: string }) {
   const { t, locale } = useLanguage();
   return (
@@ -141,7 +141,8 @@ export function Brand({ className = "" }: { className?: string }) {
       href={locale === "es" ? "/es#top" : "/#top"}
       className={`${brandStyles.wordmark} ${className}`.trim()}
     >
-      Brilliant<span className={brandStyles.period}>.</span>
+      Brilliant<span className={brandStyles.ai}> AI</span>
+      <span className={brandStyles.period}>.</span>
       <span className="sr-only"> {t("home")}</span>
     </a>
   );

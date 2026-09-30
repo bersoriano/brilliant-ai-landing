@@ -10,15 +10,18 @@ export function Hero() {
   return (
     <section id="top" className={`shell grid-12 ${styles.hero}`}>
       <div className={styles.copy}>
-        <Kicker>{t("Done-for-you AI automation")}</Kicker>
-        <h1 className={`display ${styles.title}`}>
-          {t("Busywork in.")}
-          <br />
-          <em>{t("Finished work out.")}</em>
+        <Kicker>{t("Done-for-you AI automation for finance and healthcare")}</Kicker>
+        <h1 className={styles.title}>
+          {t(
+            "We take the repetitive work off your team\u00a0— invoices, reports, referrals, follow-ups\u00a0— and run it inside the tools you already use.",
+          )}
         </h1>
+        <p className={styles.line}>
+          {t("Busywork in.")} <em>{t("Finished work out.")}</em>
+        </p>
         <p className="lead">
           {t(
-            "We build and manage AI workflows for finance and healthcare teams in the United States, Canada, and Mexico—processing documents, preparing reports, and keeping follow-ups moving inside your existing systems.",
+            "You keep every approval that matters. We build the workflow, monitor it, and handle the exceptions. United States, Canada, and Mexico.",
           )}
         </p>
         <div className={styles.actions}>
@@ -26,7 +29,7 @@ export function Hero() {
             {t(PRIMARY_CTA)}
           </a>
           <a href="#solutions" className="text-link">
-            {t("See what we can automate")} <Icon name="arrow" size={16} />
+            {t("See a workflow in motion")} <Icon name="arrow" size={16} />
           </a>
         </div>
         <p className="caption">{t("20 minutes. Bring one repetitive task.")}</p>
