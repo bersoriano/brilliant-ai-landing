@@ -1,4 +1,12 @@
 {
+  "Client work": "Trabajo con clientes",
+  "One connected CRM for industrial glass operations.": "Un CRM conectado para operaciones de vidrio industrial.",
+  "Raw materials, finished-product stock, and sales were managed in separate software.": "Las materias primas, el inventario de productos terminados y las ventas se gestionaban en sistemas separados.",
+  "What we built": "Lo que construimos",
+  "We built a custom CRM from scratch, developing each part as a module and connecting them through shared APIs.": "Construimos un CRM a la medida desde cero. Desarrollamos cada parte como un módulo y los conectamos mediante API compartidas.",
+  "Now": "Ahora",
+  "Rhino works from one integrated system and can automate workflows across inventory and sales.": "Rhino trabaja desde un sistema integrado y puede automatizar procesos de inventario y ventas.",
+  "Visit Rhino": "Conoce a Rhino",
   "What happens in the first workflow review?": "¿Qué pasa en la primera revisión de procesos?",
   "Bring one task your team repeats. In a 20-minute conversation, we’ll talk through the inputs, tools, handoffs, and approval points. We’ll identify a useful starting point and discuss what needs deeper discovery before a pilot can be scoped. There’s no need to prepare a technical brief.": "Trae una tarea que tu equipo repita. En una conversación de 20 minutos revisamos las entradas, las herramientas, los traspasos y los puntos de aprobación. Identificamos un buen punto de partida y lo que requiere un diagnóstico más profundo antes de definir un piloto. No necesitas preparar un documento técnico.",
   "Do we need an AI specialist on our team?": "¿Necesitamos un especialista en IA en nuestro equipo?",

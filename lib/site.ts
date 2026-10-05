@@ -1,7 +1,7 @@
 /** Public contact settings. Set these before deploying to your own domain. */
 export const SITE_NAME = "Brilliant AI";
 export const CONTACT_EMAIL =
-  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@brilliant.ai";
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@brilliant.dev";
 const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL;
 export const DISCOVERY_CALL_HREF =
   bookingUrl && /^https:\/\//.test(bookingUrl) ? bookingUrl : "#contact";
@@ -31,9 +31,9 @@ export const NAV_LINKS = [
 export function getSiteUrl() {
   const fromEnv = process.env.NEXT_PUBLIC_SITE_URL;
   if (fromEnv) return fromEnv.replace(/\/$/, "");
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
-    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.replace(/\/$/, "")}`;
-  return "http://localhost:3000";
+  return process.env.NODE_ENV === "production"
+    ? `https://${SITE_DOMAIN}`
+    : "http://localhost:3000";
 }
 
 export function absoluteUrl(path: string) {
