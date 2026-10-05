@@ -2,12 +2,11 @@
 export const SITE_NAME = "Brilliant AI";
 export const CONTACT_EMAIL =
   process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@brilliant.dev";
-const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL;
 export const DISCOVERY_CALL_HREF =
-  bookingUrl && /^https:\/\//.test(bookingUrl) ? bookingUrl : "#contact";
+  "https://haabcalendar.com/professionals/ai-automation";
 /**
  * One named offer, repeated verbatim. Every control whose destination is the
- * conversion (booking link or the inquiry form) uses PRIMARY_CTA so the ask is
+ * booking uses PRIMARY_CTA so the ask is
  * recognisable rather than reworded a dozen ways. ONSITE_CTA is the single
  * exception: a different service, deliberately kept on the same noun.
  */

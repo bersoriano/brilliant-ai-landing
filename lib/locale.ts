@@ -25,6 +25,15 @@ export function stripLocalePrefix(pathname: string) {
   return pathname || "/";
 }
 
+/** Keep public locale path when middleware runs again on its rewritten target. */
+export function effectiveLocalePath(pathname: string, forwardedPath?: string | null) {
+  return forwardedPath &&
+    isSpanishPath(forwardedPath) &&
+    stripLocalePrefix(forwardedPath) === pathname
+    ? forwardedPath
+    : pathname;
+}
+
 export function splitHash(path: string) {
   const hashIndex = path.indexOf("#");
   if (hashIndex === -1) return { pathname: path || "/", hash: "" };
@@ -100,8 +109,10 @@ export function resolveLocale({
 /** Which page a (locale-prefixed or plain) path is, for titles and metadata. */
 export function pageFromPath(
   pathname: string,
-): "home" | "privacy" | "security" | "about" {
+): "home" | "privacy" | "security" | "about" | "finance" | "healthcare" {
   const path = stripLocalePrefix(pathname);
+  if (path === "/finance-automation") return "finance";
+  if (path === "/healthcare-automation") return "healthcare";
   if (path === "/privacy") return "privacy";
   if (path === "/security") return "security";
   if (path === "/about") return "about";

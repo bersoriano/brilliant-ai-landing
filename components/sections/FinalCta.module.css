@@ -76,6 +76,10 @@
 .submit {
   width: 100%;
 }
+.bookingNote {
+  margin-top: 10px;
+  max-width: 34ch;
+}
 .submit:disabled {
   opacity: 0.7;
   cursor: progress;

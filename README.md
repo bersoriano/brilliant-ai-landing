@@ -28,9 +28,7 @@ Copy `.env.example` to `.env.local`, then configure:
   before publishing.
 - `NEXT_PUBLIC_SITE_URL`: your production website origin, used for social preview
   URLs. Defaults to `https://brilliant.dev` in production when unset.
-- `NEXT_PUBLIC_BOOKING_URL`: optional HTTPS scheduling URL. With no booking URL,
-  calls to action scroll to the inquiry form. Public environment variables are
-  included at build time, so rebuild after changing them.
+Booking CTAs use the Haab Calendar URL in `lib/site.ts`.
 
 The contact form validates required fields and opens a **draft in the visitor’s
 email application**. The visitor sends that email. This site does not claim the
@@ -42,14 +40,12 @@ provider configuration. No credentials are required for the current email flow.
 
 ## Page behavior
 
-- Finance, healthcare, operations, and sales tabs each offer three selectable
+- Finance and healthcare tabs each offer three selectable
   workflow examples, including their trigger, example tools, deliverable, and
   human approval point. Arrow keys, Home, and End switch industries; workflow
   buttons expose their selected state.
-- “Discuss this workflow” carries the chosen example into the contact form without
-  navigation, network requests, or browser storage. Existing name, email, and notes
-  remain intact. Visitors can clear the selection or change industry; the email
-  draft includes the chosen workflow. Additional notes are optional with a selection.
+- Finance and healthcare service pages expand those examples with their trigger,
+  deliverable, and approval point. Homepage, footer, and sitemap link to both.
 - The ROI calculator updates locally, explains its assumptions, and downloads a
   plain-text breakdown without collecting an email address. Values describe
   reclaimed capacity, not cash savings. Implementation and operating costs are
@@ -70,6 +66,7 @@ provider configuration. No credentials are required for the current email flow.
 - `components/ui`: primitives (`Kicker`, `Exhibit`, `StackedBar`, `RichTemplate`, `DocumentScene`) plus `Icon.tsx` (icons and the wordmark).
 - `lib/scenes.ts`: illustrative document scenes (what arrives → what the team receives) for each finance and healthcare workflow.
 - `app/security`, `app/about`: the trust page and the background page (prior employers, hedged).
+- `app/finance-automation`, `app/healthcare-automation`: focused service pages.
 - `lib/fonts.ts`: Bodoni Moda (display), Geist (UI), and Geist Mono (labels), all served locally.
 - `lib/site.ts`: CTA labels, contact settings (email, WhatsApp, domain), public URL, and navigation.
 - `lib/seo.ts`: metadata, hreflang, and JSON-LD.
@@ -79,7 +76,7 @@ provider configuration. No credentials are required for the current email flow.
 
 ## Before publishing
 
-Verify the contact mailbox, set the scheduling URL if desired, and check the
+Verify the contact mailbox, confirm the Haab Calendar booking URL, and check the
 inquiry flow on a device with an email application. Confirm that service and
 privacy descriptions match your operating practices and hosting provider.
 Tool names represent potential integrations, not client endorsements. Workflow
@@ -89,7 +86,7 @@ compliance certifications are invented.
 ### English and Mexican Spanish
 
 English is served at `/` (United States and Canada). Mexican Spanish is served at `/es`
-(Mexico). `/privacy` and `/es/privacy` follow the same split. The sitemap and `hreflang`
+(Mexico). Service and supporting pages follow the same split. The sitemap and `hreflang`
 tags advertise `en-US`, `en-CA`, `es-MX`, and `x-default`. Search-engine crawlers receive
 the URL they request and are not redirected by language or location.
 

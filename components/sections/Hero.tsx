@@ -32,7 +32,11 @@ export function Hero() {
             {t("See a workflow in motion")} <Icon name="arrow" size={16} />
           </a>
         </div>
-        <p className="caption">{t("20 minutes. Bring one repetitive task.")}</p>
+        <p className="caption">
+          {t("20 minutes. Bring one repetitive task.")}
+          <br />
+          {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+        </p>
       </div>
       <HeroVisual />
     </section>

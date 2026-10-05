@@ -1,7 +1,7 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { Kicker } from "../ui/Kicker";
-import { ONSITE_CTA } from "@/lib/site";
+import { DISCOVERY_CALL_HREF, ONSITE_CTA } from "@/lib/site";
 import styles from "./OnsiteConsulting.module.css";
 
 const countries = ["United States", "Canada", "Mexico"];
@@ -37,9 +37,12 @@ export function OnsiteConsulting() {
               </li>
             ))}
           </ul>
-          <a href="#contact" className="button button--outline">
+          <a href={DISCOVERY_CALL_HREF} className="button button--outline">
             {t(ONSITE_CTA)}
           </a>
+          <p className="caption">
+            {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+          </p>
         </div>
       </div>
     </section>

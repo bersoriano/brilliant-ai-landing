@@ -103,9 +103,8 @@ in Chrome at 360 / 390 / 700 / 900 / 1150 / 1440px, EN and ES.
 
 ## Still open
 
-- **Booking URL:** set `NEXT_PUBLIC_BOOKING_URL` (https) once you have it. The
-  CTAs switch to it, and the contact column shows "Pick a time on the
-  calendar".
+- **Booking URL:** CTAs use the Haab Calendar URL in `lib/site.ts`. The hero,
+  contact section, onsite review, and footer disclose the booking partner.
 - **Real proof:** when the pilot outcome is cleared, fill `lib/caseStudy.ts`
   and set `approved: true`. The proof block then renders it instead of the
   fallback line.
