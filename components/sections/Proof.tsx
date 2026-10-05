@@ -1,35 +1,64 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { shouldRenderCaseStudy } from "@/lib/caseStudy";
-import { localePath } from "@/lib/locale";
 import { CaseStudy } from "./CaseStudy";
 import { Icon } from "../ui/Icon";
 import styles from "./Proof.module.css";
 
-/**
- * One proof block. The case study renders only when approved (or in dev as a
- * draft). Until then: an honest line about the builders' background — no
- * employer logos on the homepage; those live on /about with their hedge.
- */
+/** Named client story has no invented metrics; measured case study stays gated. */
 export function Proof() {
-  const { t, locale } = useLanguage();
-  if (shouldRenderCaseStudy(process.env.NODE_ENV === "production"))
-    return <CaseStudy />;
+  const { t } = useLanguage();
   return (
-    <section id="proof" className="shell" aria-labelledby="proof-title">
-      <div className={styles.strip}>
-        <h2 id="proof-title" className="label">
-          {t("Who builds it")}
-        </h2>
-        <p className={styles.line}>
-          {t(
-            "Built by operators who have worked on finance and technology systems at global banks and consulting firms.",
-          )}
+    <>
+      <section id="proof" className={`shell ${styles.proof}`} aria-labelledby="proof-title">
+        <div className={styles.heading}>
+          <div>
+            <p className="label">{t("Client work")}</p>
+            <h2 id="proof-title" className="h2-sm">
+              Rhino Automotive Glass
+            </h2>
+          </div>
+          <a
+            className="text-link"
+            href="https://rhinoautoglass.mx/"
+            rel="noopener noreferrer"
+          >
+            {t("Visit Rhino")} <Icon name="arrow" size={16} />
+          </a>
+        </div>
+        <p className={styles.summary}>
+          {t("One connected CRM for industrial glass operations.")}
         </p>
-        <a className="text-link" href={localePath(locale, "/about")}>
-          {t("See background")} <Icon name="arrow" size={16} />
-        </a>
-      </div>
-    </section>
+        <div className={styles.story}>
+          <div>
+            <h3 className="label">{t("Before")}</h3>
+            <p>
+              {t(
+                "Raw materials, finished-product stock, and sales were managed in separate software.",
+              )}
+            </p>
+          </div>
+          <div>
+            <h3 className="label">{t("What we built")}</h3>
+            <p>
+              {t(
+                "We built a custom CRM from scratch, developing each part as a module and connecting them through shared APIs.",
+              )}
+            </p>
+          </div>
+          <div>
+            <h3 className="label">{t("Now")}</h3>
+            <p>
+              {t(
+                "Rhino works from one integrated system and can automate workflows across inventory and sales.",
+              )}
+            </p>
+          </div>
+        </div>
+      </section>
+      {shouldRenderCaseStudy(process.env.NODE_ENV === "production") && (
+        <CaseStudy />
+      )}
+    </>
   );
 }

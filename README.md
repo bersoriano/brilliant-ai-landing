@@ -23,11 +23,11 @@ npm start
 
 Copy `.env.example` to `.env.local`, then configure:
 
-- `NEXT_PUBLIC_CONTACT_EMAIL`: the monitored business mailbox. The existing
-  `hello@brilliant.ai` address is the default; confirm ownership and delivery
+- `NEXT_PUBLIC_CONTACT_EMAIL`: the monitored business mailbox. The
+  `hello@brilliant.dev` address is the default; confirm ownership and delivery
   before publishing.
 - `NEXT_PUBLIC_SITE_URL`: your production website origin, used for social preview
-  URLs. Vercel production domains are detected automatically when this is unset.
+  URLs. Defaults to `https://brilliant.dev` in production when unset.
 - `NEXT_PUBLIC_BOOKING_URL`: optional HTTPS scheduling URL. With no booking URL,
   calls to action scroll to the inquiry form. Public environment variables are
   included at build time, so rebuild after changing them.
