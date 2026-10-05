@@ -12,7 +12,8 @@ import {
   type Industry,
 } from "@/lib/workflows";
 import { SCENES } from "@/lib/scenes";
-import { PRIMARY_CTA } from "@/lib/site";
+import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
+import { localePath } from "@/lib/locale";
 import { useInquiry } from "../inquiry/InquiryContext";
 import styles from "./Solution.module.css";
 
@@ -177,10 +178,16 @@ export function Solution() {
               </dl>
               <a
                 className="text-link text-link--accent"
-                href="#contact"
-                onClick={() => selectWorkflow(selected)}
+                href={DISCOVERY_CALL_HREF}
               >
                 {t(PRIMARY_CTA)} <Icon name="arrow" size={15} />
+              </a>
+              <a
+                className="text-link"
+                href={localePath(locale, `/${active}-automation`)}
+              >
+                {t(active === "finance" ? "Explore finance automation" : "Explore healthcare automation")}{" "}
+                <Icon name="arrow" size={15} />
               </a>
             </div>
             <div className={styles.main}>

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import {
   LANGUAGE_COOKIE,
+  effectiveLocalePath,
   isSearchBot,
   isSpanishPath,
   localeFromPathname,
@@ -50,6 +51,10 @@ function persistLocaleCookie(
 
 export function middleware(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
+  const publicPath = effectiveLocalePath(
+    pathname,
+    request.headers.get(LOCALE_PATH_HEADER),
+  );
   const explicit = request.nextUrl.searchParams.get("lang");
   if (explicit === "en" || explicit === "es") {
     const url = request.nextUrl.clone();
@@ -64,7 +69,7 @@ export function middleware(request: NextRequest) {
   const bot = isSearchBot(request.headers.get("user-agent"));
   const skipPreferenceRedirect =
     bot ||
-    isSpanishPath(pathname) ||
+    isSpanishPath(publicPath) ||
     /(?:^|\/)(og|opengraph-image|twitter-image|apple-icon|icon)$/.test(
       pathname,
     );
@@ -84,10 +89,10 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  const locale = localeFromPathname(pathname);
+  const locale = localeFromPathname(publicPath);
 
-  const headers = withLocaleHeaders(request, pathname);
-  if (locale === "es") {
+  const headers = withLocaleHeaders(request, publicPath);
+  if (isSpanishPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = stripLocalePrefix(pathname);
     url.search = search;

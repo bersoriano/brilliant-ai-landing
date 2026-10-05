@@ -7,7 +7,7 @@ import {
 } from "@/lib/caseStudy";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
-import { PRIMARY_CTA } from "@/lib/site";
+import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 import styles from "./CaseStudy.module.css";
 
 export function CaseStudy() {
@@ -71,7 +71,7 @@ export function CaseStudy() {
           <footer className="label">{copy.quote.attribution}</footer>
         </blockquote>
       )}
-      <a href="#contact" className="text-link text-link--accent">
+      <a href={DISCOVERY_CALL_HREF} className="text-link text-link--accent">
         {t(PRIMARY_CTA)} <Icon name="arrow" size={16} />
       </a>
     </section>

@@ -35,7 +35,6 @@ export function FinalCta() {
   const [fallbackHref, setFallbackHref] = useState("");
   const [industry, setIndustry] = useState("");
   const { selectedWorkflow, selectWorkflow, sectorHint } = useInquiry();
-  const bookingIsExternal = DISCOVERY_CALL_HREF.startsWith("https://");
   useEffect(() => {
     if (selectedWorkflow) setIndustry(selectedWorkflow.industry);
     setStatus("idle");
@@ -111,16 +110,19 @@ export function FinalCta() {
         <p className="caption">
           {t("A focused 20-minute conversation. No technical brief needed.")}
         </p>
+        <div>
+          <a className="button" href={DISCOVERY_CALL_HREF}>
+            {t(PRIMARY_CTA)}
+          </a>
+          <p className={`caption ${styles.bookingNote}`}>
+            {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+          </p>
+        </div>
         <div className={styles.channels}>
           <p className="label">{t("Prefer another channel?")}</p>
           <a className="text-link" href={WHATSAPP_HREF} rel="noopener">
             {t(WHATSAPP_CTA)} <span className="caption">{WHATSAPP_NUMBER}</span>
           </a>
-          {bookingIsExternal ? (
-            <a className="text-link" href={DISCOVERY_CALL_HREF} rel="noopener">
-              {t("Pick a time on the calendar")} <Icon name="arrow" size={16} />
-            </a>
-          ) : null}
           <a className="text-link" href={`mailto:${CONTACT_EMAIL}`}>
             {CONTACT_EMAIL} <Icon name="arrow" size={16} />
           </a>
@@ -290,7 +292,7 @@ export function FinalCta() {
           type="submit"
           disabled={status === "sending"}
         >
-          {t(status === "sending" ? "Sending…" : PRIMARY_CTA)}
+          {t(status === "sending" ? "Sending…" : "Send workflow inquiry")}
         </button>
         <p className="caption">
           {t(

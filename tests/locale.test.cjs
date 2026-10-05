@@ -22,6 +22,8 @@ const {
   stripLocalePrefix,
   languageAlternatePaths,
   isSearchBot,
+  pageFromPath,
+  effectiveLocalePath,
 } = require("../lib/locale.ts");
 const { pageTitle, pageDescription, translate } = require("../lib/i18n.ts");
 const { FAQS } = require("../lib/faq.ts");
@@ -106,6 +108,17 @@ test("Locale prefixes map English and Mexican Spanish onto stable URLs", () => {
   assert.equal(home["es-MX"], "/es");
   assert.equal(home["x-default"], "/");
 });
+test("Second middleware pass preserves original Spanish URL after rewrite", () => {
+  assert.equal(
+    effectiveLocalePath?.("/finance-automation", "/es/finance-automation"),
+    "/es/finance-automation",
+  );
+  assert.equal(effectiveLocalePath?.("/", "/es"), "/es");
+  assert.equal(
+    effectiveLocalePath?.("/finance-automation", "/es/healthcare-automation"),
+    "/finance-automation",
+  );
+});
 test("Home metadata names the US, Canada, and Mexico; FAQ copy is translated", () => {
   assert.match(pageTitle("en"), /Finance & Healthcare/);
   assert.match(pageTitle("es"), /finanzas y salud/);
@@ -115,6 +128,35 @@ test("Home metadata names the US, Canada, and Mexico; FAQ copy is translated", (
   assert.match(question, /United States, Canada, and Mexico/);
   assert.notEqual(translate(question, "es"), question);
   assert.notEqual(translate(answer, "es"), answer);
+});
+test("Finance and healthcare landing URLs keep distinct, localized search metadata", () => {
+  const cases = [
+    {
+      path: "/finance-automation",
+      page: "finance",
+      title: /Finance Workflow Automation/,
+      description: /invoices.*month-end/i,
+      esTitle: /Automatización.*finanzas/,
+      esDescription: /facturas.*cierre mensual/i,
+    },
+    {
+      path: "/healthcare-automation",
+      page: "healthcare",
+      title: /Healthcare Workflow Automation/,
+      description: /referrals.*intake/i,
+      esTitle: /Automatización.*salud/,
+      esDescription: /referencias.*admisión/i,
+    },
+  ];
+  for (const item of cases) {
+    assert.equal(pageFromPath(item.path), item.page);
+    assert.equal(pageFromPath(`/es${item.path}`), item.page);
+    assert.match(pageTitle("en", item.page), item.title);
+    assert.match(pageDescription("en", item.page), item.description);
+    assert.match(pageTitle("es", item.page), item.esTitle);
+    assert.match(pageDescription("es", item.page), item.esDescription);
+    assert.equal(languageAlternatePaths(item.path)["es-MX"], `/es${item.path}`);
+  }
 });
 test("Search-engine user agents are detected so language URLs stay stable for crawlers", () => {
   assert.equal(isSearchBot("Mozilla/5.0 (compatible; Googlebot/2.1)"), true);

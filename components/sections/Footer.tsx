@@ -4,6 +4,7 @@ import styles from "./Footer.module.css";
 import {
   CALCULATOR_ANCHOR,
   CONTACT_EMAIL,
+  DISCOVERY_CALL_HREF,
   PRIMARY_CTA,
   SITE_DOMAIN,
   WHATSAPP_HREF,
@@ -36,6 +37,12 @@ export function Footer() {
             <div>
               <h3 className="label">{t("Explore")}</h3>
               <a href={home("#solutions")}>{t("Solutions")}</a>
+              <a href={localePath(locale, "/finance-automation")}>
+                {t("Finance automation")}
+              </a>
+              <a href={localePath(locale, "/healthcare-automation")}>
+                {t("Healthcare automation")}
+              </a>
               <a href={home("#how-it-works")}>{t("How it works")}</a>
               <a href={home(CALCULATOR_ANCHOR)}>{t("ROI calculator")}</a>
               <a href={home("#faq")}>{t("Common questions")}</a>
@@ -48,7 +55,10 @@ export function Footer() {
             </div>
             <div>
               <h3 className="label">{t("Get started")}</h3>
-              <a href={home("#contact")}>{t(PRIMARY_CTA)}</a>
+              <a href={DISCOVERY_CALL_HREF}>{t(PRIMARY_CTA)}</a>
+              <p className="caption">
+                {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+              </p>
               <a href={WHATSAPP_HREF} rel="noopener">
                 WhatsApp
               </a>
