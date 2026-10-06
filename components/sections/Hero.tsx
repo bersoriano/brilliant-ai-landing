@@ -10,6 +10,18 @@ export function Hero() {
   return (
     <>
       <section id="top" className={styles.hero}>
+        <video
+          className={styles.video}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+          tabIndex={-1}
+        >
+          <source src="/horizon_video_mobile.mp4" type="video/mp4" media="(max-width: 900px)" />
+          <source src="/horizon_video.mp4" type="video/mp4" />
+        </video>
         <div className={`shell grid-12 ${styles.inner}`}>
           <div className={styles.copy}>
             <Kicker>{t("Done-for-you AI automation")}</Kicker>
