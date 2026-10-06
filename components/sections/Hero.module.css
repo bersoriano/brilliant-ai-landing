@@ -1,38 +1,74 @@
 .hero {
-  align-items: center;
-  padding-top: clamp(56px, 5.5vw, 88px);
-  padding-bottom: clamp(64px, 7vw, 96px);
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  min-height: 100svh;
+  overflow: hidden;
+  background-color: #0b1520;
 }
+
+.hero::before {
+  position: absolute;
+  inset: 0 0 -35%;
+  content: "";
+  background: url("/hero-threshold.jpg") center 70% / cover no-repeat;
+  pointer-events: none;
+}
+
+.hero::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background:
+    linear-gradient(180deg, transparent 86%, #0b1520 100%),
+    linear-gradient(90deg, rgba(11, 21, 32, 0.94) 0%, rgba(11, 21, 32, 0.8) 34%, rgba(11, 21, 32, 0.38) 68%, rgba(11, 21, 32, 0.12) 100%);
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding-top: clamp(56px, 8svh, 96px);
+  padding-bottom: clamp(96px, 16svh, 180px);
+}
+
 .copy {
-  grid-column: 1 / span 6;
+  grid-column: 1 / span 7;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 22px;
+  max-width: 38rem;
+  animation: copy-enter 600ms ease-out both;
 }
-/* The buyer line: the job, in the buyer's nouns. */
+
 .title {
   margin-top: 4px;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(30px, 2.8vw, 42px);
-  line-height: 1.08;
-  letter-spacing: -0.025em;
-  text-wrap: balance;
+  font-size: clamp(3.4rem, 7vw, 6.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-wrap: normal;
 }
-/* The old headline, demoted to a kicker line. */
-.line {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(22px, 2vw, 28px);
-  line-height: 1.2;
-  color: var(--text-2);
-}
-.line em {
+
+.title em {
+  display: block;
   font-style: italic;
   font-weight: 500;
   color: var(--accent);
+  text-wrap: balance;
 }
+
+.lead {
+  max-width: 38rem;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: rgba(238, 240, 238, 0.82);
+  text-wrap: pretty;
+}
+
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -40,20 +76,43 @@
   gap: 32px;
 }
 
-/* Exhibit 1 */
-.exhibit {
-  grid-column: 7 / span 6;
+.exhibitSection {
+  padding-block: clamp(64px, 7vw, 96px);
 }
 
-@media (max-width: 1150px) {
-  .copy {
-    grid-column: 1 / span 12;
+@keyframes copy-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
-  .exhibit {
-    grid-column: 1 / span 12;
-    margin-top: 16px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
+
+@media (max-width: 799px) {
+  .hero::before {
+    inset: 0 0 -16%;
+    background-position: center 80%;
+  }
+
+  .hero::after {
+    background:
+      linear-gradient(180deg, transparent 86%, #0b1520 100%),
+      rgba(11, 21, 32, 0.76);
+  }
+
+  .inner {
+    padding-top: 48px;
+    padding-bottom: clamp(280px, 42svh, 400px);
+  }
+
+  .copy {
+    gap: 18px;
+  }
+}
+
 @media (max-width: 700px) {
   .actions {
     flex-direction: column;
@@ -61,8 +120,15 @@
     gap: 12px;
     width: 100%;
   }
+
   .actions > * {
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy {
+    animation: none;
   }
 }

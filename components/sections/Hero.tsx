@@ -8,37 +8,36 @@ import styles from "./Hero.module.css";
 export function Hero() {
   const { t } = useLanguage();
   return (
-    <section id="top" className={`shell grid-12 ${styles.hero}`}>
-      <div className={styles.copy}>
-        <Kicker>{t("Done-for-you AI automation for finance and healthcare")}</Kicker>
-        <h1 className={styles.title}>
-          {t(
-            "We take the repetitive work off your team\u00a0— invoices, reports, referrals, follow-ups\u00a0— and run it inside the tools you already use.",
-          )}
-        </h1>
-        <p className={styles.line}>
-          {t("Busywork in.")} <em>{t("Finished work out.")}</em>
-        </p>
-        <p className="lead">
-          {t(
-            "You keep every approval that matters. We build the workflow, monitor it, and handle the exceptions. United States, Canada, and Mexico.",
-          )}
-        </p>
-        <div className={styles.actions}>
-          <a href={DISCOVERY_CALL_HREF} className="button">
-            {t(PRIMARY_CTA)}
-          </a>
-          <a href="#solutions" className="text-link">
-            {t("See a workflow in motion")} <Icon name="arrow" size={16} />
-          </a>
+    <>
+      <section id="top" className={styles.hero}>
+        <div className={`shell grid-12 ${styles.inner}`}>
+          <div className={styles.copy}>
+            <Kicker>{t("Done-for-you AI automation")}</Kicker>
+            <h1 className={styles.title}>
+              {t("Busywork in.")} <em>{t("Finished work out.")}</em>
+            </h1>
+            <p className={styles.lead}>
+              {t(
+                "Invoices, reports, referrals, follow-ups — inside the tools you already use. You keep every approval.",
+              )}
+            </p>
+            <div className={styles.actions}>
+              <a href={DISCOVERY_CALL_HREF} className="button">
+                {t(PRIMARY_CTA)}
+              </a>
+              <a href="#solutions" className="text-link">
+                {t("See a workflow in motion")} <Icon name="arrow" size={16} />
+              </a>
+            </div>
+            <p className="caption">{t("20 minutes. Bring one repetitive task.")}</p>
+          </div>
         </div>
-        <p className="caption">
-          {t("20 minutes. Bring one repetitive task.")}
-          <br />
-          {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
-        </p>
-      </div>
-      <HeroVisual />
-    </section>
+      </section>
+      <section className={styles.exhibitSection} aria-labelledby="exhibit-1-title">
+        <div className="shell">
+          <HeroVisual />
+        </div>
+      </section>
+    </>
   );
 }
