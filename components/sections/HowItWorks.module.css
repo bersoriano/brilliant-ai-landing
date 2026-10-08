@@ -5,9 +5,74 @@
   align-items: flex-start;
   gap: 24px;
 }
+/* Two offers: stacked by default; side by side, rows aligned, when the
+   column has room for two readable cards */
+.offerBlock {
+  grid-column: 6 / span 7;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  container-type: inline-size;
+}
+.offers {
+  display: grid;
+  gap: var(--col-gap);
+}
+.offer {
+  padding: 24px 24px 10px;
+  background: var(--surface);
+}
+.offer h3 {
+  padding-bottom: 12px;
+}
+.offer dl {
+  margin: 0;
+}
+.offer dl > div {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding-block: 14px;
+  border-top: 1px solid var(--line-strong);
+}
+.offer dd {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+@container (min-width: 39rem) {
+  .offers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 0;
+  }
+  /* h3 + five rows share tracks across both cards */
+  .offer {
+    display: grid;
+    grid-row: span 6;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+  .offer dl {
+    display: grid;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+}
+.rule {
+  max-width: 34em;
+  margin-inline: auto;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text);
+  text-align: center;
+  text-wrap: balance;
+}
 .steps {
   grid-column: 6 / span 7;
-  margin: 0;
+  margin: 24px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -124,7 +189,7 @@
   }
 }
 @media (max-width: 900px) {
-  .steps {
+  .offerBlock {
     margin-top: 24px;
   }
   .costList {

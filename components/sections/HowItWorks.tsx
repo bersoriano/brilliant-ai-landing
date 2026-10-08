@@ -9,17 +9,49 @@ const steps = [
   {
     title: "Review",
     duration: "20 min",
-    body: "Walk us through one repetitive task. We map inputs, tools, handoffs, and approval gates. You leave with a useful first step. No technical brief.",
+    body: "Walk us through one repetitive task, or record yourself doing it once. We map the inputs, tools, handoffs, and approval points, then tell you whether it calls for a workflow, an agent, or both.",
   },
   {
     title: "Pilot",
     duration: "3–6 weeks",
-    body: "We connect approved tools, test on representative, non-sensitive data, and put the output next to your current process. You accept it, or we revise.",
+    body: "One workflow or one agent, fixed scope. We connect approved tools, test on representative, non-sensitive data, and put the output next to your current process. You accept it, or we revise.",
   },
   {
     title: "We run it",
     duration: "Ongoing",
-    body: "We monitor it, handle exceptions, and keep it current. Your team gets documentation. Running it stays with us unless you want a handover.",
+    body: "We monitor it, handle exceptions, and keep it current. When the first one is working, we add the next workflow or the next person’s agent. Your team gets documentation. Running it stays with us unless you want a handover.",
+  },
+];
+/** The two offers, compared row by row. Examples are illustrative. */
+const offers = [
+  {
+    title: "Workflows",
+    rows: [
+      ["For", "Work that arrives the same way every time"],
+      ["How it starts", "Something arrives: an invoice, a referral, month-end"],
+      [
+        "What it does",
+        "Collects, checks, and prepares the work, then sends exceptions to a person",
+      ],
+      [
+        "Example",
+        "Invoice arrives → matched to its PO → approval packet in Teams",
+      ],
+      ["Who decides", "The approver you name"],
+    ],
+  },
+  {
+    title: "Agents",
+    rows: [
+      ["For", "Work that changes from day to day"],
+      ["How it starts", "Someone asks, in plain language"],
+      [
+        "What it does",
+        "Finds, drafts, and follows up for the person it’s assigned to",
+      ],
+      ["Example", "“Chase the three clients still missing documents”"],
+      ["Who decides", "The person who asked"],
+    ],
   },
 ];
 const reviewCovers = [
@@ -33,19 +65,16 @@ const costs = [
   ["Workflow review", "Free. 20 minutes."],
   [
     "Pilot",
-    "One workflow, fixed scope, typically 3–6 weeks. Priced after discovery.",
+    "One workflow or one agent, fixed scope, typically 3–6 weeks. Priced after discovery.",
   ],
-  [
-    "Run",
-    "A monthly operating retainer, so the workflow keeps working after launch.",
-  ],
+  ["Run", "A monthly retainer covering the workflows and agents we run for you."],
 ];
 /** Secondary: what the work includes (formerly the capability grid). */
 const inTheWork = [
-  ["Automation discovery", "Find the bottleneck worth fixing first."],
-  ["Custom AI agents", "Extract, classify, and draft, guided by your rules."],
   ["Connected workflows", "One reliable process from request to handoff."],
-  ["Integration & ongoing care", "Monitoring, exceptions, and updates."],
+  ["Custom AI agents", "Assigned to a person, guided by your rules."],
+  ["Automation discovery", "Find the bottleneck worth fixing first."],
+  ["Integration and ongoing care", "Monitoring, exceptions, and updates."],
 ];
 const NUMERALS = ["i.", "ii.", "iii."];
 
@@ -57,11 +86,35 @@ export function HowItWorks() {
         <div className={styles.intro}>
           <Kicker>{t("How it works")}</Kicker>
           <h2 className="h2-sm">
-            {t("One managed workflow.")}{" "}
-            <em>{t("You approve the exceptions.")}</em>
+            {t("Agents for your people.")}{" "}
+            <em>{t("Workflows for your processes.")}</em>
           </h2>
           <p className="body">
-            {t("You show us the job. We pilot it on your stack. We run it.")}
+            {t(
+              "You show us the job. We build it on your stack. We run it. You approve the exceptions.",
+            )}
+          </p>
+        </div>
+        <div className={styles.offerBlock}>
+          <div className={styles.offers}>
+            {offers.map((offer) => (
+              <article key={offer.title} className={styles.offer}>
+                <h3 className="h3">{t(offer.title)}</h3>
+                <dl>
+                  {offer.rows.map(([term, detail]) => (
+                    <div key={term}>
+                      <dt className="label">{t(term)}</dt>
+                      <dd>{t(detail)}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </article>
+            ))}
+          </div>
+          <p className={styles.rule}>
+            {t(
+              "If it starts with a trigger, it’s a workflow. If it starts with a request, it’s an agent. Many jobs need both.",
+            )}
           </p>
         </div>
         <ol className={`rule-list ${styles.steps}`}>
