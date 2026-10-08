@@ -42,7 +42,7 @@ export async function GET() {
               color: "#86C5C0",
             }}
           >
-            {t("Done-for-you AI automation")}
+            {t("AI automation for finance and healthcare")}
           </span>
         </div>
         <div
@@ -56,7 +56,7 @@ export async function GET() {
           }}
         >
           <span style={{ fontFamily: "Bodoni Moda", fontWeight: 500 }}>
-            {t("Busywork in.")}
+            {t("The capacity of a bigger team.")}
           </span>
           <span
             style={{
@@ -66,7 +66,7 @@ export async function GET() {
               color: "#86C5C0",
             }}
           >
-            {t("Finished work out.")}
+            {t("Without the hiring.")}
           </span>
         </div>
         <div

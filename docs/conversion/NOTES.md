@@ -91,7 +91,7 @@ in Chrome at 360 / 390 / 700 / 900 / 1150 / 1440px, EN and ES.
 
 | Test | How | Result |
 |---|---|---|
-| **8-second hero** | Above the fold at 1440×900: eyebrow names finance + healthcare, H1 names the job in their nouns (invoices, reports, referrals, follow-ups), sub says approvals stay with them, primary CTA visible, Exhibit 1 shows the mismatch and the approval card | Pass |
+| **8-second hero** | Above the fold at 1440×900: eyebrow names finance + healthcare, H1 names the outcome (a bigger team's capacity without hiring), sub names the job in their nouns (invoices, referrals, follow-ups) and says approvals stay with them, primary CTA visible. Exhibit 1 follows directly below the hero | Pass |
 | **Logo honesty** | Test "Employer names stay off the homepage…"; names only on `/about` with the hedge | Pass |
 | **HIPAA / LFPDPPP presence** | `/security` has "Healthcare in the United States (HIPAA)" and "Mexico: personal data and residency (LFPDPPP)"; no certification claims | Pass |
 | **Mexico noun test** | `/es`: CFDI, OC, RFC, provisiones, preautorización, aseguradora, CONTPAQi/SAP in tools; "Revisión en sitio en México" | Pass |
