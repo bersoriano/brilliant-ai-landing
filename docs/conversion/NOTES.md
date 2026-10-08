@@ -96,7 +96,7 @@ in Chrome at 360 / 390 / 700 / 900 / 1150 / 1440px, EN and ES.
 | **HIPAA / LFPDPPP presence** | `/security` has "Healthcare in the United States (HIPAA)" and "Mexico: personal data and residency (LFPDPPP)"; no certification claims | Pass |
 | **Mexico noun test** | `/es`: CFDI, OC, RFC, provisiones, preautorización, aseguradora, CONTPAQi/SAP in tools; "Revisión en sitio en México" | Pass |
 | **Register** | Test "Mexican Spanish uses tú with the visitor, not usted or Spain forms" over the whole dictionary (the visitor addressing us stays "ustedes") | Pass |
-| **CTA friction** | One primary ask everywhere ("Book a 20-minute workflow review"); WhatsApp and email as alternates; the form asks for 5 required fields + optional phone; "No technical brief" stated in the hero micro-copy, Review step, and form | Pass |
+| **CTA friction** | One primary ask everywhere ("Book a 20-minute workflow review"); WhatsApp and email as alternates; the form requires 5 fields (name, email, organization, country, industry) plus "What task should we look at?" unless a workflow example is already selected, with phone optional; "No technical brief needed" sits beside the booking button in the contact section, and the Review step offers recording the task once instead of explaining it | Pass |
 | Overflow | No horizontal scroll on `/`, `/es`, `/security`, `/about` (EN/ES) at any width | Pass |
 | Keyboard | Tabs respond to arrow/Home/End keys; all 61 focusable controls show a focus indicator; mobile nav Escape returns focus | Pass |
 | Headings | One `h1` then `h2`s, in order, on every page | Pass |
