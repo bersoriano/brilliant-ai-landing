@@ -78,9 +78,9 @@ Copy marked **(existing)** already has a Spanish entry; use the exact English ke
 ### 4.2 Hero (`Hero`, `HeroVisual` → Exhibit 1)
 - `.grid-12`: copy spans 7 columns, exhibit spans 5 (column 8), vertically centered. Padding 112px top, 104px bottom.
 - **Copy:**
-  - `.kicker` "Done-for-you AI automation" (existing).
-  - `h1.display`: "Busywork in." `<br>` `<em>`"Finished work out."`</em>`.
-  - `.lead`: the existing hero paragraph.
+  - `.kicker` "AI automation for finance and healthcare".
+  - `h1`: "The capacity of a bigger team." `<em>`"Without the hiring."`</em>` (the `<em>` is block-level, so it starts its own line). The headline is long, so the hero sets its own size, clamp(48→76px), below `.display`. The copy column widens to 46rem while `.lead` keeps 38rem. At 1440×900 the H1 is 3 lines (4 in Spanish) and the CTA stays above the fold.
+  - `.lead`: "Done-for-you AI agents for finance and healthcare teams. Each person gets agents that handle their invoices, referrals, and follow-ups inside the tools you already use, and every approval stays with them."
   - Actions, gap 32: `.button` `t(PRIMARY_CTA)` and `.text-link` "See what we can automate" (existing) with an arrow → `#solutions`.
   - Footnote `.caption`: "20 minutes. Bring one repetitive task." (existing).
 - **Exhibit 1** (`<Exhibit>`):

@@ -24,13 +24,13 @@ export function Hero() {
         </video>
         <div className={`shell grid-12 ${styles.inner}`}>
           <div className={styles.copy}>
-            <Kicker>{t("Done-for-you AI automation")}</Kicker>
+            <Kicker>{t("AI automation for finance and healthcare")}</Kicker>
             <h1 className={styles.title}>
-              {t("Busywork in.")} <em>{t("Finished work out.")}</em>
+              {t("The capacity of a bigger team.")} <em>{t("Without the hiring.")}</em>
             </h1>
             <p className={styles.lead}>
               {t(
-                "Invoices, reports, referrals, follow-ups — inside the tools you already use. You keep every approval.",
+                "Done-for-you AI agents for finance and healthcare teams. Each person gets agents that handle their invoices, referrals, and follow-ups inside the tools you already use, and every approval stays with them.",
               )}
             </p>
             <div className={styles.actions}>
