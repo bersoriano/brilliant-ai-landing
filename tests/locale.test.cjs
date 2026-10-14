@@ -451,8 +451,10 @@ test("Custom CRM copy is translated and stays white-label", () => {
   // Without an MXN price, /es falls back to the USD price, labelled as USD.
   assert.equal(crmPrice("en").currency, "USD");
   assert.ok(["USD", "MXN"].includes(crmPrice("es").currency));
-  // The foundation is not named anywhere a visitor can read.
+  // The foundation is not named anywhere a visitor can read (the repo is public).
   const sources = [
+    fs.readFileSync("CLAUDE.md", "utf8"),
+    fs.readFileSync("docs/conversion/NOTES.md", "utf8"),
     fs.readFileSync("lib/crm.ts", "utf8"),
     fs.readFileSync("components/sections/CustomCrm.tsx", "utf8"),
     fs.readFileSync("components/sections/CrmLanding.tsx", "utf8"),
