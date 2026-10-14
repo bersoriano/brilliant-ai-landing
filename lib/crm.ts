@@ -9,13 +9,14 @@ import type { Currency } from "./roi";
  */
 
 /**
- * Base-plan price per currency. No FX conversion: until an MXN entry exists,
- * /es shows the USD price, labelled as USD.
+ * Base-plan price per currency, set separately (no FX conversion). A currency
+ * without an entry falls back to the USD price, labelled as USD.
  */
 export const CRM_PRICE: Partial<
   Record<Currency, { month: number; year: number }>
 > = {
   USD: { month: 29, year: 290 },
+  MXN: { month: 499, year: 4990 },
 };
 
 export function crmPrice(locale: Locale) {

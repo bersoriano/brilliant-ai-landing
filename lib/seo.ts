@@ -16,7 +16,7 @@ import {
   stripLocalePrefix,
   type Locale,
 } from "./locale";
-import { CRM_PRICE } from "./crm";
+import { crmPrice } from "./crm";
 import { absoluteUrl, CONTACT_EMAIL, getSiteUrl, SITE_NAME } from "./site";
 
 export function buildMetadata(locale: Locale, path: string): Metadata {
@@ -163,17 +163,18 @@ export function buildJsonLd(locale: Locale, path: string) {
     });
   }
 
-  const crmPrice = CRM_PRICE.USD;
-  if (page === "crm" && crmPrice) {
+  if (page === "crm") {
+    // The page's own price: USD in English, MXN in Spanish.
+    const { currency, month, year } = crmPrice(locale);
     // UN/CEFACT unit codes: MON = month, ANN = year.
     const offer = (price: number, unitCode: string) => ({
       "@type": "Offer",
       price,
-      priceCurrency: "USD",
+      priceCurrency: currency,
       priceSpecification: {
         "@type": "UnitPriceSpecification",
         price,
-        priceCurrency: "USD",
+        priceCurrency: currency,
         unitCode,
       },
     });
@@ -185,7 +186,7 @@ export function buildJsonLd(locale: Locale, path: string) {
       description: pageDescription(locale, page),
       provider: { "@id": organizationId },
       areaServed: organization.areaServed,
-      offers: [offer(crmPrice.month, "MON"), offer(crmPrice.year, "ANN")],
+      offers: [offer(month, "MON"), offer(year, "ANN")],
     });
   }
 
