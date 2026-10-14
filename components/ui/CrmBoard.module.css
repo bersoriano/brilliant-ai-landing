@@ -1,0 +1,71 @@
+/* Pipeline board, one column per stage */
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 4px 0 0;
+  list-style: none;
+}
+.board > li {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.board ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stage {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-strong);
+}
+.won .stage {
+  border-bottom-color: var(--accent);
+}
+.won .stage :global(.label) {
+  color: var(--accent);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  background: var(--surface);
+  border-top: 2px solid var(--line-strong);
+}
+.won .card {
+  border-top-color: var(--accent);
+}
+.card strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+}
+.card span {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.card .value {
+  padding-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 700px) {
+  .board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 24px;
+  }
+}

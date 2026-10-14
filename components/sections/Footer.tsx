@@ -43,6 +43,7 @@ export function Footer() {
               <a href={localePath(locale, "/healthcare-automation")}>
                 {t("Healthcare automation")}
               </a>
+              <a href={localePath(locale, "/custom-crm")}>{t("Custom CRM")}</a>
               <a href={home("#how-it-works")}>{t("How it works")}</a>
               <a href={home(CALCULATOR_ANCHOR)}>{t("ROI calculator")}</a>
               <a href={home("#faq")}>{t("Common questions")}</a>

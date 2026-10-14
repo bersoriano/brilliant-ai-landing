@@ -7,6 +7,7 @@ import { RoiCalculator } from "@/components/sections/RoiCalculator";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Trust } from "@/components/sections/Trust";
 import { Proof } from "@/components/sections/Proof";
+import { CustomCrm } from "@/components/sections/CustomCrm";
 import { Faq } from "@/components/sections/Faq";
 import { OnsiteConsulting } from "@/components/sections/OnsiteConsulting";
 import { FinalCta } from "@/components/sections/FinalCta";
@@ -25,6 +26,7 @@ export default function Home() {
           <HowItWorks />
           <Trust />
           <Proof />
+          <CustomCrm />
           <Faq />
           <OnsiteConsulting />
           <FinalCta />

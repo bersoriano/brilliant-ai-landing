@@ -4,7 +4,7 @@ Next.js 15 (App Router), React 19, TypeScript, Tailwind 4 (imported, but styling
 
 ## Rules
 - **Copy goes through `t()`** (`useLanguage`). English source strings are the keys in `lib/es-MX.json`. Every new literal `t("…")` needs a Spanish entry, or `npm test` fails.
-- **CTA labels come from constants:** `PRIMARY_CTA`, `NAV_CTA` (short form), `ONSITE_CTA`, `WHATSAPP_CTA` in `lib/site.ts`. Never reword them inline.
+- **CTA labels come from constants:** `PRIMARY_CTA`, `NAV_CTA` (short form), `ONSITE_CTA`, `CRM_CTA`, `WHATSAPP_CTA` in `lib/site.ts`. Never reword them inline.
 - **Audience:** the homepage speaks to finance and healthcare only (`HOMEPAGE_INDUSTRIES`). Operations/sales stay in the data and reach the form as "Other".
 - **Mexican Spanish uses *tú*** with the visitor ("ustedes" when the visitor addresses us: "Ayúdennos"). A test rejects *usted* and Spain-only forms in `lib/es-MX.json`. Use Mexican nouns: CFDI, OC, RFC, preautorización, aseguradora, iguala, junta.
 - **Currency follows the language:** USD in English, MXN in Spanish (no FX conversion; editable defaults per currency).
@@ -15,6 +15,7 @@ Next.js 15 (App Router), React 19, TypeScript, Tailwind 4 (imported, but styling
   - Never invent stats, clients or certifications. Security copy describes a process the client controls (`/security`); it never claims SOC 2, HIPAA attestation, or CFDI/MXN invoicing.
   - Employer names (BCG, BofA, Merrill Lynch, Banorte, BNY Mellon, Accenture, IBM) live only on `/about` with the "not clients" hedge; a test keeps them off the homepage.
   - Document scenes (`lib/scenes.ts`) are illustrative: invented names and numbers, labelled as such.
+  - The custom CRM offer (homepage `#crm`, the `/custom-crm` landing, data in `lib/crm.ts`) is built on Atomic CRM but is white-label: the site says "open-source foundation" and never names the project (a test enforces it). List only features that foundation ships. The base-plan price lives in `CRM_PRICE`; without an MXN entry `/es` shows the USD price, labelled.
 - **Design system (B5 "Ink"):**
   - Tokens, type classes and primitives live in `app/globals.css`; section layout goes in co-located `*.module.css`.
   - Fonts are local via `lib/fonts.ts`; don't add third-party font or image requests.

@@ -7,13 +7,14 @@ export const DISCOVERY_CALL_HREF =
 /**
  * One named offer, repeated verbatim. Every control whose destination is the
  * booking uses PRIMARY_CTA so the ask is
- * recognisable rather than reworded a dozen ways. ONSITE_CTA is the single
- * exception: a different service, deliberately kept on the same noun.
+ * recognisable rather than reworded a dozen ways. ONSITE_CTA and CRM_CTA are
+ * the exceptions: different services, deliberately kept on the same noun.
  */
 export const PRIMARY_CTA = "Book a 20-minute workflow review";
 /** Short form of PRIMARY_CTA for tight spaces (header, sticky mobile bar). */
 export const NAV_CTA = "Book review";
 export const ONSITE_CTA = "Book an onsite review";
+export const CRM_CTA = "Book a CRM review";
 export const WHATSAPP_CTA = "Message us on WhatsApp";
 /** Canonical domain, shown next to CONTACT_EMAIL so IT can verify the firm. */
 export const SITE_DOMAIN = "brilliant.dev";
@@ -25,6 +26,7 @@ export const NAV_LINKS = [
   { label: "How it works", href: "#how-it-works" },
   { label: "ROI", href: CALCULATOR_ANCHOR },
   { label: "Trust", href: "#trust" },
+  { label: "CRM", href: "#crm" },
 ];
 
 export function getSiteUrl() {

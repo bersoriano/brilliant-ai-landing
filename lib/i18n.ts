@@ -11,6 +11,7 @@ export const HOME_KEYWORDS = [
   "healthcare automation",
   "invoice approvals",
   "patient intake",
+  "custom CRM",
   "United States",
   "Canada",
   "Mexico",
@@ -21,6 +22,7 @@ export const HOME_KEYWORDS_ES = [
   "automatización en salud",
   "aprobación de facturas",
   "admisión de pacientes",
+  "CRM a la medida",
   "Estados Unidos",
   "Canadá",
   "México",
@@ -49,7 +51,17 @@ export const FINANCE_DESCRIPTION =
 export const HEALTHCARE_DESCRIPTION =
   "Managed AI workflow automation for healthcare administration: route referrals, prepare intake, and follow up on billing issues while clinical decisions stay with your team.";
 
-export type PageKey = "home" | "privacy" | "security" | "about" | "finance" | "healthcare";
+export const CRM_DESCRIPTION =
+  "Custom CRM implementation on a proven open-source foundation: contacts, deals, tasks, and an assistant you can talk to. Unlimited users on the base plan.";
+
+export type PageKey =
+  | "home"
+  | "privacy"
+  | "security"
+  | "about"
+  | "finance"
+  | "healthcare"
+  | "crm";
 const TITLES: Record<PageKey, [en: string, es: string]> = {
   home: [
     "AI Automation for Finance & Healthcare | Brilliant AI",
@@ -72,6 +84,10 @@ const TITLES: Record<PageKey, [en: string, es: string]> = {
     "Healthcare Workflow Automation | Brilliant AI",
     "Automatización de procesos de salud | Brilliant AI",
   ],
+  crm: [
+    "Custom CRM Implementation | Brilliant AI",
+    "Implementación de CRM a la medida | Brilliant AI",
+  ],
 };
 const DESCRIPTIONS: Record<PageKey, string> = {
   home: HOME_DESCRIPTION,
@@ -80,6 +96,7 @@ const DESCRIPTIONS: Record<PageKey, string> = {
   about: ABOUT_DESCRIPTION,
   finance: FINANCE_DESCRIPTION,
   healthcare: HEALTHCARE_DESCRIPTION,
+  crm: CRM_DESCRIPTION,
 };
 /** `true` is accepted for the privacy page (the original boolean signature). */
 const pageKey = (page: PageKey | boolean) =>
