@@ -448,9 +448,14 @@ test("Custom CRM copy is translated and stays white-label", () => {
   for (const column of CRM_PIPELINE)
     for (const deal of column.deals)
       assert.ok(deal.value.USD > 0 && deal.value.MXN > 0, deal.company);
-  // Without an MXN price, /es falls back to the USD price, labelled as USD.
+  // The base-plan price follows the language: USD in English, MXN in Spanish.
   assert.equal(crmPrice("en").currency, "USD");
-  assert.ok(["USD", "MXN"].includes(crmPrice("es").currency));
+  assert.equal(crmPrice("es").currency, "MXN");
+  // "Two months free" is only shown when it is true.
+  for (const locale of ["en", "es"]) {
+    const { month, year, twoMonthsFree } = crmPrice(locale);
+    assert.equal(twoMonthsFree, year === month * 10, locale);
+  }
   // The foundation is not named anywhere a visitor can read (the repo is public).
   const sources = [
     fs.readFileSync("CLAUDE.md", "utf8"),
