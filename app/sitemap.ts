@@ -6,6 +6,7 @@ const pages = [
   "/",
   "/finance-automation",
   "/healthcare-automation",
+  "/custom-crm",
   "/security",
   "/about",
   "/privacy",

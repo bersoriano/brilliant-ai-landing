@@ -109,9 +109,10 @@ export function resolveLocale({
 /** Which page a (locale-prefixed or plain) path is, for titles and metadata. */
 export function pageFromPath(
   pathname: string,
-): "home" | "privacy" | "security" | "about" | "finance" | "healthcare" {
+): "home" | "privacy" | "security" | "about" | "finance" | "healthcare" | "crm" {
   const path = stripLocalePrefix(pathname);
   if (path === "/finance-automation") return "finance";
+  if (path === "/custom-crm") return "crm";
   if (path === "/healthcare-automation") return "healthcare";
   if (path === "/privacy") return "privacy";
   if (path === "/security") return "security";

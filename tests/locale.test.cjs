@@ -35,6 +35,7 @@ const {
   NAV_CTA,
   ONSITE_CTA,
   WHATSAPP_CTA,
+  CRM_CTA,
 } = require("../lib/site.ts");
 const {
   CASE_STUDY,
@@ -271,6 +272,7 @@ test("Every literal translation call in active UI has a Spanish dictionary entry
     .concat([
       "components/ui/Icon.tsx",
       "components/ui/DocumentScene.tsx",
+      "components/ui/CrmBoard.tsx",
       "app/privacy/PrivacyContent.tsx",
       "app/security/SecurityContent.tsx",
       "app/about/AboutContent.tsx",
@@ -337,7 +339,7 @@ test("Payback is reported whenever an engagement budget is supplied", () => {
 
 test("CTA constants are translated and used in place of ad-hoc labels", () => {
   // Passed to t() as identifiers, so the literal scanner cannot see them.
-  for (const cta of [PRIMARY_CTA, NAV_CTA, ONSITE_CTA, WHATSAPP_CTA])
+  for (const cta of [PRIMARY_CTA, NAV_CTA, ONSITE_CTA, WHATSAPP_CTA, CRM_CTA])
     assert.ok(dictionary[cta.replace(/\s+/g, " ").trim()], cta);
   // The retired one-off labels must not creep back into the sections.
   const retired = [
@@ -407,4 +409,71 @@ test("Employer names stay off the homepage; they live on /about with the hedge",
     assert.ok(!home.includes(name), `employer on homepage: ${name}`);
   const about = fs.readFileSync("app/about/AboutContent.tsx", "utf8");
   assert.match(about, /not current Brilliant AI clients or partners/);
+});
+
+test("Custom CRM copy is translated and stays white-label", () => {
+  const {
+    CRM_PIPELINE,
+    CRM_ESSENTIALS,
+    CRM_ADVANCED,
+    CRM_ASSISTANT,
+    CRM_PROMPTS,
+    CRM_REQUESTS,
+    CRM_REASONS,
+    CRM_SECURITY,
+    CRM_STEPS,
+    CRM_CUSTOM_WORK,
+    crmPrice,
+  } = require("../lib/crm.ts");
+  const strings = [
+    ...CRM_PIPELINE.flatMap((column) => [
+      column.stage,
+      ...column.deals.map((deal) => deal.deal),
+    ]),
+    ...[...CRM_ESSENTIALS, ...CRM_ADVANCED].flatMap(([, title, line]) => [
+      title,
+      line,
+    ]),
+    ...CRM_ASSISTANT.flat(),
+    ...CRM_PROMPTS,
+    ...CRM_REQUESTS,
+    ...CRM_REASONS.flat(),
+    ...CRM_SECURITY.flat(),
+    ...CRM_STEPS.flatMap((step) => [step.title, step.body]),
+    ...CRM_CUSTOM_WORK,
+  ];
+  for (const s of strings)
+    assert.notEqual(translate(s, "es"), s, `missing Spanish: ${s}`);
+  // Illustrative deal values exist in both page currencies (no FX conversion).
+  for (const column of CRM_PIPELINE)
+    for (const deal of column.deals)
+      assert.ok(deal.value.USD > 0 && deal.value.MXN > 0, deal.company);
+  // Without an MXN price, /es falls back to the USD price, labelled as USD.
+  assert.equal(crmPrice("en").currency, "USD");
+  assert.ok(["USD", "MXN"].includes(crmPrice("es").currency));
+  // The foundation is not named anywhere a visitor can read (the repo is public).
+  const sources = [
+    fs.readFileSync("CLAUDE.md", "utf8"),
+    fs.readFileSync("docs/conversion/NOTES.md", "utf8"),
+    fs.readFileSync("lib/crm.ts", "utf8"),
+    fs.readFileSync("components/sections/CustomCrm.tsx", "utf8"),
+    fs.readFileSync("components/sections/CrmLanding.tsx", "utf8"),
+    fs.readFileSync("components/ui/CrmBoard.tsx", "utf8"),
+    fs.readFileSync("lib/i18n.ts", "utf8"),
+    JSON.stringify(dictionary),
+  ].join("\n");
+  assert.doesNotMatch(sources, /atomic|marmelab/i);
+});
+
+test("Custom CRM landing has its own localized URL, metadata, and sitemap entry", () => {
+  const { CRM_DESCRIPTION } = require("../lib/i18n.ts");
+  assert.equal(pageFromPath("/custom-crm"), "crm");
+  assert.equal(pageFromPath("/es/custom-crm"), "crm");
+  assert.equal(languageAlternatePaths("/custom-crm")["es-MX"], "/es/custom-crm");
+  assert.match(pageTitle("en", "crm"), /Custom CRM/);
+  assert.match(pageTitle("es", "crm"), /CRM a la medida/);
+  assert.ok(dictionary[CRM_DESCRIPTION], "Spanish CRM description");
+  assert.equal(pageDescription("es", "crm"), dictionary[CRM_DESCRIPTION]);
+  assert.ok(fs.existsSync("app/custom-crm/page.tsx"));
+  assert.match(fs.readFileSync("app/sitemap.ts", "utf8"), /"\/custom-crm"/);
 });

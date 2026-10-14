@@ -10,10 +10,12 @@ to do in the next 20 minutes.
 Nav + geo/lang → Hero (Exhibit 1) → Solutions: Finance | Healthcare switcher
 with the workflow exhibit (Exhibit 2, paper band) → Pain → ROI calculator →
 How it works (Review → Pilot → We run it, the 20-minute review, pricing shape,
-"What's in the work") → Trust (paper band) → Proof → FAQ → Onsite → Contact →
+"What's in the work") → Trust (paper band) → Proof → Custom CRM (pipeline
+exhibit, features, pricing) → FAQ → Onsite → Contact →
 Footer, plus the sticky mobile CTA.
 
-Pages: `/security`, `/about` (and `/es/…`). The "what the 20 minutes covers"
+Pages: `/security`, `/about`, `/custom-crm` (the full CRM offer: pipeline and
+conversation exhibits, features, setup steps, pricing) (and `/es/…`). The "what the 20 minutes covers"
 content is the in-page anchor `#review`.
 
 ## Components

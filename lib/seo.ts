@@ -16,6 +16,7 @@ import {
   stripLocalePrefix,
   type Locale,
 } from "./locale";
+import { CRM_PRICE } from "./crm";
 import { absoluteUrl, CONTACT_EMAIL, getSiteUrl, SITE_NAME } from "./site";
 
 export function buildMetadata(locale: Locale, path: string): Metadata {
@@ -107,6 +108,7 @@ export function buildJsonLd(locale: Locale, path: string) {
       "AI automation",
       "Finance workflow automation",
       "Healthcare workflow automation",
+      "Custom CRM implementation",
     ],
     knowsAbout: [
       "AI automation",
@@ -158,6 +160,32 @@ export function buildJsonLd(locale: Locale, path: string) {
           text: t(answer),
         },
       })),
+    });
+  }
+
+  const crmPrice = CRM_PRICE.USD;
+  if (page === "crm" && crmPrice) {
+    // UN/CEFACT unit codes: MON = month, ANN = year.
+    const offer = (price: number, unitCode: string) => ({
+      "@type": "Offer",
+      price,
+      priceCurrency: "USD",
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price,
+        priceCurrency: "USD",
+        unitCode,
+      },
+    });
+    graph.push({
+      "@type": "Service",
+      "@id": `${canonical}#service`,
+      name: t("Custom CRM"),
+      serviceType: "Custom CRM implementation",
+      description: pageDescription(locale, page),
+      provider: { "@id": organizationId },
+      areaServed: organization.areaServed,
+      offers: [offer(crmPrice.month, "MON"), offer(crmPrice.year, "ANN")],
     });
   }
 
