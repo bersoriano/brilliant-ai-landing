@@ -80,9 +80,9 @@ Copy marked **(existing)** already has a Spanish entry; use the exact English ke
 - **Copy:**
   - `.kicker` "AI automation for finance and healthcare".
   - `h1`: "The capacity of a bigger team." `<em>`"Without the hiring."`</em>` (the `<em>` is block-level, so it starts its own line). The headline is long, so the hero sets its own size, clamp(48→76px), below `.display`. The copy column widens to 46rem while `.lead` keeps 38rem. At 1440×900 the H1 is 3 lines (4 in Spanish) and the CTA stays above the fold.
-  - `.lead`: "Done-for-you AI agents for finance and healthcare teams. Each person gets agents that handle their invoices, referrals, and follow-ups inside the tools you already use, and every approval stays with them."
-  - Actions, gap 32: `.button` `t(PRIMARY_CTA)` and `.text-link` "See what we can automate" (existing) with an arrow → `#solutions`.
-  - Footnote `.caption`: "20 minutes. Bring one repetitive task." (existing).
+  - `.lead`: "We build and run AI agents that prepare invoices, referrals, and follow-ups inside the tools you already use. Your team keeps every approval." Who runs it, what it prepares, where it runs, then control as its own short sentence. The eyebrow already names the two sectors, so the lead doesn't repeat them.
+  - Actions, gap 32: `.button` `t(PRIMARY_CTA)` and `.text-link` "See a workflow in motion" with an arrow → `#exhibit-1`, the run directly below the hero (it plays on first view).
+  - Footnote `.caption`: "Free. Bring one repetitive task; leave with a concrete next step." (The button already says 20 minutes.)
 - **Exhibit 1** (`<Exhibit>`):
   - Label "Exhibit {number}" = 1; status `live` "Running"; title "How an invoice moves through an automated approval".
   - Rows come from `WORKFLOWS` id `invoice-approvals` → `stages[0..3]`, translated. Row grid `44px 1fr auto`, 16px padding, top rule `--line`.

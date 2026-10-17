@@ -38,35 +38,16 @@ export const CONSULTANCY_PHRASES =
   /\b(AI strategy|AI roadmap|digital transformation|transformation program|change management|AI readiness|organizational readiness|maturity model|consultancy|consulting arm|consulting services|estrategia de IA|hoja de ruta de IA|transformación digital|gestión del cambio|madurez digital|brazo de consultoría|servicios de consultoría|consultoría presencial)\b/i;
 
 /**
- * The homepage "What we've learned" block: four operator rules, each tied to
- * a note (or to a page). Short on purpose; the notes carry the detail. The
- * examples pair finance with healthcare so both buyers see their own work.
+ * The homepage "What we've learned" block. Link, don't lecture: each rule is
+ * one line and links the note that explains it, so the homepage stays short
+ * and the depth is one click away. The measuring note is linked from the
+ * calculator instead, where that question comes up.
  */
 export const APPROACH_RULES: {
   title: string;
-  body: string;
-  note?: keyof typeof INSIGHTS;
-  href?: string;
-  linkLabel?: string;
+  note: keyof typeof INSIGHTS;
 }[] = [
-  {
-    title: "Design for the exception first.",
-    body: "An invoice that matches its PO, or a referral with every field filled in, barely needs help. The hours go into the price difference, the missing receipt, the referral without insurance details. Each one reaches a person as a clear question, with the evidence attached.",
-    note: "exceptions",
-  },
-  {
-    title: "One decision per approval, where your team already works.",
-    body: "A card in Teams or Outlook with the invoice, the PO and the difference gets decided. So does a referral in the intake queue that shows exactly which fields are missing. A link to a new dashboard waits.",
-    note: "approvals",
-  },
-  {
-    title: "Count hours, not hype.",
-    body: "We measure the items handled against the time they used to take, and report capacity as a range. The money is your estimate, not ours.",
-    note: "measuring",
-  },
-  {
-    title: "Judgment stays with your team.",
-    body: "Every agent works for a named person. It gathers, checks and drafts; that person decides. Recording, paying, triage and care decisions stay with your team, and every action is logged.",
-    note: "agents",
-  },
+  { title: "Design for the exception first.", note: "exceptions" },
+  { title: "One decision per approval, where your team already works.", note: "approvals" },
+  { title: "Agents prepare. Your team decides.", note: "agents" },
 ];
