@@ -10,9 +10,11 @@ to do in the next 20 minutes.
 Nav + geo/lang → Hero (Exhibit 1) → Solutions: Finance | Healthcare switcher
 with the workflow exhibit (Exhibit 2, paper band) → Pain → ROI calculator →
 How it works (Review → Pilot → We run it, the 20-minute review, pricing shape,
-"What's in the work") → Trust (paper band) → Proof → Custom CRM (pipeline
-exhibit, features, pricing) → FAQ → Onsite → Contact →
-Footer, plus the sticky mobile CTA.
+"What's in the work") → What we've learned (four operator rules, each linked
+to a note) → Trust (paper band, opens with the approval point of view) → Proof
+→ Custom CRM (agent playbook exhibit, features, pricing) → FAQ → Blog teaser
+(posts not already featured) → Onsite → Contact → Footer, plus the sticky
+mobile CTA.
 
 Pages: `/security`, `/about`, `/custom-crm` (the full CRM offer: pipeline and
 conversation exhibits, features, setup steps, pricing) (and `/es/…`). The "what the 20 minutes covers"
@@ -43,6 +45,21 @@ content is the in-page anchor `#review`.
   register; `toolsMx` swaps
   QuickBooks → CONTPAQi and the close system → SAP on `/es`.
 - The paper document is always light, whatever band it sits in.
+
+### Authority layer (`components/sections/Approach.tsx`, `lib/insights.ts`)
+
+- "What we've learned": four rules (design for the exception first; one
+  decision per approval, where your team already works; count hours, not hype;
+  judgment stays with your team). Three link to notes, one to `/security`. The
+  block is server-rendered so links carry each note's own title, and it ends
+  with the review CTA rather than a reading CTA.
+- The notes (`content/posts/why-invoice-automation-stalls`,
+  `measuring-capacity-reclaimed`, `approval-points-without-bottlenecks`) are
+  operator notes: no statistics, no client claims, examples labelled as
+  examples. The calculator links to the measuring note from its disclaimer;
+  Trust links to the approvals note.
+- Placement rule: authority sits after the process (How it works) and before
+  the controls (Trust), so it reads as the reasoning behind both.
 
 ### Live exhibits (motion and control)
 

@@ -5,6 +5,7 @@ import { Solution } from "@/components/sections/Solution";
 import { Problem } from "@/components/sections/Problem";
 import { RoiCalculator } from "@/components/sections/RoiCalculator";
 import { HowItWorks } from "@/components/sections/HowItWorks";
+import { Approach } from "@/components/sections/Approach";
 import { Trust } from "@/components/sections/Trust";
 import { Proof } from "@/components/sections/Proof";
 import { CustomCrm } from "@/components/sections/CustomCrm";
@@ -15,10 +16,21 @@ import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
 import { StickyCta } from "@/components/sections/StickyCta";
 import { getRequestLocale } from "@/lib/locale.server";
-import { getPosts } from "@/lib/posts.server";
+import { getPost, getPosts } from "@/lib/posts.server";
+import { FEATURED_INSIGHTS } from "@/lib/insights";
 export default async function Home() {
   const locale = await getRequestLocale();
-  const posts = (await getPosts(locale)).slice(0, 3);
+  const [posts, notes] = await Promise.all([
+    getPosts(locale),
+    Promise.all(FEATURED_INSIGHTS.map((slug) => getPost(slug, locale))),
+  ]);
+  // The notes are linked from "What we've learned"; the blog teaser shows the rest.
+  const latest = posts
+    .filter((post) => !FEATURED_INSIGHTS.includes(post.slug))
+    .slice(0, 3);
+  const noteBySlug = Object.fromEntries(
+    FEATURED_INSIGHTS.map((slug, i) => [slug, notes[i]]),
+  );
   return (
     <>
       <Navbar />
@@ -29,11 +41,12 @@ export default async function Home() {
           <Problem />
           <RoiCalculator />
           <HowItWorks />
+          <Approach locale={locale} notes={noteBySlug} />
           <Trust />
           <Proof />
           <CustomCrm />
           <Faq />
-          <LatestPosts locale={locale} posts={posts} />
+          <LatestPosts locale={locale} posts={latest} />
           <OnsiteConsulting />
           <FinalCta />
         </main>

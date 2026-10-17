@@ -277,6 +277,12 @@
   font-weight: 600;
   color: var(--text);
 }
+.noteLink {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
 .share {
   display: flex;
   flex-wrap: wrap;

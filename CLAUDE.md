@@ -6,6 +6,8 @@ Next.js 15 (App Router), React 19, TypeScript, Tailwind 4 (imported, but styling
 - **Copy goes through `t()`** (`useLanguage`). English source strings are the keys in `lib/es-MX.json`. Every new literal `t("…")` needs a Spanish entry, or `npm test` fails.
 - **CTA labels come from constants:** `PRIMARY_CTA`, `NAV_CTA` (short form), `ONSITE_CTA`, `CRM_CTA`, `WHATSAPP_CTA` in `lib/site.ts`. Never reword them inline.
 - **Audience:** the homepage speaks to finance and healthcare only (`HOMEPAGE_INDUSTRIES`). Operations/sales stay in the data and reach the form as "Other".
+- **Positioning: operator, not consultancy.** Authority comes from how the work runs (exceptions, approvals, measurement), not from advisory language. No "AI strategy", roadmaps, transformation programs, change management or readiness/maturity framing (`CONSULTANCY_PHRASES` in `lib/insights.ts`; a test enforces it in homepage copy, the dictionary and posts). No team bios or credential lists. Authority content links back to the 20-minute review, never competes with it.
+- **Notes linked from the homepage** ("What we've learned", the calculator, Trust) are registered in `INSIGHTS` (`lib/insights.ts`); a test keeps each one published in both languages.
 - **Mexican Spanish uses *tú*** with the visitor ("ustedes" when the visitor addresses us: "Ayúdennos"). A test rejects *usted* and Spain-only forms in `lib/es-MX.json`. Use Mexican nouns: CFDI, OC, RFC, preautorización, aseguradora, iguala, junta.
 - **Currency follows the language:** USD in English, MXN in Spanish (no FX conversion; editable defaults per currency).
 - **Honesty:**

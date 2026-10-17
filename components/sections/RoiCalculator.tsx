@@ -15,6 +15,8 @@ import { RichTemplate } from "../ui/RichTemplate";
 import { CapacityWeek } from "../ui/CapacityWeek";
 import styles from "./RoiCalculator.module.css";
 import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
+import { INSIGHTS } from "@/lib/insights";
+import { localePath } from "@/lib/locale";
 /**
  * Conservative starting point: 4 people × 8 repetitive hours a week. The
  * currency follows the language (USD in English, MXN in Spanish); the hourly
@@ -355,7 +357,13 @@ export function RoiCalculator() {
               <strong>{t("An illustrative estimate, not a guarantee.")}</strong>{" "}
               {t(
                 "The $ figure is capacity value, not cash savings. Implementation cost is scoped after the review.",
-              )}
+              )}{" "}
+              <a
+                className={styles.noteLink}
+                href={localePath(locale, `/blog/${INSIGHTS.measuring}`)}
+              >
+                {t("How we measure capacity")}
+              </a>
             </p>
             <div className={styles.actions}>
               <a href={DISCOVERY_CALL_HREF} className="button">

@@ -9,6 +9,13 @@
   align-items: flex-start;
   gap: 24px;
 }
+/* The point of view, set apart from the headline */
+.view {
+  max-width: 30em;
+  padding-left: 14px;
+  border-left: 2px solid var(--accent);
+  color: var(--text-2);
+}
 .points {
   grid-column: 6 / span 7;
   display: grid;

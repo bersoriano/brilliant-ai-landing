@@ -1,5 +1,6 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { INSIGHTS } from "@/lib/insights";
 import { localePath } from "@/lib/locale";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
@@ -38,12 +39,23 @@ export function Trust() {
           <h2 id="trust-title" className="h2-sm">
             {t("Your data and your approvals")} <em>{t("stay yours.")}</em>
           </h2>
+          <p className={`body ${styles.view}`}>
+            {t(
+              "Our view: automation is only useful if your team can see what it did, stop it, and decide what it shouldn’t. So we design the approval first, and the automation around it.",
+            )}
+          </p>
           <a
             className="text-link text-link--accent"
             href={localePath(locale, "/security")}
           >
             {t("Read how we handle financial and patient data")}{" "}
             <Icon name="arrow" size={16} />
+          </a>
+          <a
+            className="text-link"
+            href={localePath(locale, `/blog/${INSIGHTS.approvals}`)}
+          >
+            {t("How we design approval points")} <Icon name="arrow" size={16} />
           </a>
         </div>
         <ul className={styles.points}>

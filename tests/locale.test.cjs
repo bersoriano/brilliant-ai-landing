@@ -597,3 +597,39 @@ test("Blog is reachable from the nav and homepage; the CRM page links to a publi
     assert.equal(parsePost(fs.readFileSync(file, "utf8"), CRM_POST_SLUG, locale).draft, false, `${file} is a draft`);
   }
 });
+
+test("Homepage notes stay published in both languages, and the approach copy is translated", () => {
+  const { INSIGHTS, APPROACH_RULES } = require("../lib/insights.ts");
+  const { POSTS_DIR, POST_LOCALES, parsePost } = require("../lib/posts.ts");
+  // Linked from the approach block, the calculator and the trust section:
+  // a missing or draft note would be a broken link on the homepage.
+  for (const slug of Object.values(INSIGHTS))
+    for (const locale of POST_LOCALES) {
+      const file = `${POSTS_DIR}/${slug}/${locale}.mdx`;
+      assert.ok(fs.existsSync(file), `missing ${file}`);
+      assert.equal(parsePost(fs.readFileSync(file, "utf8"), slug, locale).draft, false, `${file} is a draft`);
+    }
+  for (const rule of APPROACH_RULES) {
+    assert.ok(rule.note || rule.href, `${rule.title}: needs a note or a link`);
+    for (const s of [rule.title, rule.body, rule.linkLabel].filter(Boolean))
+      assert.ok(dictionary[s], `missing Spanish: ${s}`);
+  }
+  assert.match(fs.readFileSync("app/page.tsx", "utf8"), /<Approach /);
+});
+
+test("Positioning stays operator, not consultancy", () => {
+  const { CONSULTANCY_PHRASES } = require("../lib/insights.ts");
+  const files = fs
+    .readdirSync("components/sections")
+    .filter((f) => f.endsWith(".tsx"))
+    .map((f) => `components/sections/${f}`)
+    .concat(["lib/i18n.ts", "lib/faq.ts", "lib/workflows.ts", "lib/site.ts", "lib/crm.ts"]);
+  for (const dir of fs.readdirSync("content/posts"))
+    for (const locale of ["en", "es"]) files.push(`content/posts/${dir}/${locale}.mdx`);
+  for (const file of files)
+    assert.doesNotMatch(fs.readFileSync(file, "utf8"), CONSULTANCY_PHRASES, file);
+  for (const [key, value] of Object.entries(dictionary)) {
+    assert.doesNotMatch(key, CONSULTANCY_PHRASES, key);
+    assert.doesNotMatch(value, CONSULTANCY_PHRASES, key);
+  }
+});
