@@ -4,7 +4,6 @@ import { Kicker } from "@/components/ui/Kicker";
 import { BLOG_DESCRIPTION, translate } from "@/lib/i18n";
 import { localePath } from "@/lib/locale";
 import { getRequestLocale } from "@/lib/locale.server";
-import { formatPostDate } from "@/lib/posts";
 import { getPosts } from "@/lib/posts.server";
 import styles from "./Blog.module.css";
 
@@ -28,12 +27,7 @@ export default async function Blog() {
           <ol className={styles.list}>
             {posts.map((post) => (
               <li key={post.slug}>
-                <p className="label">
-                  <time dateTime={post.date}>
-                    {formatPostDate(post.date, locale)}
-                  </time>
-                  {post.draft && ` · ${t("Draft")}`}
-                </p>
+                {post.draft && <p className="label">{t("Draft")}</p>}
                 <h2>
                   <a href={localePath(locale, `/blog/${post.slug}`)}>
                     {post.title}

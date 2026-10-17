@@ -61,6 +61,12 @@ export const getPost = cache(async (slug: string, locale: Locale) => {
 // production, and on every request in development so edits show on reload.
 const compiled = new Map<string, Promise<MDXContent>>();
 
+// GFM footnotes (`[^id]`) render as a visible "Sources" list in the post's language.
+const FOOTNOTES: Record<Locale, { label: string; back: string }> = {
+  en: { label: "Sources", back: "Back to reference" },
+  es: { label: "Fuentes", back: "Volver a la referencia" },
+};
+
 export function compilePost(post: Post): Promise<MDXContent> {
   const key = `${post.slug}/${post.locale}`;
   const hit = production ? compiled.get(key) : undefined;
@@ -68,6 +74,12 @@ export function compilePost(post: Post): Promise<MDXContent> {
   const result = evaluate(post.body, {
     ...runtime,
     remarkPlugins: [remarkGfm],
+    remarkRehypeOptions: {
+      footnoteLabel: FOOTNOTES[post.locale].label,
+      footnoteLabelProperties: {},
+      footnoteBackLabel: (index, rereference) =>
+        `${FOOTNOTES[post.locale].back} ${index + 1}${rereference > 1 ? `-${rereference}` : ""}`,
+    },
   }).then((module) => module.default);
   if (production) compiled.set(key, result);
   return result;
