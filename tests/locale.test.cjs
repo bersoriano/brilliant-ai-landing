@@ -273,6 +273,7 @@ test("Every literal translation call in active UI has a Spanish dictionary entry
       "components/ui/Icon.tsx",
       "components/ui/DocumentScene.tsx",
       "components/ui/CrmBoard.tsx",
+      "components/ui/AgentPlays.tsx",
       "app/privacy/PrivacyContent.tsx",
       "app/security/SecurityContent.tsx",
       "app/about/AboutContent.tsx",
@@ -429,6 +430,7 @@ test("Custom CRM copy is translated and stays white-label", () => {
     CRM_SECURITY,
     CRM_STEPS,
     CRM_CUSTOM_WORK,
+    CRM_AGENT_PLAYS,
     crmPrice,
   } = require("../lib/crm.ts");
   const strings = [
@@ -447,6 +449,7 @@ test("Custom CRM copy is translated and stays white-label", () => {
     ...CRM_SECURITY.flat(),
     ...CRM_STEPS.flatMap((step) => [step.title, step.body]),
     ...CRM_CUSTOM_WORK,
+    ...CRM_AGENT_PLAYS.flatMap((play) => Object.values(play)),
   ];
   for (const s of strings)
     assert.notEqual(translate(s, "es"), s, `missing Spanish: ${s}`);

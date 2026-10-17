@@ -13,7 +13,7 @@ import {
 import { localePath } from "@/lib/locale";
 import { fmtCurrency } from "@/lib/roi";
 import { CRM_CTA, DISCOVERY_CALL_HREF } from "@/lib/site";
-import { CrmBoard } from "../ui/CrmBoard";
+import { AgentPlays } from "../ui/AgentPlays";
 import { Exhibit } from "../ui/Exhibit";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
@@ -70,13 +70,13 @@ export function CustomCrm() {
         <Exhibit
           className={styles.exhibit}
           label={t("Exhibit {number}", { number: exhibitNumber })}
-          title={t("A sales pipeline, stage by stage")}
+          title={t("Where an agent could start in your CRM")}
           titleId="crm-exhibit-title"
           caption={t(
-            "Illustrative. Invented names and figures. Stages and fields are set to match how you sell.",
+            "Examples to adapt, not client results. Start with high-volume, low-judgment work, and keep a person on anything that leaves your team.",
           )}
         >
-          <CrmBoard />
+          <AgentPlays />
         </Exhibit>
       </div>
 

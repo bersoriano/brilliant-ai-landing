@@ -790,5 +790,22 @@
   "Updated": "Actualizado",
   "Have a workflow like this on your team?": "¿Tu equipo tiene un proceso así?",
   "All posts": "Todas las publicaciones",
-  "Read: how AI is turning CRMs into systems of action": "Lee: cómo la IA está convirtiendo los CRM en sistemas de acción"
+  "Read: how AI is turning CRMs into systems of action": "Lee: cómo la IA está convirtiendo los CRM en sistemas de acción",
+  "A lead goes quiet for 90 days": "Un prospecto lleva 90 días sin actividad",
+  "The agent researches the account and drafts a re-engagement email.": "El agente investiga la cuenta y redacta un correo para retomar la conversación.",
+  "The email before it goes out": "El correo antes de enviarlo",
+  "Meetings booked": "Juntas agendadas",
+  "A proposal has no reply after 14 days": "Una propuesta lleva 14 días sin respuesta",
+  "The agent drafts a follow-up and creates a task for the deal owner.": "El agente redacta un seguimiento y crea una tarea para el responsable de la oportunidad.",
+  "The follow-up": "El seguimiento",
+  "Stalled deals that move again": "Oportunidades detenidas que vuelven a avanzar",
+  "A new inquiry arrives from your website": "Llega una solicitud nueva desde tu sitio web",
+  "The agent enriches the contact, checks fit, and suggests meeting times.": "El agente completa los datos del contacto, revisa si es buen prospecto y propone horarios para una junta.",
+  "Who takes the lead": "Quién atiende al prospecto",
+  "Time to first response": "Tiempo de primera respuesta",
+  "Where an agent could start in your CRM": "Dónde podría empezar un agente en tu CRM",
+  "When": "Cuando",
+  "You approve": "Tú apruebas",
+  "You measure": "Tú mides",
+  "Examples to adapt, not client results. Start with high-volume, low-judgment work, and keep a person on anything that leaves your team.": "Ejemplos para adaptar, no resultados de clientes. Empieza con trabajo de alto volumen y poco criterio, y deja en manos de una persona todo lo que salga de tu equipo."
 }
