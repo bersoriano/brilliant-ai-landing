@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import {
   LANGUAGE_COOKIE,
   htmlLang,
+  isServerLocalizedPage,
   localePath,
   ogLocale,
   pageFromPath,
@@ -69,9 +70,18 @@ export function LanguageProvider({
     updateLocale(initialLocale);
   }, [initialLocale]);
   useEffect(() => {
-    syncDocumentSeo(locale, pathname);
+    // Server-localized pages already carry their own title and description.
+    if (!isServerLocalizedPage(pathname)) syncDocumentSeo(locale, pathname);
   }, [locale, pathname]);
   function setLocale(next: Locale) {
+    // Post bodies are rendered on the server per language: load the other one.
+    // `?lang=` makes the middleware store the choice and redirect.
+    if (isServerLocalizedPage(pathname)) {
+      window.location.assign(
+        `${stripLocalePrefix(pathname)}?lang=${next}${window.location.hash}`,
+      );
+      return;
+    }
     updateLocale(next);
     try {
       document.cookie = `${LANGUAGE_COOKIE}=${next}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;

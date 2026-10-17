@@ -54,6 +54,9 @@ export const HEALTHCARE_DESCRIPTION =
 export const CRM_DESCRIPTION =
   "Custom CRM implementation on a proven open-source foundation: contacts, deals, tasks, and an assistant you can talk to. Unlimited users on the base plan.";
 
+export const BLOG_DESCRIPTION =
+  "Notes on scoping, building, and running AI workflows for finance and healthcare operations teams.";
+
 export type PageKey =
   | "home"
   | "privacy"
@@ -61,7 +64,9 @@ export type PageKey =
   | "about"
   | "finance"
   | "healthcare"
-  | "crm";
+  | "crm"
+  | "blog"
+  | "post";
 const TITLES: Record<PageKey, [en: string, es: string]> = {
   home: [
     "AI Automation for Finance & Healthcare | Brilliant AI",
@@ -88,6 +93,9 @@ const TITLES: Record<PageKey, [en: string, es: string]> = {
     "Custom CRM Implementation | Brilliant AI",
     "Implementación de CRM a la medida | Brilliant AI",
   ],
+  blog: ["Blog | Brilliant AI", "Blog | Brilliant AI"],
+  // Fallback only: each post sets its own title in generateMetadata.
+  post: ["Blog | Brilliant AI", "Blog | Brilliant AI"],
 };
 const DESCRIPTIONS: Record<PageKey, string> = {
   home: HOME_DESCRIPTION,
@@ -97,6 +105,8 @@ const DESCRIPTIONS: Record<PageKey, string> = {
   finance: FINANCE_DESCRIPTION,
   healthcare: HEALTHCARE_DESCRIPTION,
   crm: CRM_DESCRIPTION,
+  blog: BLOG_DESCRIPTION,
+  post: BLOG_DESCRIPTION,
 };
 /** `true` is accepted for the privacy page (the original boolean signature). */
 const pageKey = (page: PageKey | boolean) =>

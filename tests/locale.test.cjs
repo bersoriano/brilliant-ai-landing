@@ -277,6 +277,8 @@ test("Every literal translation call in active UI has a Spanish dictionary entry
       "app/security/SecurityContent.tsx",
       "app/about/AboutContent.tsx",
       "components/i18n/LanguageProvider.tsx",
+      "app/blog/page.tsx",
+      "app/blog/[slug]/page.tsx",
     ]);
   for (const file of files) {
     const ast = ts.createSourceFile(
@@ -362,15 +364,19 @@ test("CTA constants are translated and used in place of ad-hoc labels", () => {
     assert.ok(!sections.includes(`"${label}"`), `retired CTA still present: ${label}`);
 });
 
+// Formal singular forms we must not slip back into ("ustedes" for the
+// visitor addressing us — "Ayúdennos", "¿Trabajan…?" — is standard Mexican).
+// Phrases, not bare verbs: "empiece"/"envíe" are also third-person subjunctive.
+const FORMAL_SPANISH =
+  /(^|[^\p{L}])(usted|empiece con|traiga|elija|seleccione|comparta|envíela|envíelo|escriba a|escríbanos|agende|ajuste los|agréguelo|cuéntenos|muéstrenos|evite|designe|envíenos|su equipo|su proceso|su control|tiene en mente)(?=[^\p{L}]|$)/iu;
+// Spain-only vocabulary and vosotros forms.
+const SPAIN_SPANISH =
+  /(^|[^\p{L}])(vosotros|vosotras|os|ordenador|fichero|coger|tenéis|podéis|queréis|habéis)(?=[^\p{L}]|$)/iu;
+const EMPLOYERS = ["Boston Consulting Group", "Bank of America", "Merrill Lynch", "Banorte", "Mellon", "Accenture", "IBM"];
+
 test("Mexican Spanish uses tú with the visitor, not usted or Spain forms", () => {
-  // Formal singular forms we must not slip back into ("ustedes" for the
-  // visitor addressing us — "Ayúdennos", "¿Trabajan…?" — is standard Mexican).
-  // Phrases, not bare verbs: "empiece"/"envíe" are also third-person subjunctive.
-  const formal =
-    /(^|[^\p{L}])(usted|empiece con|traiga|elija|seleccione|comparta|envíela|envíelo|escriba a|escríbanos|agende|ajuste los|agréguelo|cuéntenos|muéstrenos|evite|designe|envíenos|su equipo|su proceso|su control|tiene en mente)(?=[^\p{L}]|$)/iu;
-  // Spain-only vocabulary and vosotros forms.
-  const spain =
-    /(^|[^\p{L}])(vosotros|vosotras|os|ordenador|fichero|coger|tenéis|podéis|queréis|habéis)(?=[^\p{L}]|$)/iu;
+  const formal = FORMAL_SPANISH;
+  const spain = SPAIN_SPANISH;
   for (const [key, value] of Object.entries(dictionary)) {
     assert.doesNotMatch(value, formal, key);
     assert.doesNotMatch(value, spain, key);
@@ -405,7 +411,7 @@ test("Employer names stay off the homepage; they live on /about with the hedge",
     .filter((f) => f.endsWith(".tsx"))
     .map((f) => fs.readFileSync(`components/sections/${f}`, "utf8"))
     .join("\n");
-  for (const name of ["Boston Consulting Group", "Bank of America", "Merrill Lynch", "Banorte", "Mellon", "Accenture", "IBM"])
+  for (const name of EMPLOYERS)
     assert.ok(!home.includes(name), `employer on homepage: ${name}`);
   const about = fs.readFileSync("app/about/AboutContent.tsx", "utf8");
   assert.match(about, /not current Brilliant AI clients or partners/);
@@ -481,4 +487,88 @@ test("Custom CRM landing has its own localized URL, metadata, and sitemap entry"
   assert.equal(pageDescription("es", "crm"), dictionary[CRM_DESCRIPTION]);
   assert.ok(fs.existsSync("app/custom-crm/page.tsx"));
   assert.match(fs.readFileSync("app/sitemap.ts", "utf8"), /"\/custom-crm"/);
+});
+
+test("Blog index and posts have localized URLs, metadata, and sitemap entries", () => {
+  const { BLOG_DESCRIPTION } = require("../lib/i18n.ts");
+  const { isServerLocalizedPage } = require("../lib/locale.ts");
+  assert.equal(pageFromPath("/blog"), "blog");
+  assert.equal(pageFromPath("/es/blog"), "blog");
+  assert.equal(pageFromPath("/blog/some-post"), "post");
+  assert.equal(pageFromPath("/es/blog/some-post"), "post");
+  assert.equal(languageAlternatePaths("/blog/some-post")["es-MX"], "/es/blog/some-post");
+  // Post bodies come from the server per language, so the switch must navigate.
+  assert.ok(isServerLocalizedPage("/es/blog/some-post"));
+  assert.ok(!isServerLocalizedPage("/security"));
+  assert.ok(dictionary[BLOG_DESCRIPTION], "Spanish blog description");
+  assert.equal(pageDescription("es", "blog"), dictionary[BLOG_DESCRIPTION]);
+  assert.match(fs.readFileSync("app/sitemap.ts", "utf8"), /"\/blog"/);
+});
+
+test("Post frontmatter is validated", () => {
+  const { parsePost, sortPosts } = require("../lib/posts.ts");
+  const post = (front) => `---\n${front}\n---\n\nBody.\n`;
+  const ok = parsePost(
+    post('title: "A: B"\ndescription: Short.\ndate: 2026-01-02'),
+    "a-post",
+    "en",
+  );
+  assert.equal(ok.title, "A: B");
+  assert.equal(ok.draft, false);
+  assert.equal(ok.body.trim(), "Body.");
+  assert.throws(() => parsePost(post("description: x\ndate: 2026-01-02"), "a", "en"), /title/);
+  assert.throws(() => parsePost(post("title: x\ndescription: x\ndate: Jan 2"), "a", "en"), /date/);
+  assert.throws(() => parsePost(post("title: x\ndescription: x\ndate: 2026-01-02\ndraft: yes"), "a", "en"), /draft/);
+  assert.throws(() => parsePost(post("title: x\ndescription: x\ndate: 2026-01-02"), "Bad_Slug", "en"), /slug/);
+  assert.throws(() => parsePost("No frontmatter", "a", "en"), /frontmatter/);
+  assert.deepEqual(
+    sortPosts([
+      { slug: "b", date: "2026-01-01" },
+      { slug: "a", date: "2026-03-01" },
+      { slug: "c", date: "2026-01-01" },
+    ]).map((p) => p.slug),
+    ["a", "b", "c"],
+  );
+});
+
+test("Every post ships in English and Mexican Spanish, compiles, and follows the site's rules", async () => {
+  const { POSTS_DIR, POST_LOCALES, parsePost } = require("../lib/posts.ts");
+  const { compile } = await import("@mdx-js/mdx");
+  const { default: remarkGfm } = await import("remark-gfm");
+  const slugs = fs
+    .readdirSync(POSTS_DIR, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+  assert.ok(slugs.length > 0, "the example post keeps the format documented");
+  for (const slug of slugs) {
+    const [en, es] = POST_LOCALES.map((locale) => {
+      const file = `${POSTS_DIR}/${slug}/${locale}.mdx`;
+      assert.ok(fs.existsSync(file), `missing ${file}`);
+      return { file, post: parsePost(fs.readFileSync(file, "utf8"), slug, locale) };
+    });
+    // Both languages publish together so hreflang alternates never 404.
+    assert.equal(en.post.draft, es.post.draft, `${slug}: draft differs between languages`);
+    assert.equal(en.post.date, es.post.date, `${slug}: date differs between languages`);
+    assert.notEqual(en.post.title, es.post.title, `${slug}: Spanish title is untranslated`);
+    for (const { file, post } of [en, es]) {
+      await compile(post.body, { remarkPlugins: [remarkGfm] }).catch((error) => {
+        assert.fail(`${file} does not compile: ${error.message}`);
+      });
+      const text = [post.title, post.description, post.body].join("\n");
+      // No third-party image requests: images live in public/.
+      assert.doesNotMatch(text, /!\[[^\]]*\]\(\s*(https?:)?\/\//, `${file}: remote image`);
+      assert.doesNotMatch(text, /<img[^>]+src=["'](https?:)?\/\//i, `${file}: remote image`);
+      // Honesty rules from CLAUDE.md apply to posts too.
+      for (const name of EMPLOYERS)
+        assert.ok(!text.includes(name), `${file}: employer names live only on /about (${name})`);
+      assert.doesNotMatch(text, /atomic|marmelab/i, `${file}: the CRM foundation stays unnamed`);
+      assert.doesNotMatch(
+        text,
+        /\b(SOC ?2|HIPAA|ISO ?27001)[- ](certified|compliant|attested)\b/i,
+        `${file}: certification claim`,
+      );
+    }
+    assert.doesNotMatch(es.post.body + es.post.title + es.post.description, FORMAL_SPANISH, `${es.file}: use tú`);
+    assert.doesNotMatch(es.post.body + es.post.title + es.post.description, SPAIN_SPANISH, `${es.file}: Mexican Spanish`);
+  }
 });
