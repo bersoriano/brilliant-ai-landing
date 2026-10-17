@@ -120,6 +120,18 @@ test("Second middleware pass preserves original Spanish URL after rewrite", () =
     "/finance-automation",
   );
 });
+test("Middleware runs on pages but never on API routes", () => {
+  const { config } = require("../middleware.ts");
+  const matchers = config.matcher.map((source) => new RegExp(`^${source}$`));
+  const runs = (path) => matchers.some((matcher) => matcher.test(path));
+  for (const page of ["/", "/es", "/es/blog/example-post", "/about", "/apiary"])
+    assert.equal(runs(page), true, `${page} should get locale handling`);
+  // A Spanish-preference redirect on /api/inquiry bounced every form POST.
+  for (const api of ["/api/inquiry", "/api/anything/else"])
+    assert.equal(runs(api), false, `${api} should skip middleware`);
+  for (const asset of ["/_next/static/chunk.js", "/robots.txt", "/icon.svg"])
+    assert.equal(runs(asset), false, `${asset} should skip middleware`);
+});
 test("Home metadata names the US, Canada, and Mexico; FAQ copy is translated", () => {
   assert.match(pageTitle("en"), /Finance & Healthcare/);
   assert.match(pageTitle("es"), /finanzas y salud/);

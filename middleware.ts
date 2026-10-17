@@ -102,6 +102,8 @@ export function middleware(request: NextRequest) {
   return NextResponse.next({ request: { headers } });
 }
 
+// API routes have no language: skip them so a Spanish-preference redirect
+// never bounces a form POST. See docs/i18n/MIDDLEWARE.md.
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|.*\\..*).*)"],
+  matcher: ["/((?!api/|_next/static|_next/image|.*\\..*).*)"],
 };
