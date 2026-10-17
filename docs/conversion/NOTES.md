@@ -50,14 +50,21 @@ content is the in-page anchor `#review`.
 
 - "What we've learned": four rules (design for the exception first; one
   decision per approval, where your team already works; count hours, not hype;
-  judgment stays with your team). Three link to notes, one to `/security`. The
-  block is server-rendered so links carry each note's own title, and it ends
-  with the review CTA rather than a reading CTA.
+  judgment stays with your team), each linked to a note. Rules 1–2 pair an
+  invoice with a referral so healthcare buyers see their own work. The block
+  is server-rendered so links carry each note's own title, and it ends with the
+  review CTA rather than a reading CTA. `/security` is Trust's lead link, one
+  section down.
 - The notes (`content/posts/why-invoice-automation-stalls`,
-  `measuring-capacity-reclaimed`, `approval-points-without-bottlenecks`) are
-  operator notes: no statistics, no client claims, examples labelled as
-  examples. The calculator links to the measuring note from its disclaimer;
-  Trust links to the approvals note.
+  `approval-points-without-bottlenecks`, `measuring-capacity-reclaimed`,
+  `agents-in-regulated-work`) are operator notes: no statistics, no client
+  claims, examples labelled as examples. The calculator links to the measuring
+  note from its disclaimer; Trust links to the approvals note; the finance and
+  healthcare pages link the invoice and agents notes.
+- The homepage blog teaser (`homepageTeaser`) skips those notes and the CRM
+  post, which `#crm` already links and whose market commentary would read as
+  our view under a finance-and-healthcare heading. It stays hidden until
+  another note is published.
 - Placement rule: authority sits after the process (How it works) and before
   the controls (Trust), so it reads as the reasoning behind both.
 

@@ -39,7 +39,7 @@ export default function AboutContent() {
             <h2>{t("Where we work")}</h2>
             <p>
               {t(
-                "Onsite reviews in the United States, Canada, and Mexico, including Mexico City. A consulting arm in Malaysia serves clients across Southeast Asia.",
+                "Onsite reviews in the United States, Canada, and Mexico, including Mexico City. We serve clients across Southeast Asia from Malaysia.",
               )}
             </p>
           </section>

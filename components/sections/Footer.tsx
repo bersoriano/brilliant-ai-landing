@@ -30,7 +30,7 @@ export function Footer() {
               {t(
                 "AI automation for finance and healthcare teams in the United States, Canada, and Mexico.",
               )}{" "}
-              {t("A consulting arm in Malaysia serves clients across Southeast Asia.")}
+              {t("We serve clients across Southeast Asia from Malaysia.")}
             </p>
           </div>
           <div className={styles.columns}>

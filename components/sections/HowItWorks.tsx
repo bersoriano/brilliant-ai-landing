@@ -10,7 +10,7 @@ const steps = [
   {
     title: "Review",
     duration: "20 min",
-    body: "Walk us through one repetitive task, or record yourself doing it once. We map the inputs, tools, handoffs, and approval points, then tell you whether it calls for a workflow, an agent, or both.",
+    body: "Walk us through one repetitive task, or record yourself doing it once. We map the inputs, tools, handoffs, and approval points, then tell you whether it calls for a workflow, an agent, or both. If it isn’t worth automating yet, we’ll say so.",
   },
   {
     title: "Pilot",
@@ -81,8 +81,14 @@ const costs = [
 const inTheWork = [
   ["Connected workflows", "One reliable process from request to handoff."],
   ["Custom AI agents", "Assigned to a person, guided by your rules."],
-  ["Automation discovery", "Find the bottleneck worth fixing first."],
-  ["Integration and ongoing care", "Monitoring, exceptions, and updates."],
+  [
+    "Automation discovery",
+    "Find the bottleneck worth fixing first, and the exceptions behind it.",
+  ],
+  [
+    "Integration and ongoing care",
+    "Monitoring, exception handling, and rule updates when your process changes.",
+  ],
 ];
 const NUMERALS = ["i.", "ii.", "iii."];
 
