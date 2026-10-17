@@ -2,10 +2,11 @@ import type { Locale } from "./locale";
 import type { Currency } from "./roi";
 
 /**
- * The custom CRM offer. It is white-label: copy says "open-source foundation"
- * and never names the project underneath (a test enforces this). Features
- * listed here ship with that foundation; anything beyond the base plan is
- * scoped and quoted after the review.
+ * The custom CRM offer. It is white-label: /custom-crm says "open-source
+ * foundation" (the homepage Services section doesn't mention it) and never
+ * names the project underneath (a test enforces this). Features listed here
+ * ship with that foundation; anything beyond the base plan is scoped and
+ * quoted after the review.
  */
 
 /**
@@ -245,17 +246,20 @@ export const CRM_CUSTOM_WORK = [
 /** The blog post the /custom-crm page links to (a test keeps it published). */
 export const CRM_POST_SLUG = "crm-systems-of-action";
 
+/** One row of an agent playbook exhibit (components/ui/AgentPlays). */
+export type AgentPlay = {
+  when: string;
+  agent: string;
+  approve: string;
+  measure: string;
+};
+
 /**
  * Homepage CRM exhibit: where an agent could start, drawn from the CRM post
  * (high-volume, low-judgment work first; a person approves; measure outcomes).
  * Examples to adapt, not client results.
  */
-export const CRM_AGENT_PLAYS: {
-  when: string;
-  agent: string;
-  approve: string;
-  measure: string;
-}[] = [
+export const CRM_AGENT_PLAYS: AgentPlay[] = [
   {
     when: "A lead goes quiet for 90 days",
     agent: "The agent researches the account and drafts a re-engagement email.",

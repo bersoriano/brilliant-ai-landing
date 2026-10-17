@@ -4,11 +4,11 @@ import { Hero } from "@/components/sections/Hero";
 import { Solution } from "@/components/sections/Solution";
 import { Problem } from "@/components/sections/Problem";
 import { RoiCalculator } from "@/components/sections/RoiCalculator";
+import { Services } from "@/components/sections/Services";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Approach } from "@/components/sections/Approach";
 import { Trust } from "@/components/sections/Trust";
 import { Proof } from "@/components/sections/Proof";
-import { CustomCrm } from "@/components/sections/CustomCrm";
 import { Faq } from "@/components/sections/Faq";
 import { LatestPosts } from "@/components/sections/LatestPosts";
 import { OnsiteConsulting } from "@/components/sections/OnsiteConsulting";
@@ -37,11 +37,11 @@ export default async function Home() {
           <Solution />
           <Problem />
           <RoiCalculator />
+          <Services />
           <HowItWorks />
           <Approach locale={locale} notes={noteBySlug} />
           <Trust />
           <Proof />
-          <CustomCrm />
           <Faq />
           <LatestPosts locale={locale} posts={latest} />
           <OnsiteConsulting />

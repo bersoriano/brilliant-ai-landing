@@ -276,6 +276,30 @@ test("SEO copy and FAQs have Spanish dictionary entries", () => {
     assert.ok(dictionary[normalized], normalized);
   }
 });
+/** The first argument of every literal `t("…")` call in a TSX file. */
+function tLiterals(file) {
+  const ast = ts.createSourceFile(
+    file,
+    fs.readFileSync(file, "utf8"),
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  const keys = [];
+  function visit(node) {
+    if (
+      ts.isCallExpression(node) &&
+      node.expression.getText(ast) === "t" &&
+      node.arguments[0] &&
+      ts.isStringLiteral(node.arguments[0])
+    )
+      keys.push(node.arguments[0].text.replace(/\s+/g, " ").trim());
+    ts.forEachChild(node, visit);
+  }
+  visit(ast);
+  return keys;
+}
+
 test("Every literal translation call in active UI has a Spanish dictionary entry", () => {
   const files = fs
     .readdirSync("components/sections")
@@ -293,29 +317,8 @@ test("Every literal translation call in active UI has a Spanish dictionary entry
       "app/blog/page.tsx",
       "app/blog/[slug]/page.tsx",
     ]);
-  for (const file of files) {
-    const ast = ts.createSourceFile(
-      file,
-      fs.readFileSync(file, "utf8"),
-      ts.ScriptTarget.Latest,
-      true,
-      ts.ScriptKind.TSX,
-    );
-    function visit(node) {
-      if (
-        ts.isCallExpression(node) &&
-        node.expression.getText(ast) === "t" &&
-        node.arguments[0] &&
-        ts.isStringLiteral(node.arguments[0])
-      )
-        assert.ok(
-          dictionary[node.arguments[0].text.replace(/\s+/g, " ").trim()],
-          `${file}: ${node.arguments[0].text}`,
-        );
-      ts.forEachChild(node, visit);
-    }
-    visit(ast);
-  }
+  for (const file of files)
+    for (const key of tLiterals(file)) assert.ok(dictionary[key], `${file}: ${key}`);
 });
 
 test("Unapproved case study figures never render in a production build", () => {
@@ -385,6 +388,8 @@ const FORMAL_SPANISH =
 // Spain-only vocabulary and vosotros forms.
 const SPAIN_SPANISH =
   /(^|[^\p{L}])(vosotros|vosotras|os|ordenador|fichero|coger|tenéis|podéis|queréis|habéis)(?=[^\p{L}]|$)/iu;
+// The custom ERP is white-label too: these never appear in the public repo.
+const ERP_FOUNDATION = /erpnext|frappe|caffyne/i;
 const EMPLOYERS = ["Boston Consulting Group", "Bank of America", "Merrill Lynch", "Banorte", "Mellon", "Accenture", "IBM"];
 
 test("Mexican Spanish uses tú with the visitor, not usted or Spain forms", () => {
@@ -488,13 +493,88 @@ test("Custom CRM copy is translated and stays white-label", () => {
     fs.readFileSync("CLAUDE.md", "utf8"),
     fs.readFileSync("docs/conversion/NOTES.md", "utf8"),
     fs.readFileSync("lib/crm.ts", "utf8"),
-    fs.readFileSync("components/sections/CustomCrm.tsx", "utf8"),
+    fs.readFileSync("components/sections/Services.tsx", "utf8"),
     fs.readFileSync("components/sections/CrmLanding.tsx", "utf8"),
     fs.readFileSync("components/ui/CrmBoard.tsx", "utf8"),
     fs.readFileSync("lib/i18n.ts", "utf8"),
     JSON.stringify(dictionary),
   ].join("\n");
   assert.doesNotMatch(sources, /atomic|marmelab/i);
+});
+
+test("Services presents the four offers as one translated set, ahead of How it works", () => {
+  const { SERVICES, WORKFLOW_EXAMPLES, AGENT_EXAMPLES } = require("../lib/services.ts");
+  const { ERP_PLAYS, ERP_FEATURES, erpPrice } = require("../lib/erp.ts");
+  const { NAV_LINKS } = require("../lib/site.ts");
+  assert.deepEqual(
+    SERVICES.map((service) => service.name),
+    ["AI Workflow Automations", "AI Agents", "Custom CRM", "Custom ERP"],
+  );
+  const strings = [
+    ...SERVICES.flatMap((service) => [service.name, service.line]),
+    ...WORKFLOW_EXAMPLES.flatMap((example) => [example.label, example.steps]),
+    ...AGENT_EXAMPLES.flatMap((example) => Object.values(example)),
+    ...ERP_PLAYS.flatMap((play) => Object.values(play)),
+    ...ERP_FEATURES.flatMap(([, title, line]) => [title, line]),
+  ];
+  for (const s of strings)
+    assert.notEqual(translate(s, "es"), s, `missing Spanish: ${s}`);
+  // Workflow examples are drawn as pipelines split on " → " after
+  // translation, so both languages must keep the same steps.
+  for (const { steps } of WORKFLOW_EXAMPLES) {
+    const count = steps.split(" → ").length;
+    assert.ok(count >= 3, `${steps}: a pipeline has at least three steps`);
+    assert.equal(translate(steps, "es").split(" → ").length, count, steps);
+  }
+  // The ERP base plan follows the language, like the CRM's (no FX conversion).
+  assert.equal(erpPrice("en").currency, "USD");
+  assert.equal(erpPrice("es").currency, "MXN");
+  for (const locale of ["en", "es"]) assert.ok(erpPrice(locale).month > 0, locale);
+  // One Services section, ahead of How it works; the CRM lives inside it.
+  const page = fs.readFileSync("app/page.tsx", "utf8");
+  assert.ok(page.includes("<Services />"), "homepage renders Services");
+  assert.ok(page.indexOf("<Services />") < page.indexOf("<HowItWorks />"), "Services comes before How it works");
+  assert.doesNotMatch(page, /<CustomCrm/);
+  assert.ok(NAV_LINKS.some((link) => link.href === "#services"), "nav links to #services");
+  const services = fs.readFileSync("components/sections/Services.tsx", "utf8");
+  assert.match(services, /PRIMARY_CTA/, "Services closes on the primary CTA");
+  for (const id of SERVICES.map((service) => service.id))
+    assert.ok(/^[a-z-]+$/.test(id), `${id}: a plain anchor id`);
+});
+
+test("Services copy speaks to business owners: no build-stack or technical terms", () => {
+  const { SERVICES, WORKFLOW_EXAMPLES, AGENT_EXAMPLES } = require("../lib/services.ts");
+  const { ERP_PLAYS, ERP_FEATURES } = require("../lib/erp.ts");
+  const { CRM_AGENT_PLAYS, CRM_ESSENTIALS, CRM_ADVANCED } = require("../lib/crm.ts");
+  const TECHNICAL =
+    /\b(atomic|marmelab|erpnext|frappe|caffyne|doctypes?|mcp|python|open[- ]source|self[- ]host(ed|ing)?|código abierto|autoalojad[oa]s?)\b/i;
+  const keys = [
+    ...tLiterals("components/sections/Services.tsx"),
+    ...tLiterals("components/sections/SystemOffer.tsx"),
+    ...SERVICES.flatMap((service) => [service.name, service.line]),
+    ...WORKFLOW_EXAMPLES.flatMap((example) => [example.label, example.steps]),
+    ...AGENT_EXAMPLES.flatMap((example) => Object.values(example)),
+    ...ERP_PLAYS.flatMap((play) => Object.values(play)),
+    ...ERP_FEATURES.flatMap(([, title, line]) => [title, line]),
+    ...CRM_AGENT_PLAYS.flatMap((play) => Object.values(play)),
+    ...[...CRM_ESSENTIALS, ...CRM_ADVANCED.slice(0, 3)].flatMap(([, title, line]) => [title, line]),
+  ];
+  for (const key of keys) {
+    assert.doesNotMatch(key, TECHNICAL, key);
+    assert.doesNotMatch(translate(key, "es"), TECHNICAL, `Spanish for: ${key}`);
+  }
+  // The ERP foundation is never named anywhere in the public repo.
+  const sources = [
+    fs.readFileSync("CLAUDE.md", "utf8"),
+    fs.readFileSync("docs/conversion/NOTES.md", "utf8"),
+    fs.readFileSync("lib/erp.ts", "utf8"),
+    fs.readFileSync("lib/services.ts", "utf8"),
+    fs.readFileSync("components/sections/Services.tsx", "utf8"),
+    fs.readFileSync("components/sections/SystemOffer.tsx", "utf8"),
+    fs.readFileSync("lib/seo.ts", "utf8"),
+    JSON.stringify(dictionary),
+  ].join("\n");
+  assert.doesNotMatch(sources, ERP_FOUNDATION);
 });
 
 test("Custom CRM landing has its own localized URL, metadata, and sitemap entry", () => {
@@ -583,6 +663,7 @@ test("Every post ships in English and Mexican Spanish, compiles, and follows the
       for (const name of EMPLOYERS)
         assert.ok(!text.includes(name), `${file}: employer names live only on /about (${name})`);
       assert.doesNotMatch(text, /atomic|marmelab/i, `${file}: the CRM foundation stays unnamed`);
+      assert.doesNotMatch(text, ERP_FOUNDATION, `${file}: the ERP foundation stays unnamed`);
       assert.doesNotMatch(
         text,
         /\b(SOC ?2|HIPAA|ISO ?27001)[- ](certified|compliant|attested)\b/i,
@@ -600,7 +681,7 @@ test("Blog is reachable from the nav and homepage; the CRM page links to a publi
   const { POSTS_DIR, POST_LOCALES, parsePost } = require("../lib/posts.ts");
   assert.ok(NAV_LINKS.some((link) => link.href === "/blog"), "nav links to /blog");
   assert.match(fs.readFileSync("app/page.tsx", "utf8"), /<LatestPosts /);
-  for (const file of ["CrmLanding.tsx", "CustomCrm.tsx"])
+  for (const file of ["CrmLanding.tsx", "Services.tsx"])
     assert.match(fs.readFileSync(`components/sections/${file}`, "utf8"), /CRM_POST_SLUG/, file);
   // The link must never 404: the post exists in both languages and is not a draft.
   for (const locale of POST_LOCALES) {
