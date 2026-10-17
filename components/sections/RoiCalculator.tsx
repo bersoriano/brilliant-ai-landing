@@ -354,7 +354,7 @@ export function RoiCalculator() {
               )}
             </dl>
             <p className={styles.disclaimer}>
-              <strong>{t("An illustrative estimate, not a guarantee.")}</strong>{" "}
+              <strong>{t("An estimate from your inputs, not a guarantee.")}</strong>{" "}
               {t(
                 "The $ figure is capacity value, not cash savings. Implementation cost is scoped after the review.",
               )}{" "}

@@ -8,7 +8,7 @@ import styles from "./Faq.module.css";
 export function Faq() {
   const { t } = useLanguage();
   return (
-    <section id="faq" className="section shell grid-12">
+    <section id="faq" className="section section-rule shell grid-12">
       <div className={styles.intro}>
         <Kicker>{t("A little more clarity")}</Kicker>
         <h2 className="h2-sm">

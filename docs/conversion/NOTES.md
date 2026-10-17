@@ -76,11 +76,22 @@ content is the in-page anchor `#review`.
   repetitive hour, filled where Brilliant handles the work. Headline numbers:
   hours per week (accent), capacity value, payback (hours per year when no
   budget is set).
-- **How it works**: workflows and agents as process diagrams. A filled square
-  is a trigger, an outlined square a request, and the sand node (reached by a
-  dashed line) is the person who decides.
+- **How it works**: workflows and agents as process diagrams. Each card opens
+  with a specimen of what starts it, so the difference reads in a glance: the
+  workflow's example as a pipeline of boxed steps, the agent's as a request
+  from a person. Below it, a filled square is a trigger, an outlined square a
+  request, and the sand node (reached by a dashed line) is the person who
+  decides.
 - **Exhibit 4 (`AgentPlays`)**: each CRM trigger is a vertical tab; the
-  selected one shows what the agent does → you approve → you measure.
+  selected one shows what the agent does → you approve → you measure. Grey
+  rules; sand only on "You approve".
+- **CRM stays secondary**: the homepage section is the pitch (`.h2-sm`, outline
+  CTA), the agent playbook, and one ruled row with the price and the included
+  features (titles only on phones). The assistant, custom work and reasons
+  live on `/custom-crm`.
+- **Page rhythm**: `.section-rule` draws a content-width hairline between
+  consecutive sections on the same band (Approach, CRM, FAQ, Blog). Headings
+  are `.h2` up to 56px and `.h2-sm` up to 44px.
 - **Rhino (`Proof`)**: before (three areas in separate software) → what we
   built (modules of one system over shared APIs) → now, using only the three
   existing sentences as captions.
@@ -90,6 +101,10 @@ content is the in-page anchor `#review`.
   exhibits and cards only.
 - **The control line** (`.control` in `globals.css`): sand rule and label
   "Stays with you". Every exhibit ends with what stays with a person.
+- **Demo language**: exhibits carry a "Sample data" (or "Examples") tag in the
+  header instead of "Illustrative." captions, here and on `/custom-crm`; the
+  calculator says "An estimate from your inputs, not a guarantee." Accuracy
+  stays: names and numbers are invented, tools are examples.
 
 ### Calculator currency (`components/sections/RoiCalculator.tsx`)
 

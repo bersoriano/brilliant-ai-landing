@@ -23,7 +23,7 @@ export function Approach({
   return (
     <section
       id="approach"
-      className="section shell grid-12"
+      className="section section-rule shell grid-12"
       aria-labelledby="approach-title"
     >
       <div className={styles.intro}>

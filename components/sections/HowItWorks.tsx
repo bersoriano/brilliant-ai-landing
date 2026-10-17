@@ -120,6 +120,27 @@ export function HowItWorks() {
                   <h3 className="h3">{t(offer.title)}</h3>
                   <p className={styles.for}>{t(offer.for)}</p>
                 </header>
+                {/* What starts it, drawn so the difference reads at a glance:
+                    a workflow is a pipeline, an agent is a person asking. */}
+                <div className={styles.specimen} data-kind={offer.kind}>
+                  <span className="label">{t("Example")}</span>
+                  {offer.kind === "workflow" ? (
+                    <ol className={styles.pipeline}>
+                      {t(offer.example)
+                        .split(" → ")
+                        .map((step) => (
+                          <li key={step}>{step}</li>
+                        ))}
+                    </ol>
+                  ) : (
+                    <p className={styles.request}>
+                      <span className={styles.asker} aria-hidden="true">
+                        <Icon name="people" size={14} />
+                      </span>
+                      <span>{t(offer.example)}</span>
+                    </p>
+                  )}
+                </div>
                 <ol className={styles.flow}>
                   {offer.flow.map(([term, detail], n) => (
                     <li key={term} data-node={NODES[n]} data-kind={offer.kind}>
@@ -128,10 +149,6 @@ export function HowItWorks() {
                     </li>
                   ))}
                 </ol>
-                <p className={styles.example}>
-                  <span className="label">{t("Example")}</span>
-                  <span>{t(offer.example)}</span>
-                </p>
               </Reveal>
             ))}
           </div>

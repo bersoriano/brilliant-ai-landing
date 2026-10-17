@@ -18,7 +18,7 @@ export function LatestPosts({
   return (
     <section
       id="blog"
-      className="section shell grid-12"
+      className="section section-rule shell grid-12"
       aria-labelledby="blog-title"
     >
       <div className={styles.intro}>

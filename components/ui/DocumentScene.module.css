@@ -425,4 +425,9 @@
   .inbox li:not([data-active]) {
     display: none;
   }
+  /* ...and its inbox row already names the sender and subject */
+  .scene[data-inbox] .from,
+  .scene[data-inbox] .subject {
+    display: none;
+  }
 }

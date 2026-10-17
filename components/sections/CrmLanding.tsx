@@ -100,10 +100,11 @@ export function CrmLanding() {
             <Exhibit
               className={styles.heroExhibit}
               label={t("Exhibit {number}", { number: 1 })}
+              tag={t("Sample data")}
               title={t("A sales pipeline, stage by stage")}
               titleId="crm-pipeline-title"
               caption={t(
-                "Illustrative. Invented names and figures. Stages and fields are set to match how you sell.",
+                "Stages and fields are set to match how you sell.",
               )}
             >
               <CrmBoard />
@@ -176,10 +177,11 @@ export function CrmLanding() {
           <Exhibit
             className={styles.chatExhibit}
             label={t("Exhibit {number}", { number: 2 })}
+            tag={t("Sample data")}
             title={t("A conversation with your CRM")}
             titleId="crm-chat-title"
             caption={t(
-              "Illustrative. The assistant works with the same permissions as the person asking.",
+              "The assistant works with the same permissions as the person asking.",
             )}
           >
             <ol className={styles.chat}>
