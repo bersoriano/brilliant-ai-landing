@@ -2,6 +2,7 @@
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
+import { Reveal } from "../ui/Reveal";
 import styles from "./HowItWorks.module.css";
 
 /** The product, in three steps. */
@@ -22,38 +23,45 @@ const steps = [
     body: "We monitor it, handle exceptions, and keep it current. When the first one is working, we add the next workflow or the next person’s agent. Your team gets documentation. Running it stays with us unless you want a handover.",
   },
 ];
-/** The two offers, compared row by row. Examples are illustrative. */
+/**
+ * The two offers as process diagrams: what starts it, what it does, and the
+ * person it hands off to. Examples are illustrative.
+ */
 const offers = [
   {
+    kind: "workflow",
     title: "Workflows",
-    rows: [
-      ["For", "Work that arrives the same way every time"],
+    starts: "Starts with a trigger",
+    icon: "flow",
+    for: "Work that arrives the same way every time",
+    flow: [
       ["How it starts", "Something arrives: an invoice, a referral, month-end"],
       [
         "What it does",
         "Collects, checks, and prepares the work, then sends exceptions to a person",
       ],
-      [
-        "Example",
-        "Invoice arrives → matched to its PO → approval packet in Teams",
-      ],
       ["Who decides", "The approver you name"],
     ],
+    example: "Invoice arrives → matched to its PO → approval packet in Teams",
   },
   {
+    kind: "agent",
     title: "Agents",
-    rows: [
-      ["For", "Work that changes from day to day"],
+    starts: "Starts with a request",
+    icon: "people",
+    for: "Work that changes from day to day",
+    flow: [
       ["How it starts", "Someone asks, in plain language"],
       [
         "What it does",
         "Finds, drafts, and follows up for the person it’s assigned to",
       ],
-      ["Example", "“Chase the three clients still missing documents”"],
       ["Who decides", "The person who asked"],
     ],
+    example: "“Chase the three clients still missing documents”",
   },
 ];
+const NODES = ["start", "work", "human"];
 const reviewCovers = [
   "The task, its inputs, and where it arrives",
   "The tools and handoffs involved",
@@ -97,18 +105,34 @@ export function HowItWorks() {
         </div>
         <div className={styles.offerBlock}>
           <div className={styles.offers}>
-            {offers.map((offer) => (
-              <article key={offer.title} className={styles.offer}>
-                <h3 className="h3">{t(offer.title)}</h3>
-                <dl>
-                  {offer.rows.map(([term, detail]) => (
-                    <div key={term}>
-                      <dt className="label">{t(term)}</dt>
-                      <dd>{t(detail)}</dd>
-                    </div>
+            {offers.map((offer, i) => (
+              <Reveal
+                as="article"
+                key={offer.title}
+                className={styles.offer}
+                delay={i * 120}
+              >
+                <header className={styles.offerHead}>
+                  <p className={styles.starts} data-kind={offer.kind}>
+                    <Icon name={offer.icon} size={15} />
+                    {t(offer.starts)}
+                  </p>
+                  <h3 className="h3">{t(offer.title)}</h3>
+                  <p className={styles.for}>{t(offer.for)}</p>
+                </header>
+                <ol className={styles.flow}>
+                  {offer.flow.map(([term, detail], n) => (
+                    <li key={term} data-node={NODES[n]} data-kind={offer.kind}>
+                      <span className="label">{t(term)}</span>
+                      <span className={styles.nodeText}>{t(detail)}</span>
+                    </li>
                   ))}
-                </dl>
-              </article>
+                </ol>
+                <p className={styles.example}>
+                  <span className="label">{t("Example")}</span>
+                  <span>{t(offer.example)}</span>
+                </p>
+              </Reveal>
             ))}
           </div>
           <p className={styles.rule}>

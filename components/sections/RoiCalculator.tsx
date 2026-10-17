@@ -12,7 +12,7 @@ import {
 } from "@/lib/roi";
 import { Icon } from "../ui/Icon";
 import { RichTemplate } from "../ui/RichTemplate";
-import { StackedBar } from "../ui/StackedBar";
+import { CapacityWeek } from "../ui/CapacityWeek";
 import styles from "./RoiCalculator.module.css";
 import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 /**
@@ -236,12 +236,6 @@ export function RoiCalculator() {
                   <dd className="numeral">{hrs(result.hoursReclaimedWeek)}</dd>
                 </div>
                 <div className={styles.stat}>
-                  <dt className={styles.statLabel}>{t("Hours reclaimed / year")}</dt>
-                  <dd className="numeral">
-                    {fmtNumber(result.hoursReclaimedYear, 0, locale)}
-                  </dd>
-                </div>
-                <div className={styles.stat}>
                   <dt className={styles.statLabel}>{t("Annual capacity value")}</dt>
                   <dd className="numeral">
                     {/* es-MX joins "USD" to the amount with a no-break space;
@@ -249,6 +243,23 @@ export function RoiCalculator() {
                     {money(result.valueRedeployed).replace(/\u00a0/g, " ")}
                   </dd>
                 </div>
+                {result.paybackMonths !== null ? (
+                  <div className={styles.stat}>
+                    <dt className={styles.statLabel}>{t("Simple payback on that budget")}</dt>
+                    <dd className="numeral">
+                      {t("{count} mo", {
+                        count: fmtNumber(result.paybackMonths, 1, locale),
+                      })}
+                    </dd>
+                  </div>
+                ) : (
+                  <div className={styles.stat}>
+                    <dt className={styles.statLabel}>{t("Hours reclaimed / year")}</dt>
+                    <dd className="numeral">
+                      {fmtNumber(result.hoursReclaimedYear, 0, locale)}
+                    </dd>
+                  </div>
+                )}
               </dl>
             </div>
             <figure className={styles.chart} aria-labelledby="exhibit-3-title">
@@ -258,23 +269,48 @@ export function RoiCalculator() {
               <p id="exhibit-3-title" className={styles.chartTitle}>
                 {t("Where the repetitive week goes")}
               </p>
-              <p className="caption">{t("Hours per week across your team")}</p>
+              <p className={styles.split} aria-hidden="true">
+                <RichTemplate
+                  template={t(
+                    "{handled} of {total} repetitive hours a week handled by Brilliant",
+                  )}
+                  values={{
+                    handled: <strong>{hrs(handledHours)}</strong>,
+                    total: hrs(totalHours),
+                  }}
+                />
+              </p>
               <div className={styles.bar}>
-                <StackedBar
+                <CapacityWeek
+                  people={inputs.people}
+                  hoursPerPerson={inputs.hoursPerWeek}
                   share={inputs.automatableShare}
+                  personLabel={(n) => t("Person {number}", { number: n })}
+                  moreLabel={(n) =>
+                    t("+ {count} more people with the same week", { count: n })
+                  }
                   handledLabel={t("Handled by Brilliant · {hours} hrs", {
                     hours: hrs(handledHours),
                   })}
                   remainingLabel={t("Still with your team · {hours} hrs", {
                     hours: hrs(totalHours - handledHours),
                   })}
-                  axisEnd={t("{hours} hrs", { hours: hrs(totalHours) })}
+                  scaleLabel={t("Each square is one hour of one person’s repetitive week.")}
                   summary={t(
                     "{handled} of {total} repetitive hours a week handled by Brilliant",
                     { handled: hrs(handledHours), total: hrs(totalHours) },
                   )}
                 />
               </div>
+              <p className="control">
+                <span className="control__label">{t("Stays with you")}</span>
+                <span className="control__text">
+                  {t(
+                    "{hours} hrs a week of repetitive work stay with your team, and every approval stays with a person.",
+                    { hours: hrs(totalHours - handledHours) },
+                  )}
+                </span>
+              </p>
               <figcaption className="caption">
                 {t("Source: your inputs. Assumes {weeks} working weeks a year.", {
                   weeks: inputs.workingWeeksPerYear,
@@ -282,6 +318,12 @@ export function RoiCalculator() {
               </figcaption>
             </figure>
             <dl className={styles.secondary} aria-live="polite">
+              {result.paybackMonths !== null && (
+                <div>
+                  <dt>{t("Hours reclaimed / year")}</dt>
+                  <dd>{fmtNumber(result.hoursReclaimedYear, 0, locale)}</dd>
+                </div>
+              )}
               <div>
                 <dt>{t("More capacity, same team")}</dt>
                 <dd>+{fmtNumber(result.extraVolumePct, 0, locale)}%</dd>
@@ -306,16 +348,6 @@ export function RoiCalculator() {
                     })}
                   </dt>
                   <dd>{money(result.revenueOpportunity)}</dd>
-                </div>
-              )}
-              {result.paybackMonths !== null && (
-                <div>
-                  <dt>{t("Simple payback on that budget")}</dt>
-                  <dd>
-                    {t("{count} mo", {
-                      count: fmtNumber(result.paybackMonths, 1, locale),
-                    })}
-                  </dd>
                 </div>
               )}
             </dl>
@@ -452,6 +484,10 @@ function Range({
         onChange={(e) => onChange(Number(e.target.value))}
         style={{ "--fill": `${fill}%` } as CSSProperties}
       />
+      <span className={styles.scale} aria-hidden="true">
+        <span>{min}</span>
+        <span>{max}</span>
+      </span>
     </div>
   );
 }

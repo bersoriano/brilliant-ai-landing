@@ -25,6 +25,12 @@ export function Icon({
       </>
     ),
     check: <path d="m5 12 4 4L19 6" />,
+    replay: (
+      <>
+        <path d="M4 12a8 8 0 1 0 2.4-5.7" />
+        <path d="M4 4v4.5h4.5" />
+      </>
+    ),
     shield: (
       <>
         <path d="M12 3 3 7v5c0 5 9 9 9 9s9-4 9-9V7l-9-4Z" />

@@ -432,6 +432,54 @@ input[type="range"] {
   background: var(--accent);
 }
 
+.exhibit__tag {
+  margin-left: 12px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line-strong);
+  color: var(--faint);
+}
+
+/* Human control: what stays with a person. Sand = "needs a person" (only). */
+.control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 4px 14px;
+  padding: 14px 16px;
+  border-left: 2px solid var(--caution);
+  background: color-mix(in oklab, var(--caution) 7%, transparent);
+}
+.control__label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--caution);
+  white-space: nowrap;
+}
+.control__text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-2);
+}
+@media (max-width: 520px) {
+  .control {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* First-view reveal (components/ui/Reveal). Off for reduced motion. */
+.reveal[data-view="below"] {
+  opacity: 0;
+  transform: translateY(18px);
+}
+.reveal[data-view="in"] {
+  transition:
+    opacity 0.7s ease var(--reveal-delay, 0ms),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
+}
+
 /* Ruled list rows (exhibit rows, approach steps, FAQ) */
 .rule-list > * {
   border-top: 1px solid var(--line);

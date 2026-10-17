@@ -17,6 +17,7 @@ import { AgentPlays } from "../ui/AgentPlays";
 import { Exhibit } from "../ui/Exhibit";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
+import { Reveal } from "../ui/Reveal";
 import styles from "./CustomCrm.module.css";
 
 /** Homepage features: the essentials plus the first three advanced ones. */
@@ -67,17 +68,19 @@ export function CustomCrm() {
             {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
           </p>
         </div>
-        <Exhibit
-          className={styles.exhibit}
-          label={t("Exhibit {number}", { number: exhibitNumber })}
-          title={t("Where an agent could start in your CRM")}
-          titleId="crm-exhibit-title"
-          caption={t(
-            "Examples to adapt, not client results. Start with high-volume, low-judgment work, and keep a person on anything that leaves your team.",
-          )}
-        >
-          <AgentPlays />
-        </Exhibit>
+        <Reveal className={styles.exhibit}>
+          <Exhibit
+            label={t("Exhibit {number}", { number: exhibitNumber })}
+            tag={t("Examples")}
+            title={t("Where an agent could start in your CRM")}
+            titleId="crm-exhibit-title"
+            caption={t(
+              "Examples to adapt, not client results. Start with high-volume, low-judgment work, and keep a person on anything that leaves your team.",
+            )}
+          >
+            <AgentPlays />
+          </Exhibit>
+        </Reveal>
       </div>
 
       <div className={`grid-12 ${styles.block}`}>

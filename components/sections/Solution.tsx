@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
 import { DocumentScene } from "../ui/DocumentScene";
+import { Reveal } from "../ui/Reveal";
 import { RichTemplate, lowerFirst } from "../ui/RichTemplate";
 import {
   HOMEPAGE_INDUSTRIES,
@@ -21,11 +22,9 @@ const defaultSelectedIds = Object.fromEntries(
   HOMEPAGE_INDUSTRIES.map((key) => [key, INDUSTRIES[key].defaultWorkflowId]),
 ) as Record<Industry, string>;
 const NUMERALS = ["i.", "ii.", "iii.", "iv."];
-const CAPTIONS: Partial<Record<Industry, string>> = {
-  finance:
-    "Illustrative. Exceptions always go to a person before anything is approved.",
-  healthcare:
-    "Illustrative. Administrative routing only. Clinical decisions stay with your team.",
+/** Sector note under the exhibit (finance needs none beyond the control line). */
+const SECTOR_NOTES: Partial<Record<Industry, string>> = {
+  healthcare: "Administrative routing only. Clinical decisions stay with your team.",
 };
 
 export function Solution() {
@@ -151,6 +150,7 @@ export function Solution() {
               ))}
             </div>
           </div>
+          <Reveal>
           <figure
             className={`grid-12 ${styles.exhibit}`}
             id="workflow-preview"
@@ -164,16 +164,12 @@ export function Solution() {
                 {t("{workflow}, step by step", { workflow: t(selected.title) })}
               </h3>
               <p className="label">
-                {t(industry.label)} · {t("Example only")}
+                {t(industry.label)} · {t("Example workflow")}
               </p>
               <dl className={styles.facts}>
                 <div>
                   <dt className="label">{t("Starts when")}</dt>
                   <dd>{t(selected.trigger)}</dd>
-                </div>
-                <div>
-                  <dt className="label">{t("Who decides")}</dt>
-                  <dd>{t(selected.approval)}</dd>
                 </div>
               </dl>
               <a
@@ -191,17 +187,25 @@ export function Solution() {
               </a>
             </div>
             <div className={styles.main}>
-              <DocumentScene scene={SCENES[selected.id]} />
               <ol className={styles.stages} aria-label={t("What we handle")}>
                 {selected.stages.map((stage, i) => (
-                  <li key={stage}>
+                  <li
+                    key={stage}
+                    data-human={i === selected.stages.length - 1 || undefined}
+                  >
                     <span className="roman">{NUMERALS[i]}</span>
                     <span>{t(stage)}</span>
                   </li>
                 ))}
               </ol>
+              <div key={selected.id} className={styles.swap}>
+                <DocumentScene
+                  scene={SCENES[selected.id]}
+                  control={t(selected.approval)}
+                />
+              </div>
               <figcaption className={`caption ${styles.caption}`}>
-                <span>{t(CAPTIONS[active] ?? CAPTIONS.finance!)}</span>
+                {SECTOR_NOTES[active] ? <span>{t(SECTOR_NOTES[active]!)}</span> : null}
                 <span>
                   {t("Tools in this example")}:{" "}
                   {tools.map((tool) => t(tool)).join(" → ")}
@@ -214,6 +218,7 @@ export function Solution() {
               </figcaption>
             </div>
           </figure>
+          </Reveal>
         </div>
         <p role="status" className="sr-only">
           {t("Selected example:")} {t(selected.title)}.

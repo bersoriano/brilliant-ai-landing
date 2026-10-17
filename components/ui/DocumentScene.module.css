@@ -1,36 +1,110 @@
-/* Two panels: inbound reality | what the team receives. Stacks at <= 700px
-   with the inbound first and the approval card directly below it. */
+/* Two app windows: what arrives | what the team receives. Stacks at <= 700px
+   with the inbound window first and the team's window directly below it. */
 .scene {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   padding-top: 16px;
 }
-.panel {
+
+/* ---------- Window chrome ---------- */
+.window {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   min-width: 0;
-}
-.email,
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 16px;
   background: var(--surface);
-  border-top: 2px solid var(--line-strong);
+  border: 1px solid var(--line-strong);
 }
-.card {
-  flex: 1;
-  border-top-color: var(--accent);
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 38px;
+  padding: 0 14px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line-strong);
+  font-size: 13px;
+  line-height: 1.2;
 }
-.channel {
+.app {
+  font-weight: 600;
+  color: var(--text);
+}
+.place {
+  padding-left: 10px;
+  border-left: 1px solid var(--line-strong);
+  color: var(--muted);
+}
+.time {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Inbox list (hero only) ---------- */
+.inbox {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--line-strong);
+}
+.inbox li {
+  display: grid;
+  grid-template-columns: minmax(0, 8.5em) minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 14px 9px 12px;
+  border-left: 2px solid transparent;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.inbox li + li {
+  border-top: 1px solid var(--line);
+}
+.inbox li[data-active] {
+  border-left-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 7%, transparent);
+}
+.rowFrom,
+.rowSubject {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rowFrom {
+  font-weight: 600;
+  color: var(--text-2);
+}
+.rowSubject {
+  color: var(--muted);
+}
+.rowStatus {
   font-family: var(--font-mono);
   font-size: 10.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  white-space: nowrap;
   color: var(--faint);
+  transition: color 0.3s ease;
+}
+.rowStatus[data-tone="new"],
+.rowStatus[data-tone="sent"] {
+  color: var(--accent);
+}
+.rowStatus[data-tone="flag"] {
+  color: var(--caution);
+}
+
+/* ---------- The open message and its document ---------- */
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  transition: outline-color 0.3s ease;
 }
 .from {
   font-size: 13px;
@@ -47,7 +121,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 4px;
+  margin-top: 2px;
   font-family: var(--font-mono);
   font-size: 11.5px;
   color: var(--muted);
@@ -56,17 +130,21 @@
 
 /* The document itself: always paper, whatever band it sits in. */
 .paper {
+  margin-top: 8px;
   padding: 16px 16px 14px;
   background: #f7f5ef;
   color: #0b1520;
   border: 1px solid #d6d2c7;
+  outline: 2px solid transparent;
+  outline-offset: 3px;
+  transition: outline-color 0.3s ease;
 }
 .paperTitle {
   padding-bottom: 8px;
   border-bottom: 1px solid #d6d2c7;
   font-family: var(--font-display);
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
 }
 .lines {
   display: grid;
@@ -75,6 +153,7 @@
 .lines > div {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
   padding: 7px 0;
   border-bottom: 1px dashed #d6d2c7;
@@ -84,13 +163,36 @@
   color: #3d4a57;
 }
 .lines dd {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   margin: 0;
+  padding: 0 4px;
   font-family: var(--font-mono);
   font-size: 12.5px;
   text-align: right;
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease;
 }
-.lines > [data-flagged] dd {
-  padding: 0 4px;
+.tick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #2a6863;
+  color: #2a6863;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  transition: opacity 0.3s ease;
+}
+[data-flagged] .tick {
+  border-color: #6b4c0f;
+  color: #6b4c0f;
+}
+.scene[data-flag] .lines > [data-flagged] dd {
   background: #f3e3bd;
   color: #5e420b;
 }
@@ -102,6 +204,7 @@
   font-size: 13px;
   font-weight: 600;
   color: #6b4c0f;
+  transition: opacity 0.35s ease;
 }
 .flag span {
   display: inline-flex;
@@ -113,7 +216,92 @@
   font-size: 11px;
   font-weight: 700;
 }
+/* Run states: nothing is checked before "match", nothing flagged before "flag" */
+.scene:not([data-match]) .tick,
+.scene:not([data-flag]) [data-flagged] .tick,
+.scene:not([data-flag]) .flag {
+  opacity: 0;
+}
 
+/* ---------- The team's window ---------- */
+.thread {
+  position: relative;
+  flex: 1;
+  padding: 14px;
+}
+.assignee {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px;
+  border-top: 1px solid var(--line-strong);
+  font-size: 13px;
+  color: var(--text-2);
+}
+.assignee svg {
+  color: var(--caution);
+}
+.assignee :global(.label) {
+  color: var(--caution);
+}
+.empty {
+  position: absolute;
+  inset: 14px;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  border: 1px dashed var(--line-strong);
+  font-size: 13px;
+  color: var(--faint);
+  text-align: center;
+  transition: opacity 0.35s ease;
+}
+.scene[data-sent] .empty {
+  opacity: 0;
+}
+.post {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.scene:not([data-sent]) .post {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.postHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+}
+.author {
+  font-weight: 600;
+  color: var(--text-2);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  border-top: 2px solid var(--accent);
+}
 .cardTitle {
   font-size: 16px;
   font-weight: 600;
@@ -123,7 +311,7 @@
 .checks {
   display: grid;
   gap: 8px;
-  margin: 8px 0 4px;
+  margin: 6px 0 2px;
   padding: 0;
   list-style: none;
 }
@@ -160,6 +348,9 @@
   color: var(--text);
 }
 .attachments {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12.5px;
   color: var(--faint);
 }
@@ -169,7 +360,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-top: auto;
+  margin-top: 4px;
   padding-top: 12px;
   border-top: 1px solid var(--line);
 }
@@ -185,56 +376,53 @@
   cursor: not-allowed;
 }
 .waits {
-  font-size: 12px;
-  color: var(--faint);
-  text-align: right;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--caution);
 }
 
-/* Optional hero motion: the four steps tick once, left to right. */
-.steps {
+.control {
   grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  margin: 4px 0 0;
-  padding: 0;
-  list-style: none;
 }
-.steps li {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  padding-top: 8px;
-  border-top: 2px solid var(--line-strong);
-  font-size: 13px;
-  color: var(--faint);
-  animation: tick 0.4s ease forwards;
+
+/* ---------- Where the eye goes while the run plays (hero only) ---------- */
+.scene[data-live] .message,
+.scene[data-live] .card {
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: outline-color 0.3s ease;
 }
-.steps li span {
-  font-family: var(--font-display);
-  font-style: italic;
+.scene[data-live][data-focus="collect"] .message {
+  outline-color: var(--accent);
 }
-.steps li:last-child {
-  animation-name: tick-last;
+.scene[data-live][data-focus="match"] .paper {
+  outline-color: var(--accent);
 }
-@keyframes tick {
-  to {
-    border-top-color: var(--accent);
-    color: var(--text-2);
-  }
+.scene[data-live][data-focus="flag"] .paper {
+  outline-color: var(--caution);
 }
-@keyframes tick-last {
-  to {
-    border-top-color: var(--caution);
-    color: var(--text);
-  }
+.scene[data-live][data-focus="approve"] .card {
+  outline-color: var(--caution);
 }
 
 @media (max-width: 700px) {
   .scene {
     grid-template-columns: minmax(0, 1fr);
   }
-  .steps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .inbox li {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px 12px;
+  }
+  .rowSubject {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  /* On a phone the flagged invoice carries the story */
+  .inbox li:not([data-active]) {
+    display: none;
   }
 }

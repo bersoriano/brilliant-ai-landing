@@ -92,6 +92,150 @@
   padding-block: clamp(64px, 7vw, 96px);
 }
 
+/* Exhibit 1: the run. A step rail (live progress) above the two windows. */
+.run {
+  display: flex;
+  flex-direction: column;
+}
+.rail {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  align-items: start;
+  gap: 10px;
+  padding-top: 18px;
+}
+.railStep {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: 2px 8px;
+  min-height: 44px;
+  padding: 10px 0 0;
+  border: 0;
+  border-top: 2px solid var(--line-strong);
+  background: transparent;
+  color: var(--faint);
+  text-align: left;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+/* Progress fill along the top rule while the run is on this step */
+.railStep::before {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  content: "";
+  background: var(--accent);
+}
+.run[data-playing] .railStep[aria-pressed="true"]::before {
+  animation: rail-fill 1.6s linear forwards;
+}
+@keyframes rail-fill {
+  to {
+    width: 100%;
+  }
+}
+.railStep:hover {
+  color: var(--text);
+}
+.railStep[data-done] {
+  border-top-color: var(--accent);
+  color: var(--text-2);
+}
+.railStep[aria-pressed="true"] {
+  color: var(--text);
+}
+.run:not([data-playing]) .railStep[aria-pressed="true"] {
+  border-top-color: var(--accent);
+}
+.run .railStep[data-human][aria-pressed="true"] {
+  border-top-color: var(--caution);
+}
+.railNum {
+  grid-row: span 2;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1;
+}
+.railName {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.railTime {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.railStep[data-human][aria-pressed="true"] .railTime {
+  color: var(--caution);
+}
+/* Waiting on a person: a small sand marker that breathes */
+.railStep[data-human][aria-pressed="true"] .railTime::before {
+  width: 6px;
+  height: 6px;
+  content: "";
+  background: var(--caution);
+  animation: waiting 1.8s ease-in-out infinite;
+}
+@keyframes waiting {
+  50% {
+    opacity: 0.25;
+  }
+}
+.replay {
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 2px 0 8px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+.replay:hover {
+  color: var(--accent);
+}
+
+@media (max-width: 700px) {
+  .rail {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .railStep {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .railNum {
+    grid-row: auto;
+    font-size: 16px;
+  }
+  .railName {
+    font-size: 13px;
+  }
+  .railTime {
+    font-size: 10px;
+  }
+  .replay {
+    grid-column: 1 / -1;
+    justify-self: end;
+    min-height: 36px;
+  }
+}
+
 @keyframes copy-enter {
   from {
     opacity: 0;

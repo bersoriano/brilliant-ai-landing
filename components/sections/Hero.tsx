@@ -4,6 +4,7 @@ import { HeroVisual } from "./HeroVisual";
 import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
+import { Reveal } from "../ui/Reveal";
 import styles from "./Hero.module.css";
 export function Hero() {
   const { t } = useLanguage();
@@ -46,9 +47,9 @@ export function Hero() {
         </div>
       </section>
       <section className={styles.exhibitSection} aria-labelledby="exhibit-1-title">
-        <div className="shell">
+        <Reveal className="shell">
           <HeroVisual />
-        </div>
+        </Reveal>
       </section>
     </>
   );

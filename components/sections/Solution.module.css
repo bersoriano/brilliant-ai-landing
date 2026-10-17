@@ -84,30 +84,63 @@
   grid-column: 4 / span 9;
   min-width: 0;
 }
+/* The run as a connected flow; the last stage hands off to your team. */
 .stages {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin: 20px 0 0;
-  padding: 16px 0 0;
-  border-top: 1px solid var(--line);
+  gap: 0;
+  margin: 0;
+  padding: 0;
   list-style: none;
   font-size: 14px;
   line-height: 1.4;
   color: var(--text-2);
 }
 .stages li {
+  position: relative;
   display: grid;
   align-content: start;
   gap: 6px;
+  padding: 12px 20px 0 0;
+  border-top: 2px solid var(--accent);
+}
+/* Arrowhead where one stage hands to the next */
+.stages li:not(:last-child)::after {
+  position: absolute;
+  top: -6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  content: "";
+  border-top: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+  transform: rotate(45deg);
+}
+.stages li[data-human] {
+  padding-right: 0;
+  border-top-color: var(--caution);
+  color: var(--text);
+}
+.stages li[data-human] .roman {
+  color: var(--caution);
 }
 .stages .roman {
   font-size: 18px;
 }
+/* A short settle when the task changes */
+.swap {
+  animation: swap 0.35s ease both;
+}
+@keyframes swap {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
 .caption {
   display: grid;
   gap: 6px;
-  padding-top: 16px;
+  padding-top: 14px;
 }
 
 @media (max-width: 1150px) {
@@ -125,6 +158,10 @@
   }
   .stages {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 16px;
+  }
+  .stages li:nth-child(2)::after {
+    display: none;
   }
 }
 @media (max-width: 700px) {
@@ -149,5 +186,27 @@
   }
   .stages {
     grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+  /* Vertical flow: rules on the left, arrowheads point down */
+  .stages li {
+    grid-template-columns: 2.4em minmax(0, 1fr);
+    align-items: baseline;
+    gap: 6px;
+    padding: 4px 0 14px 16px;
+    border-top: 0;
+    border-left: 2px solid var(--accent);
+  }
+  .stages li[data-human] {
+    border-left-color: var(--caution);
+  }
+  .stages li:not(:last-child)::after,
+  .stages li:nth-child(2)::after {
+    display: block;
+    top: auto;
+    right: auto;
+    bottom: -1px;
+    left: -6px;
+    transform: rotate(135deg);
   }
 }

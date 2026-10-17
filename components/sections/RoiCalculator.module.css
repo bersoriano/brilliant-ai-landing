@@ -36,43 +36,78 @@
 }
 .value {
   font-family: var(--font-mono);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent);
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 .range {
   --fill: 0%;
   appearance: none;
-  height: 44px;
+  height: 36px;
   margin: 0;
   background: linear-gradient(
       to right,
       var(--accent) var(--fill),
       var(--line-strong) var(--fill)
     )
-    center / 100% 3px no-repeat;
+    center / 100% 4px no-repeat;
+  cursor: pointer;
 }
 .range::-webkit-slider-thumb {
   appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 0;
   background: var(--accent);
-  border: 0;
+  border: 3px solid var(--surface);
+  outline: 1px solid var(--accent);
+  transition: transform 0.15s ease;
 }
 .range::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   border-radius: 0;
   background: var(--accent);
-  border: 0;
+  border: 3px solid var(--surface);
+  outline: 1px solid var(--accent);
 }
+.range:hover::-webkit-slider-thumb,
+.range:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+.scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: -6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--faint);
+}
+/* Money: a boxed field with the currency sign inside */
 .money {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
   color: var(--muted);
+  transition: border-color 0.15s ease;
+}
+.money:focus-within {
+  border-color: var(--accent);
+}
+.money :global(.input) {
+  min-height: 46px;
+  padding: 0;
+  border-bottom: 0;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+}
+.money :global(.input):focus-visible {
+  box-shadow: none;
 }
 .assumptions summary {
   justify-content: space-between;
@@ -107,7 +142,7 @@
 .numerals {
   container-type: inline-size;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.6fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr) minmax(0, 1fr);
   gap: var(--col-gap);
   margin: 0;
 }
@@ -127,6 +162,10 @@
   font-size: min(clamp(48px, 5vw, 72px), 6.8cqi);
   color: var(--text);
 }
+/* Hours lead: the first figure is the accent one */
+.stat:first-child dd {
+  color: var(--accent);
+}
 .statLabel {
   font-size: 15px;
   line-height: 1.4;
@@ -143,8 +182,22 @@
   line-height: 1.3;
   color: var(--text);
 }
+/* "19.2 of 32 repetitive hours a week handled by Brilliant" */
+.split {
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 1.4;
+  color: var(--text-2);
+}
+.split strong {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: lining-nums tabular-nums;
+}
 .bar {
-  margin-block: 18px 8px;
+  margin-block: 14px 18px;
 }
 .secondary {
   display: grid;

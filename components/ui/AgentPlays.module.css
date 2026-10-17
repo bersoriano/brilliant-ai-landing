@@ -1,75 +1,127 @@
-/* Agent playbook: one ruled row per play */
+/* Agent playbook: triggers as tabs, the selected chain below */
 .plays {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 4px;
+}
+.tabs {
   display: grid;
-  margin: 0;
-  padding: 4px 0 0;
-  list-style: none;
 }
-.play {
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr);
-  gap: 16px;
-  padding-block: 18px;
-  border-top: 1px solid var(--line-strong);
-}
-.play:first-child {
-  border-top-color: var(--accent);
-}
-.index {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  line-height: 22px;
-  color: var(--accent);
-}
-.body {
-  display: grid;
-  gap: 8px;
-}
-.when {
+.tab {
   display: grid;
   gap: 4px;
+  min-height: 44px;
+  padding: 14px 16px 14px 14px;
+  border: 0;
+  border-top: 1px solid var(--line-strong);
+  border-left: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
-.when strong {
+.tab:last-child {
+  border-bottom: 1px solid var(--line-strong);
+}
+.tab:hover {
+  color: var(--text);
+}
+.tab[aria-selected="true"] {
+  border-left-color: var(--accent);
+  background: var(--surface);
+  color: var(--text);
+}
+.when {
   font-size: 16px;
   font-weight: 600;
   line-height: 1.35;
+}
+
+/* The chain: agent → you approve → you measure */
+.chain {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chain li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  padding: 14px 22px 0 0;
+  border-top: 2px solid var(--accent);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-2);
+  animation: node-in 0.4s ease both;
+}
+.chain li:nth-child(2) {
+  animation-delay: 0.08s;
+}
+.chain li:nth-child(3) {
+  animation-delay: 0.16s;
+  padding-right: 0;
+}
+/* Arrowhead where one step hands to the next */
+.chain li:not(:last-child)::after {
+  position: absolute;
+  top: -6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  content: "";
+  border-top: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+  transform: rotate(45deg);
+}
+.chain li[data-node="approve"] {
+  border-top-color: var(--caution);
   color: var(--text);
 }
-.agent {
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--muted);
+.chain li[data-node="approve"]::after {
+  border-color: var(--caution);
 }
-.meta {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin: 4px 0 0;
-  padding: 12px 14px;
-  background: var(--surface);
-}
-.meta div {
-  display: grid;
-  gap: 4px;
-}
-.meta dd {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.4;
-  color: var(--text-2);
-}
-/* "Needs a person" uses the caution tone, per the design system. */
-.meta div:first-child dt {
+.chain li[data-node="approve"] :global(.label) {
   color: var(--caution);
+}
+.chain li[data-node="measure"] {
+  border-top-color: var(--line-strong);
+}
+@keyframes node-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 @media (max-width: 520px) {
-  .play {
+  .chain {
     grid-template-columns: minmax(0, 1fr);
-    gap: 6px;
   }
-  .meta {
-    grid-template-columns: minmax(0, 1fr);
+  .chain li {
+    padding: 2px 0 16px 16px;
+    border-top: 0;
+    border-left: 2px solid var(--accent);
+  }
+  .chain li[data-node="approve"] {
+    border-left-color: var(--caution);
+  }
+  .chain li[data-node="measure"] {
+    border-left-color: var(--line-strong);
+    padding-bottom: 0;
+  }
+  .chain li:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -1px;
+    left: -6px;
+    transform: rotate(135deg);
   }
 }
