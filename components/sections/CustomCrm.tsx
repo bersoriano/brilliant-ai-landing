@@ -48,6 +48,13 @@ export function CustomCrm() {
             )}{" "}
             {t("Clients, deals, tasks, and notes in one place, ready for your agents.")}
           </p>
+          <a
+            className="text-link text-link--accent"
+            href={localePath(locale, `/blog/${CRM_POST_SLUG}`)}
+          >
+            {t("Read: how AI is turning CRMs into systems of action")}{" "}
+            <Icon name="arrow" size={16} />
+          </a>
           <div className={styles.actions}>
             <a href={DISCOVERY_CALL_HREF} className="button">
               {t(CRM_CTA)}
@@ -108,13 +115,6 @@ export function CustomCrm() {
               <li key={prompt}>{t(prompt)}</li>
             ))}
           </ul>
-          <a
-            className="text-link text-link--accent"
-            href={localePath(locale, `/blog/${CRM_POST_SLUG}`)}
-          >
-            {t("Read: how AI is turning CRMs into systems of action")}{" "}
-            <Icon name="arrow" size={16} />
-          </a>
         </article>
         <article className={styles.cell}>
           <p className="label">{t("Shaped to you")}</p>
