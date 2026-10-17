@@ -1,0 +1,43 @@
+---
+title: "Por qué se atora la automatización de facturas, y qué la destraba"
+description: "Casi toda la automatización de facturas está hecha para la factura que ya cuadra. Las horas se van en las que no."
+date: 2026-10-17
+draft: false
+---
+
+La promesa de automatizar facturas suele ser el procesamiento “sin intervención”. La realidad de un buzón de cuentas por pagar es otra. Las facturas que cuadran con su orden de compra y su recepción de mercancía nunca fueron lo lento. El tiempo se va en las que no: un precio que cambió, una entrega parcial, un proveedor que no está en el catálogo, una OC que se cerró antes de tiempo.
+
+Una automatización que solo resuelve el caso limpio se ve bien en una demo y cambia muy poco en la semana. Aquí es donde suele atorarse, y esto es lo que hacemos distinto.
+
+## Dónde se atora
+
+**Se automatiza primero el camino fácil.** Cotejar una factura limpia contra una OC limpia es lo más sencillo de construir, así que se construye primero. También es lo que tu equipo ya resuelve en segundos.
+
+**Nadie escribió las tolerancias.** ¿Una diferencia de $12 en el flete es una excepción? ¿Un 2% por encima de la OC? Si la regla vive en la cabeza de una persona, el proceso marca todo o no marca nada, y en ambos casos la gente termina ignorándolo.
+
+**El catálogo de proveedores está desactualizado.** Cotejar contra registros viejos genera excepciones falsas. Después de unas cuantas, el equipo deja de confiar en las alertas.
+
+**El resultado llega a un lugar nuevo.** Un tablero que nadie abre es un segundo buzón. Quien aprueba sigue trabajando donde siempre, y el trabajo de la automatización se queda esperando.
+
+**Se automatizan el registro y el pago antes de que exista confianza.** Basta una póliza equivocada para que tu contralor apague todo, y con razón.
+
+## Qué la destraba
+
+**Diseña primero para la excepción.** Antes de construir, enlista las pocas razones por las que hoy una factura no se puede aprobar: precio, cantidad, falta de recepción, proveedor desconocido, OC cerrada. Cada una debe llegar a una persona como una pregunta clara, con la evidencia adjunta.
+
+**Escribe las tolerancias.** Precio, cantidad, flete, impuestos: acuérdalas por escrito con tu contralor antes de construir nada. Cuando cambien, se cambian en un solo lugar.
+
+**Manda un paquete, no una liga.** Quien aprueba ve la factura, la OC, la recepción y la diferencia en una sola tarjeta, en Teams o en Outlook, y decide ahí.
+
+**Deja el registro y el pago con tu equipo.** El proceso prepara la póliza. Una persona que tú designes la registra, y el pago sigue bajo tu control.
+
+**Ponlo a correr junto a tu proceso actual.** Durante el piloto, el resultado del proceso se compara con el trabajo de tu equipo sobre las mismas facturas. Cuando coinciden en suficientes, se amplía. Cuando no, aprendes dónde las reglas no estaban claras antes de que alguien dependa del proceso.
+
+## Cómo se ve cuando funciona
+
+- Quien aprueba decide desde una sola tarjeta, sin abrir otro sistema.
+- Cada excepción llega con una razón que una persona puede leer.
+- Tu equipo ve qué resolvió el proceso y qué le envió.
+- Nada se registra ni se paga sin una persona designada que lo apruebe.
+
+Ese último punto no es un límite de la tecnología. Es el diseño. El proceso reúne, revisa y prepara; la decisión se queda donde debe estar.

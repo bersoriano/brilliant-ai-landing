@@ -15,12 +15,12 @@ const steps = [
   {
     title: "Pilot",
     duration: "3–6 weeks",
-    body: "One workflow or one agent, fixed scope. We connect approved tools, test on representative, non-sensitive data, and put the output next to your current process. You accept it, or we revise.",
+    body: "One workflow or one agent, fixed scope. Before we build, we agree in writing what it checks, what counts as an exception, and who approves. We connect approved tools, test on representative, non-sensitive data, and put the output next to your current process. You accept it, or we revise.",
   },
   {
     title: "We run it",
     duration: "Ongoing",
-    body: "We monitor it, handle exceptions, and keep it current. When the first one is working, we add the next workflow or the next person’s agent. Your team gets documentation. Running it stays with us unless you want a handover.",
+    body: "We monitor it, handle exceptions, and keep it current. You can see what it handled and what it sent to your team. When the first one is working, we add the next workflow or the next person’s agent. Your team gets documentation. Running it stays with us unless you want a handover.",
   },
 ];
 /**

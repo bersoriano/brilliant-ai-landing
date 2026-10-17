@@ -1,0 +1,43 @@
+---
+title: "Why invoice automation stalls, and what moves it"
+description: "Most invoice automation is built for the invoice that already matches. The hours are in the ones that don’t."
+date: 2026-10-17
+draft: false
+---
+
+The pitch for invoice automation is usually “touchless” processing. The reality of an accounts-payable inbox is different. The invoices that match their purchase order and goods receipt were never the slow part. The time goes into the ones that don’t: a price that changed, a partial delivery, a vendor that isn’t in the vendor master, a PO that was closed early.
+
+Automation that only handles the clean case looks good in a demo and changes very little in the week. Here is where it usually stalls, and what we do differently.
+
+## Where it stalls
+
+**The happy path gets automated first.** Matching a clean invoice to a clean PO is the easiest part to build, so it’s built first. It’s also the part your team already clears in seconds.
+
+**Nobody wrote down the tolerances.** Is a $12 freight difference an exception? Is 2% over the PO? If the rule lives in one person’s head, the workflow either flags everything or flags nothing, and both end with people ignoring it.
+
+**The vendor master is out of date.** Matching against stale vendor records produces false exceptions. After a few of those, the team stops trusting the flags.
+
+**The output lands somewhere new.** A dashboard nobody opens is a second inbox. Approvers keep working where they always did, and the automation’s work waits.
+
+**Posting and payment are automated before there’s trust.** One wrong entry is enough for a controller to switch the whole thing off, and they would be right to.
+
+## What moves it
+
+**Design for the exception first.** Before building, list the handful of reasons an invoice can’t be approved today: price, quantity, missing receipt, unknown vendor, closed PO. Each one should reach a person as a clear question with the evidence attached.
+
+**Write the tolerances down.** Price, quantity, freight, tax: agree them with the controller, in writing, before anything is built. When they change, they change in one place.
+
+**Send a packet, not a link.** The approver sees the invoice, the PO, the receipt and the difference in one card, in Teams or Outlook, and decides there.
+
+**Keep posting and payment with your team.** The workflow prepares the entry. A person you name records it, and payment stays under your control.
+
+**Run it next to the current process.** During a pilot, the workflow’s output sits beside your team’s work on the same invoices. When the two agree on enough of them, you widen it. When they don’t, you learn where the rules were unclear before anyone depends on the workflow.
+
+## What good looks like
+
+- Approvers decide from one card, without opening another system.
+- Every exception arrives with a reason a person can read.
+- Your team can see what the workflow handled and what it sent to them.
+- Nothing is recorded or paid without a named approver.
+
+That last point isn’t a limit of the technology. It’s the design. The workflow collects, checks and prepares; the decision stays where it belongs.
