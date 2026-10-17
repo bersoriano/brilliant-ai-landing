@@ -22,23 +22,57 @@ content is the in-page anchor `#review`.
 
 ### Document scene (`components/ui/DocumentScene.tsx`, `lib/scenes.ts`)
 
-- Two panels: **What arrives** (channel, sender, subject, attachment, and a
-  paper document with the problem line highlighted and flagged) and **What your
-  team receives** (approval card: checks marked ok / flag / owner / hold,
-  attachments, status, and the action).
+- Two app windows, each with a title bar split from the scene's channel
+  ("Teams · Approvals" → **Teams** | Approvals): **What arrives** (sender,
+  subject, attachment, and a paper document whose lines get checked and whose
+  problem line gets flagged) and **What your team receives** (a workflow post
+  with the approval card: checks marked ok / flag / owner / hold, attachments,
+  status, and the action).
 - The action ("Approve to record", "Mark ready to schedule"…) is drawn, not a
-  control: `aria-disabled`, dashed, with "Waits for a person to act."
-- Optional `steps` prop animates a four-step strip once (Collect → Match →
-  Flag → Your approval), about 6 seconds, and respects `prefers-reduced-motion`
-  through the global rule.
-- ≤ 700px: stacks with the inbound document first and the approval card
-  directly below it, never below other headlines.
+  control: `aria-disabled`, dashed, with "Waits for a person to act." The
+  optional `approver` row and `control` line ("Stays with you") say who acts.
+- `step` (0–3) drives the run: nothing is checked before Match, nothing is
+  flagged before Flag, and the card posts at Your approval. Without `step` the
+  scene renders its final state, which is also what the server and
+  reduced-motion visitors get.
+- ≤ 700px: stacks with the inbound window first and the team's window directly
+  below it; the hero's extra inbox rows are hidden.
 - One scene per finance/healthcare workflow. All names and numbers are
-  invented and captioned "Illustrative". Spanish scenes use Mexican nouns
+  invented; exhibits carry a "Sample data" tag. Spanish scenes use Mexican nouns
   (CFDI, OC, RFC, provisiones, preautorización, aseguradora), in the *tú*
   register; `toolsMx` swaps
   QuickBooks → CONTPAQi and the close system → SAP on `/es`.
 - The paper document is always light, whatever band it sits in.
+
+### Live exhibits (motion and control)
+
+- **Exhibit 1 (`HeroVisual`)**: the invoice run. A step rail (Collect → Match
+  → Flag → Your approval) plays once when the exhibit first scrolls into view,
+  with a progress fill on the current step, and stops on the step that needs a
+  person ("Waiting", sand). Every step is a button (`aria-pressed`) and
+  "Replay" restarts the run. Step changes made by the visitor are announced.
+- **Exhibit 2 (`Solution`)**: the selected task's scene in its final state,
+  under the workflow's stages drawn as a connected flow whose last stage (the
+  handoff to your team) is sand. The approval sentence is the control line.
+- **Exhibit 3 (`CapacityWeek`)**: one row per person (max six; larger teams
+  show five and "+ N more people with the same week") and one square per
+  repetitive hour, filled where Brilliant handles the work. Headline numbers:
+  hours per week (accent), capacity value, payback (hours per year when no
+  budget is set).
+- **How it works**: workflows and agents as process diagrams. A filled square
+  is a trigger, an outlined square a request, and the sand node (reached by a
+  dashed line) is the person who decides.
+- **Exhibit 4 (`AgentPlays`)**: each CRM trigger is a vertical tab; the
+  selected one shows what the agent does → you approve → you measure.
+- **Rhino (`Proof`)**: before (three areas in separate software) → what we
+  built (modules of one system over shared APIs) → now, using only the three
+  existing sentences as captions.
+- **Motion rules**: `useFirstView` / `Reveal` (`components/ui/motion.ts`)
+  render the final state on the server, hide only what is still below the
+  fold, and return `"static"` under `prefers-reduced-motion`. Use them for
+  exhibits and cards only.
+- **The control line** (`.control` in `globals.css`): sand rule and label
+  "Stays with you". Every exhibit ends with what stays with a person.
 
 ### Calculator currency (`components/sections/RoiCalculator.tsx`)
 

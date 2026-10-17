@@ -63,7 +63,7 @@ provider configuration. No credentials are required for the current email flow.
 - `app/page.tsx`: page composition.
 - `app/globals.css`: B5 "Ink" design tokens, type classes, and shared primitives (buttons, chips, exhibits, forms).
 - `components/sections`: page sections and interactive components, each with a co-located `*.module.css` for its layout.
-- `components/ui`: primitives (`Kicker`, `Exhibit`, `StackedBar`, `RichTemplate`, `DocumentScene`) plus `Icon.tsx` (icons and the wordmark).
+- `components/ui`: primitives (`Kicker`, `Exhibit`, `RichTemplate`, `DocumentScene`, `CapacityWeek`, `AgentPlays`, `Reveal`, and the motion hooks in `motion.ts`) plus `Icon.tsx` (icons and the wordmark).
 - `lib/scenes.ts`: illustrative document scenes (what arrives → what the team receives) for each finance and healthcare workflow.
 - `app/security`, `app/about`: the trust page and the background page (prior employers, hedged).
 - `app/finance-automation`, `app/healthcare-automation`: focused service pages.

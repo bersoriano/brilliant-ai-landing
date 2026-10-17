@@ -133,7 +133,7 @@ Keep **all** calculator behavior: every input (people, hours, hourly value, oppo
   - **Inputs, 4 columns** (right rule `--line-strong`, padding-right 24): label row (label left, mono value right) above the control. Keep native number inputs where they exist today; use range inputs only where the current component does. Assumptions `<details>` summary as `.text-link`.
   - **Results, 8 columns:** a row of three `.numeral` stats, each with a 2px top rule (first teal, others `--line-strong`) and a 15px muted caption: hours back per week · hours back per year · value of redeployed capacity (`fmtCurrency`). Keep the existing result labels.
   - Below the numerals: `.label` "Exhibit 3", then `.h3`-sized 18px "Where the repetitive week goes", then `.caption` "Hours per week across your team".
-  - Then `<StackedBar share={automatableShare}>` with:
+  - Then the chart (now `<CapacityWeek>`, see `docs/conversion/NOTES.md`; it replaced `StackedBar`) with:
     - `handledLabel` = "Handled by Brilliant · {hours} hrs"
     - `remainingLabel` = "Still with your team · {hours} hrs"
     - `axisEnd` = "{hours} hrs" (total)
@@ -194,7 +194,7 @@ Keep **all** calculator behavior: every input (people, hours, hourly value, oppo
 - Headings: one `h1`, then one `h2` per section, in order. Exhibits are `<figure>` + `<figcaption>`.
 - Every interactive element is at least 44×44px and has the `:focus-visible` teal outline (global). Chips use `aria-selected`/`aria-pressed` as today.
 - Contrast: body ≥ 4.5:1 (tokens are pre-checked). Don't put text colors on `--surface` other than those tokens.
-- `prefers-reduced-motion` is honored (global). The only motion is hover transitions and the bar width.
+- `prefers-reduced-motion` is honored (global, plus `useFirstView` returns `"static"`). Motion is limited to hover transitions, first-view reveals of exhibits and cards, and the exhibit runs described in `docs/conversion/NOTES.md` ("Live exhibits"), which supersedes this spec for Exhibits 1–4.
 - **Spanish (`/es`):** every new literal `t()` string has an entry, and the long Spanish headlines wrap without overflow at 390px.
 - **Checks:** `npm run typecheck`, `npm test` (includes "Every literal translation call in active UI has a Spanish dictionary entry" and the CTA/case-study tests), and `npm run build` all pass.
 - Visually, at 1440px it matches `reference/b5-desktop-*.png`; at 390px nothing overflows horizontally.

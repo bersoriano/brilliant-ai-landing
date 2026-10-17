@@ -209,3 +209,20 @@ export const SCENES: Record<string, Scene> = {
 
 /** The hero exhibit animates these steps over the invoice scene. */
 export const HERO_STEPS = ["Collect", "Match", "Flag", "Your approval"];
+
+/**
+ * The rest of the hero's sample AP inbox: invoices that matched their PO, so
+ * they carry no exception. Vendors and numbers are invented.
+ */
+export const HERO_INBOX = [
+  { from: "Harbor Office Supply", subject: "Invoice 4468 — PO 1839", status: "Matched" },
+  { from: "Copperline Tools", subject: "Invoice 4459 — PO 1830", status: "Matched" },
+];
+
+/** The flagged invoice's status in the hero inbox at each step of the run. */
+export const HERO_ROW_STATUS: [label: string, tone: "new" | "flag" | "sent"][] = [
+  ["New", "new"],
+  ["Matching", "new"],
+  ["Flagged", "flag"],
+  ["Sent for approval", "sent"],
+];

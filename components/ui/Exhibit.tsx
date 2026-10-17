@@ -8,6 +8,7 @@ export type ExhibitStatus = { text: string; tone?: "live" | "ready" | "review" |
 
 export function Exhibit({
   label,
+  tag,
   title,
   titleId,
   status,
@@ -16,6 +17,8 @@ export function Exhibit({
   className = "",
 }: {
   label: string;
+  /** Quiet provenance next to the label, e.g. "Sample data". */
+  tag?: string;
   title?: ReactNode;
   titleId?: string;
   status?: ExhibitStatus;
@@ -26,7 +29,10 @@ export function Exhibit({
   return (
     <figure className={`exhibit ${className}`.trim()} aria-labelledby={titleId}>
       <div className="exhibit__head">
-        <span className="exhibit__label">{label}</span>
+        <span className="exhibit__label">
+          {label}
+          {tag ? <span className="exhibit__tag">{tag}</span> : null}
+        </span>
         {status ? (
           <span className={`status status--${status.tone ?? "done"}`}>{status.text}</span>
         ) : null}

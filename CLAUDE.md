@@ -14,7 +14,7 @@ Next.js 15 (App Router), React 19, TypeScript, Tailwind 4 (imported, but styling
   - The ROI is capacity-first (see `lib/roi.ts`).
   - Never invent stats, clients or certifications. Security copy describes a process the client controls (`/security`); it never claims SOC 2, HIPAA attestation, or CFDI/MXN invoicing.
   - Employer names (BCG, BofA, Merrill Lynch, Banorte, BNY Mellon, Accenture, IBM) live only on `/about` with the "not clients" hedge; a test keeps them off the homepage.
-  - Document scenes (`lib/scenes.ts`) are illustrative: invented names and numbers, labelled as such.
+  - Document scenes (`lib/scenes.ts`) are illustrative: invented names and numbers, labelled "Sample data" in the exhibit header.
   - The custom CRM offer (homepage `#crm`, the `/custom-crm` landing, data in `lib/crm.ts`) is white-label: the site says "open-source foundation" and never names the project, here or anywhere in this public repo (a test enforces it). List only features that foundation ships. The base-plan price lives in `CRM_PRICE`, set per currency (no FX conversion).
 - **Blog posts** are MDX in `content/posts/<slug>/en.mdx` + `es.mdx` (both required, same `date` and `draft`). Frontmatter: `title`, `description`, `date` (YYYY-MM-DD), optional `updated`, `draft`. Drafts render in dev only. Start the body with a paragraph (the page renders the `h1`); images go in `public/blog/<slug>/`, never remote. `npm test` compiles every post and applies the honesty and *tú* rules to it. Reader: `lib/posts.server.ts`; pages: `app/blog/`. Linked from the nav, the footer, and the homepage `#blog` section (latest 3, hidden when empty). `/custom-crm` and the homepage `#crm` link to `CRM_POST_SLUG` (`lib/crm.ts`); a test keeps that post published. Draft new posts with `/new-post <topic>` (`.claude/commands/new-post.md`).
 - **Design system (B5 "Ink"):**
@@ -23,6 +23,7 @@ Next.js 15 (App Router), React 19, TypeScript, Tailwind 4 (imported, but styling
   - Radius 0, one teal accent, no gradients or shadows.
   - Legibility: Bodoni is pinned to its text optical size (`"opsz" 11` on `html`) and headings use weight 600; its display sizes have hairlines that vanish on navy. Don't re-enable `font-optical-sizing: auto` or `-webkit-font-smoothing: antialiased`.
   - Light sections use `.band-paper` (redefines the tokens; every pair ≥ 4.5:1). Keep navy for hero, calculator and close.
+  - Exhibits are live demos (see "Live exhibits" in `docs/conversion/NOTES.md`): they end with a `.control` line ("Stays with you", sand = needs a person), and motion only comes from `useFirstView`/`Reveal`, which show the final state under reduced motion.
   - Spec: `docs/redesign/B5-SPEC.md`.
 - **Keep a11y behavior:** tab keyboard handling, `aria-pressed` / `aria-selected`, native `<details>`, skip link, focus return in the mobile nav.
 

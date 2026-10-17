@@ -386,10 +386,16 @@ test("Mexican Spanish uses tú with the visitor, not usted or Spain forms", () =
 });
 
 test("Every scene string and homepage data string has a Spanish entry", () => {
-  const { SCENES, HERO_STEPS } = require("../lib/scenes.ts");
+  const { SCENES, HERO_STEPS, HERO_INBOX, HERO_ROW_STATUS } = require("../lib/scenes.ts");
   const { HOMEPAGE_INDUSTRIES } = require("../lib/workflows.ts");
   assert.deepEqual(HOMEPAGE_INDUSTRIES, ["finance", "healthcare"]);
-  const strings = [...HERO_STEPS];
+  const strings = [
+    ...HERO_STEPS,
+    ...HERO_INBOX.flatMap((row) => [row.subject, row.status]),
+    ...HERO_ROW_STATUS.map(([label]) => label),
+  ];
+  // The run has one inbox status per step.
+  assert.equal(HERO_ROW_STATUS.length, HERO_STEPS.length);
   for (const workflow of WORKFLOWS.filter((w) =>
     HOMEPAGE_INDUSTRIES.includes(w.industry),
   )) {
