@@ -45,7 +45,7 @@ In `app/layout.tsx`, replace the Manrope `localFont` with `fontVariables` from `
 | Class | Spec |
 |---|---|
 | `.display` | Bodoni 500, clamp(54→118px), lh .92, ls −.035em. `<em>` = italic 400 teal |
-| `.h2` / `.h2-sm` / `.statement` | Bodoni 500 at clamp(40→80) / (34→64) / (44→104) |
+| `.h2` / `.h2-sm` / `.statement` | Bodoni 600 at clamp(32→56) / (28→44) / (44→104) (tightened Oct 2026) |
 | `.h3` | Geist 600 24px, ls −.015em |
 | `.lead` / `.body` / `.caption` | Geist 21 / 17 / 13px, muted/faint |
 | `.kicker` | 32×4 teal bar above Geist Mono 12px, .14em, uppercase, teal |

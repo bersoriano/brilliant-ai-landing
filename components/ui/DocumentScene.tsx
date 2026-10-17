@@ -64,6 +64,7 @@ export function DocumentScene({
       className={styles.scene}
       data-focus={focus}
       data-live={live || undefined}
+      data-inbox={inbox ? true : undefined}
       data-match={step >= 1 || undefined}
       data-flag={step >= 2 || undefined}
       data-sent={step >= 3 || undefined}
