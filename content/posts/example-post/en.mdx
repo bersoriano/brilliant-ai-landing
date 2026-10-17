@@ -1,0 +1,30 @@
+---
+title: "Example post: how to write for this blog"
+description: "A formatting reference for new posts. Drafts like this one show in development only."
+date: 2026-10-16
+draft: true
+---
+
+This post is a template. Copy the `example-post` folder, rename it to your slug, and set `draft: false` when the post is ready. The page already shows the title, date and description from the frontmatter, so start the body with a paragraph, not a `#` heading.
+
+## Section headings use two hashes
+
+Paragraphs are plain text. Use **bold** for the one phrase that matters and *italics* sparingly. Links to site pages follow the post's language: [how we handle data](/security) goes to `/es/security` in the Spanish version.
+
+### Lists
+
+- Name the workflow and who approves it.
+- Say what stays with a person.
+- Keep numbers honest: label illustrative figures as examples.
+
+1. Ordered steps work too.
+2. Keep them short.
+
+> A pull quote renders in the display face.
+
+| Step | Owner | Output |
+| --- | --- | --- |
+| Intake | Assistant | Draft record |
+| Review | Your team | Approved record |
+
+Images go in `public/blog/<slug>/` and are referenced as `/blog/<slug>/image.jpg`. Remote images are rejected by the tests.

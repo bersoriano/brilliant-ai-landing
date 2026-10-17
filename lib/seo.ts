@@ -134,7 +134,9 @@ export function buildJsonLd(locale: Locale, path: string) {
         ? "PrivacyPolicy"
         : page === "about"
           ? "AboutPage"
-          : "WebPage",
+          : page === "blog"
+            ? "CollectionPage"
+            : "WebPage",
     "@id": `${canonical}#webpage`,
     url: canonical,
     name: pageTitle(locale, page),
@@ -144,7 +146,9 @@ export function buildJsonLd(locale: Locale, path: string) {
     about: { "@id": organizationId },
   };
 
-  const graph: Record<string, unknown>[] = [organization, website, webPage];
+  // A post describes itself (BlogPosting) from its own page; see app/blog/[slug].
+  const graph: Record<string, unknown>[] =
+    page === "post" ? [organization, website] : [organization, website, webPage];
 
   if (page === "home") {
     graph.push({

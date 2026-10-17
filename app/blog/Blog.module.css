@@ -1,0 +1,208 @@
+/* /blog and /blog/[slug]: a single reading column, like /about and /security. */
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+  max-width: calc(760px + 2 * var(--gutter));
+  padding-block: 48px var(--section-y);
+}
+
+/* ---------- Index ---------- */
+.list {
+  display: grid;
+  width: 100%;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.list li {
+  display: grid;
+  gap: 10px;
+  padding-block: 28px;
+  border-top: 1px solid var(--line);
+}
+.list h2 {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.4vw, 30px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  text-wrap: balance;
+}
+.list h2 a:hover {
+  color: var(--accent);
+}
+.list p:last-child {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ---------- Post ---------- */
+.article {
+  display: grid;
+  gap: 40px;
+  width: 100%;
+}
+.header {
+  display: grid;
+  gap: 18px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+}
+
+.prose {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--text-2);
+  overflow-wrap: break-word;
+}
+.prose > * + * {
+  margin-top: 1.1em;
+}
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text);
+  text-wrap: balance;
+}
+.prose h2 {
+  margin-top: 1.9em;
+  font-size: clamp(26px, 2.6vw, 32px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+.prose h3 {
+  margin-top: 1.6em;
+  font-size: 22px;
+  line-height: 1.25;
+}
+.prose h4 {
+  margin-top: 1.4em;
+  font-size: 19px;
+  line-height: 1.3;
+}
+.prose :is(h2, h3, h4) + * {
+  margin-top: 0.6em;
+}
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose a:hover {
+  color: var(--accent-hover);
+}
+.prose strong {
+  font-weight: 600;
+  color: var(--text);
+}
+/* Tailwind's preflight strips list markers; posts need them back. */
+.prose ul {
+  list-style: disc;
+  padding-left: 1.3em;
+}
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.3em;
+}
+.prose li + li {
+  margin-top: 0.4em;
+}
+.prose li::marker {
+  color: var(--faint);
+}
+.prose blockquote {
+  padding-left: 20px;
+  border-left: 4px solid var(--accent);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--text);
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin-block: 2em;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 0.1em 0.35em;
+  background: var(--surface);
+}
+.prose pre {
+  padding: 18px 20px;
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.prose pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.prose figure {
+  display: grid;
+  gap: 10px;
+}
+.prose figcaption {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--faint);
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.prose :is(th, td) {
+  padding: 10px 14px 10px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.close {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  width: 100%;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.close p {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+}

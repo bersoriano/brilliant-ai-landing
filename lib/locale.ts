@@ -109,8 +109,19 @@ export function resolveLocale({
 /** Which page a (locale-prefixed or plain) path is, for titles and metadata. */
 export function pageFromPath(
   pathname: string,
-): "home" | "privacy" | "security" | "about" | "finance" | "healthcare" | "crm" {
+):
+  | "home"
+  | "privacy"
+  | "security"
+  | "about"
+  | "finance"
+  | "healthcare"
+  | "crm"
+  | "blog"
+  | "post" {
   const path = stripLocalePrefix(pathname);
+  if (path === "/blog" || path === "/blog/") return "blog";
+  if (path.startsWith("/blog/")) return "post";
   if (path === "/finance-automation") return "finance";
   if (path === "/custom-crm") return "crm";
   if (path === "/healthcare-automation") return "healthcare";
@@ -118,4 +129,14 @@ export function pageFromPath(
   if (path === "/security") return "security";
   if (path === "/about") return "about";
   return "home";
+}
+
+/**
+ * Pages whose content is rendered on the server per language (blog posts are
+ * MDX files, not `t()` strings). Switching language there needs a real
+ * navigation, and the client must not overwrite the server's post title.
+ */
+export function isServerLocalizedPage(pathname: string) {
+  const page = pageFromPath(pathname);
+  return page === "blog" || page === "post";
 }

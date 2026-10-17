@@ -47,6 +47,7 @@ export function Footer() {
               <a href={home("#how-it-works")}>{t("How it works")}</a>
               <a href={home(CALCULATOR_ANCHOR)}>{t("ROI calculator")}</a>
               <a href={home("#faq")}>{t("Common questions")}</a>
+              <a href={localePath(locale, "/blog")}>{t("Blog")}</a>
             </div>
             <div>
               <h3 className="label">{t("Trust")}</h3>
