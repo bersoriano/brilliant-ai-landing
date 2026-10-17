@@ -36,15 +36,15 @@ Uno se enfoca en ingresos y relaciones. El otro, en operación, eficiencia y con
 
 ### CRM (herramientas de cara al cliente)
 
-- **HubSpot**: excelente plan gratuito; fuerte para juntar marketing y ventas.
-- **Zoho CRM**: accesible y con muchas funciones; popular entre equipos que cuidan el gasto.
-- **Pipedrive**: limpio y centrado en el embudo; ideal si sobre todo necesitas seguir ventas.
+- **HubSpot**: tiene plan gratuito; junta marketing y ventas.
+- **Zoho CRM**: precio más bajo con un catálogo amplio de funciones.
+- **Pipedrive**: construido alrededor del embudo de ventas.
 - **Salesforce**: muy potente, pero muchas veces excesivo (y caro) para un negocio de verdad pequeño.
 
 ### ERP (operación y oficina de atrás)
 
-- **Microsoft Dynamics 365 Business Central**: buena opción si ya vives en el ecosistema de Microsoft.
-- **NetSuite**: plataforma en la nube que escala bien conforme creces.
+- **Microsoft Dynamics 365 Business Central**: común entre empresas que ya trabajan en el ecosistema de Microsoft.
+- **NetSuite**: plataforma en la nube pensada para crecer con la empresa.
 - **SAP Business One**: opción tradicional para negocios que venden productos.
 
 Muchas funcionan bien, pero traen cuotas recurrentes por usuario y límites en qué tanto puedes cambiar el sistema.
@@ -53,11 +53,9 @@ Muchas funcionan bien, pero traen cuotas recurrentes por usuario y límites en q
 
 Cada vez más negocios pequeños eligen sistemas CRM y ERP de código abierto y luego los adaptan. Así obtienen los beneficios de una solución a la medida por una fracción del costo a largo plazo de las grandes plataformas propietarias.
 
-### Opciones de código abierto líderes para negocios pequeños
+### Cómo se ve el mundo del código abierto
 
-- **Odoo Community**: la suite modular de código abierto más popular. Cubre CRM, contabilidad, inventario, recursos humanos, comercio electrónico, manufactura y más. Empieza con la edición Community gratuita y agrega solo lo que necesites. Tiene un ecosistema enorme de aplicaciones y de socios implementadores.
-- **SuiteCRM**: un CRM de código abierto maduro y completo (una bifurcación de SugarCRM con muchos años). Excelente si solo necesitas CRM y todavía no un ERP completo.
-- **Dolibarr**: ligero y práctico para equipos chicos que quieren un sistema sencillo y modular, sin cargas pesadas.
+Va desde suites modulares completas (CRM, contabilidad, inventario, recursos humanos, comercio electrónico, manufactura) hasta proyectos maduros que solo hacen CRM y sistemas ligeros para equipos chicos. Entre los nombres conocidos están Odoo Community, SuiteCRM y Dolibarr. El software es el punto de partida: lo que hace que cualquiera de ellos le quede a un negocio es cómo se implementa y se adapta a la forma en que ese negocio trabaja.
 
 ### Por qué un sistema de código abierto adaptado es una alternativa fuerte a las opciones comunes
 
@@ -66,8 +64,29 @@ Cada vez más negocios pequeños eligen sistemas CRM y ERP de código abierto y 
 - **Sin amarrarte a un proveedor.** Los datos y la instalación son tuyos. Puedes alojarlo tú mismo, cambiar de proveedor de hosting o de socio implementador sin pedirle permiso a nadie ni pagar penalizaciones de salida.
 - **Tus datos, bajo tu control.** Alojarlo tú mismo mantiene todo bajo tu control, algo que importa para el cumplimiento, los requisitos de tu industria o simplemente para no tener los datos de tus clientes y tus finanzas solo en la nube de alguien más.
 - **Crece a tu ritmo.** Empieza ligero y gratis (o casi). Agrega módulos, funciones a la medida o soporte pagado solo conforme crece el negocio. Nadie te obliga a pagar planes empresariales caros para desbloquear lo básico.
-- **Comunidad y socios.** Comunidades activas y socios especializados en implementación significan que no estás solo. Muchos negocios pequeños operan con éxito sistemas Odoo adaptados, con un socio local o remoto que se encarga de la parte técnica.
+- **Comunidad y socios.** Comunidades activas y socios especializados en implementación significan que no estás solo. Muchos negocios pequeños operan con éxito sistemas de código abierto adaptados, con un socio local o remoto que se encarga de la parte técnica.
 - **Ventaja por ser distinto.** Cuando tus procesos son de verdad diferentes, las plataformas de código abierto te dejan construir justo lo que necesitas, en lugar de vivir con parches o esperar a que el proveedor lo incluya en sus planes.
+
+### La diferencia en licencias, en números
+
+Precios de lista de plataformas propietarias comunes, frente al costo de licencia del código abierto. Los proveedores publican sus precios en dólares (USD):
+
+| Sistema | Precio de lista | 10 usuarios al año | 20 usuarios al año | Cubre |
+| --- | --- | --- | --- | --- |
+| Salesforce Starter Suite[^salesforce] | 25 USD/usuario/mes | ~3,000 USD | ~6,000 USD | Solo CRM |
+| Salesforce Pro Suite[^salesforce] | 100 USD/usuario/mes | ~12,000 USD | ~24,000 USD | Solo CRM |
+| Dynamics 365 Business Central Essentials[^bc] | 80 USD/usuario/mes | ~9,600 USD | ~19,200 USD | ERP |
+| Dynamics 365 Business Central Premium[^bc] | 110 USD/usuario/mes | ~13,200 USD | ~26,400 USD | ERP + manufactura |
+| NetSuite[^netsuite] | ~999 USD/mes base + 129–199 USD/usuario/mes | ~27,000–36,000 USD | ~43,000–60,000 USD | ERP + CRM; precio por cotización |
+| CRM o ERP de código abierto[^hosting] | Licencia de 0 USD | ~600–2,400 USD de hosting | ~600–2,400 USD de hosting | Pagas hosting, implementación y soporte |
+
+En cinco años, para una empresa de 20 usuarios:
+
+- **Dynamics 365 Business Central Essentials:** ~96,000 USD en licencias.
+- **NetSuite:** ~215,000–300,000 USD en licencias.
+- **Código abierto:** 0 USD en licencias, más unos 3,000–12,000 USD de hosting.
+
+Eso es antes de la implementación o la adaptación, que cualquier opción necesita.
 
 ### Advertencias honestas (para que no te lleves sorpresas)
 
@@ -89,7 +108,7 @@ Beneficios clave de un sistema a la medida bien construido:
 
 1. **Empieza por el dolor.** ¿Se te pierden prospectos? CRM. ¿Caos operativo y financiero? ERP.
 2. **No compres los dos a la vez si no lo necesitas.** Muchas empresas llegan al segundo sistema conforme crecen.
-3. **Considera el código abierto desde temprano si te importan el costo y el control.** Odoo puede sustituir tanto a un CRM como a un ERP en muchos negocios pequeños, sobre todo empresas de productos o servicios con necesidades de inventario y contabilidad.
+3. **Considera el código abierto desde temprano si te importan el costo y el control.** Una sola suite de código abierto puede sustituir tanto a un CRM como a un ERP en muchos negocios pequeños, sobre todo empresas de productos o servicios con necesidades de inventario y contabilidad.
 4. **Integra desde temprano.** El verdadero valor aparece cuando los datos de clientes y los datos operativos y financieros se hablan entre sí.
 5. **Evalúa adaptar el sistema (de código abierto o no) cuando se acumulen los parches.** Exportar a hojas de cálculo todo el tiempo y el clásico “el sistema no nos deja” son señales claras.
 
@@ -132,3 +151,11 @@ Las fuentes están en inglés.
 - Anexum, [Open Source ERP Compared: The 7 Systems That Matter in 2026](https://anexum.eu/en/blog/open-source-erp-vergleich/)
 - Ecosire, [Open Source vs Proprietary ERP: The 2026 Decision Guide](https://ecosire.com/blog/open-source-vs-proprietary-erp-2026)
 - NOI Technologies, [Benefits of Open-Source ERP](https://noitechnologies.com/guide-to-open-source-erp-everything-you-should-know/)
+
+[^salesforce]: Salesforce, [precios para pequeñas empresas](https://www.salesforce.com/editions-pricing/small-business/): Starter Suite 25 USD y Pro Suite 100 USD por usuario al mes, consultado en octubre de 2026.
+
+[^bc]: Microsoft, [precios de Dynamics 365 Business Central](https://www.microsoft.com/en-us/dynamics-365/products/business-central/pricing): Essentials 80 USD y Premium 110 USD por usuario al mes, pago anual, consultado en octubre de 2026.
+
+[^netsuite]: ERP Research, [Best ERP for Small Business 2026](https://www.erpresearch.com/en-us/erp-for-small-business-smb-sme): alrededor de 999 USD al mes de base más 129–199 USD por usuario al mes; los módulos se cobran aparte. NetSuite cotiza cada venta.
+
+[^hosting]: El hosting varía según el proveedor: ERP Softnic, [Best Open-Source ERP Software 2026](https://erpsoftnic.com/erp-software/open-source-erp-software) (servidores propios desde 15–50 USD al mes); Anexum, [Open Source ERP Compared](https://anexum.eu/en/blog/open-source-erp-vergleich/) (hosting administrado de 50–300 EUR al mes).
