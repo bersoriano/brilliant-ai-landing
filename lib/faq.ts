@@ -25,7 +25,7 @@ export const FAQS: [question: string, answer: string][] = [
   ],
   [
     "What if an AI output is wrong?",
-    "AI output is treated as something to validate. We define checks, approval steps, and exception handling around the risk of each task. Important decisions stay with your team, with a clear path to pause or revert to the existing process.",
+    "We assume it sometimes will be, and design for that. Every output is checked against rules your team agrees in writing before go-live. Anything that fails a check, or falls outside those rules, stops and goes to the person you named, with the reason. Nothing is recorded, paid, or submitted without their approval. During the pilot, the workflow runs next to your current process on the same work, so you see where it disagrees before anyone depends on it. You can pause it and go back to the current process at any time.",
   ],
   [
     "What does it cost, and what happens after launch?",

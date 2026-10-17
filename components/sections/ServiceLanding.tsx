@@ -1,5 +1,6 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { INSIGHTS } from "@/lib/insights";
 import { localePath } from "@/lib/locale";
 import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 import { WORKFLOWS, type Industry } from "@/lib/workflows";
@@ -20,6 +21,8 @@ const content = {
     examples: "Finance tasks we can help organize",
     control:
       "Your team keeps control of accounting entries, payments, and exceptions. We agree on source systems, checks, and approval rules before connecting data; a pilot runs alongside your current process first.",
+    note: "exceptions",
+    noteLabel: "Why invoice automation stalls",
     related: "Explore healthcare automation",
     relatedPath: "/healthcare-automation",
   },
@@ -31,6 +34,8 @@ const content = {
     examples: "Healthcare tasks we can help organize",
     control:
       "Your team decides what may be shared, who can access it, and which approvals remain with staff. We agree on any BAA and data-handling requirements before sensitive information is connected. Clinical records are not changed automatically.",
+    note: "agents",
+    noteLabel: "Why our agents draft and your staff decide",
     related: "Explore finance automation",
     relatedPath: "/finance-automation",
   },
@@ -102,6 +107,12 @@ export function ServiceLanding({ industry }: { industry: ServiceIndustry }) {
             <a className="text-link text-link--accent" href={localePath(locale, "/security")}>
               {t("Read how we handle financial and patient data")}{" "}
               <Icon name="arrow" size={16} />
+            </a>
+            <a
+              className="text-link"
+              href={localePath(locale, `/blog/${INSIGHTS[copy.note]}`)}
+            >
+              {t(copy.noteLabel)} <Icon name="arrow" size={16} />
             </a>
             <a className="text-link" href={localePath(locale, copy.relatedPath)}>
               {t(copy.related)} <Icon name="arrow" size={16} />

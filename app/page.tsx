@@ -17,17 +17,14 @@ import { Footer } from "@/components/sections/Footer";
 import { StickyCta } from "@/components/sections/StickyCta";
 import { getRequestLocale } from "@/lib/locale.server";
 import { getPost, getPosts } from "@/lib/posts.server";
-import { FEATURED_INSIGHTS } from "@/lib/insights";
+import { FEATURED_INSIGHTS, homepageTeaser } from "@/lib/insights";
 export default async function Home() {
   const locale = await getRequestLocale();
   const [posts, notes] = await Promise.all([
     getPosts(locale),
     Promise.all(FEATURED_INSIGHTS.map((slug) => getPost(slug, locale))),
   ]);
-  // The notes are linked from "What we've learned"; the blog teaser shows the rest.
-  const latest = posts
-    .filter((post) => !FEATURED_INSIGHTS.includes(post.slug))
-    .slice(0, 3);
+  const latest = homepageTeaser(posts);
   const noteBySlug = Object.fromEntries(
     FEATURED_INSIGHTS.map((slug, i) => [slug, notes[i]]),
   );

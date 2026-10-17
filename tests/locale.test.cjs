@@ -629,6 +629,24 @@ test("Homepage notes stay published in both languages, and the approach copy is 
   assert.match(fs.readFileSync("app/page.tsx", "utf8"), /<Approach /);
 });
 
+test("Homepage blog teaser skips the notes it already links and the CRM post", () => {
+  const { FEATURED_INSIGHTS, homepageTeaser } = require("../lib/insights.ts");
+  const { CRM_POST_SLUG } = require("../lib/crm.ts");
+  // Newest first, as getPosts returns them.
+  const posts = [CRM_POST_SLUG, "newest", ...FEATURED_INSIGHTS, "second", "third", "fourth"].map(
+    (slug) => ({ slug }),
+  );
+  assert.deepEqual(
+    homepageTeaser(posts).map((post) => post.slug),
+    ["newest", "second", "third"],
+  );
+  // With only linked notes and the CRM post published, the section has nothing to show.
+  assert.deepEqual(
+    homepageTeaser([CRM_POST_SLUG, ...FEATURED_INSIGHTS].map((slug) => ({ slug }))),
+    [],
+  );
+});
+
 test("Positioning stays operator, not consultancy", () => {
   const { CONSULTANCY_PHRASES } = require("../lib/insights.ts");
   const files = fs
