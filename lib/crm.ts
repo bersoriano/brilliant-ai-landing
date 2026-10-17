@@ -244,3 +244,40 @@ export const CRM_CUSTOM_WORK = [
 
 /** The blog post the /custom-crm page links to (a test keeps it published). */
 export const CRM_POST_SLUG = "crm-systems-of-action";
+
+/**
+ * Homepage CRM exhibit: where an agent could start, drawn from the CRM post
+ * (high-volume, low-judgment work first; a person approves; measure outcomes).
+ * Examples to adapt, not client results.
+ */
+export const CRM_AGENT_PLAYS: {
+  when: string;
+  agent: string;
+  approve: string;
+  measure: string;
+}[] = [
+  {
+    when: "A lead goes quiet for 90 days",
+    agent: "The agent researches the account and drafts a re-engagement email.",
+    approve: "The email before it goes out",
+    measure: "Meetings booked",
+  },
+  {
+    when: "A proposal has no reply after 14 days",
+    agent: "The agent drafts a follow-up and creates a task for the deal owner.",
+    approve: "The follow-up",
+    measure: "Stalled deals that move again",
+  },
+  {
+    when: "A client call ends",
+    agent: "The agent logs the notes, updates the deal stage, and lists next steps.",
+    approve: "The stage change",
+    measure: "Hours of data entry returned",
+  },
+  {
+    when: "A new inquiry arrives from your website",
+    agent: "The agent enriches the contact, checks fit, and suggests meeting times.",
+    approve: "Who takes the lead",
+    measure: "Time to first response",
+  },
+];
