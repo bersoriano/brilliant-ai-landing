@@ -572,3 +572,19 @@ test("Every post ships in English and Mexican Spanish, compiles, and follows the
     assert.doesNotMatch(es.post.body + es.post.title + es.post.description, SPAIN_SPANISH, `${es.file}: Mexican Spanish`);
   }
 });
+
+test("Blog is reachable from the nav and homepage; the CRM page links to a published post", () => {
+  const { NAV_LINKS } = require("../lib/site.ts");
+  const { CRM_POST_SLUG } = require("../lib/crm.ts");
+  const { POSTS_DIR, POST_LOCALES, parsePost } = require("../lib/posts.ts");
+  assert.ok(NAV_LINKS.some((link) => link.href === "/blog"), "nav links to /blog");
+  assert.match(fs.readFileSync("app/page.tsx", "utf8"), /<LatestPosts /);
+  for (const file of ["CrmLanding.tsx", "CustomCrm.tsx"])
+    assert.match(fs.readFileSync(`components/sections/${file}`, "utf8"), /CRM_POST_SLUG/, file);
+  // The link must never 404: the post exists in both languages and is not a draft.
+  for (const locale of POST_LOCALES) {
+    const file = `${POSTS_DIR}/${CRM_POST_SLUG}/${locale}.mdx`;
+    assert.ok(fs.existsSync(file), `missing ${file}`);
+    assert.equal(parsePost(fs.readFileSync(file, "utf8"), CRM_POST_SLUG, locale).draft, false, `${file} is a draft`);
+  }
+});

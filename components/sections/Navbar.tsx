@@ -5,10 +5,14 @@ import {
 } from "@/components/i18n/LanguageProvider";
 import { useEffect, useRef, useState } from "react";
 import { DISCOVERY_CALL_HREF, NAV_CTA, NAV_LINKS, PRIMARY_CTA } from "@/lib/site";
+import { localePath } from "@/lib/locale";
 import { Brand, Icon } from "../ui/Icon";
 import styles from "./Navbar.module.css";
 export function Navbar() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  // Section anchors stay as-is; page links follow the language.
+  const navHref = (href: string) =>
+    href.startsWith("/") ? localePath(locale, href) : href;
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -37,7 +41,7 @@ export function Navbar() {
           <Brand />
           <div className={styles.links}>
             {NAV_LINKS.map((link) => (
-              <a href={link.href} key={link.href}>
+              <a href={navHref(link.href)} key={link.href}>
                 {t(link.label)}
               </a>
             ))}
@@ -70,7 +74,7 @@ export function Navbar() {
               {NAV_LINKS.map((link) => (
                 <a
                   key={link.href}
-                  href={link.href}
+                  href={navHref(link.href)}
                   className={styles.panelLink}
                   onClick={() => setOpen(false)}
                 >
