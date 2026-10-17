@@ -6,7 +6,6 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { translate } from "@/lib/i18n";
 import { htmlLang, localePath, ogLocale } from "@/lib/locale";
 import { getRequestLocale } from "@/lib/locale.server";
-import { formatPostDate } from "@/lib/posts";
 import { compilePost, getPost } from "@/lib/posts.server";
 import {
   DISCOVERY_CALL_HREF,
@@ -85,19 +84,7 @@ export default async function BlogPost({ params }: Props) {
         </a>
         <article className={styles.article}>
           <header className={styles.header}>
-            <p className="label">
-              <time dateTime={post.date}>{formatPostDate(post.date, locale)}</time>
-              {post.updated && (
-                <>
-                  {" · "}
-                  {t("Updated")}{" "}
-                  <time dateTime={post.updated}>
-                    {formatPostDate(post.updated, locale)}
-                  </time>
-                </>
-              )}
-              {post.draft && ` · ${t("Draft")}`}
-            </p>
+            {post.draft && <p className="label">{t("Draft")}</p>}
             <h1 className="h2">{post.title}</h1>
             <p className="lead">{post.description}</p>
           </header>

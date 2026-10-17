@@ -79,10 +79,3 @@ export function sortPosts<T extends Pick<PostMeta, "date" | "slug">>(posts: T[])
     (a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),
   );
 }
-
-export function formatPostDate(date: string, locale: Locale) {
-  return new Intl.DateTimeFormat(locale === "es" ? "es-MX" : "en-US", {
-    dateStyle: "long",
-    timeZone: "UTC",
-  }).format(new Date(`${date}T00:00:00Z`));
-}

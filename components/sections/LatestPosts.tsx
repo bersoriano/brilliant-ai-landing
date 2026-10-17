@@ -1,6 +1,6 @@
 import { translate } from "@/lib/i18n";
 import { localePath, type Locale } from "@/lib/locale";
-import { formatPostDate, type PostMeta } from "@/lib/posts";
+import { type PostMeta } from "@/lib/posts";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
 import styles from "./LatestPosts.module.css";
@@ -33,9 +33,6 @@ export function LatestPosts({
       <ol className={styles.list}>
         {posts.map((post) => (
           <li key={post.slug}>
-            <p className="label">
-              <time dateTime={post.date}>{formatPostDate(post.date, locale)}</time>
-            </p>
             <h3>
               <a href={localePath(locale, `/blog/${post.slug}`)}>{post.title}</a>
             </h3>
