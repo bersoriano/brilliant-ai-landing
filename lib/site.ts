@@ -27,6 +27,7 @@ export const NAV_LINKS = [
   { label: "ROI", href: CALCULATOR_ANCHOR },
   { label: "Trust", href: "#trust" },
   { label: "CRM", href: "#crm" },
+  { label: "Blog", href: "/blog" },
 ];
 
 export function getSiteUrl() {

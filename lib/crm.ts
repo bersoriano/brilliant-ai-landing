@@ -241,3 +241,6 @@ export const CRM_CUSTOM_WORK = [
   "Importing data from your current tools",
   "Training for your team",
 ];
+
+/** The blog post the /custom-crm page links to (a test keeps it published). */
+export const CRM_POST_SLUG = "crm-systems-of-action";

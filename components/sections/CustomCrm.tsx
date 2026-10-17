@@ -4,6 +4,7 @@ import { shouldRenderCaseStudy } from "@/lib/caseStudy";
 import {
   CRM_ADVANCED,
   CRM_ESSENTIALS,
+  CRM_POST_SLUG,
   CRM_PROMPTS,
   CRM_REASONS,
   CRM_REQUESTS,
@@ -107,6 +108,13 @@ export function CustomCrm() {
               <li key={prompt}>{t(prompt)}</li>
             ))}
           </ul>
+          <a
+            className="text-link text-link--accent"
+            href={localePath(locale, `/blog/${CRM_POST_SLUG}`)}
+          >
+            {t("Read: how AI is turning CRMs into systems of action")}{" "}
+            <Icon name="arrow" size={16} />
+          </a>
         </article>
         <article className={styles.cell}>
           <p className="label">{t("Shaped to you")}</p>

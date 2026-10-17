@@ -6,6 +6,7 @@ import {
   CRM_CUSTOM_WORK,
   CRM_ESSENTIALS,
   CRM_PIPELINE,
+  CRM_POST_SLUG,
   CRM_PROMPTS,
   CRM_REASONS,
   CRM_REQUESTS,
@@ -164,6 +165,13 @@ export function CrmLanding() {
                 </div>
               ))}
             </dl>
+            <a
+              className="text-link text-link--accent"
+              href={localePath(locale, `/blog/${CRM_POST_SLUG}`)}
+            >
+              {t("Read: how AI is turning CRMs into systems of action")}{" "}
+              <Icon name="arrow" size={16} />
+            </a>
           </div>
           <Exhibit
             className={styles.chatExhibit}

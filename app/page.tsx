@@ -9,11 +9,16 @@ import { Trust } from "@/components/sections/Trust";
 import { Proof } from "@/components/sections/Proof";
 import { CustomCrm } from "@/components/sections/CustomCrm";
 import { Faq } from "@/components/sections/Faq";
+import { LatestPosts } from "@/components/sections/LatestPosts";
 import { OnsiteConsulting } from "@/components/sections/OnsiteConsulting";
 import { FinalCta } from "@/components/sections/FinalCta";
 import { Footer } from "@/components/sections/Footer";
 import { StickyCta } from "@/components/sections/StickyCta";
-export default function Home() {
+import { getRequestLocale } from "@/lib/locale.server";
+import { getPosts } from "@/lib/posts.server";
+export default async function Home() {
+  const locale = await getRequestLocale();
+  const posts = (await getPosts(locale)).slice(0, 3);
   return (
     <>
       <Navbar />
@@ -28,6 +33,7 @@ export default function Home() {
           <Proof />
           <CustomCrm />
           <Faq />
+          <LatestPosts locale={locale} posts={posts} />
           <OnsiteConsulting />
           <FinalCta />
         </main>
