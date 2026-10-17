@@ -86,21 +86,21 @@ content is the in-page anchor `#review`.
   repetitive hour, filled where Brilliant handles the work. Headline numbers:
   hours per week (accent), capacity value, payback (hours per year when no
   budget is set).
-- **How it works**: workflows and agents as process diagrams. Each card opens
-  with a specimen of what starts it, so the difference reads in a glance: the
-  workflow's example as a pipeline of boxed steps, the agent's as a request
-  from a person. Below it, a filled square is a trigger, an outlined square a
-  request, and the sand node (reached by a dashed line) is the person who
-  decides.
-- **Exhibit 4 (`AgentPlays`)**: each CRM trigger is a vertical tab; the
-  selected one shows what the agent does → you approve → you measure. Grey
-  rules; sand only on "You approve".
-- **CRM stays secondary**: the homepage section is the pitch (`.h2-sm`, outline
-  CTA), the agent playbook, and one ruled row with the price and the included
-  features (titles only on phones). The assistant, custom work and reasons
-  live on `/custom-crm`.
+- **Services** (paper band, after the calculator): four ruled blocks, each the
+  pitch on the left and what it looks like on the right. Workflows and agents
+  open with what starts them ("Starts with a trigger" / "Starts with a
+  request") and show three examples as chains: the trigger in teal, the work
+  in grey, the person who decides in sand. Each ends with a `.control` line.
+  How it works keeps only Review → Pilot → Run, costs and what's in the work.
+- **Exhibits 4 and 5 (`AgentPlays`)**: the CRM and ERP playbooks. Each trigger
+  is a vertical tab; the selected one shows what the agent (or the system)
+  does → you approve → you measure. Grey rules; sand only on "You approve".
+  Below each: two short notes (ask in plain language, ask for something new)
+  and one ruled row with the price and the included features (titles only on
+  phones). The CRM's assistant, custom work and reasons live on
+  `/custom-crm`. The gated case study is Exhibit 6.
 - **Page rhythm**: `.section-rule` draws a content-width hairline between
-  consecutive sections on the same band (Approach, CRM, FAQ, Blog). Headings
+  consecutive sections on the same band (Approach, FAQ, Blog). Headings
   are `.h2` up to 56px and `.h2-sm` up to 44px.
 - **Rhino (`Proof`)**: before (three areas in separate software) → what we
   built (modules of one system over shared APIs) → now, using only the three

@@ -23,10 +23,10 @@ export const WHATSAPP_HREF = "https://wa.me/13473261975";
 export const CALCULATOR_ANCHOR = "#roi-calculator";
 export const NAV_LINKS = [
   { label: "Solutions", href: "#solutions" },
+  { label: "Services", href: "#services" },
   { label: "How it works", href: "#how-it-works" },
   { label: "ROI", href: CALCULATOR_ANCHOR },
   { label: "Trust", href: "#trust" },
-  { label: "CRM", href: "#crm" },
   { label: "Blog", href: "/blog" },
 ];
 

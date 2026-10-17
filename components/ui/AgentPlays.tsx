@@ -1,36 +1,48 @@
 "use client";
 import { useState } from "react";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
-import { CRM_AGENT_PLAYS } from "@/lib/crm";
+import type { AgentPlay } from "@/lib/crm";
 import styles from "./AgentPlays.module.css";
 
 /**
- * Agent playbook for the homepage CRM exhibit. Every trigger stays visible as
- * a tab; the selected one shows its chain: what the agent does, what a person
- * approves, and what you measure.
+ * Agent playbook for the homepage CRM and ERP exhibits. Every trigger stays
+ * visible as a tab; the selected one shows its chain: what the agent (or the
+ * system) does, what a person approves, and what you measure. `id` keeps tab
+ * ids unique when more than one playbook is on the page; `label` names the
+ * tablist and arrives translated.
  */
-export function AgentPlays() {
+export function AgentPlays({
+  plays,
+  id,
+  label,
+}: {
+  plays: AgentPlay[];
+  id: string;
+  label: string;
+}) {
   const { t } = useLanguage();
   const [active, setActive] = useState(0);
-  const play = CRM_AGENT_PLAYS[active];
-  const count = CRM_AGENT_PLAYS.length;
+  const play = plays[active];
+  const count = plays.length;
+  const tabId = (index: number) => `${id}-tab-${index}`;
+  const panelId = `${id}-panel`;
   return (
     <div className={styles.plays}>
       <div
         className={styles.tabs}
         role="tablist"
         aria-orientation="vertical"
-        aria-label={t("Where an agent could start in your CRM")}
+        aria-label={label}
       >
-        {CRM_AGENT_PLAYS.map((item, index) => (
+        {plays.map((item, index) => (
           <button
             key={item.when}
-            id={`play-tab-${index}`}
+            id={tabId(index)}
             type="button"
             role="tab"
             className={styles.tab}
             aria-selected={index === active}
-            aria-controls="play-panel"
+            aria-controls={panelId}
             tabIndex={index === active ? 0 : -1}
             onClick={() => setActive(index)}
             onKeyDown={(event) => {
@@ -46,7 +58,7 @@ export function AgentPlays() {
                       ? (index + 1) % count
                       : (index - 1 + count) % count;
               setActive(next);
-              document.getElementById(`play-tab-${next}`)?.focus();
+              document.getElementById(tabId(next))?.focus();
             }}
           >
             <span className="label">{t("When")}</span>
@@ -56,9 +68,9 @@ export function AgentPlays() {
       </div>
       <ol
         key={active}
-        id="play-panel"
+        id={panelId}
         role="tabpanel"
-        aria-labelledby={`play-tab-${active}`}
+        aria-labelledby={tabId(active)}
         className={styles.chain}
       >
         <li data-node="agent">

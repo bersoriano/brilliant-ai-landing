@@ -2,7 +2,6 @@
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
-import { Reveal } from "../ui/Reveal";
 import styles from "./HowItWorks.module.css";
 
 /** The product, in three steps. */
@@ -23,45 +22,6 @@ const steps = [
     body: "We monitor it, handle exceptions, and keep it current. You can see what it handled and what it sent to your team. When the first one is working, we add the next workflow or the next person’s agent. Your team gets documentation. Running it stays with us unless you want a handover.",
   },
 ];
-/**
- * The two offers as process diagrams: what starts it, what it does, and the
- * person it hands off to. Examples are illustrative.
- */
-const offers = [
-  {
-    kind: "workflow",
-    title: "Workflows",
-    starts: "Starts with a trigger",
-    icon: "flow",
-    for: "Work that arrives the same way every time",
-    flow: [
-      ["How it starts", "Something arrives: an invoice, a referral, month-end"],
-      [
-        "What it does",
-        "Collects, checks, and prepares the work, then sends exceptions to a person",
-      ],
-      ["Who decides", "The approver you name"],
-    ],
-    example: "Invoice arrives → matched to its PO → approval packet in Teams",
-  },
-  {
-    kind: "agent",
-    title: "Agents",
-    starts: "Starts with a request",
-    icon: "people",
-    for: "Work that changes from day to day",
-    flow: [
-      ["How it starts", "Someone asks, in plain language"],
-      [
-        "What it does",
-        "Finds, drafts, and follows up for the person it’s assigned to",
-      ],
-      ["Who decides", "The person who asked"],
-    ],
-    example: "“Chase the three clients still missing documents”",
-  },
-];
-const NODES = ["start", "work", "human"];
 const reviewCovers = [
   "The task, its inputs, and where it arrives",
   "The tools and handoffs involved",
@@ -106,61 +66,6 @@ export function HowItWorks() {
           <p className="body">
             {t(
               "You show us the job. We build it on your stack. We run it. You approve the exceptions.",
-            )}
-          </p>
-        </div>
-        <div className={styles.offerBlock}>
-          <div className={styles.offers}>
-            {offers.map((offer, i) => (
-              <Reveal
-                as="article"
-                key={offer.title}
-                className={styles.offer}
-                delay={i * 120}
-              >
-                <header className={styles.offerHead}>
-                  <p className={styles.starts} data-kind={offer.kind}>
-                    <Icon name={offer.icon} size={15} />
-                    {t(offer.starts)}
-                  </p>
-                  <h3 className="h3">{t(offer.title)}</h3>
-                  <p className={styles.for}>{t(offer.for)}</p>
-                </header>
-                {/* What starts it, drawn so the difference reads at a glance:
-                    a workflow is a pipeline, an agent is a person asking. */}
-                <div className={styles.specimen} data-kind={offer.kind}>
-                  <span className="label">{t("Example")}</span>
-                  {offer.kind === "workflow" ? (
-                    <ol className={styles.pipeline}>
-                      {t(offer.example)
-                        .split(" → ")
-                        .map((step) => (
-                          <li key={step}>{step}</li>
-                        ))}
-                    </ol>
-                  ) : (
-                    <p className={styles.request}>
-                      <span className={styles.asker} aria-hidden="true">
-                        <Icon name="people" size={14} />
-                      </span>
-                      <span>{t(offer.example)}</span>
-                    </p>
-                  )}
-                </div>
-                <ol className={styles.flow}>
-                  {offer.flow.map(([term, detail], n) => (
-                    <li key={term} data-node={NODES[n]} data-kind={offer.kind}>
-                      <span className="label">{t(term)}</span>
-                      <span className={styles.nodeText}>{t(detail)}</span>
-                    </li>
-                  ))}
-                </ol>
-              </Reveal>
-            ))}
-          </div>
-          <p className={styles.rule}>
-            {t(
-              "If it starts with a trigger, it’s a workflow. If it starts with a request, it’s an agent. Many jobs need both.",
             )}
           </p>
         </div>

@@ -108,7 +108,9 @@ export function buildJsonLd(locale: Locale, path: string) {
       "AI automation",
       "Finance workflow automation",
       "Healthcare workflow automation",
+      "AI agents",
       "Custom CRM implementation",
+      "Custom ERP implementation",
     ],
     knowsAbout: [
       "AI automation",
