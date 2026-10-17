@@ -31,22 +31,29 @@ export function Hero() {
             </h1>
             <p className={styles.lead}>
               {t(
-                "Done-for-you AI agents for finance and healthcare teams. Each person gets agents that handle their invoices, referrals, and follow-ups inside the tools you already use, and every approval stays with them.",
+                "We build and run AI agents that prepare invoices, referrals, and follow-ups inside the tools you already use. Your team keeps every approval.",
               )}
             </p>
             <div className={styles.actions}>
               <a href={DISCOVERY_CALL_HREF} className="button">
                 {t(PRIMARY_CTA)}
               </a>
-              <a href="#solutions" className="text-link">
+              <a href="#exhibit-1" className="text-link">
                 {t("See a workflow in motion")} <Icon name="arrow" size={16} />
               </a>
             </div>
-            <p className="caption">{t("20 minutes. Bring one repetitive task.")}</p>
+            <p className="caption">
+              {t("Free. Bring one repetitive task; leave with a concrete next step.")}
+            </p>
           </div>
         </div>
       </section>
-      <section className={styles.exhibitSection} aria-labelledby="exhibit-1-title">
+      {/* "See a workflow in motion" lands here: the run plays on first view */}
+      <section
+        id="exhibit-1"
+        className={styles.exhibitSection}
+        aria-labelledby="exhibit-1-title"
+      >
         <Reveal className="shell">
           <HeroVisual />
         </Reveal>

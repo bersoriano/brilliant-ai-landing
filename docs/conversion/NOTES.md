@@ -48,19 +48,22 @@ content is the in-page anchor `#review`.
 
 ### Authority layer (`components/sections/Approach.tsx`, `lib/insights.ts`)
 
-- "What we've learned": four rules (design for the exception first; one
-  decision per approval, where your team already works; count hours, not hype;
-  judgment stays with your team), each linked to a note. Rules 1–2 pair an
-  invoice with a referral so healthcare buyers see their own work. The block
-  is server-rendered so links carry each note's own title, and it ends with the
-  review CTA rather than a reading CTA. `/security` is Trust's lead link, one
-  section down.
+- Link, don't lecture: the homepage gives a rule in one line and links the
+  note that explains it. "What we've learned" is three ruled rows, each a rule
+  beside its note (design for the exception first; one decision per approval,
+  where your team already works; agents prepare, your team decides). A test
+  keeps it to three one-line rules, each linking a note. The intro line names
+  invoices, month-end, referrals and missing documents so both buyers see
+  their work. The block is server-rendered so links carry each note's own
+  title, and the review link is its accent link. `/security` is Trust's only
+  link, one section down.
 - The notes (`content/posts/why-invoice-automation-stalls`,
   `approval-points-without-bottlenecks`, `measuring-capacity-reclaimed`,
   `agents-in-regulated-work`) are operator notes: no statistics, no client
   claims, examples labelled as examples. The calculator links to the measuring
-  note from its disclaimer; Trust links to the approvals note; the finance and
-  healthcare pages link the invoice and agents notes.
+  note from its disclaimer, where that question comes up; the finance and
+  healthcare pages link the invoice and agents notes. Each note page ends with
+  the review button.
 - The homepage blog teaser (`homepageTeaser`) skips those notes and the CRM
   post, which `#crm` already links and whose market commentary would read as
   our view under a finance-and-healthcare heading. It stays hidden until
@@ -166,7 +169,7 @@ in Chrome at 360 / 390 / 700 / 900 / 1150 / 1440px, EN and ES.
 
 | Test | How | Result |
 |---|---|---|
-| **8-second hero** | Above the fold at 1440×900: eyebrow names finance + healthcare, H1 names the outcome (a bigger team's capacity without hiring), sub names the job in their nouns (invoices, referrals, follow-ups) and says approvals stay with them, primary CTA visible. Exhibit 1 follows directly below the hero | Pass |
+| **8-second hero** | Above the fold at 1440×900: eyebrow names finance + healthcare, H1 names the outcome (a bigger team's capacity without hiring), sub says who runs it ("We build and run"), names the job in their nouns (invoices, referrals, follow-ups) and where it runs, then "Your team keeps every approval."; primary CTA visible (EN and ES, also at 1024×768). "See a workflow in motion" jumps to Exhibit 1, directly below the hero | Pass |
 | **Logo honesty** | Test "Employer names stay off the homepage…"; names only on `/about` with the hedge | Pass |
 | **HIPAA / LFPDPPP presence** | `/security` has "Healthcare in the United States (HIPAA)" and "Mexico: personal data and residency (LFPDPPP)"; no certification claims | Pass |
 | **Mexico noun test** | `/es`: CFDI, OC, RFC, provisiones, preautorización, aseguradora, CONTPAQi/SAP in tools; "Revisión en sitio en México" | Pass |

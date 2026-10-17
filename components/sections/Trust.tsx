@@ -1,6 +1,5 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
-import { INSIGHTS } from "@/lib/insights";
 import { localePath } from "@/lib/locale";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
@@ -50,12 +49,6 @@ export function Trust() {
           >
             {t("Read how we handle financial and patient data")}{" "}
             <Icon name="arrow" size={16} />
-          </a>
-          <a
-            className="text-link"
-            href={localePath(locale, `/blog/${INSIGHTS.approvals}`)}
-          >
-            {t("How we design approval points")} <Icon name="arrow" size={16} />
           </a>
         </div>
         <ul className={styles.points}>

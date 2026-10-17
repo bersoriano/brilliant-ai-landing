@@ -621,12 +621,20 @@ test("Homepage notes stay published in both languages, and the approach copy is 
       assert.ok(fs.existsSync(file), `missing ${file}`);
       assert.equal(parsePost(fs.readFileSync(file, "utf8"), slug, locale).draft, false, `${file} is a draft`);
     }
-  for (const rule of APPROACH_RULES) {
-    assert.ok(rule.note || rule.href, `${rule.title}: needs a note or a link`);
-    for (const s of [rule.title, rule.body, rule.linkLabel].filter(Boolean))
-      assert.ok(dictionary[s], `missing Spanish: ${s}`);
-  }
+  for (const rule of APPROACH_RULES)
+    assert.ok(dictionary[rule.title], `missing Spanish: ${rule.title}`);
   assert.match(fs.readFileSync("app/page.tsx", "utf8"), /<Approach /);
+});
+
+test("Link, don't lecture: the authority block is at most three one-line rules, each linking a note", () => {
+  const { APPROACH_RULES, INSIGHTS } = require("../lib/insights.ts");
+  assert.ok(APPROACH_RULES.length <= 3, `${APPROACH_RULES.length} rules: the homepage keeps three at most`);
+  for (const rule of APPROACH_RULES) {
+    // The note carries the explanation; the homepage shows only the rule.
+    assert.deepEqual(Object.keys(rule).sort(), ["note", "title"], `${rule.title}: a rule is a title and a note`);
+    assert.ok(INSIGHTS[rule.note], `${rule.title}: links a registered note`);
+    assert.ok(rule.title.length <= 60, `${rule.title}: keep the rule to one line`);
+  }
 });
 
 test("Homepage blog teaser skips the notes it already links and the CRM post", () => {
