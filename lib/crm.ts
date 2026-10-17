@@ -269,12 +269,6 @@ export const CRM_AGENT_PLAYS: {
     measure: "Stalled deals that move again",
   },
   {
-    when: "A client call ends",
-    agent: "The agent logs the notes, updates the deal stage, and lists next steps.",
-    approve: "The stage change",
-    measure: "Hours of data entry returned",
-  },
-  {
     when: "A new inquiry arrives from your website",
     agent: "The agent enriches the contact, checks fit, and suggests meeting times.",
     approve: "Who takes the lead",
