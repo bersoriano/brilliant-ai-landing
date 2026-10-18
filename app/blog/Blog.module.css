@@ -43,6 +43,8 @@
 /* ---------- Post ---------- */
 .article {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   gap: 40px;
   width: 100%;
 }
@@ -51,6 +53,28 @@
   gap: 18px;
   padding-bottom: 32px;
   border-bottom: 1px solid var(--line);
+}
+
+.breadcrumbs,
+.byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.breadcrumbs a,
+.byline a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.date {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .prose {
@@ -204,7 +228,7 @@
   margin-top: 12px;
 }
 .prose [data-footnote-backref] {
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .tableWrap {

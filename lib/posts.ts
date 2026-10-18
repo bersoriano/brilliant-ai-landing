@@ -14,6 +14,8 @@ export type PostMeta = {
   slug: string;
   locale: Locale;
   title: string;
+  /** Optional concise search title; the full editorial title remains the h1. */
+  seoTitle?: string;
   description: string;
   /** ISO date, YYYY-MM-DD. */
   date: string;
@@ -35,7 +37,8 @@ function isIsoDate(value: unknown): value is string {
   return (
     typeof value === "string" &&
     ISO_DATE.test(value) &&
-    !Number.isNaN(Date.parse(`${value}T00:00:00Z`))
+    !Number.isNaN(Date.parse(`${value}T00:00:00Z`)) &&
+    new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value
   );
 }
 
@@ -47,20 +50,25 @@ export function parsePost(raw: string, slug: string, locale: Locale): Post {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
   if (!match) throw new Error(`${file}: missing --- frontmatter block`);
   const data = (parseYaml(match[1]) ?? {}) as Record<string, unknown>;
-  const { title, description, date, updated, draft = false } = data;
+  const { title, seoTitle, description, date, updated, draft = false } = data;
   if (typeof title !== "string" || !title.trim())
     throw new Error(`${file}: title is required`);
   if (typeof description !== "string" || !description.trim())
     throw new Error(`${file}: description is required`);
+  if (seoTitle !== undefined && (typeof seoTitle !== "string" || !seoTitle.trim()))
+    throw new Error(`${file}: seoTitle must be a nonempty string`);
   if (!isIsoDate(date)) throw new Error(`${file}: date must be YYYY-MM-DD`);
   if (updated !== undefined && !isIsoDate(updated))
     throw new Error(`${file}: updated must be YYYY-MM-DD`);
+  if (updated !== undefined && updated < date)
+    throw new Error(`${file}: updated must not precede date`);
   if (typeof draft !== "boolean")
     throw new Error(`${file}: draft must be true or false`);
   return {
     slug,
     locale,
     title: title.trim(),
+    seoTitle: typeof seoTitle === "string" ? seoTitle.trim() : undefined,
     description: description.trim(),
     date,
     updated,

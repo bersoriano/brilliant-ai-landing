@@ -1,0 +1,56 @@
+{
+  "environment": "Local production build; mobile lab emulation. Scores do not measure rankings or real-user Core Web Vitals.",
+  "results": [
+    {
+      "page": "Homepage",
+      "url": "http://127.0.0.1:3100/",
+      "auditedAt": "2026-10-18T02:14:04.695Z",
+      "lighthouseVersion": "13.5.0",
+      "scores": {
+        "performance": 83,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "largest-contentful-paint": "4.7 s",
+        "cumulative-layout-shift": "0",
+        "total-blocking-time": "0 ms"
+      }
+    },
+    {
+      "page": "Blog index",
+      "url": "http://127.0.0.1:3100/blog",
+      "auditedAt": "2026-10-18T02:12:25.416Z",
+      "lighthouseVersion": "13.5.0",
+      "scores": {
+        "performance": 91,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "largest-contentful-paint": "3.5 s",
+        "cumulative-layout-shift": "0",
+        "total-blocking-time": "0 ms"
+      }
+    },
+    {
+      "page": "Spanish article",
+      "url": "http://127.0.0.1:3100/es/blog/erp-vs-crm-small-business",
+      "auditedAt": "2026-10-18T02:15:32.341Z",
+      "lighthouseVersion": "13.5.0",
+      "scores": {
+        "performance": 90,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "largest-contentful-paint": "3.6 s",
+        "cumulative-layout-shift": "0",
+        "total-blocking-time": "0 ms"
+      }
+    }
+  ]
+}
