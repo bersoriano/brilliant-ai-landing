@@ -316,6 +316,7 @@ test("Every literal translation call in active UI has a Spanish dictionary entry
       "components/i18n/LanguageProvider.tsx",
       "app/blog/page.tsx",
       "app/blog/[slug]/page.tsx",
+      "app/blog/mdx.tsx",
     ]);
   for (const file of files)
     for (const key of tLiterals(file)) assert.ok(dictionary[key], `${file}: ${key}`);

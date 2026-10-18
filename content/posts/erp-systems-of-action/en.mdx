@@ -1,55 +1,76 @@
 ---
-title: "Your ERP is no longer just a system of record. It’s becoming a system of action."
-description: "Generative and agentic AI are turning ERPs from software that records what happened into active participants in the work itself."
+title: "AI in ERP: from system of record to system of action"
+description: "Generative and agentic AI are turning ERPs from software that records the work into software that helps do it. What works today, and what stays with your team."
 date: 2026-10-17
 draft: false
 ---
 
-For decades, enterprise resource planning systems have been the unloved backbone of business: expensive to implement, painful to use, and mostly useful for recording what already happened. Finance teams reconciled. Procurement chased approvals. Operations waited on reports. The software captured transactions; humans did the thinking and the heavy lifting.
+**Who this is for:** controllers, finance managers and owners who run an ERP, or are choosing one, and want to know what AI inside it can do today.
 
-That model is ending. In 2026, generative AI and especially agentic AI are turning ERPs into active participants in the work itself.[^softices] Early adopters are already reporting EBIT improvements of 5% or more, while McKinsey estimates that AI agents can cut ERP implementation effort and program duration by at least half.[^mckinsey]
+<Takeaway>
+AI in the ERP works best around the core of the system: answering questions in plain language, preparing matches and entries for review, and flagging anomalies early. The ERP stays the controlled core, and the results depend on clean master data and on approvals that stay with people.
+</Takeaway>
 
-Here’s how the shift is actually playing out inside companies that already run SAP, Oracle Fusion, Microsoft Dynamics 365, or similar platforms.
+For decades, ERP (enterprise resource planning) systems have been the backbone few people enjoy using: expensive to implement, hard to navigate, and mostly useful for recording what already happened. Finance teams reconciled. Procurement chased approvals. Operations waited on reports. The software captured transactions; people did the thinking and the heavy lifting.
 
-## 1. Natural-language access replaces menu hell
+That is changing. In 2026, generative AI, and especially agentic AI, is making the ERP part of the work itself.[^softices] Early adopters are already reporting EBIT improvements of 5% or more, and McKinsey estimates that AI agents can cut ERP implementation effort and program duration by at least half.[^mckinsey]
 
-The single most mature and immediately valuable use case is conversational access to ERP data. Instead of navigating nested screens or waiting for a report, a finance leader can ask: “What were our top five suppliers by spend last quarter, and which ones are trending above budget?” and get a structured answer drawn from live data, complete with citations back to the source records.[^nasscom]
+Here’s how the shift is playing out in companies that already run SAP, Oracle Fusion, Microsoft Dynamics 365 or similar platforms:
 
-Microsoft, SAP (via Joule), and Oracle have all shipped these capabilities.[^vendors] The UX problem that has plagued ERP for decades is finally being solved—not by better menus, but by removing the need for them.
+| Where AI helps | What it does | What stays with your team |
+| --- | --- | --- |
+| Questions about your data | Answers in plain language from live data, with links to the source records | Deciding what the answer means |
+| Accounts payable | Captures invoices, matches them to POs and receipts, codes them, routes the exceptions | Approving exceptions, posting, paying |
+| Reconciliation | Matches bank transactions and prepares journal entries | Reviewing and posting the entries |
+| Forecasts and anomalies | Updates forecasts more often; flags duplicate payments and unusual expenses as they happen | Acting on the flag |
 
-## 2. Agents handle the unglamorous work
+## 1. Ask your ERP questions in plain language
 
-Generative AI drafts and explains. Agentic AI does.[^technologyadvice]
+The most mature and immediately useful case is asking the ERP questions in plain language. Instead of clicking through nested screens or waiting for a report, a finance leader can ask: “What were our top five suppliers by spend last quarter, and which ones are trending above budget?” The answer comes back structured, drawn from live data, with links back to the source records.[^nasscom]
 
-- In accounts payable, agents capture invoices from multiple channels, match them to purchase orders and receipts, code them, and route only true exceptions.
-- Reconciliation agents match bank transactions and prepare journal entries for review.[^versich-agents]
-- Procurement agents analyze supplier communications, flag at-risk production orders, and surface the downstream impact on sales and inventory.
-- In manufacturing and supply chain, agents monitor equipment sensor data for predictive maintenance and continuously adjust safety stock based on demand signals, weather, and port congestion.[^manufacturingdive]
+Microsoft, SAP (through Joule) and Oracle have all shipped this.[^vendors] The problem ERP users have lived with for decades, too many menus, is being solved by removing the need for them, not by building better ones.
 
-Gartner projected that roughly 40% of enterprise applications would embed task-specific AI agents by the end of 2026—up from under 5% the year before.[^gartner] Major ERP vendors have delivered on that trajectory, with governed agent runtimes that respect existing security roles and audit trails.[^vendors]
+## 2. AI agents for accounts payable and reconciliation
 
-## 3. From historical reporting to continuous forecasting and exception management
+Generative AI drafts and explains. Agentic AI does the work.[^technologyadvice]
 
-Traditional ERPs excel at telling you what happened. AI-powered ones surface what is likely to happen next and what to do about it.
+- **Accounts payable:** agents capture invoices from several channels, match them to purchase orders and receipts, code them, and route only the true exceptions.
+- **Reconciliation:** agents match bank transactions and prepare journal entries for review.[^versich-agents]
+- **Procurement:** agents read supplier communications, flag orders at risk, and show the knock-on effect on sales and inventory.
 
-Demand forecasting moves from monthly static plans to dynamic weekly (or faster) updates that incorporate external signals.[^erpsoftwareblog] Cash-flow models incorporate payment behavior and scenario inputs. Anomaly detection flags duplicate payments or unusual expenses the day they occur rather than at month-end.[^synlabs] In one McKinsey-linked operations example, AI invoice analysis identified more than $10 million in value leakage in four weeks.[^mckinsey-leakage]
+Gartner projected that about 40% of enterprise applications would include task-specific AI agents by the end of 2026, up from under 5% the year before.[^gartner] ERP vendors now ship agents that run under the system’s existing security roles and audit trails.[^vendors]
 
-The best implementations treat the ERP as the governed core (rules, controls, and master data) while agents operate around it—reading context, preparing actions, and escalating only when human judgment or approval is required.
+In AP, the hours are in the exceptions, not the clean matches. See [Why invoice automation stalls on exceptions, and how to fix it](/blog/why-invoice-automation-stalls).
 
-## The real constraint is not the model
+## 3. From month-end reports to continuous forecasts and exception management
 
-Data quality, process standardization, and governance still determine outcomes.[^versich-ready] Organizations that treat AI as a thin overlay on messy ERP data get limited results. Those that clean master data, standardize processes, and instrument agents with clear guardrails and auditability are the ones seeing measurable P&L impact.
+Traditional ERPs are good at telling you what happened. With AI, they can also show what is likely to happen next and what to do about it.
 
-McKinsey’s broader research shows that only a minority of companies are yet achieving meaningful enterprise-level EBIT lift from AI; the gap between high performers and everyone else is widening.[^state-of-ai] In ERP specifically, the winners are redesigning workflows rather than simply automating existing ones, and they are tracking impact rigorously rather than celebrating pilot demos.
+- **Forecasts:** demand forecasts move from static monthly plans to weekly (or faster) updates that take in outside signals.[^erpsoftwareblog]
+- **Cash flow:** models take in payment behavior and different scenarios.
+- **Anomalies:** duplicate payments and unusual expenses get flagged the day they happen, not at month-end.[^synlabs] In one example McKinsey describes, AI invoice analysis found more than $10 million in value leakage in four weeks.[^mckinsey-leakage]
 
-## What companies should do now
+The best implementations keep the ERP as the controlled core (rules, controls and master data) while agents work around it: reading context, preparing actions, and escalating when a person’s judgment or approval is needed.
 
-- Start with high-volume, high-pain, relatively bounded processes: invoice processing, reconciliation, demand sensing, or collections prioritization.[^versich-ready]
-- Demand (or build) agents that operate under existing ERP security and produce full audit trails.
-- Treat data readiness as a prerequisite, not a parallel workstream.
-- Measure time saved, exception rates, forecast accuracy, and cash-cycle impact—not just “AI adoption.”
+## The real constraint isn’t the AI model. It’s your data and your process.
 
-The companies that figure this out are not replacing their ERP. They are turning the system they already paid for into an active, continuously optimizing operational layer. The ones that wait will find their system of record increasingly outpaced by competitors whose systems are already acting.
+Data quality, consistent processes and clear controls still decide the outcome.[^versich-ready] Companies that lay AI thinly over messy ERP data get limited results. The ones seeing measurable P&L impact clean their master data, standardize their processes, and give agents clear limits and a full audit trail.
+
+McKinsey’s broader research shows that only a minority of companies are getting meaningful company-wide EBIT lift from AI so far, and the gap between high performers and everyone else is widening.[^state-of-ai] In ERP, the companies pulling ahead redesign the workflow instead of automating the old one as it is, and they track impact instead of celebrating pilot demos.
+
+## Where to start with AI in your ERP
+
+1. **Start with high-volume, well-bounded processes** where the pain is clear: invoice processing, reconciliation, demand forecasting or collections prioritization.[^versich-ready]
+2. **Require agents that work under your ERP’s existing security** and keep a full audit trail.
+3. **Clean the master data first.** Vendor, customer and item records come before any agent, not in parallel with it.
+4. **Keep approvals with named people.** Agents prepare entries; a person posts and pays. [Approval workflow design that doesn’t create a new bottleneck](/blog/approval-points-without-bottlenecks) covers how to keep that fast.
+5. **Measure time saved, exception rates, forecast accuracy and cash-cycle impact**, not just “AI adoption.” [Measuring automation ROI](/blog/measuring-capacity-reclaimed) shows how to report the hours honestly.
+
+The companies that get this right aren’t replacing their ERP. They’re getting more out of the system they already paid for.
+
+## Next step: list the three things your team fixes by hand
+
+Ask the people who work in the ERP every day which three things they most often fix by hand: a mismatched invoice, an unreconciled bank line, a duplicate vendor. Those are the first candidates for an agent to prepare, and the first rules to write down.
 
 [^mckinsey]: McKinsey, [“The end of ERP as we know it? Five ways AI is disrupting ERP”](https://www.mckinsey.com/capabilities/mckinsey-technology/our-insights/the-end-of-erp-as-we-know-it-five-ways-ai-is-disrupting-erp), May 2026. Also published by [CEO NA Magazine](https://ceo-na.com/technology/the-end-of-erp-as-we-know-it-five-ways-ai-is-disrupting-erp/), October 2026.
 
@@ -68,8 +89,6 @@ The companies that figure this out are not replacing their ERP. They are turning
 [^versich-ready]: Versich, [“Building an AI-Ready ERP Strategy for 2027”](https://versich.com/blog/building-ai-ready-erp-strategy-for-2027/), October 2026.
 
 [^softices]: Softices, [“How AI is Changing ERP Software in 2026: From Automation to Agentic ERP”](https://softices.com/blogs/ai-in-erp-software), September 2026.
-
-[^manufacturingdive]: Manufacturing Dive, [coverage of AI advances in ERP for manufacturing automation](https://www.manufacturingdive.com/news/advances-ai-erp-systems-manufacturing-automation/829448/), October 2026.
 
 [^erpsoftwareblog]: ERP Software Blog, [“Real-World Use Cases of AI-Driven Predictive Analytics in ERP”](https://erpsoftwareblog.com/cloud/2025/06/use-case-ai-driven-predictive-analytics-in-erp/), June 2025.
 
