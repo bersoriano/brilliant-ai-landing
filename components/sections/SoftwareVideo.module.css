@@ -1,0 +1,16 @@
+/* Exhibit 6: the recorded demo, framed like the other exhibits (radius 0,
+   one ruled border), then the control line. */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 4px;
+}
+.video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+}

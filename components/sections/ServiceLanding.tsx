@@ -60,7 +60,7 @@ export function ServiceLanding({ industry }: { industry: ServiceIndustry }) {
             {t(PRIMARY_CTA)}
           </a>
           <p className="caption">
-            {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+            {t("Bookings run on Haab Calendar, a booking app we built.")}
           </p>
         </section>
 

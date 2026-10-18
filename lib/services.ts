@@ -1,8 +1,9 @@
 /**
- * The homepage Services section: four offers read as one set. Workflows and
+ * The homepage Services section: five offers read as one set. Workflows and
  * agents take the repetitive work, the CRM holds clients and the pipeline,
- * and the ERP holds the rest of the operations. Copy stays in business terms:
- * a test rejects build-stack and technical names here.
+ * the ERP holds the rest of the operations, and custom software covers what
+ * nothing off the shelf does. Copy stays in business terms: a test rejects
+ * build-stack and technical names here.
  */
 export const SERVICES = [
   {
@@ -20,6 +21,11 @@ export const SERVICES = [
     id: "erp",
     name: "Custom ERP",
     line: "Sales, stock, purchasing, and accounting",
+  },
+  {
+    id: "software",
+    name: "Custom Software",
+    line: "When nothing off the shelf fits",
   },
 ] as const;
 

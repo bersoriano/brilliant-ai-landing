@@ -94,7 +94,7 @@ export function CrmLanding() {
                 </a>
               </div>
               <p className="caption">
-                {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+                {t("Bookings run on Haab Calendar, a booking app we built.")}
               </p>
             </div>
             <Exhibit
@@ -434,7 +434,7 @@ export function CrmLanding() {
               {t(CRM_CTA)}
             </a>
             <p className="caption">
-              {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+              {t("Bookings run on Haab Calendar, a booking app we built.")}
             </p>
             <p className="label">{t("Prefer another channel?")}</p>
             <a className="text-link" href={WHATSAPP_HREF} rel="noopener">

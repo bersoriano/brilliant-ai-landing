@@ -20,21 +20,24 @@ import {
   type ServiceId,
 } from "@/lib/services";
 import { CRM_CTA, DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
+import { HAAB_EXAMPLE_PATH, HAAB_FEATURES, haabHref } from "@/lib/software";
 import { AgentPlays } from "../ui/AgentPlays";
 import { Exhibit } from "../ui/Exhibit";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
 import { Reveal } from "../ui/Reveal";
+import { SoftwareVideo } from "./SoftwareVideo";
 import { SystemOffer } from "./SystemOffer";
 import styles from "./Services.module.css";
 
-const NUMERALS = ["i.", "ii.", "iii.", "iv."];
+const NUMERALS = ["i.", "ii.", "iii.", "iv.", "v."];
 /** Homepage CRM features: the essentials plus the first three advanced ones. */
 const CRM_FEATURES = [...CRM_ESSENTIALS, ...CRM_ADVANCED.slice(0, 3)];
 
 /**
- * Four offers as one set: workflows and agents for the repetitive work, the
- * CRM for clients and the pipeline, the ERP for the rest of the operations.
+ * Five offers as one set: workflows and agents for the repetitive work, the
+ * CRM for clients and the pipeline, the ERP for the rest of the operations,
+ * and custom software, shown through Haab Calendar, our own booking app.
  * Every block keeps approvals with a named person, and the section closes on
  * the review. The full CRM offer lives on /custom-crm.
  */
@@ -348,6 +351,76 @@ export function Services() {
           }}
         />
 
+        <SystemOffer
+          id="software"
+          kicker={name("software")}
+          title={
+            <>
+              {t("Software built for one job.")}{" "}
+              <em>{t("When nothing off the shelf fits.")}</em>
+            </>
+          }
+          intro={
+            <>
+              {t(
+                "When the tool your business needs doesn’t exist, we build it and keep it running.",
+              )}{" "}
+              {t(
+                "Haab Calendar is our own: a booking app for clinics, studios, venues, and events, in English and Spanish.",
+              )}
+            </>
+          }
+          actions={
+            <div className={styles.actions}>
+              <a
+                className="text-link text-link--accent"
+                href={haabHref(locale)}
+                rel="noopener noreferrer"
+              >
+                {t("See Haab Calendar")} <Icon name="arrow" size={16} />
+              </a>
+              <a
+                className={`text-link ${styles.post}`}
+                href={haabHref(locale, HAAB_EXAMPLE_PATH)}
+                rel="noopener noreferrer"
+              >
+                {t("Try a live booking page")} <Icon name="arrow" size={16} />
+              </a>
+            </div>
+          }
+          exhibit={<SoftwareVideo />}
+          notes={[
+            [
+              t("Built around your process"),
+              t(
+                "We start from the work your team and your clients already do, and build only what that work needs. You approve the scope before we start.",
+              ),
+            ],
+            [
+              t("We keep it running"),
+              t(
+                "After launch, updates, fixes, and new features stay with us. Your team decides what changes and when.",
+              ),
+              t("Quoted before we start."),
+            ],
+          ]}
+          plan={
+            <>
+              <h4 className="h3">{t("Priced by project.")}</h4>
+              <p className={styles.planNote}>
+                {t("You approve the scope and the quote before we build anything.")}
+              </p>
+              <a href="#contact" className="text-link text-link--accent">
+                {t("Or contact us for a scoped pilot")} <Icon name="arrow" size={15} />
+              </a>
+            </>
+          }
+          included={{
+            label: t("What Haab Calendar does today"),
+            features: HAAB_FEATURES.map(([title, line]) => [t(title), t(line)]),
+          }}
+        />
+
         <div className={styles.close}>
           <p className={styles.closeLine}>
             {t("Not sure which one fits? Bring one task to the review. We’ll tell you where to start.")}
@@ -357,7 +430,7 @@ export function Services() {
               {t(PRIMARY_CTA)}
             </a>
             <p className="caption">
-              {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+              {t("Bookings run on Haab Calendar, a booking app we built.")}
             </p>
           </div>
         </div>

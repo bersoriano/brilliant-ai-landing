@@ -1,4 +1,4 @@
-/* Services: four offers as one set on the paper band. Each offer is a ruled
+/* Services: five offers as one set on the paper band. Each offer is a ruled
    block: the pitch on the left, what it looks like on the right. */
 .head {
   align-items: end;
@@ -10,7 +10,7 @@
   align-items: flex-start;
   gap: 24px;
 }
-/* The set at a glance: four rows, each a jump to its offer */
+/* The set at a glance: five rows, each a jump to its offer */
 .index {
   grid-column: 9 / span 4;
 }
@@ -179,7 +179,7 @@
   margin-top: 2px;
 }
 
-/* CRM and ERP (SystemOffer) */
+/* CRM, ERP and custom software (SystemOffer) */
 .actions {
   display: flex;
   flex-wrap: wrap;

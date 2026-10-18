@@ -4,9 +4,9 @@ import { Reveal } from "../ui/Reveal";
 import styles from "./Services.module.css";
 
 /**
- * A system offer inside Services; the CRM and the ERP share this layout: the
- * pitch and two short notes, the playbook exhibit, then one ruled row with
- * the price and what's included (titles only on phones). Every string
+ * A system offer inside Services; the CRM, the ERP and custom software share
+ * this layout: the pitch and two short notes, the exhibit, then one ruled row
+ * with the price and what's included (titles only on phones). Every string
  * arrives translated from Services.
  */
 export function SystemOffer({
