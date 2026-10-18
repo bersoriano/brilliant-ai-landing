@@ -603,7 +603,7 @@ function vttCues(file) {
 }
 
 test("Custom software showcases Haab Calendar as our own product, with its demo video", () => {
-  const { HAAB_URL, HAAB_EXAMPLE_PATH, HAAB_VIDEO, captionTracks, haabHref } = require("../lib/software.ts");
+  const { HAAB_URL, HAAB_EXAMPLE_PATH, HAAB_VIDEO, captionModes, captionTracks, haabHref } = require("../lib/software.ts");
   // Haab pages take the visitor's language as ?lang=; English is the default.
   assert.equal(HAAB_URL, "https://haabcalendar.com");
   assert.equal(haabHref("en"), "https://haabcalendar.com/");
@@ -632,6 +632,10 @@ test("Custom software showcases Haab Calendar as our own product, with its demo 
   // and Chrome) stalls on play when every track is off.
   assert.deepEqual(captionTracks("es").filter((track) => track.default).map((track) => track.srcLang), ["es"]);
   assert.deepEqual(captionTracks("en").filter((track) => track.default).map((track) => track.srcLang), ["en"]);
+  // The language switch doesn't reload the page, and browsers read `default`
+  // only once: switching language switches the captions in place.
+  assert.deepEqual(captionModes("en"), [["en", "showing"], ["es", "disabled"]]);
+  assert.deepEqual(captionModes("es"), [["es", "showing"], ["en", "disabled"]]);
   // Exhibit 6 is the video: it never autoplays and loads nothing until played.
   assert.ok(!fs.existsSync("components/sections/BookingFlow.tsx"), "the scripted exhibit is gone");
   const video = fs.readFileSync("components/sections/SoftwareVideo.tsx", "utf8");
@@ -640,6 +644,7 @@ test("Custom software showcases Haab Calendar as our own product, with its demo 
   assert.match(video, /preload="none"/);
   assert.match(video, /\bcontrols\b/);
   assert.match(video, /captionTracks\(locale\)/);
+  assert.match(video, /captionModes\(locale\)/, "the captions follow the language switch");
   assert.doesNotMatch(video, /autoPlay/);
   assert.match(fs.readFileSync("components/sections/CaseStudy.tsx", "utf8"), /number: 7/);
   // Honesty: Haab is ours, so no copy may call it a client or partner.

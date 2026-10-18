@@ -1,6 +1,7 @@
 "use client";
+import { useEffect, useRef } from "react";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
-import { HAAB_VIDEO, captionTracks } from "@/lib/software";
+import { HAAB_VIDEO, captionModes, captionTracks } from "@/lib/software";
 import { Exhibit } from "../ui/Exhibit";
 import styles from "./SoftwareVideo.module.css";
 
@@ -8,10 +9,25 @@ import styles from "./SoftwareVideo.module.css";
  * Exhibit 6: a one-minute recorded demo of Haab Calendar, our own booking
  * app, on a demo page with a fictional patient. It never autoplays and loads
  * nothing but the poster until the visitor presses play; captions in the
- * page's language are on by default (see captionTracks).
+ * page's language are on by default (see captionTracks) and follow the
+ * language switch.
  */
 export function SoftwareVideo() {
   const { t, locale } = useLanguage();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // The language the tracks currently show. Loading uses `default`; only a
+  // later switch sets the modes, so the first render stays as iOS expects.
+  const shownLocale = useRef(locale);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || shownLocale.current === locale) return;
+    shownLocale.current = locale;
+    const tracks = [...video.querySelectorAll("track")];
+    for (const [srcLang, mode] of captionModes(locale)) {
+      const track = tracks.find((el) => el.srclang === srcLang)?.track;
+      if (track) track.mode = mode;
+    }
+  }, [locale]);
   return (
     <Exhibit
       label={t("Exhibit {number}", { number: 6 })}
@@ -24,6 +40,7 @@ export function SoftwareVideo() {
     >
       <div className={styles.body}>
         <video
+          ref={videoRef}
           className={styles.video}
           controls
           preload="none"

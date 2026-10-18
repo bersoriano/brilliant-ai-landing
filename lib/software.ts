@@ -58,6 +58,17 @@ export function captionTracks(locale: Locale) {
   ];
 }
 
+/**
+ * Track modes after a language switch, which doesn't reload the page (and
+ * browsers read `default` only once). The page's language comes first, so a
+ * track is on before the others turn off and they're never all off at once.
+ */
+export function captionModes(locale: Locale): [srcLang: string, mode: TextTrackMode][] {
+  return captionTracks(locale)
+    .sort((a, b) => Number(b.default) - Number(a.default))
+    .map((track) => [track.srcLang, track.default ? "showing" : "disabled"]);
+}
+
 /** What Haab Calendar does today. List only what it ships. */
 export const HAAB_FEATURES: [title: string, line: string][] = [
   ["Live availability", "Clients only see times that are still open."],
