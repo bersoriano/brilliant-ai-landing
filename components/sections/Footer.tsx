@@ -60,7 +60,7 @@ export function Footer() {
               <h3 className="label">{t("Get started")}</h3>
               <a href={DISCOVERY_CALL_HREF}>{t(PRIMARY_CTA)}</a>
               <p className="caption">
-                {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+                {t("Bookings run on Haab Calendar, a booking app we built.")}
               </p>
               <a href={WHATSAPP_HREF} rel="noopener">
                 WhatsApp

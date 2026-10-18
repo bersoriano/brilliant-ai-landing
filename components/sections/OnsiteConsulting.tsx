@@ -41,7 +41,7 @@ export function OnsiteConsulting() {
             {t(ONSITE_CTA)}
           </a>
           <p className="caption">
-            {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+            {t("Bookings run on Haab Calendar, a booking app we built.")}
           </p>
         </div>
       </div>

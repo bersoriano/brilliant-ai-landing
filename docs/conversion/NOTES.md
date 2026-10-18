@@ -86,7 +86,7 @@ content is the in-page anchor `#review`.
   repetitive hour, filled where Brilliant handles the work. Headline numbers:
   hours per week (accent), capacity value, payback (hours per year when no
   budget is set).
-- **Services** (paper band, after the calculator): four ruled blocks, each the
+- **Services** (paper band, after the calculator): five ruled blocks, each the
   pitch on the left and what it looks like on the right. Workflows and agents
   open with what starts them ("Starts with a trigger" / "Starts with a
   request") and show three examples as chains: the trigger in teal, the work
@@ -98,7 +98,15 @@ content is the in-page anchor `#review`.
   Below each: two short notes (ask in plain language, ask for something new)
   and one ruled row with the price and the included features (titles only on
   phones). The CRM's assistant, custom work and reasons live on
-  `/custom-crm`. The gated case study is Exhibit 6.
+  `/custom-crm`.
+- **Exhibit 6 (`SoftwareVideo`)**: custom software, shown through Haab
+  Calendar, our own booking app, as its one-minute recorded demo (fictional
+  patient, English narration). Self-hosted in `public/video/` (720p H.264,
+  ~3 MB, poster frame), `controls` and `preload="none"`, never autoplay.
+  English captions are available; Spanish subtitles are on by default on
+  `/es`. The control line keeps hours, services and rules with the owner.
+  Below: the same notes and ruled row as the CRM and ERP, with
+  "Priced by project" instead of a price. The gated case study is Exhibit 7.
 - **Page rhythm**: `.section-rule` draws a content-width hairline between
   consecutive sections on the same band (Approach, FAQ, Blog). Headings
   are `.h2` up to 56px and `.h2-sm` up to 44px.

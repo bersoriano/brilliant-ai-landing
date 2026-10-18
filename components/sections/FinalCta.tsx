@@ -115,7 +115,7 @@ export function FinalCta() {
             {t(PRIMARY_CTA)}
           </a>
           <p className={`caption ${styles.bookingNote}`}>
-            {t("Bookings are managed by Haab Calendar, our client and trusted partner.")}
+            {t("Bookings run on Haab Calendar, a booking app we built.")}
           </p>
         </div>
         <div className={styles.channels}>

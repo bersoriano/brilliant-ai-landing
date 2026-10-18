@@ -503,13 +503,13 @@ test("Custom CRM copy is translated and stays white-label", () => {
   assert.doesNotMatch(sources, /atomic|marmelab/i);
 });
 
-test("Services presents the four offers as one translated set, ahead of How it works", () => {
+test("Services presents the five offers as one translated set, ahead of How it works", () => {
   const { SERVICES, WORKFLOW_EXAMPLES, AGENT_EXAMPLES } = require("../lib/services.ts");
   const { ERP_PLAYS, ERP_FEATURES, erpPrice } = require("../lib/erp.ts");
   const { NAV_LINKS } = require("../lib/site.ts");
   assert.deepEqual(
     SERVICES.map((service) => service.name),
-    ["AI Workflow Automations", "AI Agents", "Custom CRM", "Custom ERP"],
+    ["AI Workflow Automations", "AI Agents", "Custom CRM", "Custom ERP", "Custom Software"],
   );
   const strings = [
     ...SERVICES.flatMap((service) => [service.name, service.line]),
@@ -517,6 +517,7 @@ test("Services presents the four offers as one translated set, ahead of How it w
     ...AGENT_EXAMPLES.flatMap((example) => Object.values(example)),
     ...ERP_PLAYS.flatMap((play) => Object.values(play)),
     ...ERP_FEATURES.flatMap(([, title, line]) => [title, line]),
+    ...softwareStrings(),
   ];
   for (const s of strings)
     assert.notEqual(translate(s, "es"), s, `missing Spanish: ${s}`);
@@ -548,10 +549,12 @@ test("Services copy speaks to business owners: no build-stack or technical terms
   const { ERP_PLAYS, ERP_FEATURES } = require("../lib/erp.ts");
   const { CRM_AGENT_PLAYS, CRM_ESSENTIALS, CRM_ADVANCED } = require("../lib/crm.ts");
   const TECHNICAL =
-    /\b(atomic|marmelab|erpnext|frappe|caffyne|doctypes?|mcp|python|open[- ]source|self[- ]host(ed|ing)?|código abierto|autoalojad[oa]s?)\b/i;
+    /\b(atomic|marmelab|erpnext|frappe|caffyne|doctypes?|mcp|python|open[- ]source|self[- ]host(ed|ing)?|código abierto|autoalojad[oa]s?|next\.?js|react|supabase|stripe|vercel|postgres(ql)?)\b/i;
   const keys = [
     ...tLiterals("components/sections/Services.tsx"),
     ...tLiterals("components/sections/SystemOffer.tsx"),
+    ...tLiterals("components/sections/SoftwareVideo.tsx"),
+    ...softwareStrings(),
     ...SERVICES.flatMap((service) => [service.name, service.line]),
     ...WORKFLOW_EXAMPLES.flatMap((example) => [example.label, example.steps]),
     ...AGENT_EXAMPLES.flatMap((example) => Object.values(example)),
@@ -576,6 +579,76 @@ test("Services copy speaks to business owners: no build-stack or technical terms
     JSON.stringify(dictionary),
   ].join("\n");
   assert.doesNotMatch(sources, ERP_FOUNDATION);
+});
+
+/** Every visitor-facing string in the custom software offer's data. */
+function softwareStrings() {
+  const { HAAB_FEATURES } = require("../lib/software.ts");
+  return HAAB_FEATURES.flatMap(([title, line]) => [title, line]);
+}
+
+/** WebVTT cues as { timing, text }; the header and blank lines are skipped. */
+function vttCues(file) {
+  const raw = fs.readFileSync(file, "utf8");
+  assert.match(raw, /^WEBVTT\b/, `${file}: WebVTT header`);
+  return raw
+    .split(/\n{2,}/)
+    .slice(1)
+    .map((block) => block.trim().split("\n"))
+    .filter((lines) => lines.some((line) => line.includes("-->")))
+    .map((lines) => {
+      const i = lines.findIndex((line) => line.includes("-->"));
+      return { timing: lines[i], text: lines.slice(i + 1).join(" ") };
+    });
+}
+
+test("Custom software showcases Haab Calendar as our own product, with its demo video", () => {
+  const { HAAB_URL, HAAB_EXAMPLE_PATH, HAAB_VIDEO, captionTracks, haabHref } = require("../lib/software.ts");
+  // Haab pages take the visitor's language as ?lang=; English is the default.
+  assert.equal(HAAB_URL, "https://haabcalendar.com");
+  assert.equal(haabHref("en"), "https://haabcalendar.com/");
+  assert.equal(haabHref("es"), "https://haabcalendar.com/?lang=es");
+  assert.equal(haabHref("es", HAAB_EXAMPLE_PATH), `https://haabcalendar.com${HAAB_EXAMPLE_PATH}?lang=es`);
+  const services = fs.readFileSync("components/sections/Services.tsx", "utf8");
+  assert.match(services, /<SoftwareVideo/, "Services renders the demo video");
+  assert.match(services, /haabHref\(locale, HAAB_EXAMPLE_PATH\)/, "links a live example page");
+  // The video, its poster and both caption files ship from our own domain,
+  // light enough for a marketing page.
+  for (const path of [HAAB_VIDEO.src, HAAB_VIDEO.poster, ...Object.values(HAAB_VIDEO.captions)])
+    assert.match(path, /^\/video\//, `${path}: served from public/video`);
+  assert.ok(fs.statSync(`public${HAAB_VIDEO.src}`).size <= 5 * 1024 * 1024, "video stays under 5 MB");
+  assert.ok(fs.statSync(`public${HAAB_VIDEO.poster}`).size <= 150 * 1024, "poster stays under 150 KB");
+  // Captions in both languages, cue for cue; Spanish follows the site's rules.
+  const en = vttCues(`public${HAAB_VIDEO.captions.en}`);
+  const es = vttCues(`public${HAAB_VIDEO.captions.es}`);
+  assert.ok(en.length > 0, "English captions have cues");
+  assert.deepEqual(es.map((cue) => cue.timing), en.map((cue) => cue.timing), "same timings");
+  es.forEach((cue, i) => {
+    assert.notEqual(cue.text, en[i].text, `cue ${i + 1} is translated`);
+    assert.doesNotMatch(cue.text, FORMAL_SPANISH, cue.text);
+    assert.doesNotMatch(cue.text, SPAIN_SPANISH, cue.text);
+  });
+  // The narration is English: Spanish subtitles are on by default on /es,
+  // English captions are available but off.
+  assert.deepEqual(captionTracks("es").filter((track) => track.default).map((track) => track.srcLang), ["es"]);
+  assert.deepEqual(captionTracks("en").filter((track) => track.default), []);
+  // Exhibit 6 is the video: it never autoplays and loads nothing until played.
+  assert.ok(!fs.existsSync("components/sections/BookingFlow.tsx"), "the scripted exhibit is gone");
+  const video = fs.readFileSync("components/sections/SoftwareVideo.tsx", "utf8");
+  assert.match(video, /number: 6/);
+  assert.match(video, /t\("Sample data"\)/, "the exhibit is labelled as sample data");
+  assert.match(video, /preload="none"/);
+  assert.match(video, /\bcontrols\b/);
+  assert.match(video, /captionTracks\(locale\)/);
+  assert.doesNotMatch(video, /autoPlay/);
+  assert.match(fs.readFileSync("components/sections/CaseStudy.tsx", "utf8"), /number: 7/);
+  // Honesty: Haab is ours, so no copy may call it a client or partner.
+  const copy = [
+    ...fs.readdirSync("components/sections").map((f) => fs.readFileSync(`components/sections/${f}`, "utf8")),
+    JSON.stringify(dictionary),
+  ].join("\n");
+  assert.doesNotMatch(copy, /Haab Calendar, (our client|cliente)/i);
+  assert.match(copy, /Bookings run on Haab Calendar, a booking app we built\./);
 });
 
 test("Custom CRM landing has its own localized URL, metadata, and sitemap entry", () => {
