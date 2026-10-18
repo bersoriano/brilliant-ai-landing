@@ -7,12 +7,6 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   // Locale metadata only reads request headers; keep it in the initial head for all clients.
   htmlLimitedBots: /.*/,
-  async redirects() {
-    return [
-      { source: "/post/:path*", destination: "/blog/:path*", permanent: true },
-      { source: "/es/post/:path*", destination: "/es/blog/:path*", permanent: true },
-    ];
-  },
   outputFileTracingIncludes: {
     "/blog": posts,
     "/blog/*": posts,

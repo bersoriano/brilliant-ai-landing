@@ -4,7 +4,7 @@ Reviewed October 17, 2026 (America/Mexico_City). Verification used a local produ
 
 ## Scope
 
-The site has 30 canonical pages: eight site pages and seven published posts, each in English and Mexican Spanish. `/blog` stays the canonical archive. `/post`, `/post/<slug>`, `/es/post`, and `/es/post/<slug>` permanently redirect to their matching blog URLs, preserving query parameters.
+The site has 30 canonical pages: eight site pages and seven published posts, each in English and Mexican Spanish. `/blog` is the only archive. `/post`, `/post/<slug>`, `/es/post`, and `/es/post/<slug>` do not exist and return 404. The redirects originally added for these mistaken paths were removed on October 18, 2026.
 
 All seven published posts were reviewed and updated in both languages:
 
@@ -29,7 +29,7 @@ All seven published posts were reviewed and updated in both languages:
 - Replaced the address-less ProfessionalService markup with Organization and ContactPoint. Replaced the unsupported PrivacyPolicy page type with WebPage. Added service markup for the finance and healthcare pages.
 - Added a unique 1200 × 630 social image for every article and language through `/og?post=<slug>`. Missing and unpublished posts return 404. Image responses use a bounded cache lifetime, and deployment traces include their content and fonts.
 - Added contextual links from each article to relevant service pages. Existing related-article links remain in place.
-- Updated sitemap dates per translation and archive freshness. Drafts and redirect aliases are excluded; public pages remain crawlable, while `/api/` is excluded in robots.txt.
+- Updated sitemap dates per translation and archive freshness. Drafts and nonexistent `/post` paths are excluded; public pages remain crawlable, while `/api/` is excluded in robots.txt.
 - Tightened frontmatter validation to reject impossible dates, modification dates before publication, and empty search titles.
 - Fixed a missing `#top` target on supporting pages and article tables forcing the whole page wider than a mobile viewport.
 - Improved language-control accessible labels, underlined the footer's inline contact link and article footnote return links, and restored native list semantics inside the CRM/ERP tab panels.
@@ -38,7 +38,7 @@ All seven published posts were reviewed and updated in both languages:
 
 - Production build and TypeScript checks pass.
 - All 39 automated tests pass, including five SEO regression tests.
-- `npm run verify:seo` checks all 30 rendered pages, seven published articles in both languages, 722 internal links and fragment targets, 14 generated article images, sitemap, robots.txt, permanent redirects, unpublished posts, and missing-page responses.
+- `npm run verify:seo` checks all 30 rendered pages, seven published articles in both languages, 722 internal links and fragment targets, 14 generated article images, sitemap, robots.txt, 404s for the nonexistent `/post` archive and all seven mistaken article paths in both languages, unpublished posts, and missing-page responses.
 - The crawler verifies initial HTML with Googlebot headers, a Spanish browser preference, and a Spanish preference cookie. English URLs remain accessible without a language redirect.
 - Browser checks confirm the Spanish long-form article fits a 390-pixel viewport and service canonical URLs retain `https://brilliant.dev` after hydration.
 - Independent code review found no material issues.
