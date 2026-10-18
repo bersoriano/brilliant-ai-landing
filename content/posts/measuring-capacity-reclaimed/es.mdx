@@ -1,35 +1,61 @@
 ---
-title: "Cómo medir la capacidad que te devuelve un agente, sin precisión falsa"
+title: "Cómo medir el retorno de la automatización en horas, sin precisión falsa"
 description: "Cuenta el trabajo y el tiempo que tomaba. Reporta las horas como un rango y trata el dinero como tu estimación, no la nuestra."
 date: 2026-10-17
 draft: false
 ---
 
-Casi todos los casos de negocio de automatización multiplican una tarifa por hora supuesta por un ahorro de tiempo supuesto y le llaman ahorro. Un equipo de finanzas lo nota en un minuto, y hace bien. Si vale la pena operar un agente o un proceso automatizado, la evidencia está en tu propia semana: cuánto trabajo llegó, cuánto de ese trabajo preparó el proceso y cuánto tiempo tomaba.
+**Para quién es:** gerentes de finanzas, contralores y quienes dirigen un consultorio, que necesitan mostrar si vale la pena operar un proceso automatizado o un agente.
+
+<Takeaway>
+Mide el trabajo, no una tarifa supuesta. Cuenta lo que llegó, lo que preparó el proceso y lo que se envió a una persona, conviértelo a horas como un rango y ponle una cifra en pesos solo con tu propio valor por hora.
+</Takeaway>
+
+Casi todos los casos de negocio de automatización multiplican una tarifa por hora supuesta por un ahorro de tiempo supuesto y le llaman ahorro. Un equipo de finanzas lo nota en un minuto, y hace bien.
+
+Si vale la pena operar un agente o un proceso automatizado, la evidencia está en tu propia semana:
+
+- cuánto trabajo llegó,
+- cuánto de ese trabajo preparó el proceso,
+- cuánto tiempo tomaba ese trabajo.
 
 Así lo medimos.
 
-## Empieza con una semana base
+## Paso 1: registra una semana base
 
-Elige una tarea: facturas, referencias, seguimientos a clientes. Durante una semana normal, anota cuántas llegaron y cuánto tardó cada una, más o menos. Los rangos están bien. “Entre diez y quince minutos por factura” es más honesto que “12.4 minutos”, y es lo que la persona que hace el trabajo de verdad te puede decir.
+Elige una tarea: facturas, referencias, seguimientos a clientes. Durante una semana normal, anota cuántas llegaron y cuánto tardó cada una, más o menos.
+
+Los rangos están bien. “Entre diez y quince minutos por factura” es más honesto que “12.4 minutos”, y es lo que la persona que hace el trabajo de verdad te puede decir.
 
 Anota qué hizo lentas a las lentas. Esa lista es el alcance.
 
-## Cuenta tres cosas cada semana
+## Paso 2: cuenta tres cosas cada semana
 
-- **Lo que llegó.** Todo lo que entró.
-- **Lo que se preparó.** Lo que el proceso llevó desde que llegó hasta una tarjeta sobre la que una persona puede decidir.
-- **Lo que se envió a una persona.** Las excepciones.
+| Qué cuentas | Qué es | En qué fijarte |
+| --- | --- | --- |
+| Lo que llegó | Todo lo que entró | El volumen que tu equipo resolvería a mano |
+| Lo que se preparó | Lo que el proceso llevó desde que llegó hasta una tarjeta sobre la que una persona puede decidir | De aquí salen las horas recuperadas |
+| Lo que se envió a una persona | Las excepciones | Solo debería bajar porque las reglas se volvieron más claras |
 
-El tercer número no es una tasa de error. Es la parte del trabajo que requiere criterio. Solo debería bajar porque las reglas se volvieron más claras, nunca porque los casos difíciles se mandan a otro lado.
+El tercer número no es una tasa de error. Es la parte del trabajo que requiere criterio. Solo debería bajar porque las reglas se volvieron más claras, nunca porque los casos difíciles se mandan a otro lado. [Por qué la automatización de facturas se atora en las excepciones](/blog/why-invoice-automation-stalls) explica de dónde salen esas excepciones en cuentas por pagar.
 
-## Convierte a horas, no a pesos
+## Paso 3: convierte a horas, no a pesos
 
-Las horas recuperadas son lo que se preparó, por el tiempo base de cada pieza, menos el tiempo que tu equipo todavía dedica a revisarlo. Repórtalo como un rango. Las horas son algo que quien lidera el equipo puede comparar con su propia semana. Una cifra en pesos abre una discusión sobre la tarifa por hora en lugar de una conversación sobre el trabajo.
+**Horas recuperadas** = lo que se preparó × el tiempo base de cada pieza − el tiempo que tu equipo todavía dedica a revisarlo.
 
-## El dinero es tu número
+Un ejemplo ilustrativo: el proceso prepara 300 facturas en un mes. A entre 10 y 15 minutos cada una, ese trabajo tomaba de 50 a 75 horas. Revisarlas toma unos 2 minutos por factura, o 10 horas. Quedan de 40 a 65 horas recuperadas.
 
-El valor de la capacidad recuperada no es un ahorro en efectivo a menos que un costo desaparezca de verdad. Si quieres una cifra, usa tu propio valor por hora y di en qué se usaron las horas: el cierre terminó un día antes, las referencias se agendaron más rápido, se liberó el rezago de documentos de clientes. Esa frase vale más que el número.
+Repórtalo como un rango. Quien lidera el equipo puede comparar las horas con su propia semana. Una cifra en pesos abre una discusión sobre la tarifa por hora en lugar de una conversación sobre el trabajo.
+
+## Paso 4: ponle valor con tu propio número
+
+La capacidad recuperada no es un ahorro en efectivo a menos que un costo desaparezca de verdad. Si quieres una cifra en pesos, usa tu propio valor por hora y di en qué se usaron las horas:
+
+- el cierre terminó un día antes,
+- las referencias se agendaron más rápido,
+- se liberó el rezago de documentos de clientes.
+
+Esa frase vale más que el número.
 
 ## Qué no reportar
 
@@ -37,11 +63,17 @@ El valor de la capacidad recuperada no es un ahorro en efectivo a menos que un c
 - Una “tasa sin intervención” por sí sola. Sube cuando los casos difíciles se van a otro lado.
 - Ahorros que suponen que las horas desaparecen.
 
-## Una vista mensual que se sostiene
+## Un reporte mensual de automatización que se sostiene
 
 - Lo que llegó, lo que se preparó y lo que se envió a una persona
 - Horas recuperadas, como rango
 - Tiempo desde que llega hasta que se decide
 - Excepciones por motivo, de la más común a la menos común
 
+El tiempo desde que llega hasta que se decide también te dice si las aprobaciones van al paso. Si no, lee [Cómo diseñar aprobaciones que no se vuelvan el nuevo cuello de botella](/blog/approval-points-without-bottlenecks).
+
 La [calculadora de capacidad](/#roi-calculator) de nuestra página principal sigue la misma lógica: primero horas, después dinero, y el dinero es claramente tu estimación.
+
+## Siguiente paso: arranca tu semana base
+
+Elige la tarea que más ocupa la semana de tu equipo. Durante los próximos cinco días hábiles, pide a la persona que la hace que anote dos números al final de cada día: cuántas piezas llegaron y cuánto tardaron, más o menos. Esa es tu semana base.

@@ -1,35 +1,61 @@
 ---
-title: "Measuring the capacity an agent gives back, without fake precision"
+title: "Measuring automation ROI: hours reclaimed, without fake precision"
 description: "Count the work and the time it used to take. Report hours as a range, and treat the money as your estimate, not ours."
 date: 2026-10-17
 draft: false
 ---
 
-Most automation business cases multiply a guessed hourly rate by a guessed time saving and call the result savings. A finance team sees through that in a minute, and it should. If an agent or a workflow is worth running, the evidence is in your own week: how much work arrived, how much of it the workflow prepared, and how long that work used to take.
+**Who this is for:** finance managers, controllers and practice managers who need to show whether an automated workflow or an agent is worth running.
+
+<Takeaway>
+Measure the work, not a guessed rate. Count what arrived, what the workflow prepared and what went to a person, convert that to hours as a range, and put a money figure on it only with your own hourly value.
+</Takeaway>
+
+Most automation business cases multiply a guessed hourly rate by a guessed time saving and call the result savings. A finance team sees through that in a minute, and it should.
+
+If an agent or a workflow is worth running, the evidence is in your own week:
+
+- how much work arrived,
+- how much of it the workflow prepared,
+- how long that work used to take.
 
 This is how we measure it.
 
-## Start with a baseline week
+## Step 1: Record a baseline week
 
-Pick one task: invoices, referrals, client follow-ups. For one normal week, note how many items arrived and roughly how long each took. Ranges are fine. “Ten to fifteen minutes an invoice” is more honest than “12.4 minutes”, and it’s what the person doing the work can actually tell you.
+Pick one task: invoices, referrals, client follow-ups. For one normal week, note how many items arrived and roughly how long each took.
+
+Ranges are fine. “Ten to fifteen minutes an invoice” is more honest than “12.4 minutes”, and it’s what the person doing the work can actually tell you.
 
 Write down what made the slow ones slow. That list is the scope.
 
-## Count three things every week
+## Step 2: Count three things every week
 
-- **Items in.** Everything that arrived.
-- **Items prepared.** What the workflow took from arrival to a card a person can decide on.
-- **Items sent to a person.** The exceptions.
+| Count | What it is | What to watch |
+| --- | --- | --- |
+| Items in | Everything that arrived | The volume your team would otherwise handle by hand |
+| Items prepared | What the workflow took from arrival to a card a person can decide on | Where the hours reclaimed come from |
+| Items sent to a person | The exceptions | It should fall only because the rules got clearer |
 
-The third number isn’t a failure rate. It’s the part of the work that needs judgment. It should go down only because the rules got clearer, never because the hard cases are being routed somewhere else.
+The third number isn’t a failure rate. It’s the part of the work that needs judgment. It should go down only because the rules got clearer, never because the hard cases are being routed somewhere else. [Why invoice automation stalls on exceptions](/blog/why-invoice-automation-stalls) covers where those exceptions come from in AP.
 
-## Convert to hours, not dollars
+## Step 3: Convert to hours, not dollars
 
-Hours reclaimed are the items prepared, times the baseline time per item, minus the time your team still spends reviewing them. Report it as a range. Hours are something a team lead can check against their own week. A dollar figure starts an argument about the hourly rate instead of a conversation about the work.
+**Hours reclaimed** = items prepared × baseline time per item − the time your team still spends reviewing them.
 
-## The money is your number
+An illustrative example: the workflow prepares 300 invoices in a month. At 10 to 15 minutes each, that work used to take 50 to 75 hours. Review takes about 2 minutes an invoice, or 10 hours. That leaves 40 to 65 hours reclaimed.
 
-The value of reclaimed capacity isn’t a cash saving unless a cost actually goes away. If you want a figure, use your own hourly value, and say what the hours went to: the close finished a day earlier, referrals were scheduled sooner, the backlog of client documents cleared. That sentence is worth more than the number.
+Report it as a range. A team lead can check hours against their own week. A dollar figure starts an argument about the hourly rate instead of a conversation about the work.
+
+## Step 4: Put a value on it with your own number
+
+Reclaimed capacity isn’t a cash saving unless a cost actually goes away. If you want a money figure, use your own hourly value, and say what the hours went to:
+
+- the close finished a day earlier,
+- referrals were scheduled sooner,
+- the backlog of client documents cleared.
+
+That sentence is worth more than the number.
 
 ## What not to report
 
@@ -37,11 +63,17 @@ The value of reclaimed capacity isn’t a cash saving unless a cost actually goe
 - A “touchless rate” on its own. It rises when the hard cases go elsewhere.
 - Savings that assume the hours disappear.
 
-## A monthly view that holds up
+## A monthly automation report that holds up
 
 - Items in, prepared, and sent to a person
 - Hours reclaimed, as a range
 - Time from arrival to decision
 - Exceptions by reason, most common first
 
+Time from arrival to decision also tells you whether approvals are keeping up. If they aren’t, see [Approval workflow design that doesn’t create a new bottleneck](/blog/approval-points-without-bottlenecks).
+
 The [capacity calculator](/#roi-calculator) on our homepage follows the same logic: hours first, money second, and the money is clearly your estimate.
+
+## Next step: start your baseline this week
+
+Pick the task that takes up the most of your team’s week. For the next five working days, ask the person who does it to note two numbers at the end of each day: how many items came in, and roughly how long they took. That’s your baseline.
