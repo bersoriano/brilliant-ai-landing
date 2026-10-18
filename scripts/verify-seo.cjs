@@ -101,18 +101,17 @@ async function verify() {
   const sitemap = await (await request("/sitemap.xml")).text();
   const locations = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(([, value]) => decode(value));
   assert.deepEqual(new Set(locations), new Set(paths.map(urlFor)), "sitemap contains every canonical page and no drafts or aliases");
-  assert.doesNotMatch(sitemap, /example-post|\/post\//, "drafts and redirects stay out of sitemap");
+  assert.doesNotMatch(sitemap, /example-post|\/post(?:[</]|$)/, "drafts and nonexistent post paths stay out of sitemap");
   const robots = await (await request("/robots.txt")).text();
   assert.ok(robots.includes(`Sitemap: ${canonicalOrigin}/sitemap.xml`), "robots advertises canonical sitemap");
   assert.ok(robots.includes("Disallow: /api/"), "API is excluded from crawling");
 
   for (const prefix of ["", "/es"]) {
-    for (const suffix of ["", `/${published[0].slug}`]) {
-      const from = `${prefix}/post${suffix}?utm_source=seo-check`;
-      const response = await request(from);
-      assert.equal(response.status, 308, `${from}: permanent redirect`);
-      assert.equal(new URL(response.headers.get("location"), origin).pathname, `${prefix}/blog${suffix}`, `${from}: canonical destination`);
-      assert.equal(new URL(response.headers.get("location"), origin).search, "?utm_source=seo-check", `${from}: preserve query`);
+    for (const suffix of ["", ...published.map((post) => `/${post.slug}`)]) {
+      const path = `${prefix}/post${suffix}?utm_source=seo-check`;
+      const response = await request(path);
+      assert.equal(response.status, 404, `${path}: nonexistent route`);
+      assert.equal(response.headers.get("location"), null, `${path}: no redirect`);
     }
     for (const post of published) {
       const response = await request(`${prefix}/og?post=${post.slug}`);
@@ -129,7 +128,7 @@ async function verify() {
       assert.equal((await request(`${prefix}/og?post=${slug}`)).status, 404, `${slug}: image does not expose unpublished content`);
     }
   }
-  console.log(`SEO checks passed: ${paths.length} pages, ${published.length} posts in both languages, ${checkedLinks} internal links, 14 article images, sitemap, robots, redirects, and 404s.`);
+  console.log(`SEO checks passed: ${paths.length} pages, ${published.length} posts in both languages, ${checkedLinks} internal links, 14 article images, sitemap, robots, nonexistent /post routes, and 404s.`);
 }
 
 verify().catch((error) => { console.error(error); process.exitCode = 1; });
