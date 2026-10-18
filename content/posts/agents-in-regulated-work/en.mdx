@@ -17,9 +17,11 @@ In regulated work, an agent stays in use when it prepares and a named person dec
 - what the agent was allowed to read to write them,
 - who notices when one of them is wrong.
 
-In finance and healthcare, those aren’t details. They decide whether an agent becomes part of the week or gets switched off after its first mistake. Gartner [expects over 40% of agentic AI projects to be canceled by the end of 2027](https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027), citing rising costs, unclear business value and inadequate risk controls.
+In finance and healthcare, those aren’t details. They decide whether an agent becomes part of the week or gets switched off after its first mistake. Plenty of agent projects don’t make it that far: Gartner [expects over 40% of agentic AI projects to be canceled by the end of 2027](https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027), citing rising costs, unclear business value and inadequate risk controls.
 
 ## Why AI agents stall, and what keeps them in use
+
+The same five problems come up again and again. Each one has a fairly simple fix.
 
 | Where agents stall | What keeps them in use |
 | --- | --- |
@@ -31,13 +33,13 @@ In finance and healthcare, those aren’t details. They decide whether an agent 
 
 ### Give every agent a named owner
 
-An agent with no owner produces work nobody is responsible for reviewing. Drafts pile up in a shared queue, and the team goes back to doing the work by hand.
+An agent with no owner produces work nobody is responsible for reviewing. Drafts pile up in a shared queue, and before long the team is doing the work by hand again.
 
 Instead, each agent works for one person: the intake coordinator, the AP lead, the relationship manager. They ask for the work, and they decide what happens to it.
 
 ### Let it draft, not send
 
-An agent that writes to clients or patients by itself turns every message into a risk. The quickest way to remove the risk is to stop using the agent.
+An agent that writes to clients or patients by itself turns every message into a risk. And the quickest way to remove that risk is to stop using the agent.
 
 So anything that leaves your team goes out as a draft for that person to approve, unless a rule you agreed in writing says otherwise. An appointment reminder built from an approved template can go out on its own. A new message to a patient or a client can’t.
 
@@ -45,21 +47,21 @@ So anything that leaves your team goes out as a draft for that person to approve
 
 Read access to the whole shared drive, the accounting system and the patient record will stop an agent at the security review, and it should.
 
-Give it the referral inbox and the intake queue, not every system the practice runs. Grant access one task at a time, and keep the ability to revoke it.
+Give it the referral inbox and the intake queue, not every system the practice runs. Grant access one task at a time, and make sure you can take it back.
 
 ### Put it where the person already works
 
-A chat tool nobody opens on a busy day is where an agent’s work goes to wait. The draft should arrive where the decision gets made: Outlook, Teams, the intake queue. The same rule holds for any approval; see [Approval workflow design that doesn’t create a new bottleneck](/blog/approval-points-without-bottlenecks).
+A chat tool nobody opens on a busy day is where an agent’s work goes to wait. The draft should show up where the decision gets made: Outlook, Teams, the intake queue. The same goes for any approval; see [Approval workflow design that doesn’t create a new bottleneck](/blog/approval-points-without-bottlenecks).
 
 ### Keep an audit trail
 
-After a mistake, the first thing a controller or practice manager asks is which documents the agent read and what it sent. That question needs an answer.
+After a mistake, the first thing a controller or practice manager asks is which documents the agent read and what it sent. You need to be able to answer that.
 
 Record what it read, what it drafted, who approved it, and when. That record is what lets a controller or a compliance lead trust the agent.
 
 ## Examples: AI agents for referrals, prior authorization and client documents
 
-These are examples of the shape of the work, not client results.
+These are examples of what the work looks like, not client results.
 
 **A referral missing insurance details.** The agent checks the referral against the fields your intake team requires, drafts the request to the referring practice, and puts it in the coordinator’s queue. The coordinator sends it. Scheduling stays with your team, and clinical triage stays with clinicians.
 
@@ -67,18 +69,18 @@ These are examples of the shape of the work, not client results.
 
 **Missing client documents.** “Chase the three clients still missing documents” becomes three short, specific drafts. Each one names the missing document and when it’s needed, for the relationship manager to send or edit.
 
-None of these needs an agent that acts on its own. Each needs one that gathers and checks well, and hands a person something they can decide on in a minute.
+None of these needs an agent that acts on its own. Each one needs an agent that gathers and checks well, and hands a person something they can decide on in a minute.
 
-## What we run, and what stays with your team
+## Who runs the agent, and who decides
 
-**We run the agent.** We monitor it, handle the exceptions it raises, and update its rules when your process changes.
+Running an agent is ongoing work. Someone has to watch what it produces, handle the exceptions it raises, and update its rules when your process changes. That can be someone on your team or an outside partner.
 
-**Your team keeps the decisions:** what gets sent, recorded, paid or submitted, and anything clinical.
+Who decides is a separate question, and the answer doesn’t change: what gets sent, recorded, paid or submitted, and anything clinical, stays with your team.
 
-That makes for a less impressive demo than an agent that does everything itself. It’s also the version a controller or a practice manager will let near their work.
+That makes for a less impressive demo than an agent that does everything itself. In our experience, it’s also the version a controller or a practice manager will actually let near their work.
 
-- Access, logging and the agreements we work under: [How we handle financial and patient data](/security).
-- Showing whether an agent is earning its place: [Measuring automation ROI: hours reclaimed, without fake precision](/blog/measuring-capacity-reclaimed).
+- How access and logging work with financial or patient data: [How we handle financial and patient data](/security).
+- How to tell whether an agent is earning its place: [Measuring automation ROI: hours reclaimed, without fake precision](/blog/measuring-capacity-reclaimed).
 
 ## Next step: pick one task and name its owner
 
@@ -88,4 +90,6 @@ Pick one task your team repeats every week, like chasing documents or checking r
 2. the systems it would need to read,
 3. what it should never send without that person’s approval.
 
-If you can’t fill in all three, start there, before any agent.
+If you can’t fill in all three yet, start there. If you can, bring that task to a 20-minute workflow review. It’s usually enough to see whether an agent is worth piloting for it.
+
+<BookReview />

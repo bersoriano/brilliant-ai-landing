@@ -11,26 +11,26 @@ draft: false
 Las facturas que cuadran con su OC y su recepción nunca fueron lo lento. Construye primero para las excepciones: escribe las tolerancias, manda cada excepción a una persona designada con la evidencia adjunta y deja el registro y el pago con tu equipo hasta que el proceso se gane su confianza.
 </Takeaway>
 
-La promesa de automatizar facturas suele ser el procesamiento “sin intervención”. Un buzón real de cuentas por pagar se ve distinto. Las facturas que cuadran con su orden de compra (OC) y su recepción de mercancía nunca fueron lo lento. El tiempo se va en las que no:
+La automatización de facturas casi siempre se vende como procesamiento “sin intervención”. Luego ves un buzón real de cuentas por pagar. Las facturas que cuadran con su orden de compra (OC) y su recepción de mercancía nunca fueron lo lento. El tiempo se va en las que no:
 
 - un precio que cambió,
 - una entrega parcial,
 - un proveedor que no está en el catálogo,
 - una OC que se cerró antes de tiempo.
 
-Una automatización que solo resuelve el caso limpio se ve bien en una demo y cambia muy poco en la semana. Aquí es donde suele atorarse, y qué la destraba.
+Si la automatización solo resuelve el caso limpio, se ve muy bien en una demo y cambia muy poco en la semana. Este es el patrón que vemos una y otra vez: dónde se atora y qué suele destrabarla.
 
 ## Cinco razones por las que se atora la automatización de cuentas por pagar
 
-**1. Se automatiza primero el cotejo fácil.** Cotejar una factura limpia contra una OC limpia es lo más sencillo de construir, así que se construye primero. También es lo que tu equipo ya resuelve en segundos.
+**1. Se automatiza primero el cotejo fácil.** Cotejar una factura limpia contra una OC limpia es lo más sencillo de construir, así que es lo primero que se construye. También es lo que tu equipo ya resuelve en segundos.
 
-**2. Nadie escribió las tolerancias.** ¿Una diferencia de $200 en el flete es una excepción? ¿Un 2% por encima de la OC? Si la regla vive en la cabeza de una persona, el proceso marca todo o no marca nada. En ambos casos, la gente deja de hacerle caso.
+**2. Nadie escribió las tolerancias.** ¿Una diferencia de $200 en el flete es una excepción? ¿Y un 2% por encima de la OC? Si la respuesta vive en la cabeza de una persona, el proceso marca todo o no marca nada. En ambos casos, la gente deja de hacerle caso.
 
-**3. El catálogo de proveedores está desactualizado.** Cotejar contra registros viejos genera excepciones falsas. Después de unas cuantas, el equipo deja de confiar en las alertas.
+**3. El catálogo de proveedores está desactualizado.** Cotejar contra registros viejos genera excepciones falsas. Con unas cuantas, el equipo deja de confiar en las alertas.
 
-**4. El resultado llega a un lugar nuevo.** Un tablero que nadie abre es un segundo buzón. Quien aprueba sigue trabajando donde siempre, y el trabajo de la automatización se queda esperando.
+**4. El resultado llega a un lugar nuevo.** Un tablero que nadie abre es solo un segundo buzón. Quien aprueba sigue trabajando donde siempre, y el trabajo de la automatización se queda ahí.
 
-**5. Se automatizan el registro y el pago antes de que exista confianza.** Basta una póliza equivocada para que tu contralor apague todo, y con razón.
+**5. Se automatizan el registro y el pago antes de que alguien confíe en el proceso.** Basta una póliza equivocada para que tu contralor apague todo. Y la verdad, tendría razón.
 
 ## Manejo de excepciones en facturas: diséñalas primero
 
@@ -44,30 +44,30 @@ Antes de construir nada, enlista las pocas razones por las que hoy una factura n
 | Proveedor desconocido | La factura y el proveedor más parecido del catálogo | ¿Das de alta al proveedor o rechazas la factura? |
 | OC cerrada | La OC, cuándo se cerró y por qué | ¿Reabres la OC o rechazas la factura? |
 
-Tu lista va a ser distinta. Parte de las razones por las que las facturas de verdad se quedaron esperando el mes pasado, no de la lista de funciones de un proveedor.
+Tu lista se va a ver distinta. Parte de las razones por las que las facturas de verdad se quedaron esperando el mes pasado, no de una lista de funciones.
 
 ## Escribe las tolerancias de cotejo
 
-Precio, cantidad, flete, impuestos: acuerda cada tolerancia por escrito con tu contralor antes de construir nada. Por ejemplo: “Un flete de hasta $500 por encima de la OC se aprueba en lote. Arriba de eso, lleva su propia tarjeta”. (Es una cifra ilustrativa; define la tuya.)
+Precio, cantidad, flete, impuestos: acuerda cada tolerancia por escrito con tu contralor antes de construir nada. Algo así: “Un flete de hasta $500 por encima de la OC se aprueba en lote. Lo que pase de eso lleva su propia tarjeta”. (Esa cifra es solo un ejemplo; define la tuya.)
 
-Cuando una tolerancia cambie, se cambia en un solo lugar.
+Cuando una tolerancia cambie, se cambia en un solo lugar y todos ven el número nuevo.
 
 ## Manda un paquete, no una liga
 
-Quien aprueba ve la factura, la OC, la recepción y la diferencia en una sola tarjeta, en Teams o en Outlook, y decide ahí. Si tiene que abrir el ERP para responder, a la tarjeta le falta algo. [Cómo diseñar aprobaciones que no se vuelvan el nuevo cuello de botella](/blog/approval-points-without-bottlenecks) explica cómo armar esas tarjetas.
+Quien aprueba debería ver la factura, la OC, la recepción y la diferencia en una sola tarjeta, en Teams o en Outlook, y decidir ahí mismo. Si tiene que abrir el ERP para responder, a la tarjeta le falta algo. [Cómo diseñar aprobaciones que no se vuelvan el nuevo cuello de botella](/blog/approval-points-without-bottlenecks) explica cómo armar esas tarjetas.
 
 ## Deja el registro y el pago con tu equipo
 
-El proceso prepara la póliza. Una persona que tú designes la registra, y el pago sigue bajo tu control.
+Deja que el proceso prepare la póliza. Una persona que tú designes la registra, y el pago sigue bajo tu control.
 
-No es un límite de la tecnología. Es el diseño. La misma regla aplica a los agentes de IA: preparan y una persona decide. Lee [Agentes de IA en finanzas y salud: preparan, no deciden](/blog/agents-in-regulated-work).
+Es una decisión de diseño, no un límite técnico. Una póliza equivocada cuesta más confianza de la que gana un mes de pólizas correctas. La misma regla aplica a los agentes de IA: preparan y una persona decide. Más sobre eso en [Agentes de IA en finanzas y salud: preparan, no deciden](/blog/agents-in-regulated-work).
 
 ## Haz el piloto junto a tu proceso actual
 
-Durante el piloto, el resultado del proceso se compara con el trabajo de tu equipo sobre las mismas facturas.
+Durante el piloto, pon el resultado del proceso junto al trabajo de tu equipo sobre las mismas facturas.
 
-- Cuando coinciden en suficientes, amplía el alcance.
-- Cuando no, encontraste una regla que no estaba clara, antes de que alguien dependa del proceso.
+- Cuando coinciden con suficiente frecuencia, amplía el alcance.
+- Cuando no, encontraste una regla que no estaba clara, y la encontraste antes de que alguien dependiera del proceso.
 
 ## Lista de revisión: cómo se ve una automatización de facturas que funciona
 
@@ -77,8 +77,12 @@ Durante el piloto, el resultado del proceso se compara con el trabajo de tu equi
 - Tu equipo ve qué resolvió el proceso y qué le envió.
 - Nada se registra ni se paga sin una persona designada que lo apruebe.
 
-Para saber si funciona, mídelo en horas, no con una “tasa sin intervención”: [Cómo medir el retorno de la automatización en horas, sin precisión falsa](/blog/measuring-capacity-reclaimed).
+Para saber si funciona, cuenta horas, no una “tasa sin intervención”: [Cómo medir el retorno de la automatización en horas, sin precisión falsa](/blog/measuring-capacity-reclaimed).
 
 ## Siguiente paso: ordena por motivo las excepciones del mes pasado
 
 Junta las facturas que esperaron más de un día el mes pasado y anota por qué esperó cada una. Ordena los motivos del más frecuente al menos frecuente. Los tres primeros son por donde debe empezar un proceso de facturas, y esa lista también es el primer borrador de tus tolerancias.
+
+Si quieres que alguien más la revise contigo, trae esa lista a una revisión de 20 minutos. Suele bastar para ver si vale la pena hacer un piloto con tus facturas.
+
+<BookReview />
