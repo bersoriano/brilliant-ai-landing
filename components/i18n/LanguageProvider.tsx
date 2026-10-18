@@ -23,7 +23,11 @@ function syncDocumentSeo(locale: Locale, pathname: string) {
   const title = pageTitle(locale, page);
   const description = pageDescription(locale, page);
   const canonicalPath = localePath(locale, stripLocalePrefix(pathname));
-  const origin = window.location.origin;
+  // Preserve the configured public domain on previews and alternate hostnames.
+  const origin = new URL(
+    document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href ||
+      window.location.origin,
+  ).origin;
   const canonicalUrl = `${origin}${canonicalPath === "/" ? "" : canonicalPath}`;
   const imageUrl = `${origin}${locale === "es" ? "/es/og" : "/og"}`;
   document.documentElement.lang = htmlLang(locale);
@@ -118,7 +122,7 @@ export function LanguageSwitch({ className = "" }: { className?: string }) {
       <button
         type="button"
         lang="en"
-        aria-label="English (EN)"
+        aria-label="EN: English"
         aria-pressed={locale === "en"}
         onClick={() => setLocale("en")}
       >
@@ -127,7 +131,7 @@ export function LanguageSwitch({ className = "" }: { className?: string }) {
       <button
         type="button"
         lang="es-MX"
-        aria-label="Español (ES)"
+        aria-label="ES: Español"
         aria-pressed={locale === "es"}
         onClick={() => setLocale("es")}
       >

@@ -4,10 +4,11 @@ import { PageHeader } from "@/components/sections/PageHeader";
 import { Footer } from "@/components/sections/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { translate } from "@/lib/i18n";
-import { htmlLang, localePath, ogLocale } from "@/lib/locale";
+import { localePath } from "@/lib/locale";
 import { getRequestLocale } from "@/lib/locale.server";
 import { compilePost, getPost } from "@/lib/posts.server";
-import { SITE_NAME, absoluteUrl, getSiteUrl } from "@/lib/site";
+import { SITE_NAME } from "@/lib/site";
+import { buildPostJsonLd, buildPostMetadata } from "@/lib/seo";
 import { postComponents } from "../mdx";
 import styles from "../Blog.module.css";
 
@@ -16,31 +17,8 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [{ slug }, locale] = await Promise.all([params, getRequestLocale()]);
   const post = await getPost(slug, locale);
-  if (!post) return {};
-  const url = localePath(locale, `/blog/${slug}`);
-  const image = locale === "es" ? "/es/og" : "/og";
-  return {
-    title: `${post.title} | ${SITE_NAME}`,
-    description: post.description,
-    openGraph: {
-      type: "article",
-      title: post.title,
-      description: post.description,
-      url,
-      siteName: SITE_NAME,
-      locale: ogLocale(locale),
-      publishedTime: post.date,
-      modifiedTime: post.updated ?? post.date,
-      images: [{ url: image, width: 1200, height: 630, alt: post.title }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.description,
-      images: [image],
-    },
-    ...(post.draft && { robots: { index: false, follow: false } }),
-  };
+  if (!post) notFound();
+  return buildPostMetadata(post);
 }
 
 export default async function BlogPost({ params }: Props) {
@@ -49,38 +27,37 @@ export default async function BlogPost({ params }: Props) {
   if (!post) notFound();
   const Content = await compilePost(post);
   const t = (source: string) => translate(source, locale);
-  const siteUrl = getSiteUrl();
-  const url = absoluteUrl(localePath(locale, `/blog/${slug}`));
+  const formatDate = (date: string) => new Intl.DateTimeFormat(
+    locale === "es" ? "es-MX" : "en-US",
+    { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" },
+  ).format(new Date(`${date}T00:00:00Z`));
   return (
     <>
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "@id": `${url}#article`,
-          headline: post.title,
-          description: post.description,
-          datePublished: post.date,
-          dateModified: post.updated ?? post.date,
-          inLanguage: htmlLang(locale),
-          url,
-          mainEntityOfPage: url,
-          image: absoluteUrl(locale === "es" ? "/es/og" : "/og"),
-          author: { "@id": `${siteUrl}/#organization` },
-          publisher: { "@id": `${siteUrl}/#organization` },
-          isPartOf: { "@id": `${siteUrl}/#website` },
-        }}
-      />
+      <JsonLd data={buildPostJsonLd(post)} />
       <PageHeader />
       <main id="main" className={`shell ${styles.page}`}>
         <a className="text-link" href={localePath(locale, "/blog")}>
           {t("← All posts")}
         </a>
+        <nav aria-label={t("Breadcrumb")} className={styles.breadcrumbs}>
+          <a href={localePath(locale, "/")}>{t("Home")}</a>
+          <span aria-hidden="true">/</span>
+          <a href={localePath(locale, "/blog")}>{t("Blog")}</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{post.title}</span>
+        </nav>
         <article className={styles.article}>
           <header className={styles.header}>
             {post.draft && <p className="label">{t("Draft")}</p>}
             <h1 className="h2">{post.title}</h1>
             <p className="lead">{post.description}</p>
+            <p className={styles.byline}>
+              <span>{t("By")} <a rel="author" href={localePath(locale, "/about")}>{SITE_NAME}</a></span>
+              <span>{t("Published")} <time dateTime={post.date}>{formatDate(post.date)}</time></span>
+              {post.updated && post.updated !== post.date && (
+                <span>{t("Updated")} <time dateTime={post.updated}>{formatDate(post.updated)}</time></span>
+              )}
+            </p>
           </header>
           <div className={styles.prose}>
             <Content components={postComponents(locale)} />

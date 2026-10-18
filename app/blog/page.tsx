@@ -5,6 +5,8 @@ import { BLOG_DESCRIPTION, translate } from "@/lib/i18n";
 import { localePath } from "@/lib/locale";
 import { getRequestLocale } from "@/lib/locale.server";
 import { getPosts } from "@/lib/posts.server";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { buildBlogJsonLd } from "@/lib/seo";
 import styles from "./Blog.module.css";
 
 export default async function Blog() {
@@ -13,14 +15,17 @@ export default async function Blog() {
   const posts = await getPosts(locale);
   return (
     <>
+      <JsonLd data={buildBlogJsonLd(locale, posts)} />
       <PageHeader />
       <main id="main" className={`shell ${styles.page}`}>
-        <a className="text-link" href={localePath(locale, "/")}>
-          {t("← Back to home")}
-        </a>
+        <nav aria-label={t("Breadcrumb")} className={styles.breadcrumbs}>
+          <a href={localePath(locale, "/")}>{t("Home")}</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{t("Blog")}</span>
+        </nav>
         <Kicker>{t("Blog")}</Kicker>
         <h1 className="h2">
-          {t("Notes on AI automation for finance and healthcare")}
+          {t("AI automation, CRM, and ERP: practical guides")}
         </h1>
         <p className="lead">{t(BLOG_DESCRIPTION)}</p>
         {posts.length ? (
@@ -34,6 +39,11 @@ export default async function Blog() {
                   </a>
                 </h2>
                 <p>{post.description}</p>
+                <time className={styles.date} dateTime={post.date}>
+                  {new Intl.DateTimeFormat(locale === "es" ? "es-MX" : "en-US", {
+                    year: "numeric", month: "long", day: "numeric", timeZone: "UTC",
+                  }).format(new Date(`${post.date}T00:00:00Z`))}
+                </time>
               </li>
             ))}
           </ol>

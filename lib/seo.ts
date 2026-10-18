@@ -17,6 +17,7 @@ import {
   type Locale,
 } from "./locale";
 import { crmPrice } from "./crm";
+import type { PostMeta } from "./posts";
 import { absoluteUrl, CONTACT_EMAIL, getSiteUrl, SITE_NAME } from "./site";
 
 export function buildMetadata(locale: Locale, path: string): Metadata {
@@ -87,7 +88,7 @@ export function buildJsonLd(locale: Locale, path: string) {
   const organizationId = `${siteUrl}/#organization`;
 
   const organization = {
-    "@type": "ProfessionalService",
+    "@type": "Organization",
     "@id": organizationId,
     name: SITE_NAME,
     url: siteUrl,
@@ -100,18 +101,12 @@ export function buildJsonLd(locale: Locale, path: string) {
       { "@type": "Country", name: "Canada" },
       { "@type": "Country", name: "Mexico" },
     ],
-    availableLanguage: [
-      { "@type": "Language", name: "English", alternateName: "en" },
-      { "@type": "Language", name: "Spanish", alternateName: "es-MX" },
-    ],
-    serviceType: [
-      "AI automation",
-      "Finance workflow automation",
-      "Healthcare workflow automation",
-      "AI agents",
-      "Custom CRM implementation",
-      "Custom ERP implementation",
-    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: CONTACT_EMAIL,
+      contactType: "customer service",
+      availableLanguage: ["English", "Spanish"],
+    },
     knowsAbout: [
       "AI automation",
       "Finance operations",
@@ -132,13 +127,11 @@ export function buildJsonLd(locale: Locale, path: string) {
 
   const webPage = {
     "@type":
-      page === "privacy"
-        ? "PrivacyPolicy"
-        : page === "about"
-          ? "AboutPage"
-          : page === "blog"
-            ? "CollectionPage"
-            : "WebPage",
+      page === "about"
+        ? "AboutPage"
+        : page === "blog"
+          ? "CollectionPage"
+          : "WebPage",
     "@id": `${canonical}#webpage`,
     url: canonical,
     name: pageTitle(locale, page),
@@ -146,6 +139,7 @@ export function buildJsonLd(locale: Locale, path: string) {
     inLanguage,
     isPartOf: { "@id": `${siteUrl}/#website` },
     about: { "@id": organizationId },
+    ...(page === "blog" && { mainEntity: { "@id": `${canonical}#posts` } }),
   };
 
   // A post describes itself (BlogPosting) from its own page; see app/blog/[slug].
@@ -196,8 +190,146 @@ export function buildJsonLd(locale: Locale, path: string) {
     });
   }
 
+  if (page === "finance" || page === "healthcare") {
+    graph.push({
+      "@type": "Service",
+      "@id": `${canonical}#service`,
+      name: t(page === "finance" ? "Finance workflow automation" : "Healthcare workflow automation"),
+      serviceType: page === "finance" ? "Finance workflow automation" : "Healthcare workflow automation",
+      description: pageDescription(locale, page),
+      url: canonical,
+      provider: { "@id": organizationId },
+      areaServed: organization.areaServed,
+      mainEntityOfPage: { "@id": `${canonical}#webpage` },
+    });
+  }
+
   return {
     "@context": "https://schema.org",
     "@graph": graph,
+  };
+}
+
+export function postImagePath(post: Pick<PostMeta, "slug" | "locale">) {
+  return `${localePath(post.locale, "/og")}?post=${encodeURIComponent(post.slug)}`;
+}
+
+/** Keep article overrides together with the canonical and hreflang they describe. */
+export function buildPostMetadata(post: PostMeta): Metadata {
+  const path = `/blog/${post.slug}`;
+  const image = postImagePath(post);
+  return {
+    ...buildMetadata(post.locale, path),
+    title: `${post.seoTitle ?? post.title} | ${SITE_NAME}`,
+    description: post.description,
+    authors: [{ name: SITE_NAME, url: absoluteUrl(localePath(post.locale, "/about")) }],
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.description,
+      url: localePath(post.locale, path),
+      siteName: SITE_NAME,
+      locale: ogLocale(post.locale),
+      alternateLocale: [ogLocale(post.locale === "en" ? "es" : "en")],
+      publishedTime: post.date,
+      modifiedTime: post.updated ?? post.date,
+      authors: [SITE_NAME],
+      images: [{ url: image, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [image],
+    },
+    ...(post.draft && { robots: { index: false, follow: false } }),
+  };
+}
+
+function blogBreadcrumbs(locale: Locale, post?: PostMeta) {
+  const blogUrl = absoluteUrl(localePath(locale, "/blog"));
+  const items = [
+    { name: translate("Home", locale), item: absoluteUrl(localePath(locale, "/")) },
+    { name: translate("Blog", locale), item: blogUrl },
+    ...(post ? [{ name: post.title, item: absoluteUrl(localePath(locale, `/blog/${post.slug}`)) }] : []),
+  ];
+  return {
+    "@type": "BreadcrumbList",
+    "@id": `${post ? items[2].item : blogUrl}#breadcrumbs`,
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem", position: index + 1, ...item,
+    })),
+  };
+}
+
+export function buildPostJsonLd(post: PostMeta) {
+  const url = absoluteUrl(localePath(post.locale, `/blog/${post.slug}`));
+  const siteUrl = getSiteUrl();
+  const breadcrumbs = blogBreadcrumbs(post.locale, post);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: post.title,
+        description: post.description,
+        inLanguage: htmlLang(post.locale),
+        isPartOf: { "@id": `${siteUrl}/#website` },
+        mainEntity: { "@id": `${url}#article` },
+        breadcrumb: { "@id": breadcrumbs["@id"] },
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": `${url}#article`,
+        headline: post.title,
+        description: post.description,
+        datePublished: post.date,
+        dateModified: post.updated ?? post.date,
+        inLanguage: htmlLang(post.locale),
+        url,
+        mainEntityOfPage: { "@id": `${url}#webpage` },
+        image: { "@type": "ImageObject", url: absoluteUrl(postImagePath(post)), width: 1200, height: 630 },
+        author: { "@type": "Organization", "@id": `${siteUrl}/#organization`, name: SITE_NAME, url: siteUrl },
+        publisher: { "@id": `${siteUrl}/#organization` },
+        isPartOf: { "@id": `${absoluteUrl(localePath(post.locale, "/blog"))}#blog` },
+      },
+      breadcrumbs,
+    ],
+  };
+}
+
+export function buildBlogJsonLd(locale: Locale, posts: PostMeta[]) {
+  const url = absoluteUrl(localePath(locale, "/blog"));
+  const published = posts.filter((post) => !post.draft);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Blog",
+        "@id": `${url}#blog`,
+        url,
+        name: pageTitle(locale, "blog"),
+        description: pageDescription(locale, "blog"),
+        inLanguage: htmlLang(locale),
+        publisher: { "@id": `${getSiteUrl()}/#organization` },
+        isPartOf: { "@id": `${getSiteUrl()}/#website` },
+        mainEntityOfPage: { "@id": `${url}#webpage` },
+        blogPost: published.map((post) => ({ "@id": `${absoluteUrl(localePath(locale, `/blog/${post.slug}`))}#article` })),
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${url}#posts`,
+        numberOfItems: published.length,
+        itemListElement: published.map((post, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: post.title,
+          url: absoluteUrl(localePath(locale, `/blog/${post.slug}`)),
+        })),
+      },
+      blogBreadcrumbs(locale),
+    ],
   };
 }

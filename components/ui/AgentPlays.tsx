@@ -66,26 +66,28 @@ export function AgentPlays({
           </button>
         ))}
       </div>
-      <ol
+      <div
         key={active}
         id={panelId}
         role="tabpanel"
         aria-labelledby={tabId(active)}
-        className={styles.chain}
+        tabIndex={0}
       >
-        <li data-node="agent">
-          <span className="label">{t("What it does")}</span>
-          <span>{t(play.agent)}</span>
-        </li>
-        <li data-node="approve">
-          <span className="label">{t("You approve")}</span>
-          <span>{t(play.approve)}</span>
-        </li>
-        <li data-node="measure">
-          <span className="label">{t("You measure")}</span>
-          <span>{t(play.measure)}</span>
-        </li>
-      </ol>
+        <ol className={styles.chain}>
+          <li data-node="agent">
+            <span className="label">{t("What it does")}</span>
+            <span>{t(play.agent)}</span>
+          </li>
+          <li data-node="approve">
+            <span className="label">{t("You approve")}</span>
+            <span>{t(play.approve)}</span>
+          </li>
+          <li data-node="measure">
+            <span className="label">{t("You measure")}</span>
+            <span>{t(play.measure)}</span>
+          </li>
+        </ol>
+      </div>
     </div>
   );
 }

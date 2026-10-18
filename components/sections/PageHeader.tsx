@@ -8,7 +8,7 @@ import styles from "./PageHeader.module.css";
 export function PageHeader() {
   const { t } = useLanguage();
   return (
-    <header className={styles.header}>
+    <header id="top" className={styles.header}>
       <div className={`shell ${styles.inner}`}>
         <Brand />
         <div className={styles.right}>

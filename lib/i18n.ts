@@ -2,7 +2,7 @@ import spanish from "./es-MX.json";
 import type { Locale } from "./locale";
 
 export const HOME_DESCRIPTION =
-  "Done-for-you AI automation for finance and healthcare teams in the United States, Canada, and Mexico. Invoice approvals, intake, referrals, and reporting. Start with a 20-minute workflow review.";
+  "AI automation for finance and healthcare in the United States, Canada, and Mexico. Invoice approvals, patient intake, referrals, and reporting.";
 export const PRIVACY_DESCRIPTION =
   "How the Brilliant AI website handles contact details, language preference, and calculator inputs.";
 export const HOME_KEYWORDS = [
@@ -55,7 +55,7 @@ export const CRM_DESCRIPTION =
   "Custom CRM implementation on a proven open-source foundation: contacts, deals, tasks, and an assistant you can talk to. Unlimited users on the base plan.";
 
 export const BLOG_DESCRIPTION =
-  "Notes on scoping, building, and running AI workflows for finance and healthcare operations teams.";
+  "Practical guides to AI automation, invoice approvals, healthcare workflows, custom CRM, ERP, and measuring ROI. Keep decisions with your team.";
 
 export type PageKey =
   | "home"
@@ -93,7 +93,7 @@ const TITLES: Record<PageKey, [en: string, es: string]> = {
     "Custom CRM Implementation | Brilliant AI",
     "Implementación de CRM a la medida | Brilliant AI",
   ],
-  blog: ["Blog | Brilliant AI", "Blog | Brilliant AI"],
+  blog: ["AI Automation, CRM & ERP Blog | Brilliant AI", "Blog de automatización con IA, CRM y ERP | Brilliant AI"],
   // Fallback only: each post sets its own title in generateMetadata.
   post: ["Blog | Brilliant AI", "Blog | Brilliant AI"],
 };
