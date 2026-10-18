@@ -34,8 +34,9 @@ export const HAAB_VIDEO = {
 };
 
 /**
- * Caption tracks for the video. The narration is English, so Spanish
- * subtitles are on by default on /es; English captions are there to turn on.
+ * Caption tracks for the video. The page's language is on by default: Spanish
+ * subtitles on /es, English captions on /. Keep one track on: iOS (Safari and
+ * Chrome) stalls on play when every track is off.
  * Labels are each language's own name, as browsers list them.
  */
 export function captionTracks(locale: Locale) {
@@ -45,7 +46,7 @@ export function captionTracks(locale: Locale) {
       srcLang: "en",
       label: "English",
       src: HAAB_VIDEO.captions.en,
-      default: false,
+      default: locale === "en",
     },
     {
       kind: "subtitles" as const,
@@ -55,6 +56,17 @@ export function captionTracks(locale: Locale) {
       default: locale === "es",
     },
   ];
+}
+
+/**
+ * Track modes after a language switch, which doesn't reload the page (and
+ * browsers read `default` only once). The page's language comes first, so a
+ * track is on before the others turn off and they're never all off at once.
+ */
+export function captionModes(locale: Locale): [srcLang: string, mode: TextTrackMode][] {
+  return captionTracks(locale)
+    .sort((a, b) => Number(b.default) - Number(a.default))
+    .map((track) => [track.srcLang, track.default ? "showing" : "disabled"]);
 }
 
 /** What Haab Calendar does today. List only what it ships. */
