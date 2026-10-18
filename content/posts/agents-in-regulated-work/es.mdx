@@ -17,9 +17,11 @@ En sectores regulados, un agente sigue en uso cuando prepara y una persona desig
 - qué pudo leer el agente para escribirlos,
 - quién se da cuenta cuando uno está mal.
 
-En finanzas y en salud, eso no es un detalle. Decide si un agente se vuelve parte de la semana o si lo apagan después de su primer error. Gartner [prevé que más del 40% de los proyectos de IA agéntica se cancelará antes de que termine 2027](https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027) por costos crecientes, valor de negocio poco claro o controles de riesgo insuficientes.
+En finanzas y en salud, eso no es un detalle. Decide si un agente se vuelve parte de la semana o si lo apagan después de su primer error. Muchos proyectos de agentes no llegan tan lejos: Gartner [prevé que más del 40% de los proyectos de IA agéntica se cancelará antes de que termine 2027](https://www.gartner.com/en/newsroom/press-releases/2025-06-25-gartner-predicts-over-40-percent-of-agentic-ai-projects-will-be-canceled-by-end-of-2027) por costos crecientes, valor de negocio poco claro o controles de riesgo insuficientes.
 
 ## Por qué se atoran los agentes de IA, y qué los mantiene en uso
+
+Los mismos cinco problemas aparecen una y otra vez. Cada uno tiene una solución bastante sencilla.
 
 | Dónde se atoran | Qué los mantiene en uso |
 | --- | --- |
@@ -31,13 +33,13 @@ En finanzas y en salud, eso no es un detalle. Decide si un agente se vuelve part
 
 ### Dale a cada agente una persona responsable
 
-Un agente sin dueño produce trabajo que nadie tiene la responsabilidad de revisar. Los borradores se acumulan en una cola compartida y el equipo vuelve a hacerlo a mano.
+Un agente sin dueño produce trabajo que nadie tiene la responsabilidad de revisar. Los borradores se acumulan en una cola compartida y, al poco tiempo, el equipo vuelve a hacerlo a mano.
 
 En cambio, cada agente trabaja para una persona: quien coordina la admisión, quien lleva cuentas por pagar, quien atiende la relación con el cliente. Esa persona pide el trabajo y decide qué pasa con él.
 
 ### Que redacte, no que envíe
 
-Un agente que les escribe a clientes o pacientes por sí solo convierte cada mensaje en un riesgo. La forma más rápida de quitar ese riesgo es dejar de usar el agente.
+Un agente que les escribe a clientes o pacientes por sí solo convierte cada mensaje en un riesgo. Y la forma más rápida de quitar ese riesgo es dejar de usar el agente.
 
 Por eso, todo lo que sale de tu equipo sale como borrador para que esa persona lo apruebe, salvo que una regla acordada por escrito diga otra cosa. Un recordatorio de cita hecho con una plantilla aprobada puede salir solo. Un mensaje nuevo a un paciente o a un cliente, no.
 
@@ -45,15 +47,15 @@ Por eso, todo lo que sale de tu equipo sale como borrador para que esa persona l
 
 Darle acceso de lectura a toda la unidad compartida, al sistema contable y al expediente del paciente lo frena en la revisión de seguridad, y con razón.
 
-Dale la bandeja de referencias y la cola de admisión, no todos los sistemas del consultorio. Otorga el acceso una tarea a la vez, y conserva la posibilidad de revocarlo.
+Dale la bandeja de referencias y la cola de admisión, no todos los sistemas del consultorio. Otorga el acceso una tarea a la vez, y asegúrate de poder quitarlo.
 
 ### Ponlo donde la persona ya trabaja
 
-Una herramienta de chat que nadie abre en un día pesado es donde el trabajo de un agente se queda esperando. El borrador tiene que llegar a donde se toma la decisión: Outlook, Teams, la cola de admisión. La misma regla aplica a cualquier aprobación; lee [Cómo diseñar aprobaciones que no se vuelvan el nuevo cuello de botella](/blog/approval-points-without-bottlenecks).
+Una herramienta de chat que nadie abre en un día pesado es donde el trabajo de un agente se queda esperando. El borrador tiene que aparecer donde se toma la decisión: Outlook, Teams, la cola de admisión. Lo mismo aplica a cualquier aprobación; lee [Cómo diseñar aprobaciones que no se vuelvan el nuevo cuello de botella](/blog/approval-points-without-bottlenecks).
 
 ### Guarda una bitácora
 
-Después de un error, lo primero que pregunta tu contralor o la dirección del consultorio es qué documentos leyó el agente y qué envió. Esa pregunta necesita respuesta.
+Después de un error, lo primero que pregunta tu contralor o la dirección del consultorio es qué documentos leyó el agente y qué envió. Tienes que poder contestar eso.
 
 Registra qué leyó, qué redactó, quién lo aprobó y cuándo. Ese registro es lo que permite que tu contralor o el área de cumplimiento confíen en el agente.
 
@@ -67,18 +69,18 @@ Son ejemplos de cómo se ve el trabajo, no resultados de clientes.
 
 **Documentos de clientes que faltan.** “Dales seguimiento a los tres clientes que todavía no mandan sus documentos” se convierte en tres borradores cortos y específicos. Cada uno dice qué documento falta y para cuándo se necesita, para que quien atiende la relación con el cliente los envíe o los ajuste.
 
-Ninguno de estos casos necesita un agente que actúe por su cuenta. Cada uno necesita uno que reúna y revise bien, y que le entregue a una persona algo que pueda decidir en un minuto.
+Ninguno de estos casos necesita un agente que actúe por su cuenta. Cada uno necesita un agente que reúna y revise bien, y que le entregue a una persona algo que pueda decidir en un minuto.
 
-## Lo que operamos nosotros y lo que se queda con tu equipo
+## Quién opera el agente y quién decide
 
-**Nosotros operamos el agente.** Lo monitoreamos, atendemos las excepciones que levanta y actualizamos sus reglas cuando cambia tu proceso.
+Operar un agente es trabajo continuo. Alguien tiene que revisar lo que produce, atender las excepciones que levanta y actualizar sus reglas cuando cambia tu proceso. Puede ser alguien de tu equipo o un socio externo.
 
-**Tu equipo se queda con las decisiones:** qué se envía, se registra, se paga o se presenta, y todo lo clínico.
+Quién decide es otra pregunta, y la respuesta no cambia: qué se envía, se registra, se paga o se presenta, y todo lo clínico, se queda con tu equipo.
 
-En una demostración luce menos que un agente que lo hace todo solo. También es la versión que tu contralor o la dirección del consultorio van a dejar acercarse a su trabajo.
+En una demostración luce menos que un agente que lo hace todo solo. En nuestra experiencia, también es la versión que tu contralor o la dirección del consultorio de verdad van a dejar acercarse a su trabajo.
 
-- Accesos, registro y los convenios bajo los que trabajamos: [Cómo manejamos datos financieros y de pacientes](/security).
-- Cómo mostrar si un agente se gana su lugar: [Cómo medir el retorno de la automatización en horas, sin precisión falsa](/blog/measuring-capacity-reclaimed).
+- Cómo funcionan los accesos y los registros con datos financieros o de pacientes: [Cómo manejamos datos financieros y de pacientes](/security).
+- Cómo saber si un agente se gana su lugar: [Cómo medir el retorno de la automatización en horas, sin precisión falsa](/blog/measuring-capacity-reclaimed).
 
 ## Siguiente paso: elige una tarea y nombra a su responsable
 
@@ -88,4 +90,4 @@ Elige una tarea que tu equipo repite cada semana, como pedir documentos o revisa
 2. los sistemas que necesitaría leer,
 3. lo que nunca debería enviar sin la aprobación de esa persona.
 
-Si no puedes llenar las tres, empieza por ahí, antes de cualquier agente.
+Si todavía no puedes llenar las tres, empieza por ahí, antes de cualquier agente.

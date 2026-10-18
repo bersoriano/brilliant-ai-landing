@@ -8,29 +8,29 @@ draft: false
 **Who this is for:** AP leads, controllers and finance managers whose invoice automation looks good in the demo but hasn’t changed the week.
 
 <Takeaway>
-Invoices that match their PO and receipt were never the slow part. Build for the exceptions first: write the tolerances down, send each exception to a named person with the evidence attached, and keep posting and payment with your team until the workflow has earned their trust.
+The invoices that match their PO and receipt were never the slow part. Build for the exceptions first: write the tolerances down, send each exception to a named person with the evidence attached, and keep posting and payment with your team until the workflow has earned their trust.
 </Takeaway>
 
-The pitch for invoice automation is usually “touchless” processing. A real accounts-payable inbox looks different. Invoices that match their purchase order (PO) and goods receipt were never the slow part. The time goes into the ones that don’t:
+Invoice automation usually gets pitched as “touchless” processing. Then you look at a real accounts-payable inbox. The invoices that match their purchase order (PO) and goods receipt were never the slow part. The time goes into the ones that don’t:
 
 - a price that changed,
 - a partial delivery,
 - a vendor that isn’t in the vendor master,
 - a PO that was closed early.
 
-Automation that only handles the clean case looks good in a demo and changes very little in the week. Here’s where it usually stalls, and what moves it.
+If the automation only handles the clean case, it looks great in a demo and changes very little in the week. Here’s the pattern we keep seeing: where it stalls, and what usually gets it moving.
 
 ## Five reasons AP automation stalls
 
-**1. The easy match gets automated first.** Matching a clean invoice to a clean PO is the easiest part to build, so it’s built first. It’s also the part your team already clears in seconds.
+**1. The easy match gets automated first.** Matching a clean invoice to a clean PO is the easiest thing to build, so it gets built first. It’s also the part your team already clears in seconds.
 
-**2. Nobody wrote down the tolerances.** Is a $12 freight difference an exception? Is 2% over the PO? If the rule lives in one person’s head, the workflow flags everything or nothing. Either way, people stop paying attention to it.
+**2. Nobody wrote down the tolerances.** Is a $12 freight difference an exception? What about 2% over the PO? If the answer lives in one person’s head, the workflow flags everything or nothing. Either way, people stop paying attention to it.
 
-**3. The vendor master is out of date.** Matching against stale vendor records produces false exceptions. After a few of those, the team stops trusting the flags.
+**3. The vendor master is out of date.** Matching against stale vendor records produces false exceptions. A few of those and the team stops trusting the flags.
 
-**4. The output lands somewhere new.** A dashboard nobody opens is a second inbox. Approvers keep working where they always have, and the automation’s work waits.
+**4. The output lands somewhere new.** A dashboard nobody opens is just a second inbox. Approvers keep working where they always have, and the automation’s work sits there.
 
-**5. Posting and payment are automated before there’s trust.** One wrong entry is enough for a controller to switch the whole thing off, and they would be right to.
+**5. Posting and payment get automated before anyone trusts it.** One wrong entry is enough for a controller to switch the whole thing off. Honestly, they’d be right to.
 
 ## Invoice exception handling: design for the exceptions first
 
@@ -44,30 +44,30 @@ Before building anything, list the handful of reasons an invoice can’t be appr
 | Unknown vendor | The invoice and the closest match in the vendor master | Add the vendor, or reject the invoice? |
 | Closed PO | The PO, when it closed and why | Reopen the PO, or reject the invoice? |
 
-Your list will be different. Start from the reasons invoices actually waited last month, not from a vendor’s feature list.
+Your list will look different. Start from the reasons invoices actually waited last month, not from a feature list.
 
 ## Write the matching tolerances down
 
-Price, quantity, freight, tax: agree each tolerance with the controller, in writing, before anything is built. For example: “Freight up to $25 over the PO is approved in a batch. Above that, it gets its own card.” (An illustrative figure; set your own.)
+Price, quantity, freight, tax: agree each tolerance with the controller, in writing, before anything gets built. Something like: “Freight up to $25 over the PO gets approved in a batch. Anything above that gets its own card.” (That figure is just an example; set your own.)
 
-When a tolerance changes, it changes in one place.
+When a tolerance changes, it changes in one place, and everyone can see the new number.
 
 ## Send a packet, not a link
 
-The approver sees the invoice, the PO, the receipt and the difference on one card, in Teams or Outlook, and decides there. If they have to open the ERP to answer the question, the card is missing something. [Approval workflow design that doesn’t create a new bottleneck](/blog/approval-points-without-bottlenecks) covers how to build those cards.
+The approver should see the invoice, the PO, the receipt and the difference on one card, in Teams or Outlook, and decide right there. If they have to open the ERP to answer the question, the card is missing something. [Approval workflow design that doesn’t create a new bottleneck](/blog/approval-points-without-bottlenecks) goes into how to build those cards.
 
 ## Keep posting and payment with your team
 
-The workflow prepares the entry. A person you name records it, and payment stays under your control.
+Let the workflow prepare the entry. A person you name records it, and payment stays under your control.
 
-That isn’t a limit of the technology. It’s the design. The same rule holds for AI agents: they prepare, and a person decides. See [AI agents in finance and healthcare: drafts, not decisions](/blog/agents-in-regulated-work).
+That’s a design choice, not a technical limit. One wrong posting costs more trust than a month of correct ones earns. The same rule applies to AI agents: they prepare, and a person decides. More on that in [AI agents in finance and healthcare: drafts, not decisions](/blog/agents-in-regulated-work).
 
 ## Run the pilot next to your current process
 
-During a pilot, the workflow’s output sits next to your team’s work on the same invoices.
+During the pilot, put the workflow’s output next to your team’s work on the same invoices.
 
-- When the two agree on enough of them, widen the scope.
-- When they don’t, you’ve found a rule that wasn’t clear, before anyone depends on the workflow.
+- When the two agree often enough, widen the scope.
+- When they don’t, you’ve found a rule that wasn’t clear, and you found it before anyone depended on the workflow.
 
 ## Checklist: what working invoice automation looks like
 
@@ -77,7 +77,7 @@ During a pilot, the workflow’s output sits next to your team’s work on the s
 - Your team can see what the workflow handled and what it sent to them.
 - Nothing is recorded or paid without a named approver.
 
-To see whether it’s working, measure it in hours, not a “touchless rate”: [Measuring automation ROI: hours reclaimed, without fake precision](/blog/measuring-capacity-reclaimed).
+To tell whether it’s working, count hours, not a “touchless rate”: [Measuring automation ROI: hours reclaimed, without fake precision](/blog/measuring-capacity-reclaimed).
 
 ## Next step: sort last month’s exceptions by reason
 
