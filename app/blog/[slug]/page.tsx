@@ -7,13 +7,7 @@ import { translate } from "@/lib/i18n";
 import { htmlLang, localePath, ogLocale } from "@/lib/locale";
 import { getRequestLocale } from "@/lib/locale.server";
 import { compilePost, getPost } from "@/lib/posts.server";
-import {
-  DISCOVERY_CALL_HREF,
-  PRIMARY_CTA,
-  SITE_NAME,
-  absoluteUrl,
-  getSiteUrl,
-} from "@/lib/site";
+import { SITE_NAME, absoluteUrl, getSiteUrl } from "@/lib/site";
 import { postComponents } from "../mdx";
 import styles from "../Blog.module.css";
 
@@ -92,12 +86,6 @@ export default async function BlogPost({ params }: Props) {
             <Content components={postComponents(locale)} />
           </div>
         </article>
-        <aside className={styles.close}>
-          <p>{t("Have a workflow like this on your team?")}</p>
-          <a href={DISCOVERY_CALL_HREF} className="button">
-            {t(PRIMARY_CTA)}
-          </a>
-        </aside>
       </main>
       <Footer />
     </>

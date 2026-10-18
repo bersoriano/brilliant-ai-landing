@@ -9,7 +9,7 @@ Brief from the user:
 
 $ARGUMENTS
 
-If the brief contains finished post text, it is the post: keep the author's wording, structure and claims. Only fix typos, convert it to MDX (headings, lists, links), and write the title, description and slug from it. Write the other language from it (EN or es-MX, whichever is missing). List any edit beyond typos in your reply, and flag (don't silently remove) anything that breaks the honesty rules below. Skip the outline step.
+If the brief contains finished post text, it is the post: keep the author's wording, structure and claims. Only fix typos, convert it to MDX (headings, lists, links), write the title, description and slug from it, and add the closing section below if the text has none. Write the other language from it (EN or es-MX, whichever is missing). List any edit beyond typos in your reply, and flag (don't silently remove) anything that breaks the honesty rules below. Skip the outline step.
 
 If the brief is empty, ask for the topic and stop. Otherwise fill the gaps yourself: infer the audience (finance or healthcare operations teams in the US, Canada and Mexico), propose a slug, and aim for about 800 words unless the brief says otherwise. If the brief gives no key points, show a 4–6 point outline and wait for approval before writing.
 
@@ -24,7 +24,8 @@ If the brief is empty, ask for the topic and stop. Otherwise fill the gaps yours
 - Write the English first. Then write a native Mexican Spanish version, not a word-for-word translation: use *tú* with the reader and Mexican terms (CFDI, OC, RFC, preautorización, aseguradora, iguala, junta). Call a workflow "proceso", as the rest of the site does.
 - Start the body with a paragraph; the page already renders the title. Use `##` and `###` headings, short paragraphs, and lists or a table only where they help. Don't use raw `<` or `{` in prose (MDX reads them as JSX); put them in backticks.
 - Link to site pages with plain paths (`/security`, `/finance-automation`, `/healthcare-automation`, `/custom-crm`, `/about`). They get localized automatically. Link external sources with full URLs.
-- No closing call to action. The page adds the booking button.
+- Close every post with a `## Next step: …` section (`## Siguiente paso: …` in Spanish): one small exercise tied to the post's topic (2–4 sentences, or a short list), then one calm line inviting the reader to bring that work to a 20-minute workflow review, e.g. “a 20-minute workflow review is usually enough to see whether it’s worth piloting” (“una revisión de 20 minutos suele bastar para ver si vale la pena hacer un piloto”). No urgency or hard sell.
+- End that section with `<BookReview />` on its own line. It renders the booking button with the `PRIMARY_CTA` label, and the page adds no other button, so every post needs exactly one (a test checks). Don't link the review in prose or write your own button label. Sources and footnotes go after it.
 
 ## Honesty (non-negotiable)
 

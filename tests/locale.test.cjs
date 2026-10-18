@@ -657,6 +657,12 @@ test("Every post ships in English and Mexican Spanish, compiles, and follows the
         assert.fail(`${file} does not compile: ${error.message}`);
       });
       const text = [post.title, post.description, post.body].join("\n");
+      // The post closes on the booking button, once, from the shared component.
+      assert.equal(
+        (post.body.match(/<BookReview \/>/g) || []).length,
+        1,
+        `${file}: end the "Next step" section with <BookReview />`,
+      );
       // No third-party image requests: images live in public/.
       assert.doesNotMatch(text, /!\[[^\]]*\]\(\s*(https?:)?\/\//, `${file}: remote image`);
       assert.doesNotMatch(text, /<img[^>]+src=["'](https?:)?\/\//i, `${file}: remote image`);
