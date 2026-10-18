@@ -34,8 +34,9 @@ export const HAAB_VIDEO = {
 };
 
 /**
- * Caption tracks for the video. The narration is English, so Spanish
- * subtitles are on by default on /es; English captions are there to turn on.
+ * Caption tracks for the video. The page's language is on by default: Spanish
+ * subtitles on /es, English captions on /. Keep one track on: iOS (Safari and
+ * Chrome) stalls on play when every track is off.
  * Labels are each language's own name, as browsers list them.
  */
 export function captionTracks(locale: Locale) {
@@ -45,7 +46,7 @@ export function captionTracks(locale: Locale) {
       srcLang: "en",
       label: "English",
       src: HAAB_VIDEO.captions.en,
-      default: false,
+      default: locale === "en",
     },
     {
       kind: "subtitles" as const,

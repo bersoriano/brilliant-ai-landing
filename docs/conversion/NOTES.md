@@ -103,8 +103,10 @@ content is the in-page anchor `#review`.
   Calendar, our own booking app, as its one-minute recorded demo (fictional
   patient, English narration). Self-hosted in `public/video/` (720p H.264,
   ~3 MB, poster frame), `controls` and `preload="none"`, never autoplay.
-  English captions are available; Spanish subtitles are on by default on
-  `/es`. The control line keeps hours, services and rules with the owner.
+  The page's language is on by default (English captions on `/`, Spanish
+  subtitles on `/es`); one track always stays on, because iOS stalls on play
+  when every track is off. The control line keeps hours, services and rules
+  with the owner.
   Below: the same notes and ruled row as the CRM and ERP, with
   "Priced by project" instead of a price. The gated case study is Exhibit 7.
 - **Page rhythm**: `.section-rule` draws a content-width hairline between

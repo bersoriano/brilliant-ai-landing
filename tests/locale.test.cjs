@@ -628,10 +628,10 @@ test("Custom software showcases Haab Calendar as our own product, with its demo 
     assert.doesNotMatch(cue.text, FORMAL_SPANISH, cue.text);
     assert.doesNotMatch(cue.text, SPAIN_SPANISH, cue.text);
   });
-  // The narration is English: Spanish subtitles are on by default on /es,
-  // English captions are available but off.
+  // Exactly one track is on by default, in the page's language: iOS (Safari
+  // and Chrome) stalls on play when every track is off.
   assert.deepEqual(captionTracks("es").filter((track) => track.default).map((track) => track.srcLang), ["es"]);
-  assert.deepEqual(captionTracks("en").filter((track) => track.default), []);
+  assert.deepEqual(captionTracks("en").filter((track) => track.default).map((track) => track.srcLang), ["en"]);
   // Exhibit 6 is the video: it never autoplays and loads nothing until played.
   assert.ok(!fs.existsSync("components/sections/BookingFlow.tsx"), "the scripted exhibit is gone");
   const video = fs.readFileSync("components/sections/SoftwareVideo.tsx", "utf8");
