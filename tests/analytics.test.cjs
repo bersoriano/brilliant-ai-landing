@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const { test } = require("node:test");
 const fs = require("node:fs");
 const ts = require("typescript");
+const vm = require("node:vm");
 
 require.extensions[".ts"] = (module, filename) =>
   module._compile(ts.transpileModule(fs.readFileSync(filename, "utf8"), {
@@ -89,4 +90,31 @@ test("article progress uses article bounds, handles short articles and clamps ov
   assert.equal(analytics().articleProgress(-200, 2000, 800), 50);
   assert.equal(analytics().articleProgress(-1500, 2000, 800), 100);
   assert.equal(analytics().articleProgress(300, 200, 800), 100);
+});
+
+test("navigation clicks bypass batching and use an unload-safe transport", () => {
+  const captures = [];
+  // Replace only the external SDK boundary. Execute the real capture wrapper:
+  // buffering this call can lose its metric when a normal anchor unloads Next.
+  const sdk = { init() {}, register_once() {}, capture(...args) { captures.push(args); } };
+  const exported = {};
+  vm.runInNewContext(ts.transpileModule(fs.readFileSync("lib/analytics.client.ts", "utf8"), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, esModuleInterop: true },
+  }).outputText, {
+    exports: exported, module: { exports: exported },
+    require: (id) => id === "posthog-js" ? sdk : analytics(),
+    window: { location: { href: "https://brilliant.dev/es" } },
+    document: { referrer: "" },
+    process: { env: { NODE_ENV: "production", NEXT_PUBLIC_POSTHOG_KEY: "phc_test" } },
+  });
+  exported.initializeAnalytics();
+  exported.captureAnalytics("cta_clicked", { source_section: "crm", cta_type: "booking" });
+  exported.captureAnalytics("blog_link_clicked", { source_section: "blog", destination_path: "/es/blog/example" });
+  for (const [event, properties, options] of captures) {
+    assert.ok(["cta_clicked", "blog_link_clicked"].includes(event));
+    assert.equal(properties.page_path, "/es");
+    assert.equal(options?.send_instantly, true, `${event} must not wait in the batch queue`);
+    assert.equal(options?.transport, "sendBeacon", `${event} must survive navigation`);
+  }
+  assert.equal(captures.length, 2);
 });

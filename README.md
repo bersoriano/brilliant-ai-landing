@@ -64,6 +64,8 @@ Random anonymous identity lives in session storage, not an analytics cookie;
 new tabs or sessions can count the same person again. This measures visits and
 engagement, not precise cross-session unique people. Reading progress records
 how much content reached the viewport, not proof that someone read it.
+Link-click events send immediately through the browser's beacon transport so
+leaving a page does not leave the click waiting for the next batch flush.
 
 Suggested PostHog insights:
 

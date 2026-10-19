@@ -40,7 +40,12 @@ type Event = "$pageview" | "section_viewed" | "blog_read_progress" | "blog_link_
 export function captureAnalytics(event: Event, properties: Record<string, string | number> = {}) {
   if (!initialized) return;
   try {
-    posthog.capture(event, { ...pageProperties(window.location.href), ...properties });
+    // Anchor navigation can unload the document before the batch flush runs.
+    // Send clicks immediately with synchronous compression and beacon delivery.
+    const options = event === "cta_clicked" || event === "blog_link_clicked"
+      ? { send_instantly: true, transport: "sendBeacon" as const }
+      : undefined;
+    posthog.capture(event, { ...pageProperties(window.location.href), ...properties }, options);
   } catch { /* Measurement is best effort; visitor actions still work. */ }
 }
 
