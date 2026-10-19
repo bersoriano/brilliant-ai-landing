@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LANGUAGE_COOKIE,
   htmlLang,
@@ -70,6 +70,7 @@ export function LanguageProvider({
 }) {
   const [locale, updateLocale] = useState(initialLocale);
   const pathname = usePathname();
+  const router = useRouter();
   useEffect(() => {
     updateLocale(initialLocale);
   }, [initialLocale]);
@@ -94,7 +95,10 @@ export function LanguageProvider({
     }
     const nextPath =
       localePath(next, stripLocalePrefix(pathname)) + window.location.hash;
-    window.history.replaceState(window.history.state, "", nextPath);
+    // A soft replace, not history.replaceState: server-rendered sections (the
+    // homepage's notes and blog teaser) read the locale from the request, so
+    // they need the new path's payload. Client state and scroll are kept.
+    router.replace(nextPath, { scroll: false });
   }
   return (
     <LanguageContext.Provider value={{ locale, setLocale }}>
