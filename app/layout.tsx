@@ -5,6 +5,7 @@ import { htmlLang } from "@/lib/locale";
 import { buildJsonLd, buildMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { LanguageProvider, SkipLink } from "@/components/i18n/LanguageProvider";
+import { PageAnalytics } from "@/components/analytics/PageAnalytics";
 export async function generateMetadata() {
   const [locale, path] = await Promise.all([
     getRequestLocale(),
@@ -26,6 +27,7 @@ export default async function RootLayout({
       <body>
         <JsonLd data={buildJsonLd(locale, path)} />
         <LanguageProvider initialLocale={locale}>
+          <PageAnalytics />
           <SkipLink />
           {children}
         </LanguageProvider>

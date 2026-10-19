@@ -3,6 +3,7 @@ import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { useEffect, useState } from "react";
 import { useInquiry } from "../inquiry/InquiryContext";
 import { buildInquiryHref } from "@/lib/inquiry";
+import { captureAnalytics } from "@/lib/analytics.client";
 import {
   CONTACT_EMAIL,
   DISCOVERY_CALL_HREF,
@@ -59,6 +60,7 @@ export function FinalCta() {
     // Prepared up front so the fallback is ready the moment delivery fails.
     setFallbackHref(buildInquiryHref(CONTACT_EMAIL, details, locale));
     setStatus("sending");
+    captureAnalytics("inquiry_submitted");
     try {
       const response = await fetch("/api/inquiry", {
         method: "POST",
@@ -71,11 +73,13 @@ export function FinalCta() {
       });
       if (!response.ok) throw new Error(String(response.status));
       setStatus("sent");
+      captureAnalytics("inquiry_succeeded");
       form.reset();
       selectWorkflow(null);
       setIndustry("");
     } catch {
       setStatus("error");
+      captureAnalytics("inquiry_failed");
     }
   }
   return (

@@ -59,7 +59,7 @@ export default async function BlogPost({ params }: Props) {
               )}
             </p>
           </header>
-          <div className={styles.prose}>
+          <div className={styles.prose} data-analytics-article>
             <Content components={postComponents(locale)} />
           </div>
         </article>
