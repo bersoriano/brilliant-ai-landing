@@ -1,5 +1,7 @@
 # B5 "Ink" redesign: build spec
 
+> **Update (Oct 2026):** the display face is now Bricolage Grotesque 600 (no italic; `<em>` accents are teal and upright), replacing Bodoni Moda wherever this spec says "Bodoni". The light band (`.band-paper`) is now a cool mist ground (`#eaf2f1`) with white surfaces and a `#08706a` accent instead of warm paper. Tokens in `app/globals.css` win over this document.
+
 The visual redesign of the landing page. It is a **restyle and reorder**, not a rewrite: every existing behavior, data source, translation, test and honesty rule stays. Where this spec and the reference disagree, **this spec wins**.
 
 - Visual reference: `docs/redesign/reference/b5-desktop-{1,2,3}.png` (read the images; only open `b5-desktop.html` when you need an exact value).

@@ -3,7 +3,6 @@
   align-items: baseline;
   min-height: 44px;
   font-family: var(--font-display);
-  font-style: italic;
   font-weight: 600;
   font-size: 32px;
   line-height: 44px;
@@ -11,11 +10,9 @@
   color: var(--text);
 }
 .period {
-  font-style: normal;
   color: var(--accent);
 }
 .ai {
-  font-style: normal;
   font-weight: 500;
   white-space: pre;
 }

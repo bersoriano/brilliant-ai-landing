@@ -1,6 +1,7 @@
 /* Destination: app/globals.css (replaces the old file, which moves to app/legacy.css
    until every section has its own CSS module).
-   B5 "Ink": dark navy ground, soft teal accent, Bodoni display over Geist.
+   B5 "Ink": dark navy ground, soft teal accent, Bricolage Grotesque display
+   over Geist. Light bands are cool mist with white cards (.band-paper).
    Section-specific layout lives in components/sections/*.module.css. */
 @import "tailwindcss";
 
@@ -15,7 +16,7 @@
   --color-fog-600: #7d8995;
   --color-teal-300: #86c5c0;
   --color-sand-300: #e2c48a;
-  --font-display: var(--font-bodoni), "Bodoni 72", Didot, "Times New Roman", serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, Arial, sans-serif;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, Arial, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -56,10 +57,8 @@
   box-sizing: border-box;
 }
 html {
-  /* Bodoni Moda's display optical sizes (opsz 24–96) have hairlines that
-     vanish on screen, worst light-on-navy. Pin the sturdier text cut. */
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 11;
+  /* Bricolage ships no italic: render italic upright instead of a fake slant. */
+  font-synthesis: none;
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-h) + 16px);
   -webkit-text-size-adjust: 100%;
@@ -124,25 +123,33 @@ input[type="range"] {
   border: 0;
 }
 
-/* Light "briefing paper" band (document exhibit, Trust). Redefines the tokens,
-   so every primitive inside keeps working; all text pairs are >= 4.5:1. The
-   accent is a deeper shade of the same teal, legible on paper. */
+/* Light "mist" band (Solutions, Services, Trust). Cool, teal-tinted ground
+   with white cards; redefines the tokens, so every primitive inside keeps
+   working. All text pairs are >= 4.5:1 on both --bg and --surface. The accent
+   is a deeper, more saturated shade of the same teal, legible on light. */
 .band-paper {
-  --bg: #efede6;
-  --surface: #e5e2d9;
-  --line: #d6d2c7;
-  --line-strong: #b8b3a6;
+  --bg: #eaf2f1;
+  --surface: #ffffff;
+  --line: #d2dfdd;
+  --line-strong: #9fb6b3;
   --text: #0b1520;
-  --text-2: #1f2d3b;
-  --muted: #3d4a57;
-  --faint: #55616c;
-  --accent: #2a6863;
-  --accent-hover: #1f5550;
-  --on-accent: #f4f2ec;
-  --caution: #7a5712;
+  --text-2: #1c2b39;
+  --muted: #384956;
+  --faint: #4e5f69;
+  --accent: #08706a;
+  --accent-hover: #055a55;
+  --on-accent: #ffffff;
+  --caution: #875800;
   color-scheme: light;
   background: var(--bg);
   color: var(--text);
+}
+/* On the mist ground, idle chips and "needs a person" notes sit on white. */
+.band-paper .chip:not([aria-pressed="true"], [aria-selected="true"]) {
+  background: var(--surface);
+}
+.band-paper .control {
+  background: color-mix(in oklab, var(--caution) 8%, var(--surface));
 }
 
 /* ---------- Layout primitives ---------- */
@@ -216,10 +223,9 @@ input[type="range"] {
   letter-spacing: -0.035em;
   text-wrap: balance;
 }
-/* Italic accent phrase inside any display heading */
+/* Accent phrase inside any display heading: color, not slant */
 :is(.display, .h2, .h2-sm, .statement) em {
-  font-style: italic;
-  font-weight: 500;
+  font-style: normal;
   color: var(--accent);
 }
 :is(.display, .h2, .h2-sm, .statement) em.quiet {
@@ -269,7 +275,7 @@ input[type="range"] {
 }
 .roman {
   font-family: var(--font-display);
-  font-style: italic;
+  font-weight: 600;
   font-size: 22px;
   line-height: 1;
   color: var(--faint);
