@@ -46,7 +46,7 @@ export default function PrivacyContent() {
         <h2>{t("Website services")}</h2>
         <p>
           {t(
-            "This application does not include advertising trackers or analytics scripts. Fonts are served with the website. The hosting provider may process technical request information, such as IP addresses, for website delivery, security, and diagnostics.",
+            "When enabled, PostHog measures visits, traffic sources and campaign tags, section views, blog reading progress, booking and contact link clicks, and inquiry delivery outcomes. It uses a random identifier in your browser’s session storage to connect visits within the same tab. We do not send form contents or calculator inputs to analytics, create identified visitor profiles, or record browsing sessions. Analytics respects your browser’s Do Not Track setting. Fonts are served with the website. The hosting provider may process technical request information, such as IP addresses, for website delivery, security, and diagnostics.",
           )}
         </p>
         <h2>{t("External services")}</h2>

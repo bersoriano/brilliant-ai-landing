@@ -31,7 +31,7 @@ export function StickyCta() {
     };
   }, []);
   return (
-    <div className={styles.bar} data-visible={visible} aria-hidden={!visible}>
+    <div className={styles.bar} data-visible={visible} aria-hidden={!visible} data-analytics-location="sticky_cta">
       <a
         href={DISCOVERY_CALL_HREF}
         className="button"

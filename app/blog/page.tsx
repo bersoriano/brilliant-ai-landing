@@ -29,7 +29,7 @@ export default async function Blog() {
         </h1>
         <p className="lead">{t(BLOG_DESCRIPTION)}</p>
         {posts.length ? (
-          <ol className={styles.list}>
+          <ol className={styles.list} data-analytics-section="blog-list">
             {posts.map((post) => (
               <li key={post.slug}>
                 {post.draft && <p className="label">{t("Draft")}</p>}
