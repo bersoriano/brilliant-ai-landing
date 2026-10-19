@@ -17,9 +17,8 @@ export async function GET(request: Request) {
   const slug = new URL(request.url).searchParams.get("post");
   const post = slug ? await getPost(slug, locale) : null;
   if (slug && !post) return new Response("Not found", { status: 404 });
-  const [bodoni, bodoniItalic, geist, geistMono] = await Promise.all([
-    ogFont("BodoniModa-500.woff"),
-    ogFont("BodoniModa-400-Italic.woff"),
+  const [bricolage, geist, geistMono] = await Promise.all([
+    ogFont("BricolageGrotesque-600.woff"),
     ogFont("Geist-Regular.ttf"),
     ogFont("GeistMono-Regular.ttf"),
   ]);
@@ -35,8 +34,8 @@ export async function GET(request: Request) {
             {t("Blog")} / {SITE_DOMAIN}
           </div>
           <div style={{
-            display: "flex", flex: 1, alignItems: "center", fontFamily: "Bodoni Moda",
-            fontWeight: 500, fontSize: post.title.length > 65 ? 64 : 74,
+            display: "flex", flex: 1, alignItems: "center", fontFamily: "Bricolage Grotesque",
+            fontWeight: 600, fontSize: post.title.length > 65 ? 64 : 74,
             lineHeight: 1.12, letterSpacing: -1,
           }}>
             {post.title}
@@ -47,7 +46,9 @@ export async function GET(request: Request) {
             fontFamily: "Geist", fontSize: 22, color: "#A9B3BC",
           }}>
             <span>{post.date}</span>
-            <span style={{ fontFamily: "Bodoni Moda", fontSize: 32, color: "#EEF0EE" }}>Brilliant AI.</span>
+            <span style={{ fontFamily: "Bricolage Grotesque", fontWeight: 600, fontSize: 32, color: "#EEF0EE" }}>
+              Brilliant AI<span style={{ color: "#86C5C0" }}>.</span>
+            </span>
           </div>
         </div>
       ),
@@ -55,7 +56,7 @@ export async function GET(request: Request) {
         ...size,
         headers: imageHeaders,
         fonts: [
-          { name: "Bodoni Moda", data: bodoni, style: "normal", weight: 500 },
+          { name: "Bricolage Grotesque", data: bricolage, style: "normal", weight: 600 },
           { name: "Geist", data: geist, style: "normal", weight: 400 },
           { name: "Geist Mono", data: geistMono, style: "normal", weight: 400 },
         ],
@@ -100,14 +101,13 @@ export async function GET(request: Request) {
             letterSpacing: -3,
           }}
         >
-          <span style={{ fontFamily: "Bodoni Moda", fontWeight: 500 }}>
+          <span style={{ fontFamily: "Bricolage Grotesque", fontWeight: 600 }}>
             {t("The capacity of a bigger team.")}
           </span>
           <span
             style={{
-              fontFamily: "Bodoni Moda",
-              fontStyle: "italic",
-              fontWeight: 400,
+              fontFamily: "Bricolage Grotesque",
+              fontWeight: 600,
               color: "#86C5C0",
             }}
           >
@@ -134,13 +134,13 @@ export async function GET(request: Request) {
           </span>
           <span
             style={{
-              fontFamily: "Bodoni Moda",
-              fontStyle: "italic",
+              fontFamily: "Bricolage Grotesque",
+              fontWeight: 600,
               fontSize: 30,
               color: "#EEF0EE",
             }}
           >
-            Brilliant AI<span style={{ color: "#86C5C0", fontStyle: "normal" }}>.</span>
+            Brilliant AI<span style={{ color: "#86C5C0" }}>.</span>
           </span>
         </div>
       </div>
@@ -149,8 +149,7 @@ export async function GET(request: Request) {
       ...size,
       headers: imageHeaders,
       fonts: [
-        { name: "Bodoni Moda", data: bodoni, style: "normal", weight: 500 },
-        { name: "Bodoni Moda", data: bodoniItalic, style: "italic", weight: 400 },
+        { name: "Bricolage Grotesque", data: bricolage, style: "normal", weight: 600 },
         { name: "Geist", data: geist, style: "normal", weight: 400 },
         { name: "Geist Mono", data: geistMono, style: "normal", weight: 400 },
       ],

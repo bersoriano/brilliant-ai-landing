@@ -139,7 +139,7 @@ export function Icon({
     </svg>
   );
 }
-/** Wordmark: "Brilliant AI" in Bodoni italic with an upright teal period. */
+/** Wordmark: "Brilliant AI" in the display face with a teal period. */
 export function Brand({ className = "" }: { className?: string }) {
   const { t, locale } = useLanguage();
   return (

@@ -26,8 +26,8 @@ Next.js 15 (App Router), React 19, TypeScript, Tailwind 4 (imported, but styling
   - Tokens, type classes and primitives live in `app/globals.css`; section layout goes in co-located `*.module.css`.
   - Fonts are local via `lib/fonts.ts`; don't add third-party font or image requests. Video is self-hosted too: compressed MP4 + poster + English and Spanish captions in `public/video/`, never a third-party embed.
   - Radius 0, one teal accent, no gradients or shadows.
-  - Legibility: Bodoni is pinned to its text optical size (`"opsz" 11` on `html`) and headings use weight 600; its display sizes have hairlines that vanish on navy. Don't re-enable `font-optical-sizing: auto` or `-webkit-font-smoothing: antialiased`.
-  - Light sections use `.band-paper` (redefines the tokens; every pair ≥ 4.5:1). Keep navy for hero, calculator and close.
+  - Type: Bricolage Grotesque (display, weight 600, no italic) over Geist (body) and Geist Mono (labels). `html` sets `font-synthesis: none`, so `font-style: italic` on display text renders upright; accent phrases (`<em>` in headings) are teal, not slanted. Don't add `-webkit-font-smoothing: antialiased`.
+  - Light sections use `.band-paper`: a cool mist ground (`#eaf2f1`) with white `--surface` cards, deep teal accent; it redefines the tokens and every text pair is ≥ 4.5:1 on both. No warm cream "paper". Keep navy for hero, calculator and close.
   - Exhibits are live demos (see "Live exhibits" in `docs/conversion/NOTES.md`): they end with a `.control` line ("Stays with you", sand = needs a person), and motion only comes from `useFirstView`/`Reveal`, which show the final state under reduced motion. The one exception is Exhibit 6, a recorded video: `controls`, `preload="none"`, never autoplay, and one caption track always on in the page's language (iOS stalls on play when every track is off).
   - Spec: `docs/redesign/B5-SPEC.md`.
 - **Keep a11y behavior:** tab keyboard handling, `aria-pressed` / `aria-selected`, native `<details>`, skip link, focus return in the mobile nav.
