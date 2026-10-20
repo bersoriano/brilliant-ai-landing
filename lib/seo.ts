@@ -94,7 +94,7 @@ export function buildJsonLd(locale: Locale, path: string) {
     url: siteUrl,
     email: CONTACT_EMAIL,
     image: absoluteUrl("/og"),
-    logo: absoluteUrl("/icon.svg"),
+    logo: absoluteUrl("/brand/brilliant-icon-512.png"),
     description: t(HOME_DESCRIPTION),
     areaServed: [
       { "@type": "Country", name: "United States" },

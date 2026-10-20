@@ -10,6 +10,7 @@ import {
   WHATSAPP_HREF,
 } from "@/lib/site";
 import { localePath } from "@/lib/locale";
+import { BrandLogo } from "../ui/Icon";
 export function Footer() {
   const { t, locale } = useLanguage();
   // Section links work from any page: anchors resolve against the home page.
@@ -19,6 +20,7 @@ export function Footer() {
       <div className="shell">
         <div className={styles.main}>
           <div className={styles.brand}>
+            <BrandLogo className={styles.logo} alt="" />
             <p className={styles.tagline}>
               {t("Less repetitive work.")} <em>{t("More human potential.")}</em>
             </p>

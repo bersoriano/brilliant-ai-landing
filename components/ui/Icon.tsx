@@ -1,6 +1,7 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import type { CSSProperties } from "react";
+import { SITE_NAME } from "@/lib/site";
 import brandStyles from "./Brand.module.css";
 export function Icon({
   name,
@@ -139,7 +140,7 @@ export function Icon({
     </svg>
   );
 }
-/** Wordmark: "Brilliant AI" in the display face with a teal period. */
+/** Logo: the Aurora prism and "brilliant" lettering (public/brand), linking home. */
 export function Brand({ className = "" }: { className?: string }) {
   const { t, locale } = useLanguage();
   return (
@@ -147,9 +148,27 @@ export function Brand({ className = "" }: { className?: string }) {
       href={locale === "es" ? "/es#top" : "/#top"}
       className={`${brandStyles.wordmark} ${className}`.trim()}
     >
-      Brilliant<span className={brandStyles.ai}> AI</span>
-      <span className={brandStyles.period}>.</span>
+      <BrandLogo className={brandStyles.logo} />
       <span className="sr-only"> {t("home")}</span>
     </a>
+  );
+}
+/** The horizontal logo, white lettering for the dark ground. Pass alt="" where
+ *  adjacent text already names the company. */
+export function BrandLogo({
+  className = "",
+  alt = SITE_NAME,
+}: {
+  className?: string;
+  alt?: string;
+}) {
+  return (
+    <img
+      src="/brand/brilliant-horizontal-on-dark.svg"
+      alt={alt}
+      width={440}
+      height={120}
+      className={className}
+    />
   );
 }
