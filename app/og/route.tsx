@@ -10,6 +10,11 @@ const size = { width: 1200, height: 630 };
 const imageHeaders = { "Cache-Control": "public, max-age=3600, stale-while-revalidate=86400" };
 const ogFont = (file: string) =>
   readFile(join(process.cwd(), "public/fonts/og", file));
+// Horizontal logo, white lettering (880×240, ~15% clear space top and bottom).
+const ogLogo = () =>
+  readFile(join(process.cwd(), "public/brand/brilliant-horizontal-on-dark-880w.png")).then(
+    (png) => `data:image/png;base64,${png.toString("base64")}`,
+  );
 
 export async function GET(request: Request) {
   const locale = await getRequestLocale();
@@ -17,10 +22,11 @@ export async function GET(request: Request) {
   const slug = new URL(request.url).searchParams.get("post");
   const post = slug ? await getPost(slug, locale) : null;
   if (slug && !post) return new Response("Not found", { status: 404 });
-  const [bricolage, geist, geistMono] = await Promise.all([
+  const [bricolage, geist, geistMono, logo] = await Promise.all([
     ogFont("BricolageGrotesque-600.woff"),
     ogFont("Geist-Regular.ttf"),
     ogFont("GeistMono-Regular.ttf"),
+    ogLogo(),
   ]);
   if (post) {
     return new ImageResponse(
@@ -41,14 +47,12 @@ export async function GET(request: Request) {
             {post.title}
           </div>
           <div style={{
-            display: "flex", justifyContent: "space-between", alignItems: "baseline",
+            display: "flex", justifyContent: "space-between", alignItems: "center",
             borderTop: "1px solid #2C3C4D", paddingTop: 24,
             fontFamily: "Geist", fontSize: 22, color: "#A9B3BC",
           }}>
             <span>{post.date}</span>
-            <span style={{ fontFamily: "Bricolage Grotesque", fontWeight: 600, fontSize: 32, color: "#EEF0EE" }}>
-              Brilliant AI<span style={{ color: "#86C5C0" }}>.</span>
-            </span>
+            <img src={logo} width={220} height={60} style={{ margin: "-12px -8px -12px 0" }} />
           </div>
         </div>
       ),
@@ -121,7 +125,7 @@ export async function GET(request: Request) {
             paddingTop: 24,
             borderTop: "1px solid #2C3C4D",
             justifyContent: "space-between",
-            alignItems: "baseline",
+            alignItems: "center",
             fontFamily: "Geist",
             fontSize: 22,
             color: "#A9B3BC",
@@ -132,16 +136,7 @@ export async function GET(request: Request) {
               ? "IA para finanzas y salud en México, EE. UU. y Canadá"
               : "AI for finance & healthcare in the US, Canada & Mexico"}
           </span>
-          <span
-            style={{
-              fontFamily: "Bricolage Grotesque",
-              fontWeight: 600,
-              fontSize: 30,
-              color: "#EEF0EE",
-            }}
-          >
-            Brilliant AI<span style={{ color: "#86C5C0" }}>.</span>
-          </span>
+          <img src={logo} width={220} height={60} style={{ margin: "-12px -8px -12px 0" }} />
         </div>
       </div>
     ),

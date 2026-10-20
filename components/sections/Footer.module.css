@@ -14,6 +14,14 @@
   gap: 14px;
   max-width: 28em;
 }
+.logo {
+  display: block;
+  align-self: flex-start;
+  width: auto;
+  height: 64px;
+  /* Pull the SVG's built-in inset flush with the column edge. */
+  margin: -10px 0 0 -10px;
+}
 .tagline {
   font-family: var(--font-display);
   font-style: italic;
