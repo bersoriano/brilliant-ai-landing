@@ -25,6 +25,8 @@ export type PostMeta = {
 };
 
 export type Post = PostMeta & { body: string };
+/** What a page needs to link a post: no body crosses to the client. */
+export type NoteLink = Pick<PostMeta, "slug" | "title">;
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;

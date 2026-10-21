@@ -503,20 +503,25 @@ test("Custom CRM copy is translated and stays white-label", () => {
   assert.doesNotMatch(sources, /atomic|marmelab/i);
 });
 
-test("Services presents the five offers as one translated set, ahead of How it works", () => {
-  const { SERVICES, WORKFLOW_EXAMPLES, AGENT_EXAMPLES } = require("../lib/services.ts");
-  const { ERP_PLAYS, ERP_FEATURES, erpPrice } = require("../lib/erp.ts");
+test("Services presents the five offers as one translated set, ahead of How it works, each with its own page", () => {
+  const { SERVICES, WORKFLOW_EXAMPLES, AGENT_EXAMPLES, AGENT_CONTROLS } = require("../lib/services.ts");
+  const { ERP_PLAYS, ERP_FEATURES, ERP_STEPS, ERP_NOTES, ERP_CUSTOM_WORK, erpPrice } = require("../lib/erp.ts");
   const { NAV_LINKS } = require("../lib/site.ts");
   assert.deepEqual(
     SERVICES.map((service) => service.name),
     ["AI Workflow Automations", "AI Agents", "Custom CRM", "Custom ERP", "Custom Software"],
   );
   const strings = [
-    ...SERVICES.flatMap((service) => [service.name, service.line]),
+    ...SERVICES.flatMap((service) => [service.name, service.line, service.summary, service.example]),
     ...WORKFLOW_EXAMPLES.flatMap((example) => [example.label, example.steps]),
     ...AGENT_EXAMPLES.flatMap((example) => Object.values(example)),
+    ...AGENT_CONTROLS.flat(),
     ...ERP_PLAYS.flatMap((play) => Object.values(play)),
     ...ERP_FEATURES.flatMap(([, title, line]) => [title, line]),
+    // Step labels such as "20 min" read the same in Spanish.
+    ...ERP_STEPS.flatMap((step) => [step.title, step.body]),
+    ...ERP_NOTES.flat(),
+    ...ERP_CUSTOM_WORK,
     ...softwareStrings(),
   ];
   for (const s of strings)
@@ -532,34 +537,64 @@ test("Services presents the five offers as one translated set, ahead of How it w
   assert.equal(erpPrice("en").currency, "USD");
   assert.equal(erpPrice("es").currency, "MXN");
   for (const locale of ["en", "es"]) assert.ok(erpPrice(locale).month > 0, locale);
-  // One Services section, ahead of How it works; the CRM lives inside it.
+  // One Services section of cards, after the calculator and ahead of How it works.
   const page = fs.readFileSync("app/page.tsx", "utf8");
   assert.ok(page.includes("<Services />"), "homepage renders Services");
+  assert.ok(page.indexOf("<RoiCalculator />") < page.indexOf("<Services />"), "Services comes after the calculator");
   assert.ok(page.indexOf("<Services />") < page.indexOf("<HowItWorks />"), "Services comes before How it works");
   assert.doesNotMatch(page, /<CustomCrm/);
-  assert.ok(NAV_LINKS.some((link) => link.href === "#services"), "nav links to #services");
   const services = fs.readFileSync("components/sections/Services.tsx", "utf8");
   assert.match(services, /PRIMARY_CTA/, "Services closes on the primary CTA");
-  for (const id of SERVICES.map((service) => service.id))
+  assert.match(services, /localePath\(locale, item\.path\)/, "each card links its page");
+  // Each card keeps its old homepage anchor and links a page that exists.
+  for (const { id, path } of SERVICES) {
     assert.ok(/^[a-z-]+$/.test(id), `${id}: a plain anchor id`);
+    assert.ok(fs.existsSync(`app${path}/page.tsx`), `${path}: page exists`);
+    assert.match(fs.readFileSync("app/sitemap.ts", "utf8"), new RegExp(`"${path}"`), `${path}: in the sitemap`);
+  }
+  // The nav opens the service pages and keeps How it works, Security and Blog.
+  assert.deepEqual(NAV_LINKS.map((link) => link.href), ["/services", "/#how-it-works", "/security", "/blog"]);
+  assert.match(fs.readFileSync("components/sections/Navbar.tsx", "utf8"), /SERVICES\.map/, "the nav lists every service");
+  assert.ok(fs.existsSync("app/services/page.tsx"), "the services index exists");
+});
+
+test("The homepage stays short: one exhibit up top, three pains per sector, six questions", () => {
+  const { FAQS, HOMEPAGE_FAQS } = require("../lib/faq.ts");
+  const page = fs.readFileSync("app/page.tsx", "utf8");
+  // The long offers, the job picker and the blog teaser live on their own pages.
+  for (const gone of ["<Solution", "<LatestPosts", "<OnsiteConsulting"])
+    assert.ok(!page.includes(gone), `${gone} moved off the homepage`);
+  assert.match(fs.readFileSync("components/sections/WorkflowsLanding.tsx", "utf8"), /<Solution \/>/, "the job picker lives on /workflows");
+  assert.match(fs.readFileSync("components/sections/ServicesIndex.tsx", "utf8"), /<OnsiteConsulting \/>/, "onsite reviews live on /services");
+  const problem = fs.readFileSync("components/sections/Problem.tsx", "utf8");
+  for (const column of problem.match(/items: \[[^\]]*\]/g))
+    assert.ok((column.match(/"/g).length / 2) <= 3, "at most three pains per sector");
+  // Six questions on the homepage, the US/Canada/Mexico one first; all on /services.
+  assert.ok(HOMEPAGE_FAQS.length >= 5 && HOMEPAGE_FAQS.length <= 6, `${HOMEPAGE_FAQS.length} homepage questions`);
+  assert.equal(HOMEPAGE_FAQS[0], FAQS[0]);
+  assert.match(page, /<Faq items=\{HOMEPAGE_FAQS\} more \/>/);
+  const home = require("../lib/seo.ts").buildJsonLd("en", "/")["@graph"].find((node) => node["@type"] === "FAQPage");
+  assert.equal(home.mainEntity.length, HOMEPAGE_FAQS.length, "the homepage FAQ schema matches what it shows");
 });
 
 test("Services copy speaks to business owners: no build-stack or technical terms", () => {
-  const { SERVICES, WORKFLOW_EXAMPLES, AGENT_EXAMPLES } = require("../lib/services.ts");
-  const { ERP_PLAYS, ERP_FEATURES } = require("../lib/erp.ts");
+  const { SERVICES, WORKFLOW_EXAMPLES, AGENT_EXAMPLES, AGENT_CONTROLS } = require("../lib/services.ts");
+  const { ERP_PLAYS, ERP_FEATURES, ERP_STEPS, ERP_NOTES, ERP_CUSTOM_WORK } = require("../lib/erp.ts");
   const { CRM_AGENT_PLAYS, CRM_ESSENTIALS, CRM_ADVANCED } = require("../lib/crm.ts");
   const TECHNICAL =
     /\b(atomic|marmelab|erpnext|frappe|caffyne|doctypes?|mcp|python|open[- ]source|self[- ]host(ed|ing)?|código abierto|autoalojad[oa]s?|next\.?js|react|supabase|stripe|vercel|postgres(ql)?)\b/i;
   const keys = [
-    ...tLiterals("components/sections/Services.tsx"),
-    ...tLiterals("components/sections/SystemOffer.tsx"),
-    ...tLiterals("components/sections/SoftwareVideo.tsx"),
+    ...SERVICE_PAGE_FILES.flatMap(tLiterals),
     ...softwareStrings(),
-    ...SERVICES.flatMap((service) => [service.name, service.line]),
+    ...SERVICES.flatMap((service) => [service.name, service.line, service.summary, service.example]),
     ...WORKFLOW_EXAMPLES.flatMap((example) => [example.label, example.steps]),
     ...AGENT_EXAMPLES.flatMap((example) => Object.values(example)),
+    ...AGENT_CONTROLS.flat(),
     ...ERP_PLAYS.flatMap((play) => Object.values(play)),
     ...ERP_FEATURES.flatMap(([, title, line]) => [title, line]),
+    ...ERP_STEPS.flatMap((step) => [step.title, step.label, step.body]),
+    ...ERP_NOTES.flat(),
+    ...ERP_CUSTOM_WORK,
     ...CRM_AGENT_PLAYS.flatMap((play) => Object.values(play)),
     ...[...CRM_ESSENTIALS, ...CRM_ADVANCED.slice(0, 3)].flatMap(([, title, line]) => [title, line]),
   ];
@@ -573,18 +608,27 @@ test("Services copy speaks to business owners: no build-stack or technical terms
     fs.readFileSync("docs/conversion/NOTES.md", "utf8"),
     fs.readFileSync("lib/erp.ts", "utf8"),
     fs.readFileSync("lib/services.ts", "utf8"),
-    fs.readFileSync("components/sections/Services.tsx", "utf8"),
-    fs.readFileSync("components/sections/SystemOffer.tsx", "utf8"),
+    ...SERVICE_PAGE_FILES.map((file) => fs.readFileSync(file, "utf8")),
+    fs.readFileSync("lib/i18n.ts", "utf8"),
     fs.readFileSync("lib/seo.ts", "utf8"),
     JSON.stringify(dictionary),
   ].join("\n");
   assert.doesNotMatch(sources, ERP_FOUNDATION);
 });
 
+/**
+ * The homepage Services cards and the service pages. /custom-crm is not here:
+ * it says "open-source foundation" by design (see lib/crm.ts).
+ */
+const SERVICE_PAGE_FILES = [
+  "Services", "ServicesIndex", "Automation", "WorkflowsLanding", "AgentsLanding",
+  "ErpLanding", "SoftwareLanding", "SoftwareVideo", "Landing",
+].map((name) => `components/sections/${name}.tsx`);
+
 /** Every visitor-facing string in the custom software offer's data. */
 function softwareStrings() {
-  const { HAAB_FEATURES } = require("../lib/software.ts");
-  return HAAB_FEATURES.flatMap(([title, line]) => [title, line]);
+  const { HAAB_FEATURES, SOFTWARE_NOTES } = require("../lib/software.ts");
+  return [...HAAB_FEATURES, ...SOFTWARE_NOTES].flatMap(([title, line]) => [title, line]);
 }
 
 /** WebVTT cues as { timing, text }; the header and blank lines are skipped. */
@@ -609,9 +653,9 @@ test("Custom software showcases Haab Calendar as our own product, with its demo 
   assert.equal(haabHref("en"), "https://haabcalendar.com/");
   assert.equal(haabHref("es"), "https://haabcalendar.com/?lang=es");
   assert.equal(haabHref("es", HAAB_EXAMPLE_PATH), `https://haabcalendar.com${HAAB_EXAMPLE_PATH}?lang=es`);
-  const services = fs.readFileSync("components/sections/Services.tsx", "utf8");
-  assert.match(services, /<SoftwareVideo/, "Services renders the demo video");
-  assert.match(services, /haabHref\(locale, HAAB_EXAMPLE_PATH\)/, "links a live example page");
+  const software = fs.readFileSync("components/sections/SoftwareLanding.tsx", "utf8");
+  assert.match(software, /<SoftwareVideo/, "/custom-software renders the demo video");
+  assert.match(software, /haabHref\(locale, HAAB_EXAMPLE_PATH\)/, "links a live example page");
   // The video, its poster and both caption files ship from our own domain,
   // light enough for a marketing page.
   for (const path of [HAAB_VIDEO.src, HAAB_VIDEO.poster, ...Object.values(HAAB_VIDEO.captions)])
@@ -636,17 +680,19 @@ test("Custom software showcases Haab Calendar as our own product, with its demo 
   // only once: switching language switches the captions in place.
   assert.deepEqual(captionModes("en"), [["en", "showing"], ["es", "disabled"]]);
   assert.deepEqual(captionModes("es"), [["es", "showing"], ["en", "disabled"]]);
-  // Exhibit 6 is the video: it never autoplays and loads nothing until played.
+  // The video is the page's Exhibit 1: it never autoplays and loads nothing until played.
   assert.ok(!fs.existsSync("components/sections/BookingFlow.tsx"), "the scripted exhibit is gone");
   const video = fs.readFileSync("components/sections/SoftwareVideo.tsx", "utf8");
-  assert.match(video, /number: 6/);
+  assert.match(video, /number: 1/);
   assert.match(video, /t\("Sample data"\)/, "the exhibit is labelled as sample data");
   assert.match(video, /preload="none"/);
   assert.match(video, /\bcontrols\b/);
   assert.match(video, /captionTracks\(locale\)/);
   assert.match(video, /captionModes\(locale\)/, "the captions follow the language switch");
   assert.doesNotMatch(video, /autoPlay/);
-  assert.match(fs.readFileSync("components/sections/CaseStudy.tsx", "utf8"), /number: 7/);
+  // Exhibits are numbered per page: the homepage runs 1 (hero), 2 (calculator), 3 (case study).
+  assert.match(fs.readFileSync("components/sections/RoiCalculator.tsx", "utf8"), /number: 2/);
+  assert.match(fs.readFileSync("components/sections/CaseStudy.tsx", "utf8"), /number: 3/);
   // Honesty: Haab is ours, so no copy may call it a client or partner.
   const copy = [
     ...fs.readdirSync("components/sections").map((f) => fs.readFileSync(`components/sections/${f}`, "utf8")),
@@ -654,6 +700,35 @@ test("Custom software showcases Haab Calendar as our own product, with its demo 
   ].join("\n");
   assert.doesNotMatch(copy, /Haab Calendar, (our client|cliente)/i);
   assert.match(copy, /Bookings run on Haab Calendar, a booking app we built\./);
+});
+
+test("Every service page has its own localized URL, metadata, and sitemap entry", () => {
+  const i18n = require("../lib/i18n.ts");
+  const pages = [
+    ["/services", "services", "SERVICES_DESCRIPTION"],
+    ["/workflows", "workflows", "WORKFLOWS_DESCRIPTION"],
+    ["/agents", "agents", "AGENTS_DESCRIPTION"],
+    ["/custom-erp", "erp", "ERP_DESCRIPTION"],
+    ["/custom-software", "software", "SOFTWARE_DESCRIPTION"],
+  ];
+  const titles = new Set();
+  for (const [path, page, description] of pages) {
+    assert.equal(pageFromPath(path), page, path);
+    assert.equal(pageFromPath(`/es${path}`), page, path);
+    assert.equal(languageAlternatePaths(path)["es-MX"], `/es${path}`);
+    assert.ok(dictionary[i18n[description]], `Spanish description for ${path}`);
+    assert.equal(pageDescription("es", page), dictionary[i18n[description]]);
+    for (const locale of ["en", "es"]) {
+      const title = pageTitle(locale, page);
+      assert.ok(!titles.has(title), `${title}: unique title`);
+      titles.add(title);
+    }
+    assert.ok(fs.existsSync(`app${path}/page.tsx`), path);
+    assert.match(fs.readFileSync("app/sitemap.ts", "utf8"), new RegExp(`"${path}"`), path);
+    assert.match(fs.readFileSync("scripts/verify-seo.cjs", "utf8"), new RegExp(`"${path}"`), `${path}: in verify:seo`);
+  }
+  // The ERP's search description follows the Spanish ERP rule: no invoicing promise.
+  assert.doesNotMatch(dictionary[i18n.ERP_DESCRIPTION], /facturaci[oó]n/i);
 });
 
 test("Custom CRM landing has its own localized URL, metadata, and sitemap entry", () => {
@@ -760,27 +835,29 @@ test("Every post ships in English and Mexican Spanish, compiles, and follows the
   }
 });
 
-test("Blog is reachable from the nav and homepage; the CRM page links to a published post", () => {
+test("Blog is reachable from the nav and footer; the CRM and ERP pages link to published posts", () => {
   const { NAV_LINKS } = require("../lib/site.ts");
   const { CRM_POST_SLUG } = require("../lib/crm.ts");
+  const { ERP_POST_SLUG } = require("../lib/erp.ts");
   const { POSTS_DIR, POST_LOCALES, parsePost } = require("../lib/posts.ts");
   assert.ok(NAV_LINKS.some((link) => link.href === "/blog"), "nav links to /blog");
-  assert.match(fs.readFileSync("app/page.tsx", "utf8"), /<LatestPosts /);
-  for (const file of ["CrmLanding.tsx", "Services.tsx"])
-    assert.match(fs.readFileSync(`components/sections/${file}`, "utf8"), /CRM_POST_SLUG/, file);
-  // The link must never 404: the post exists in both languages and is not a draft.
-  for (const locale of POST_LOCALES) {
-    const file = `${POSTS_DIR}/${CRM_POST_SLUG}/${locale}.mdx`;
-    assert.ok(fs.existsSync(file), `missing ${file}`);
-    assert.equal(parsePost(fs.readFileSync(file, "utf8"), CRM_POST_SLUG, locale).draft, false, `${file} is a draft`);
-  }
+  assert.match(fs.readFileSync("components/sections/Footer.tsx", "utf8"), /"\/blog"/, "footer links to /blog");
+  assert.match(fs.readFileSync("components/sections/CrmLanding.tsx", "utf8"), /CRM_POST_SLUG/);
+  assert.match(fs.readFileSync("app/custom-erp/page.tsx", "utf8"), /ERP_POST_SLUG/);
+  // The links must never 404: each post exists in both languages and is not a draft.
+  for (const slug of [CRM_POST_SLUG, ERP_POST_SLUG])
+    for (const locale of POST_LOCALES) {
+      const file = `${POSTS_DIR}/${slug}/${locale}.mdx`;
+      assert.ok(fs.existsSync(file), `missing ${file}`);
+      assert.equal(parsePost(fs.readFileSync(file, "utf8"), slug, locale).draft, false, `${file} is a draft`);
+    }
 });
 
 test("Homepage notes stay published in both languages, and the approach copy is translated", () => {
   const { INSIGHTS, APPROACH_RULES } = require("../lib/insights.ts");
   const { POSTS_DIR, POST_LOCALES, parsePost } = require("../lib/posts.ts");
-  // Linked from the approach block, the calculator and the trust section:
-  // a missing or draft note would be a broken link on the homepage.
+  // Linked from the approach block, the calculator and the service pages:
+  // a missing or draft note would be a broken link.
   for (const slug of Object.values(INSIGHTS))
     for (const locale of POST_LOCALES) {
       const file = `${POSTS_DIR}/${slug}/${locale}.mdx`;
@@ -801,24 +878,6 @@ test("Link, don't lecture: the authority block is at most three one-line rules, 
     assert.ok(INSIGHTS[rule.note], `${rule.title}: links a registered note`);
     assert.ok(rule.title.length <= 60, `${rule.title}: keep the rule to one line`);
   }
-});
-
-test("Homepage blog teaser skips the notes it already links and the CRM post", () => {
-  const { FEATURED_INSIGHTS, homepageTeaser } = require("../lib/insights.ts");
-  const { CRM_POST_SLUG } = require("../lib/crm.ts");
-  // Newest first, as getPosts returns them.
-  const posts = [CRM_POST_SLUG, "newest", ...FEATURED_INSIGHTS, "second", "third", "fourth"].map(
-    (slug) => ({ slug }),
-  );
-  assert.deepEqual(
-    homepageTeaser(posts).map((post) => post.slug),
-    ["newest", "second", "third"],
-  );
-  // With only linked notes and the CRM post published, the section has nothing to show.
-  assert.deepEqual(
-    homepageTeaser([CRM_POST_SLUG, ...FEATURED_INSIGHTS].map((slug) => ({ slug }))),
-    [],
-  );
 });
 
 test("Positioning stays operator, not consultancy", () => {

@@ -117,6 +117,11 @@ export function pageFromPath(
   | "finance"
   | "healthcare"
   | "crm"
+  | "erp"
+  | "workflows"
+  | "agents"
+  | "software"
+  | "services"
   | "blog"
   | "post" {
   const path = stripLocalePrefix(pathname);
@@ -124,6 +129,11 @@ export function pageFromPath(
   if (path.startsWith("/blog/")) return "post";
   if (path === "/finance-automation") return "finance";
   if (path === "/custom-crm") return "crm";
+  if (path === "/custom-erp") return "erp";
+  if (path === "/workflows") return "workflows";
+  if (path === "/agents") return "agents";
+  if (path === "/custom-software") return "software";
+  if (path === "/services") return "services";
   if (path === "/healthcare-automation") return "healthcare";
   if (path === "/privacy") return "privacy";
   if (path === "/security") return "security";

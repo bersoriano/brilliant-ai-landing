@@ -32,3 +32,13 @@ export const FAQS: [question: string, answer: string][] = [
     "The workflow review is free and takes 20 minutes. A pilot covers one workflow with a fixed scope, typically 3–6 weeks, and is priced after discovery. After launch, a monthly operating retainer keeps the workflow monitored and current. Every proposal separates implementation, third-party and API costs, and ongoing care.",
   ],
 ];
+
+/**
+ * The homepage keeps the questions a first visit asks; the full list lives on
+ * /services. The homepage FAQ schema follows what it shows.
+ */
+const SERVICES_ONLY = new Set([
+  "Do we need an AI specialist on our team?",
+  "How long does an implementation take?",
+]);
+export const HOMEPAGE_FAQS = FAQS.filter(([question]) => !SERVICES_ONLY.has(question));

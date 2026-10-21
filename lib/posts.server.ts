@@ -13,6 +13,7 @@ import {
   isVisible,
   parsePost,
   sortPosts,
+  type NoteLink,
   type Post,
 } from "./posts";
 
@@ -56,6 +57,14 @@ export const getPost = cache(async (slug: string, locale: Locale) => {
   const post = await readPost(slug, locale);
   return post && isVisible(post, production) ? post : null;
 });
+
+/** Links to the given notes, in order; missing and draft notes are skipped. */
+export async function getNoteLinks(slugs: string[], locale: Locale): Promise<NoteLink[]> {
+  const posts = await Promise.all(slugs.map((slug) => getPost(slug, locale)));
+  return posts
+    .filter((post): post is Post => !!post)
+    .map(({ slug, title }) => ({ slug, title }));
+}
 
 // Posts are trusted repo content; compile each once per server instance in
 // production, and on every request in development so edits show on reload.

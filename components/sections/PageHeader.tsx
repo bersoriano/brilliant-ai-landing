@@ -4,7 +4,7 @@ import { DISCOVERY_CALL_HREF, NAV_CTA } from "@/lib/site";
 import { Brand } from "../ui/Icon";
 import styles from "./PageHeader.module.css";
 
-/** Slim header for the supporting pages (/security, /about). */
+/** Slim header for the supporting pages (/security, /about, the sector pages). */
 export function PageHeader() {
   const { t } = useLanguage();
   return (

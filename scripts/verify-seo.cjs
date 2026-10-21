@@ -19,7 +19,7 @@ const published = fs.readdirSync("content/posts", { withFileTypes: true })
     const raw = fs.readFileSync(`content/posts/${entry.name}/en.mdx`, "utf8");
     return { slug: entry.name, ...parse(raw.match(/^---\n([\s\S]*?)\n---/)[1]) };
   }).filter((post) => !post.draft);
-const staticPaths = ["", "/finance-automation", "/healthcare-automation", "/custom-crm", "/security", "/about", "/privacy", "/blog"];
+const staticPaths = ["", "/finance-automation", "/healthcare-automation", "/services", "/workflows", "/agents", "/custom-crm", "/custom-erp", "/custom-software", "/security", "/about", "/privacy", "/blog"];
 const paths = ["", "/es"].flatMap((prefix) => [
   ...staticPaths.map((path) => `${prefix}${path}` || "/"),
   ...published.map((post) => `${prefix}/blog/${post.slug}`),
@@ -88,6 +88,8 @@ async function verify() {
       if (!href || !href.startsWith("/") && !href.startsWith("#")) continue;
       const url = new URL(href, `${origin}${path}`);
       if (url.origin !== origin || url.search) continue;
+      // Files such as the demo video's download fallback are assets, not pages.
+      if (/\.[a-z0-9]+$/i.test(url.pathname)) continue;
       const target = url.pathname.replace(/\/$/, "") || "/";
       assert.ok(documents.has(target), `${path}: unknown internal target ${href}`);
       if (url.hash) {

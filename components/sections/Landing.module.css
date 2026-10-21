@@ -396,3 +396,58 @@
     font-size: 19px;
   }
 }
+
+/* Notes from the blog: one ruled row each */
+.notes {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-strong);
+}
+.notes li {
+  border-bottom: 1px solid var(--line);
+}
+.notes a {
+  display: grid;
+  gap: 6px;
+  padding-block: 16px;
+  color: var(--text);
+}
+.noteTitle {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.35;
+  transition: color 0.15s ease;
+}
+.noteTitle svg {
+  display: inline;
+  vertical-align: -2px;
+  color: var(--accent);
+}
+.notes a:hover .noteTitle {
+  color: var(--accent);
+}
+
+/* Body column beside a .head title block */
+.side {
+  grid-column: 6 / span 7;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+@media (max-width: 900px) {
+  .side {
+    margin-top: 24px;
+  }
+}
+.noteBlock {
+  display: grid;
+  gap: 8px;
+  max-width: 34em;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.customCopy .noteBlock:first-of-type {
+  margin-top: 8px;
+}

@@ -9,6 +9,9 @@ import type { Currency } from "./roi";
  * the base plan is scoped and quoted after the review.
  */
 
+/** The note /custom-erp links to; a test keeps it published. */
+export const ERP_POST_SLUG = "erp-systems-of-action";
+
 /**
  * Base-plan starting price per currency, set separately (no FX conversion).
  * It starts where the CRM's does; kept apart so the two can change on their
@@ -70,4 +73,48 @@ export const ERP_FEATURES: CrmFeature[] = [
     "Your own fields and stages, in English, Spanish, or both.",
   ],
   ["lock", "Single sign-on", "Sign in with the accounts your team already uses."],
+];
+
+/** /custom-erp: from the review to a system your team uses. */
+export const ERP_STEPS: { title: string; label: string; body: string }[] = [
+  {
+    title: "Review",
+    label: "20 min",
+    body: "We map your operations: sales, stock, purchasing, and the spreadsheets and tools your team uses today.",
+  },
+  {
+    title: "Set up",
+    label: "Before launch",
+    body: "We configure your fields, stages, and approvals, and bring in your records.",
+  },
+  {
+    title: "Launch",
+    label: "Day one",
+    body: "Your team signs in with the accounts they already use, and we walk them through it.",
+  },
+  {
+    title: "Grow",
+    label: "Ongoing",
+    body: "Change stages, statuses, and who can approve yourself. New approval steps, reports, or fields are quoted, then built.",
+  },
+];
+
+/** /custom-erp: asking the system, and asking us for more. */
+export const ERP_NOTES: [title: string, body: string, caption?: string][] = [
+  [
+    "Ask in plain language",
+    "Connect the agents we build, or Claude or ChatGPT. They find open invoices, check stock, draft a purchase order, or summarize what’s waiting for approval, always with the same permissions as the person asking. Nothing posts or pays without your team’s approval.",
+  ],
+  [
+    "Need something new? Ask for it.",
+    "Tell us what your process needs (a new approval step, a custom report, a field for your industry) and we add it. Everyday changes such as stages, statuses, or who can approve stay with your team.",
+    "Quoted before we start.",
+  ],
+];
+
+/** Beyond the base plan: scoped with you, quoted before we start. */
+export const ERP_CUSTOM_WORK = [
+  "A new approval step",
+  "Custom reports",
+  "Fields for your industry",
 ];

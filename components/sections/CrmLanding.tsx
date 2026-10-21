@@ -31,8 +31,8 @@ import { Exhibit } from "../ui/Exhibit";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
 import { Footer } from "./Footer";
-import { PageHeader } from "./PageHeader";
-import styles from "./CrmLanding.module.css";
+import { Navbar } from "./Navbar";
+import styles from "./Landing.module.css";
 
 const NUMERALS = ["i.", "ii.", "iii.", "iv."];
 
@@ -62,9 +62,9 @@ export function CrmLanding() {
   );
   return (
     <>
-      <PageHeader />
+      <Navbar />
       <main id="main">
-        <section className={`shell ${styles.hero}`} aria-labelledby="crm-title">
+        <section id="top" className={`shell ${styles.hero}`} aria-labelledby="crm-title">
           <a className="text-link" href={localePath(locale, "/")}>
             {t("← Back to home")}
           </a>

@@ -12,7 +12,7 @@ export const DISCOVERY_CALL_HREF =
  */
 export const PRIMARY_CTA = "Book a 20-minute workflow review";
 /** Short form of PRIMARY_CTA for tight spaces (header, sticky mobile bar). */
-export const NAV_CTA = "Book review";
+export const NAV_CTA = "Book a review";
 export const ONSITE_CTA = "Book an onsite review";
 export const CRM_CTA = "Book a CRM review";
 export const WHATSAPP_CTA = "Message us on WhatsApp";
@@ -21,12 +21,15 @@ export const SITE_DOMAIN = "brilliant.dev";
 export const WHATSAPP_NUMBER = "+1 347 326 1975";
 export const WHATSAPP_HREF = "https://wa.me/13473261975";
 export const CALCULATOR_ANCHOR = "#roi-calculator";
+/**
+ * Header links. Paths starting with "/" follow the language; "/#…" anchors
+ * resolve against the homepage, so they work from every page. "Services"
+ * opens the list of service pages (SERVICES in lib/services.ts).
+ */
 export const NAV_LINKS = [
-  { label: "Solutions", href: "#solutions" },
-  { label: "Services", href: "#services" },
-  { label: "How it works", href: "#how-it-works" },
-  { label: "ROI", href: CALCULATOR_ANCHOR },
-  { label: "Trust", href: "#trust" },
+  { label: "Services", href: "/services" },
+  { label: "How it works", href: "/#how-it-works" },
+  { label: "Security", href: "/security" },
   { label: "Blog", href: "/blog" },
 ];
 
