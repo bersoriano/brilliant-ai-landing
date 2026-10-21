@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { FAQS } from "./faq";
+import { FAQS, HOMEPAGE_FAQS } from "./faq";
 import {
   HOME_DESCRIPTION,
   pageDescription,
@@ -17,6 +17,7 @@ import {
   type Locale,
 } from "./locale";
 import { crmPrice } from "./crm";
+import { erpPrice } from "./erp";
 import type { PostMeta } from "./posts";
 import { absoluteUrl, CONTACT_EMAIL, getSiteUrl, SITE_NAME } from "./site";
 
@@ -146,13 +147,15 @@ export function buildJsonLd(locale: Locale, path: string) {
   const graph: Record<string, unknown>[] =
     page === "post" ? [organization, website] : [organization, website, webPage];
 
-  if (page === "home") {
+  // Each page's FAQ schema lists the questions it shows.
+  const faqs = page === "home" ? HOMEPAGE_FAQS : page === "services" ? FAQS : null;
+  if (faqs) {
     graph.push({
       "@type": "FAQPage",
       "@id": `${canonical}#faq`,
       isPartOf: { "@id": `${canonical}#webpage` },
       inLanguage,
-      mainEntity: FAQS.map(([question, answer]) => ({
+      mainEntity: faqs.map(([question, answer]) => ({
         "@type": "Question",
         name: t(question),
         acceptedAnswer: {
@@ -187,6 +190,50 @@ export function buildJsonLd(locale: Locale, path: string) {
       provider: { "@id": organizationId },
       areaServed: organization.areaServed,
       offers: [offer(month, "MON"), offer(year, "ANN")],
+    });
+  }
+
+  if (page === "erp") {
+    // Starting price only: the ERP has no annual plan listed.
+    const { currency, month } = erpPrice(locale);
+    graph.push({
+      "@type": "Service",
+      "@id": `${canonical}#service`,
+      name: t("Custom ERP"),
+      serviceType: "Custom ERP implementation",
+      description: pageDescription(locale, page),
+      provider: { "@id": organizationId },
+      areaServed: organization.areaServed,
+      offers: {
+        "@type": "Offer",
+        priceCurrency: currency,
+        priceSpecification: {
+          "@type": "UnitPriceSpecification",
+          minPrice: month,
+          priceCurrency: currency,
+          unitCode: "MON",
+        },
+      },
+    });
+  }
+
+  const SERVICE_TYPES: Partial<Record<typeof page, [name: string, type: string]>> = {
+    workflows: ["AI Workflow Automations", "AI workflow automation"],
+    agents: ["AI Agents", "AI agent implementation"],
+    software: ["Custom Software", "Custom software development"],
+  };
+  const serviceType = SERVICE_TYPES[page];
+  if (serviceType) {
+    graph.push({
+      "@type": "Service",
+      "@id": `${canonical}#service`,
+      name: t(serviceType[0]),
+      serviceType: serviceType[1],
+      description: pageDescription(locale, page),
+      url: canonical,
+      provider: { "@id": organizationId },
+      areaServed: organization.areaServed,
+      mainEntityOfPage: { "@id": `${canonical}#webpage` },
     });
   }
 

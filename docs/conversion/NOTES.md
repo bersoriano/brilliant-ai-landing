@@ -7,18 +7,41 @@ to do in the next 20 minutes.
 
 ## Section order (`app/page.tsx`)
 
-Nav + geo/lang → Hero (Exhibit 1) → Solutions: Finance | Healthcare switcher
-with the workflow exhibit (Exhibit 2, paper band) → Pain → ROI calculator →
-How it works (Review → Pilot → We run it, the 20-minute review, pricing shape,
-"What's in the work") → What we've learned (four operator rules, each linked
-to a note) → Trust (paper band, opens with the approval point of view) → Proof
-→ Custom CRM (agent playbook exhibit, features, pricing) → FAQ → Blog teaser
-(posts not already featured) → Onsite → Contact → Footer, plus the sticky
-mobile CTA.
+The homepage is the conversion page; each offer's detail lives on its own
+page. Nav + geo/lang → Hero (Exhibit 1, the invoice run) → Pain (three per
+sector, each column linking its sector page) → ROI calculator (Exhibit 2) →
+Services (five cards, each linking its page; closes on the review) → How it
+works (Review → Pilot → We run it, the 20-minute review, what it costs to
+start) → Trust (paper band: the approval point of view and a link to
+`/security`) → Proof (Rhino teaser, linking the full story on
+`/custom-software`) → What we've learned (three operator rules, each linked to
+a note) → FAQ (six questions, "More questions" → `/services#faq`) → Contact →
+Footer, plus the sticky mobile CTA.
 
-Pages: `/security`, `/about`, `/custom-crm` (the full CRM offer: pipeline and
-conversation exhibits, features, setup steps, pricing) (and `/es/…`). The "what the 20 minutes covers"
-content is the in-page anchor `#review`.
+Nav: Services (a disclosure listing the five service pages and "All
+services"), How it works (`/#how-it-works`), Security, Blog, and `NAV_CTA`.
+Anchors in the nav and footer resolve against the homepage, so they work from
+every page.
+
+Service pages (and `/es/…`), laid out like `/custom-crm` (back link, hero with
+an exhibit, sections, repeated review CTAs, a close with WhatsApp and email):
+
+- `/services`: the five cards, onsite reviews, every FAQ.
+- `/workflows`: the three pipelines, the Finance | Healthcare job picker
+  (Exhibit 1, `Solution`), the notes behind the rules, "Workflow or agent?",
+  and the contact form the picker fills in.
+- `/agents`: the three requests, the CRM agent playbook (Exhibit 1), what
+  keeps approvals with a person, "Workflow or agent?".
+- `/custom-crm`: the full CRM offer (pipeline and conversation exhibits,
+  features, setup steps, pricing).
+- `/custom-erp`: the ERP playbook (Exhibit 1), features, plain-language
+  notes, setup steps, pricing from `ERP_PRICE`.
+- `/custom-software`: the Haab Calendar demo (Exhibit 1), what Haab ships,
+  pricing by project, when custom software is the right fit, and Rhino's
+  before and after.
+
+Also `/security`, `/about`, `/finance-automation`, `/healthcare-automation`.
+The "what the 20 minutes covers" content is the in-page anchor `#review`.
 
 ## Components
 
@@ -62,44 +85,44 @@ content is the in-page anchor `#review`.
   `agents-in-regulated-work`) are operator notes: no statistics, no client
   claims, examples labelled as examples. The calculator links to the measuring
   note from its disclaimer, where that question comes up; the finance and
-  healthcare pages link the invoice and agents notes. Each note page ends with
-  the review button.
-- The homepage blog teaser (`homepageTeaser`) skips those notes and the CRM
-  post, which `#crm` already links and whose market commentary would read as
-  our view under a finance-and-healthcare heading. It stays hidden until
-  another note is published.
-- Placement rule: authority sits after the process (How it works) and before
-  the controls (Trust), so it reads as the reasoning behind both.
+  healthcare pages link the invoice and agents notes; `/workflows`, `/agents`
+  and `/custom-erp` list theirs (`getNoteLinks`). Each note page ends with the
+  review button.
+- The homepage has no blog teaser: the blog is in the nav and the footer.
+- Placement rule: authority sits after the proof (Trust, Rhino) and before
+  the FAQ, so it reads as the reasoning behind both.
 
 ### Live exhibits (motion and control)
 
-- **Exhibit 1 (`HeroVisual`)**: the invoice run. A step rail (Collect → Match
+Exhibits are numbered per page, starting at 1.
+
+- **Exhibit 1 (`HeroVisual`, homepage)**: the invoice run. A step rail (Collect → Match
   → Flag → Your approval) plays once when the exhibit first scrolls into view,
   with a progress fill on the current step, and stops on the step that needs a
   person ("Waiting", sand). Every step is a button (`aria-pressed`) and
   "Replay" restarts the run. Step changes made by the visitor are announced.
-- **Exhibit 2 (`Solution`)**: the selected task's scene in its final state,
-  under the workflow's stages drawn as a connected flow whose last stage (the
-  handoff to your team) is sand. The approval sentence is the control line.
-- **Exhibit 3 (`CapacityWeek`)**: one row per person (max six; larger teams
+- **Exhibit 2 (`CapacityWeek`, homepage)**: one row per person (max six; larger teams
   show five and "+ N more people with the same week") and one square per
   repetitive hour, filled where Brilliant handles the work. Headline numbers:
   hours per week (accent), capacity value, payback (hours per year when no
-  budget is set).
-- **Services** (paper band, after the calculator): five ruled blocks, each the
-  pitch on the left and what it looks like on the right. Workflows and agents
-  open with what starts them ("Starts with a trigger" / "Starts with a
-  request") and show three examples as chains: the trigger in teal, the work
-  in grey, the person who decides in sand. Each ends with a `.control` line.
-  How it works keeps only Review → Pilot → Run, costs and what's in the work.
-- **Exhibits 4 and 5 (`AgentPlays`)**: the CRM and ERP playbooks. Each trigger
-  is a vertical tab; the selected one shows what the agent (or the system)
-  does → you approve → you measure. Grey rules; sand only on "You approve".
-  Below each: two short notes (ask in plain language, ask for something new)
-  and one ruled row with the price and the included features (titles only on
-  phones). The CRM's assistant, custom work and reasons live on
-  `/custom-crm`.
-- **Exhibit 6 (`SoftwareVideo`)**: custom software, shown through Haab
+  budget is set). The gated case study is Exhibit 3.
+- **Services cards** (paper band, after the calculator): five cards, each the
+  name, what it covers, one sentence, one example or the starting price, and
+  "Learn more" to its page. Each card keeps the offer's old anchor (`#crm`,
+  `#erp`, `#software`, …).
+- **Workflow and agent specimens** (`Automation.tsx`, heroes of `/workflows`
+  and `/agents`): what starts them ("Starts with a trigger" / "Starts with a
+  request") and three examples as chains: the trigger in teal, the work in
+  grey, the person who decides in sand. Each ends with a `.control` line.
+- **The job picker (`Solution`, Exhibit 1 on `/workflows`)**: the selected
+  task's scene in its final state, under the workflow's stages drawn as a
+  connected flow whose last stage (the handoff to your team) is sand. The
+  approval sentence is the control line.
+- **Playbooks (`AgentPlays`, Exhibit 1 on `/agents` and `/custom-erp`)**: the
+  CRM and ERP playbooks. Each trigger is a vertical tab; the selected one
+  shows what the agent (or the system) does → you approve → you measure. Grey
+  rules; sand only on "You approve".
+- **The Haab demo (`SoftwareVideo`, Exhibit 1 on `/custom-software`)**: Haab
   Calendar, our own booking app, as its one-minute recorded demo (fictional
   patient, English narration). Self-hosted in `public/video/` (720p H.264,
   ~3 MB, poster frame), `controls` and `preload="none"`, never autoplay.
@@ -107,14 +130,13 @@ content is the in-page anchor `#review`.
   subtitles on `/es`); one track always stays on, because iOS stalls on play
   when every track is off. The control line keeps hours, services and rules
   with the owner.
-  Below: the same notes and ruled row as the CRM and ERP, with
-  "Priced by project" instead of a price. The gated case study is Exhibit 7.
 - **Page rhythm**: `.section-rule` draws a content-width hairline between
-  consecutive sections on the same band (Approach, FAQ, Blog). Headings
+  consecutive sections on the same band (Approach, FAQ, "Workflow or agent?"). Headings
   are `.h2` up to 56px and `.h2-sm` up to 44px.
-- **Rhino (`Proof`)**: before (three areas in separate software) → what we
-  built (modules of one system over shared APIs) → now, using only the three
-  existing sentences as captions.
+- **Rhino (`Proof`)**: on the homepage, a teaser of the three existing
+  sentences and a link. On `/custom-software`, before (three areas in separate
+  software) → what we built (modules of one system over shared APIs) → now,
+  using only those three sentences as captions.
 - **Motion rules**: `useFirstView` / `Reveal` (`components/ui/motion.ts`)
   render the final state on the server, hide only what is still below the
   fold, and return `"static"` under `prefers-reduced-motion`. Use them for

@@ -170,3 +170,32 @@
     gap: 8px;
   }
 }
+
+/* Homepage teaser: the summary beside three sentences and the link */
+.teaser {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  align-items: center;
+  gap: var(--col-gap);
+}
+.teaser .summary {
+  margin-block: 40px;
+}
+.story {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+.story :global(.body) {
+  max-width: 36em;
+}
+@media (max-width: 900px) {
+  .teaser {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .teaser .summary {
+    margin-block: 32px 20px;
+  }
+}

@@ -43,6 +43,90 @@
 .links a:hover {
   color: var(--text);
 }
+
+/* Services: a disclosure that lists the five service pages */
+.menu {
+  position: relative;
+}
+.menuToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.menuToggle:hover,
+.menuToggle[aria-expanded="true"] {
+  color: var(--text);
+}
+.caret {
+  width: 7px;
+  height: 7px;
+  margin-top: -3px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+.menuToggle[aria-expanded="true"] .caret {
+  margin-top: 3px;
+  transform: rotate(225deg);
+}
+.dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  width: 340px;
+  padding: 8px 20px 18px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-top: 2px solid var(--accent);
+}
+.dropdown[hidden] {
+  display: none;
+}
+.dropdown ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dropdown li {
+  border-bottom: 1px solid var(--line);
+}
+.links .serviceLink {
+  display: grid;
+  gap: 2px;
+  min-height: 44px;
+  padding: 12px 0;
+}
+.serviceName {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+.serviceLine {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.links .serviceLink:hover .serviceName {
+  color: var(--accent);
+}
+.links .allServices {
+  min-height: 44px;
+  margin-top: 6px;
+  padding: 0;
+  color: var(--accent);
+}
 .toggle {
   display: none;
   align-items: center;
@@ -77,6 +161,25 @@
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--text);
+}
+.panelServices {
+  margin: 0;
+  padding: 4px 0 12px;
+  list-style: none;
+  border-bottom: 1px solid var(--line);
+}
+.panelService {
+  display: grid;
+  gap: 2px;
+  min-height: 44px;
+  padding: 10px 0 10px 16px;
+  border-left: 2px solid var(--line-strong);
+}
+.panelService .serviceName {
+  font-size: 17px;
+}
+.panelGroup .panelLink {
+  border-bottom: 0;
 }
 .panelCta {
   width: 100%;

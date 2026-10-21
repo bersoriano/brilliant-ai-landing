@@ -1,0 +1,131 @@
+/* Workflows and agents (/workflows, /agents): what starts it, three
+   examples, and what stays with you. */
+.specimen {
+  display: grid;
+  gap: 22px;
+}
+.starts {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.examples {
+  display: grid;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.examples > li {
+  display: grid;
+  gap: 10px;
+}
+.request {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--text);
+}
+.asker {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  margin-top: 1px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+/* A chain: what starts it → the work → the person who decides (sand) */
+.chain {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chain > * {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  margin: 0;
+  padding: 10px 20px 0 0;
+  border-top: 2px solid var(--line-strong);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.chain > :last-child {
+  padding-right: 0;
+}
+.chain dd {
+  margin: 0;
+}
+/* Arrowhead where one step hands to the next */
+.chain > :not(:last-child)::after {
+  position: absolute;
+  top: -6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  content: "";
+  border-top: 2px solid var(--line-strong);
+  border-right: 2px solid var(--line-strong);
+  transform: rotate(45deg);
+}
+.chain > [data-node="start"] {
+  border-top-color: var(--accent);
+}
+.chain > [data-node="start"]::after {
+  border-color: var(--accent);
+}
+.chain > [data-node="human"] {
+  border-top-color: var(--caution);
+  font-weight: 500;
+  color: var(--text);
+}
+.chain > [data-node="human"] :global(.label) {
+  color: var(--caution);
+}
+.control {
+  margin-top: 2px;
+}
+
+/* Phones: chains run top to bottom */
+@media (max-width: 700px) {
+  .chain {
+    grid-auto-flow: row;
+  }
+  .chain > * {
+    padding: 2px 0 14px 16px;
+    border-top: 0;
+    border-left: 2px solid var(--line-strong);
+  }
+  .chain > [data-node="start"] {
+    border-left-color: var(--accent);
+  }
+  .chain > [data-node="human"] {
+    padding-bottom: 0;
+    border-left-color: var(--caution);
+  }
+  .chain > :not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -1px;
+    left: -6px;
+    transform: rotate(135deg);
+  }
+}

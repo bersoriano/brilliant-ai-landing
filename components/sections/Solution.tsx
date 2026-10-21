@@ -158,7 +158,7 @@ export function Solution() {
           >
             <div className={styles.aside}>
               <span className="exhibit__label">
-                {t("Exhibit {number}", { number: 2 })}
+                {t("Exhibit {number}", { number: 1 })}
               </span>
               <h3 id="workflow-preview-title" className={styles.title}>
                 {t("{workflow}, step by step", { workflow: t(selected.title) })}

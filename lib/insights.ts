@@ -1,8 +1,6 @@
-import { CRM_POST_SLUG } from "./crm";
-
 /**
  * Notes the site links to: the "What we've learned" block, the calculator,
- * the trust section and the finance and healthcare pages. A test keeps each
+ * the service pages and the finance and healthcare pages. A test keeps each
  * one published in both languages. They are operator notes on how the work
  * runs, not strategy content.
  */
@@ -14,19 +12,6 @@ export const INSIGHTS = {
 } as const;
 
 export const FEATURED_INSIGHTS: string[] = Object.values(INSIGHTS);
-
-/**
- * The homepage blog teaser: the latest three posts not already linked from
- * "What we've learned". The CRM post is linked from #crm instead; under the
- * teaser's finance-and-healthcare heading it would read as our view.
- */
-export function homepageTeaser<T extends { slug: string }>(posts: T[]): T[] {
-  return posts
-    .filter(
-      (post) => !FEATURED_INSIGHTS.includes(post.slug) && post.slug !== CRM_POST_SLUG,
-    )
-    .slice(0, 3);
-}
 
 /**
  * Positioning guard: Brilliant runs workflows and agents; it does not sell

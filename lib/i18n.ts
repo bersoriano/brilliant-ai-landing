@@ -54,6 +54,17 @@ export const HEALTHCARE_DESCRIPTION =
 export const CRM_DESCRIPTION =
   "Custom CRM implementation on a proven open-source foundation: contacts, deals, tasks, and an assistant you can talk to. Unlimited users on the base plan.";
 
+export const WORKFLOWS_DESCRIPTION =
+  "AI workflow automation for invoices, referrals, and month-end: one reliable process per task, checked against your rules, with every exception sent to a person you name.";
+export const AGENTS_DESCRIPTION =
+  "AI agents that find, draft, and follow up inside the tools your team already uses, with the same permissions as the person asking. Your team approves what goes out.";
+export const ERP_DESCRIPTION =
+  "Custom ERP implementation: sales, inventory, purchasing, invoice matching, and accounting in one system, shaped to your operations. Unlimited users on the base plan.";
+export const SOFTWARE_DESCRIPTION =
+  "Custom software for the job nothing off the shelf does: built around your process, priced by project, and kept running by us. See Haab Calendar, our own booking app.";
+export const SERVICES_DESCRIPTION =
+  "Brilliant AI services: workflow automations, AI agents, a custom CRM, a custom ERP, and custom software for finance and healthcare teams. Your team keeps every approval.";
+
 export const BLOG_DESCRIPTION =
   "Practical guides to AI automation, invoice approvals, healthcare workflows, custom CRM, ERP, and measuring ROI. Keep decisions with your team.";
 
@@ -65,6 +76,11 @@ export type PageKey =
   | "finance"
   | "healthcare"
   | "crm"
+  | "erp"
+  | "workflows"
+  | "agents"
+  | "software"
+  | "services"
   | "blog"
   | "post";
 const TITLES: Record<PageKey, [en: string, es: string]> = {
@@ -93,6 +109,26 @@ const TITLES: Record<PageKey, [en: string, es: string]> = {
     "Custom CRM Implementation | Brilliant AI",
     "Implementación de CRM a la medida | Brilliant AI",
   ],
+  erp: [
+    "Custom ERP Implementation | Brilliant AI",
+    "Implementación de ERP a la medida | Brilliant AI",
+  ],
+  workflows: [
+    "AI Workflow Automation | Brilliant AI",
+    "Automatización de procesos con IA | Brilliant AI",
+  ],
+  agents: [
+    "AI Agents for Your Team | Brilliant AI",
+    "Agentes de IA para tu equipo | Brilliant AI",
+  ],
+  software: [
+    "Custom Software Development | Brilliant AI",
+    "Desarrollo de software a la medida | Brilliant AI",
+  ],
+  services: [
+    "Services: Workflows, Agents, CRM, ERP & Software | Brilliant AI",
+    "Servicios: procesos, agentes, CRM, ERP y software | Brilliant AI",
+  ],
   blog: ["AI Automation, CRM & ERP Blog | Brilliant AI", "Blog de automatización con IA, CRM y ERP | Brilliant AI"],
   // Fallback only: each post sets its own title in generateMetadata.
   post: ["Blog | Brilliant AI", "Blog | Brilliant AI"],
@@ -105,6 +141,11 @@ const DESCRIPTIONS: Record<PageKey, string> = {
   finance: FINANCE_DESCRIPTION,
   healthcare: HEALTHCARE_DESCRIPTION,
   crm: CRM_DESCRIPTION,
+  erp: ERP_DESCRIPTION,
+  workflows: WORKFLOWS_DESCRIPTION,
+  agents: AGENTS_DESCRIPTION,
+  software: SOFTWARE_DESCRIPTION,
+  services: SERVICES_DESCRIPTION,
   blog: BLOG_DESCRIPTION,
   post: BLOG_DESCRIPTION,
 };

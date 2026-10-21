@@ -37,19 +37,6 @@ const costs = [
   ],
   ["Run", "A monthly retainer covering the workflows and agents we run for you."],
 ];
-/** Secondary: what the work includes (formerly the capability grid). */
-const inTheWork = [
-  ["Connected workflows", "One reliable process from request to handoff."],
-  ["Custom AI agents", "Assigned to a person, guided by your rules."],
-  [
-    "Automation discovery",
-    "Find the bottleneck worth fixing first, and the exceptions behind it.",
-  ],
-  [
-    "Integration and ongoing care",
-    "Monitoring, exception handling, and rule updates when your process changes.",
-  ],
-];
 const NUMERALS = ["i.", "ii.", "iii."];
 
 export function HowItWorks() {
@@ -123,17 +110,6 @@ export function HowItWorks() {
         </dl>
       </div>
 
-      <div className={styles.work}>
-        <p className="label">{t("What’s in the work")}</p>
-        <ul>
-          {inTheWork.map(([title, line]) => (
-            <li key={title}>
-              <strong>{t(title)}</strong>
-              <span>{t(line)}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
     </section>
   );
 }

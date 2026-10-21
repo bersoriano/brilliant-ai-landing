@@ -38,14 +38,14 @@ export function Footer() {
           <div className={styles.columns}>
             <div>
               <h3 className="label">{t("Explore")}</h3>
-              <a href={home("#solutions")}>{t("Solutions")}</a>
+              <a href={localePath(locale, "/workflows#solutions")}>{t("Solutions")}</a>
               <a href={localePath(locale, "/finance-automation")}>
                 {t("Finance automation")}
               </a>
               <a href={localePath(locale, "/healthcare-automation")}>
                 {t("Healthcare automation")}
               </a>
-              <a href={home("#services")}>{t("Services")}</a>
+              <a href={localePath(locale, "/services")}>{t("Services")}</a>
               <a href={localePath(locale, "/custom-crm")}>{t("Custom CRM")}</a>
               <a href={home("#how-it-works")}>{t("How it works")}</a>
               <a href={home(CALCULATOR_ANCHOR)}>{t("ROI calculator")}</a>

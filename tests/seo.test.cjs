@@ -88,7 +88,7 @@ test("Site schema describes an organization without inventing a local business a
   assert.equal(org.address, undefined);
   const privacy = seo.buildJsonLd("en", "/privacy")["@graph"];
   assert.ok(privacy.some((node) => node["@type"] === "WebPage"));
-  for (const path of ["/finance-automation", "/healthcare-automation", "/custom-crm"])
+  for (const path of ["/finance-automation", "/healthcare-automation", "/custom-crm", "/custom-erp", "/workflows", "/agents", "/custom-software"])
     assert.ok(seo.buildJsonLd("en", path)["@graph"].some((node) => node["@type"] === "Service"), path);
 });
 

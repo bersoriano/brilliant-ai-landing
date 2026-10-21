@@ -266,7 +266,7 @@ export function RoiCalculator() {
             </div>
             <figure className={styles.chart} aria-labelledby="exhibit-3-title">
               <span className="exhibit__label">
-                {t("Exhibit {number}", { number: 3 })}
+                {t("Exhibit {number}", { number: 2 })}
               </span>
               <p id="exhibit-3-title" className={styles.chartTitle}>
                 {t("Where the repetitive week goes")}

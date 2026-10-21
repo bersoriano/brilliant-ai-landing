@@ -1,6 +1,7 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { shouldRenderCaseStudy } from "@/lib/caseStudy";
+import { localePath } from "@/lib/locale";
 import { CaseStudy } from "./CaseStudy";
 import { Icon } from "../ui/Icon";
 import { Reveal } from "../ui/Reveal";
@@ -9,9 +10,66 @@ import styles from "./Proof.module.css";
 /** The three areas Rhino ran in separate software, now modules of one system. */
 const AREAS = ["Raw materials", "Finished-product stock", "Sales"];
 
-/** Named client story has no invented metrics; measured case study stays gated. */
-export function Proof() {
-  const { t } = useLanguage();
+/**
+ * Named client story has no invented metrics; measured case study stays gated.
+ * The homepage shows the teaser (three sentences and a link); the before and
+ * after diagram lives on /custom-software, where Rhino's system is the example.
+ */
+export function Proof({ variant = "teaser" }: { variant?: "teaser" | "full" }) {
+  const { t, locale } = useLanguage();
+  if (variant === "teaser")
+    return (
+      <>
+        <section
+          id="proof"
+          className={`shell ${styles.proof}`}
+          aria-labelledby="proof-title"
+        >
+          <div className={styles.heading}>
+            <div>
+              <p className="label">{t("Client work")}</p>
+              <h2 id="proof-title" className="h2-sm">
+                Rhino Automotive Glass
+              </h2>
+            </div>
+            <a
+              className="text-link"
+              href="https://rhinoautoglass.mx/"
+              rel="noopener noreferrer"
+            >
+              {t("Visit Rhino")} <Icon name="arrow" size={16} />
+            </a>
+          </div>
+          <div className={styles.teaser}>
+            <p className={styles.summary}>
+              {t("One connected CRM for industrial glass operations.")}
+            </p>
+            <div className={styles.story}>
+              <p className="body">
+                {t(
+                  "Raw materials, finished-product stock, and sales were managed in separate software.",
+                )}{" "}
+                {t(
+                  "We built a custom CRM from scratch, developing each part as a module and connecting them through shared APIs.",
+                )}{" "}
+                {t(
+                  "Rhino works from one integrated system and can automate workflows across inventory and sales.",
+                )}
+              </p>
+              <a
+                className="text-link text-link--accent"
+                href={localePath(locale, "/custom-software#proof")}
+              >
+                {t("See what we built")} <Icon name="arrow" size={16} />
+              </a>
+            </div>
+          </div>
+        </section>
+        {shouldRenderCaseStudy(process.env.NODE_ENV === "production") && (
+          <CaseStudy />
+        )}
+      </>
+    );
   return (
     <>
       <section id="proof" className={`shell ${styles.proof}`} aria-labelledby="proof-title">
@@ -84,9 +142,6 @@ export function Proof() {
           </div>
         </Reveal>
       </section>
-      {shouldRenderCaseStudy(process.env.NODE_ENV === "production") && (
-        <CaseStudy />
-      )}
     </>
   );
 }

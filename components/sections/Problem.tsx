@@ -1,33 +1,38 @@
 "use client";
 import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { localePath } from "@/lib/locale";
+import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
 import styles from "./Problem.module.css";
 
-const PAINS: { sector: string; items: string[] }[] = [
+/** Three per sector; each column links its sector page. */
+const PAINS: { sector: string; items: string[]; link: string; path: string }[] = [
   {
     sector: "Finance",
     items: [
       "The three-way match that lives in a shared inbox",
       "The month-end pack rebuilt from five exports",
-      "The vendor statement that never quite ties to AP aging",
       "The approval with no packet attached",
     ],
+    link: "Explore finance automation",
+    path: "/finance-automation",
   },
   {
     sector: "Healthcare",
     items: [
       "The referral that arrives incomplete and slips the visit",
       "The prior-authorization packet assembled by hand",
-      "The billing follow-up only one coordinator understands",
       "The intake checklist that breaks when three arrive at once",
     ],
+    link: "Explore healthcare automation",
+    path: "/healthcare-automation",
   },
 ];
-const NUMERALS = ["i.", "ii.", "iii.", "iv."];
+const NUMERALS = ["i.", "ii.", "iii."];
 
 /** Top of the shared --surface band; RoiCalculator continues it. */
 export function Problem() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   return (
     <section id="problem" className={styles.band} aria-labelledby="problem-title">
       <div className="shell">
@@ -47,6 +52,9 @@ export function Problem() {
                   </li>
                 ))}
               </ol>
+              <a className={`text-link ${styles.more}`} href={localePath(locale, column.path)}>
+                {t(column.link)} <Icon name="arrow" size={15} />
+              </a>
             </div>
           ))}
         </div>

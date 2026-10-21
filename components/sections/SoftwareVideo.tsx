@@ -6,7 +6,7 @@ import { Exhibit } from "../ui/Exhibit";
 import styles from "./SoftwareVideo.module.css";
 
 /**
- * Exhibit 6: a one-minute recorded demo of Haab Calendar, our own booking
+ * Exhibit 1 on /custom-software: a one-minute recorded demo of Haab Calendar, our own booking
  * app, on a demo page with a fictional patient. It never autoplays and loads
  * nothing but the poster until the visitor presses play; captions in the
  * page's language are on by default (see captionTracks) and follow the
@@ -30,7 +30,7 @@ export function SoftwareVideo() {
   }, [locale]);
   return (
     <Exhibit
-      label={t("Exhibit {number}", { number: 6 })}
+      label={t("Exhibit {number}", { number: 1 })}
       tag={t("Sample data")}
       title={t("How a client books on Haab Calendar")}
       titleId="software-exhibit-title"
