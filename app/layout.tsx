@@ -6,6 +6,7 @@ import { buildJsonLd, buildMetadata } from "@/lib/seo";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { LanguageProvider, SkipLink } from "@/components/i18n/LanguageProvider";
 import { PageAnalytics } from "@/components/analytics/PageAnalytics";
+import { Analytics } from "@vercel/analytics/next";
 export async function generateMetadata() {
   const [locale, path] = await Promise.all([
     getRequestLocale(),
@@ -31,6 +32,7 @@ export default async function RootLayout({
           <SkipLink />
           {children}
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );
