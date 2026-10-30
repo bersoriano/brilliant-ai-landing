@@ -102,8 +102,8 @@ export function middleware(request: NextRequest) {
   return NextResponse.next({ request: { headers } });
 }
 
-// API routes have no language: skip them so a Spanish-preference redirect
-// never bounces a form POST. See docs/i18n/MIDDLEWARE.md.
+// API routes and Vercel's analytics endpoints have no language: skip them so a
+// Spanish-preference redirect never bounces a POST. See docs/i18n/MIDDLEWARE.md.
 export const config = {
-  matcher: ["/((?!api/|_next/static|_next/image|.*\\..*).*)"],
+  matcher: ["/((?!api/|_vercel/|_next/static|_next/image|.*\\..*).*)"],
 };

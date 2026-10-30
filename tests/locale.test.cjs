@@ -127,7 +127,7 @@ test("Middleware runs on pages but never on API routes", () => {
   for (const page of ["/", "/es", "/es/blog/example-post", "/about", "/apiary"])
     assert.equal(runs(page), true, `${page} should get locale handling`);
   // A Spanish-preference redirect on /api/inquiry bounced every form POST.
-  for (const api of ["/api/inquiry", "/api/anything/else"])
+  for (const api of ["/api/inquiry", "/api/anything/else", "/_vercel/insights/view"])
     assert.equal(runs(api), false, `${api} should skip middleware`);
   for (const asset of ["/_next/static/chunk.js", "/robots.txt", "/icon.svg"])
     assert.equal(runs(asset), false, `${asset} should skip middleware`);
