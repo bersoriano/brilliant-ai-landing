@@ -36,8 +36,9 @@ flowchart TD
 
 ## What it skips, and why
 
-The matcher in `middleware.ts` skips `/api/*`, `/_next/static`, `/_next/image`,
-and any path with a dot (files). API routes have no language. Before this was
+The matcher in `middleware.ts` skips `/api/*`, `/_vercel/*` (Vercel Web
+Analytics posts page views there), `/_next/static`, `/_next/image`, and any
+path with a dot (files). API routes have no language. Before this was
 excluded, a Spanish-preference visitor's form POST to `/api/inquiry` was
 redirected to `/es/api/inquiry` and rewritten back: it worked, but every
 submission took an extra round trip. `tests/locale.test.cjs` keeps API routes

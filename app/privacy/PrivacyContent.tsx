@@ -49,6 +49,11 @@ export default function PrivacyContent() {
             "When enabled, PostHog measures visits, traffic sources and campaign tags, section views, blog reading progress, booking and contact link clicks, and inquiry delivery outcomes. It uses a random identifier in your browser’s session storage to connect visits within the same tab. We do not send form contents or calculator inputs to analytics, create identified visitor profiles, or record browsing sessions. Analytics respects your browser’s Do Not Track setting. Fonts are served with the website. The hosting provider may process technical request information, such as IP addresses, for website delivery, security, and diagnostics.",
           )}
         </p>
+        <p>
+          {t(
+            "Vercel Web Analytics, from our hosting provider, counts page views with the page address, campaign tags, referring site, and general device, browser, operating system, and country information. It sets no cookies and builds no visitor profiles: a visit is counted with a hash of the request that is discarded after 24 hours. It also respects Do Not Track.",
+          )}
+        </p>
         <h2>{t("External services")}</h2>
         <p>
           {t(

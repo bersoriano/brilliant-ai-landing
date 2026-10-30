@@ -59,6 +59,27 @@ export function sanitizeEvent<T extends { properties?: Record<string, unknown> }
   return { ...event, properties: clean(event.properties || {}) };
 }
 
+/**
+ * Vercel Web Analytics gets the same treatment as PostHog: nothing when Do Not
+ * Track is on, and URLs keep only the campaign tags.
+ */
+export function vercelAnalyticsEvent<T extends { url: string }>(event: T, doNotTrack: boolean): T | null {
+  if (doNotTrack) return null;
+  try {
+    const url = new URL(event.url);
+    const campaign = new URLSearchParams();
+    for (const key of CAMPAIGN_TAGS) {
+      const value = url.searchParams.get(key);
+      if (value) campaign.set(key, value);
+    }
+    url.search = campaign.toString();
+    url.hash = "";
+    return { ...event, url: url.toString() };
+  } catch {
+    return null;
+  }
+}
+
 export function linkProperties(href: string, currentHref: string): {
   event: "cta_clicked" | "blog_link_clicked";
   properties: Record<string, string>;
