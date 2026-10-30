@@ -92,6 +92,59 @@ test("Site schema describes an organization without inventing a local business a
     assert.ok(seo.buildJsonLd("en", path)["@graph"].some((node) => node["@type"] === "Service"), path);
 });
 
+test("Homepage schema lists every service, sharing @ids with the service pages", () => {
+  const { SERVICES } = require("../lib/services.ts");
+  for (const locale of ["en", "es"]) {
+    const prefix = locale === "es" ? "/es" : "";
+    const graph = seo.buildJsonLd(locale, prefix || "/")["@graph"];
+    const catalog = graph.find((node) => node["@type"] === "OfferCatalog");
+    const org = graph.find((node) => node["@type"] === "Organization");
+    assert.equal(org.hasOfferCatalog["@id"], catalog["@id"]);
+    const offered = catalog.itemListElement.map((offer) => offer.itemOffered);
+    assert.deepEqual(offered.map((service) => service.url), SERVICES.map((service) => `${base}${prefix}${service.path}`));
+    for (const service of SERVICES) {
+      const page = seo.buildJsonLd(locale, `${prefix}${service.path}`)["@graph"].find((node) => node["@type"] === "Service");
+      assert.ok(offered.some((node) => node["@id"] === page["@id"]), service.path);
+    }
+    if (locale === "es") assert.equal(offered[0].name, require("../lib/i18n.ts").translate(SERVICES[0].name, "es"));
+  }
+  assert.equal(seo.buildJsonLd("en", "/about")["@graph"].find((node) => node["@type"] === "Organization").hasOfferCatalog, undefined);
+});
+
+test("robots.txt welcomes AI search crawlers and keeps the API closed to every group", () => {
+  const robots = seo.buildRobots();
+  const agents = robots.rules.map((rule) => rule.userAgent);
+  for (const bot of ["*", "OAI-SearchBot", "ChatGPT-User", "PerplexityBot", "Claude-SearchBot", "Claude-User", "Googlebot", "Bingbot"])
+    assert.ok(agents.includes(bot), bot);
+  for (const rule of robots.rules) {
+    assert.equal(rule.allow, "/", rule.userAgent);
+    assert.equal(rule.disallow, "/api/", rule.userAgent);
+  }
+  assert.equal(robots.sitemap, `${base}/sitemap.xml`);
+});
+
+test("llms.txt links real pages, uses the price constants, and follows the copy rules", () => {
+  const { SERVICES } = require("../lib/services.ts");
+  const { CRM_PRICE } = require("../lib/crm.ts");
+  const { ERP_PRICE } = require("../lib/erp.ts");
+  const { CONSULTANCY_PHRASES } = require("../lib/insights.ts");
+  const text = seo.buildLlmsTxt();
+  assert.match(text, /^# Brilliant AI\n\n> /);
+  const sitemapPages = fs.readFileSync("app/sitemap.ts", "utf8");
+  const links = [...text.matchAll(/\]\(([^)]+)\)/g)].map(([, href]) => href);
+  for (const href of links) {
+    assert.ok(href.startsWith(base), href);
+    assert.ok(sitemapPages.includes(`"${href.slice(base.length) || "/"}"`), `${href} is a sitemap page`);
+  }
+  for (const service of SERVICES) assert.ok(links.includes(`${base}${service.path}`), service.path);
+  assert.ok(text.includes(`Unlimited users, from $${CRM_PRICE.USD.month}/month`));
+  assert.ok(text.includes(`Unlimited users, from $${ERP_PRICE.USD.month}/month`));
+  assert.doesNotMatch(text, CONSULTANCY_PHRASES);
+  assert.doesNotMatch(text, /\b(open[- ]source|self[- ]host(ed|ing)?|python|next\.?js|react|supabase|vercel|postgres(ql)?|SOC 2|HIPAA|CFDI)\b/i);
+  assert.doesNotMatch(text, /Haab Calendar[^.]*\b(client|partner)\b/i);
+  assert.ok(text.endsWith("\n"));
+});
+
 test("Post frontmatter rejects impossible dates, backwards updates, and empty search titles", () => {
   const raw = (extra) => `---\ntitle: Title\ndescription: Description\ndate: 2026-10-17\n${extra}\n---\nBody.`;
   assert.equal(parsePost(raw('seoTitle: "Short search title"'), "sample", "en").seoTitle, "Short search title");
