@@ -1,0 +1,7 @@
+# Local Wrangler only. Copy to .dev.vars; never commit real credentials.
+# Keep delivery unset while running browser/API smoke tests.
+INQUIRY_RATE_SALT=local-only-replace-in-production
+# RESEND_API_KEY=
+# INQUIRY_FROM_EMAIL=
+# INQUIRY_TO_EMAIL=
+# INQUIRY_WEBHOOK_URL=

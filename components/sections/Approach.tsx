@@ -1,7 +1,8 @@
-import { translate } from "@/lib/i18n";
+"use client";
+import { useLanguage } from "@/components/i18n/LanguageProvider";
 import { APPROACH_RULES, INSIGHTS } from "@/lib/insights";
 import { localePath, type Locale } from "@/lib/locale";
-import type { PostMeta } from "@/lib/posts";
+import type { NoteLink } from "@/lib/posts";
 import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 import { Icon } from "../ui/Icon";
 import { Kicker } from "../ui/Kicker";
@@ -13,13 +14,12 @@ import styles from "./Approach.module.css";
  * title. A rule whose note is missing or unpublished simply shows no link.
  */
 export function Approach({
-  locale,
-  notes,
+  notes: byLocale,
 }: {
-  locale: Locale;
-  notes: Record<string, PostMeta | null>;
+  notes: Record<Locale, Record<string, NoteLink | null>>;
 }) {
-  const t = (source: string) => translate(source, locale);
+  const { locale, t } = useLanguage();
+  const notes = byLocale[locale];
   return (
     <section
       id="approach"

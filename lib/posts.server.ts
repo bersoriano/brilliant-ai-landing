@@ -66,8 +66,8 @@ export async function getNoteLinks(slugs: string[], locale: Locale): Promise<Not
     .map(({ slug, title }) => ({ slug, title }));
 }
 
-// Posts are trusted repo content; compile each once per server instance in
-// production, and on every request in development so edits show on reload.
+// Trusted repository MDX is compiled while exporting each localized page.
+// This cache deduplicates work within a build worker; nothing ships as runtime MDX.
 const compiled = new Map<string, Promise<MDXContent>>();
 
 // GFM footnotes (`[^id]`) render as a visible "Sources" list in the post's language.

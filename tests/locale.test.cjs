@@ -120,17 +120,12 @@ test("Second middleware pass preserves original Spanish URL after rewrite", () =
     "/finance-automation",
   );
 });
-test("Middleware runs on pages but never on API routes", () => {
-  const { config } = require("../middleware.ts");
-  const matchers = config.matcher.map((source) => new RegExp(`^${source}$`));
-  const runs = (path) => matchers.some((matcher) => matcher.test(path));
-  for (const page of ["/", "/es", "/es/blog/example-post", "/about", "/apiary"])
-    assert.equal(runs(page), true, `${page} should get locale handling`);
-  // A Spanish-preference redirect on /api/inquiry bounced every form POST.
-  for (const api of ["/api/inquiry", "/api/anything/else", "/_vercel/insights/view"])
-    assert.equal(runs(api), false, `${api} should skip middleware`);
-  for (const asset of ["/_next/static/chunk.js", "/robots.txt", "/icon.svg"])
-    assert.equal(runs(asset), false, `${asset} should skip middleware`);
+test("Pages language routing skips API and asset requests", () => {
+  const { routeLanguage } = require("../cloudflare/routing.ts");
+  for (const page of ["/", "/about", "/apiary"])
+    assert.equal(routeLanguage(new Request(`https://example.com${page}`), "MX").status, 307);
+  for (const path of ["/api/inquiry", "/api/anything/else", "/_next/static/chunk.js", "/robots.txt", "/icon.svg"])
+    assert.equal(routeLanguage(new Request(`https://example.com${path}?lang=es`), "MX"), null);
 });
 test("Home metadata names the US, Canada, and Mexico; FAQ copy is translated", () => {
   assert.match(pageTitle("en"), /Finance & Healthcare/);
@@ -314,9 +309,9 @@ test("Every literal translation call in active UI has a Spanish dictionary entry
       "app/security/SecurityContent.tsx",
       "app/about/AboutContent.tsx",
       "components/i18n/LanguageProvider.tsx",
-      "app/blog/page.tsx",
-      "app/blog/[slug]/page.tsx",
-      "app/blog/mdx.tsx",
+      "views/blog/page.tsx",
+      "views/blog/[slug]/page.tsx",
+      "views/blog/mdx.tsx",
     ]);
   for (const file of files)
     for (const key of tLiterals(file)) assert.ok(dictionary[key], `${file}: ${key}`);
@@ -538,7 +533,7 @@ test("Services presents the five offers as one translated set, ahead of How it w
   assert.equal(erpPrice("es").currency, "MXN");
   for (const locale of ["en", "es"]) assert.ok(erpPrice(locale).month > 0, locale);
   // One Services section of cards, after the calculator and ahead of How it works.
-  const page = fs.readFileSync("app/page.tsx", "utf8");
+  const page = fs.readFileSync("views/page.tsx", "utf8");
   assert.ok(page.includes("<Services />"), "homepage renders Services");
   assert.ok(page.indexOf("<RoiCalculator />") < page.indexOf("<Services />"), "Services comes after the calculator");
   assert.ok(page.indexOf("<Services />") < page.indexOf("<HowItWorks />"), "Services comes before How it works");
@@ -549,19 +544,19 @@ test("Services presents the five offers as one translated set, ahead of How it w
   // Each card keeps its old homepage anchor and links a page that exists.
   for (const { id, path } of SERVICES) {
     assert.ok(/^[a-z-]+$/.test(id), `${id}: a plain anchor id`);
-    assert.ok(fs.existsSync(`app${path}/page.tsx`), `${path}: page exists`);
+    assert.ok(fs.existsSync(`views${path}/page.tsx`), `${path}: page exists`);
     assert.match(fs.readFileSync("app/sitemap.ts", "utf8"), new RegExp(`"${path}"`), `${path}: in the sitemap`);
   }
   // The nav opens the service pages and keeps How it works and Blog; Security lives in the footer.
   assert.deepEqual(NAV_LINKS.map((link) => link.href), ["/services", "/#how-it-works", "/blog"]);
   assert.match(fs.readFileSync("components/sections/Footer.tsx", "utf8"), /localePath\(locale, "\/security"\)/, "the footer links /security");
   assert.match(fs.readFileSync("components/sections/Navbar.tsx", "utf8"), /SERVICES\.map/, "the nav lists every service");
-  assert.ok(fs.existsSync("app/services/page.tsx"), "the services index exists");
+  assert.ok(fs.existsSync("views/services/page.tsx"), "the services index exists");
 });
 
 test("The homepage stays short: one exhibit up top, three pains per sector, six questions", () => {
   const { FAQS, HOMEPAGE_FAQS } = require("../lib/faq.ts");
-  const page = fs.readFileSync("app/page.tsx", "utf8");
+  const page = fs.readFileSync("views/page.tsx", "utf8");
   // The long offers, the job picker and the blog teaser live on their own pages.
   for (const gone of ["<Solution", "<LatestPosts", "<OnsiteConsulting"])
     assert.ok(!page.includes(gone), `${gone} moved off the homepage`);
@@ -724,7 +719,7 @@ test("Every service page has its own localized URL, metadata, and sitemap entry"
       assert.ok(!titles.has(title), `${title}: unique title`);
       titles.add(title);
     }
-    assert.ok(fs.existsSync(`app${path}/page.tsx`), path);
+    assert.ok(fs.existsSync(`views${path}/page.tsx`), path);
     assert.match(fs.readFileSync("app/sitemap.ts", "utf8"), new RegExp(`"${path}"`), path);
     assert.match(fs.readFileSync("scripts/verify-seo.cjs", "utf8"), new RegExp(`"${path}"`), `${path}: in verify:seo`);
   }
@@ -741,7 +736,7 @@ test("Custom CRM landing has its own localized URL, metadata, and sitemap entry"
   assert.match(pageTitle("es", "crm"), /CRM a la medida/);
   assert.ok(dictionary[CRM_DESCRIPTION], "Spanish CRM description");
   assert.equal(pageDescription("es", "crm"), dictionary[CRM_DESCRIPTION]);
-  assert.ok(fs.existsSync("app/custom-crm/page.tsx"));
+  assert.ok(fs.existsSync("views/custom-crm/page.tsx"));
   assert.match(fs.readFileSync("app/sitemap.ts", "utf8"), /"\/custom-crm"/);
 });
 
@@ -844,7 +839,7 @@ test("Blog is reachable from the nav and footer; the CRM and ERP pages link to p
   assert.ok(NAV_LINKS.some((link) => link.href === "/blog"), "nav links to /blog");
   assert.match(fs.readFileSync("components/sections/Footer.tsx", "utf8"), /"\/blog"/, "footer links to /blog");
   assert.match(fs.readFileSync("components/sections/CrmLanding.tsx", "utf8"), /CRM_POST_SLUG/);
-  assert.match(fs.readFileSync("app/custom-erp/page.tsx", "utf8"), /ERP_POST_SLUG/);
+  assert.match(fs.readFileSync("views/custom-erp/page.tsx", "utf8"), /ERP_POST_SLUG/);
   // The links must never 404: each post exists in both languages and is not a draft.
   for (const slug of [CRM_POST_SLUG, ERP_POST_SLUG])
     for (const locale of POST_LOCALES) {
@@ -867,7 +862,7 @@ test("Homepage notes stay published in both languages, and the approach copy is 
     }
   for (const rule of APPROACH_RULES)
     assert.ok(dictionary[rule.title], `missing Spanish: ${rule.title}`);
-  assert.match(fs.readFileSync("app/page.tsx", "utf8"), /<Approach /);
+  assert.match(fs.readFileSync("views/page.tsx", "utf8"), /<Approach /);
 });
 
 test("Link, don't lecture: the authority block is at most three one-line rules, each linking a note", () => {

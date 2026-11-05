@@ -28,7 +28,7 @@ export default function PrivacyContent() {
         <h2>{t("Contacting us")}</h2>
         <p>
           {t(
-            "The contact form sends your name, work email, industry, message, and language to our server, which forwards them to our team through an email delivery provider. Submissions are not stored in a website database, and their contents are not logged. If delivery fails, the form offers to prepare the same message in your device’s email application instead. We use information you send to respond to your inquiry and discuss the services you request.",
+            "The contact form sends your name, work email, industry, message, and language to our server, which forwards them to our team through an email delivery provider. Submissions are not stored in a website database, and their contents are not logged. If delivery fails, the form offers to prepare the same message in your device’s email application instead. We use information you send to respond to your inquiry and discuss the services you request. To limit abuse, our server keeps a one-way hash of your IP address and the times of your recent submissions. The record expires after one minute and is removed automatically.",
           )}
         </p>
         <h2>{t("Calculator inputs")}</h2>
@@ -47,11 +47,6 @@ export default function PrivacyContent() {
         <p>
           {t(
             "When enabled, PostHog measures visits, traffic sources and campaign tags, section views, blog reading progress, booking and contact link clicks, and inquiry delivery outcomes. It uses a random identifier in your browser’s session storage to connect visits within the same tab. We do not send form contents or calculator inputs to analytics, create identified visitor profiles, or record browsing sessions. Analytics respects your browser’s Do Not Track setting. Fonts are served with the website. The hosting provider may process technical request information, such as IP addresses, for website delivery, security, and diagnostics.",
-          )}
-        </p>
-        <p>
-          {t(
-            "Vercel Web Analytics, from our hosting provider, counts page views with the page address, campaign tags, referring site, and general device, browser, operating system, and country information. It sets no cookies and builds no visitor profiles: a visit is counted with a hash of the request that is discarded after 24 hours. It also respects Do Not Track.",
           )}
         </p>
         <h2>{t("External services")}</h2>

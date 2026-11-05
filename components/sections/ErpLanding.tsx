@@ -29,8 +29,9 @@ const NUMERALS = ["i.", "ii.", "iii.", "iv."];
  * (see lib/erp.ts): every feature listed ships with the system underneath,
  * which this page never names.
  */
-export function ErpLanding({ notes }: { notes: NoteLink[] }) {
+export function ErpLanding({ notes: byLocale }: { notes: Record<"en" | "es", NoteLink[]> }) {
   const { t, locale } = useLanguage();
+  const notes = byLocale[locale];
   const price = erpPrice(locale);
   const fmtPrice = (n: number) => fmtCurrency(n, locale, price.currency);
   const featureList = (items: CrmFeature[]) => (

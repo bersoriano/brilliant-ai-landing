@@ -1,45 +1,34 @@
-# Why there is a middleware
+# Language routing on Cloudflare Pages
 
-The site has one set of pages (`app/`) and two languages. There is no `app/es/`
-folder. `middleware.ts` runs before every page request and decides which
-language to serve. Without it, `/es` would 404 and nobody would get Spanish
-automatically.
+`middleware.ts` and request headers/cookies are no longer part of rendering.
+`app/[[...path]]` exports actual English and Spanish HTML using static params.
+Existing components live in `views/`; shared locale helpers remain in `lib/locale.ts`.
 
-## The flow
+`cloudflare/routing.ts` runs in the advanced Pages Function (`out/_worker.js`):
 
-```mermaid
-flowchart TD
-    R([Request]) --> M{"Is it a page?<br/>(matcher)"}
-    M -- "No: /api/*, /_next/*,<br/>files like robots.txt" --> SKIP["Served directly.<br/>Middleware never runs."]
-    M -- Yes --> L{"URL has<br/>?lang=en or ?lang=es"}
+1. API, Next assets and file requests bypass language handling.
+2. Valid `?lang=en|es` wins even for bots and Spanish URLs. Remove only `lang`,
+   retain other query parameters, set a one-year Path=/ SameSite=Lax cookie,
+   Secure on HTTPS, and return a private/no-store 307 to the clean locale URL.
+3. Bots, Spanish URLs and image/icon endpoints skip preference redirection.
+4. Saved language wins; otherwise trusted `request.cf.country` selects Spanish
+   for the existing Latin American market list; otherwise parse Accept-Language
+   by descending quality, excluding q=0/invalid values; English is fallback.
+5. Spanish preference redirects English URLs to their /es counterpart. Missing
+   pages still become 404 after preference handling; no SPA fallback is used.
+6. Known trailing-slash URLs canonicalize with 308. Page responses and personalized
+   redirects are no-store; no redirect caching or cross-visitor preference reuse.
 
-    L -- Yes --> SAVE["1. Save choice in the<br/>brilliant-language cookie<br/>and redirect to the clean URL<br/>/about?lang=es → /es/about"]
-    L -- No --> ESP{"Path starts<br/>with /es?"}
+Never trust incoming x-brilliant-*, x-vercel-ip-country, or cf-ipcountry headers
+for locale rendering or country detection. API delivery trusts Cloudflare's
+platform-overwritten CF-Connecting-IP for throttling.
 
-    ESP -- No --> BOT{"Search bot,<br/>or OG / icon route?"}
-    BOT -- Yes --> EN
-    BOT -- No --> PREF{"2. Preferred language<br/>cookie → country → browser"}
-    PREF -- Spanish --> REDIR["Redirect to /es + path<br/>/about → /es/about"]
-    PREF -- English --> EN["Serve the page in English<br/>x-brilliant-lang: en"]
+On client-rendered pages, language switching writes the cookie and replaces native
+history (integrated with Next usePathname). Build-time bilingual note data updates
+with the language context; calculator/form instances, inputs, scroll and selected
+workflow survive. Existing currency reseeding remains intentional. Blog/archive
+switches request the other exported page through `?lang=`; query and hash survive.
+Footer language links retain their existing request-based behavior.
 
-    ESP -- Yes --> RW["3. Rewrite internally<br/>/es/blog → /blog<br/>x-brilliant-lang: es"]
-    RW --> ES["Same page renders in Spanish<br/>html lang=es-MX, metadata,<br/>hreflang, Spanish MDX posts"]
-```
-
-## The three jobs
-
-| # | Job | Example |
-|---|-----|---------|
-| 1 | **Language switch.** The footer links add `?lang=`; the choice is saved for a year. | `/about?lang=es` → cookie `es` → `/es/about` |
-| 2 | **Auto-Spanish.** First match wins: saved cookie, then country (Mexico and the Latin American list in `lib/locale.ts`, from Vercel's country header), then the browser's `Accept-Language`. Bots are skipped so search engines index both languages as-is. | Visitor from Mexico opens `/` → `/es` |
-| 3 | **Serve `/es` from the same pages.** The URL keeps `/es`; the server renders the unprefixed route and reads `x-brilliant-lang` / `x-brilliant-path` to pick the language. | `/es/blog/x` renders `app/blog/[slug]` in Spanish |
-
-## What it skips, and why
-
-The matcher in `middleware.ts` skips `/api/*`, `/_vercel/*` (Vercel Web
-Analytics posts page views there), `/_next/static`, `/_next/image`, and any
-path with a dot (files). API routes have no language. Before this was
-excluded, a Spanish-preference visitor's form POST to `/api/inquiry` was
-redirected to `/es/api/inquiry` and rewritten back: it worked, but every
-submission took an extra round trip. `tests/locale.test.cjs` keeps API routes
-out of the matcher.
+See [deployment runbook](../deployment/CLOUDFLARE.md) for function quotas, assets
+excluded from execution, and staging checks.

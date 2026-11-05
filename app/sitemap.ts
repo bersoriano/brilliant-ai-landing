@@ -1,3 +1,4 @@
+export const dynamic = "force-static";
 import type { MetadataRoute } from "next";
 import { languageAlternatePaths, localePath, type Locale } from "@/lib/locale";
 import { getPosts } from "@/lib/posts.server";

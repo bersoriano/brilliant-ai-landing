@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "brilliant-ai",
+  "pages_build_output_dir": "./out",
+  "compatibility_date": "2026-10-29",
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://brilliant.dev",
+    "NEXT_PUBLIC_POSTHOG_KEY": "phc_sUpw7ehaHXbe5VjSwLz4eajQspLcENocL5dTu34PDUwD",
+    "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com"
+  },
+  "d1_databases": [{
+    "binding": "INQUIRY_RATE_LIMIT",
+    "database_name": "brilliant-inquiry-rate-limit",
+    "database_id": "0070b7d2-6f7e-453b-a858-cf60f5a06479",
+    "migrations_dir": "cloudflare/migrations"
+  }],
+  "env": {
+    "preview": {
+      "vars": { "NEXT_PUBLIC_SITE_URL": "https://brilliant.dev" },
+      "d1_databases": [{
+        "binding": "INQUIRY_RATE_LIMIT",
+        "database_name": "brilliant-inquiry-rate-limit-preview",
+        "database_id": "e2b8bfda-d70f-46be-b92a-1a1a4ffdb932",
+        "migrations_dir": "cloudflare/migrations"
+      }]
+    }
+  }
+}

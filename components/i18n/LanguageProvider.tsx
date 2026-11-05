@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   LANGUAGE_COOKIE,
   htmlLang,
@@ -11,7 +11,7 @@ import {
   stripLocalePrefix,
   type Locale,
 } from "@/lib/locale";
-import { pageDescription, pageTitle, translate } from "@/lib/i18n";
+import { pageDescription, pageKeywords, pageTitle, translate } from "@/lib/i18n";
 import switchStyles from "./LanguageSwitch.module.css";
 const LanguageContext = createContext<{
   locale: Locale;
@@ -29,9 +29,16 @@ function syncDocumentSeo(locale: Locale, pathname: string) {
       window.location.origin,
   ).origin;
   const canonicalUrl = `${origin}${canonicalPath === "/" ? "" : canonicalPath}`;
-  const imageUrl = `${origin}${locale === "es" ? "/es/og" : "/og"}`;
+  const imageUrl = `${origin}/social/${locale}/home.png`;
   document.documentElement.lang = htmlLang(locale);
   document.title = title;
+  if (page === "home") document.querySelector('meta[name="keywords"]')
+    ?.setAttribute("content", pageKeywords(locale).join(","));
+  document.querySelector('meta[property="og:image:alt"]')?.setAttribute("content", title);
+  const alternateLocales = locale === "es" ? ["en_US", "en_CA"] : ["en_CA", "es_MX"];
+  document.querySelectorAll('meta[property="og:locale:alternate"]').forEach((tag, index) => {
+    tag.setAttribute("content", alternateLocales[index]);
+  });
   document
     .querySelector('meta[name="description"]')
     ?.setAttribute("content", description);
@@ -70,7 +77,6 @@ export function LanguageProvider({
 }) {
   const [locale, updateLocale] = useState(initialLocale);
   const pathname = usePathname();
-  const router = useRouter();
   useEffect(() => {
     updateLocale(initialLocale);
   }, [initialLocale]);
@@ -80,11 +86,12 @@ export function LanguageProvider({
   }, [locale, pathname]);
   function setLocale(next: Locale) {
     // Post bodies are rendered on the server per language: load the other one.
-    // `?lang=` makes the middleware store the choice and redirect.
+    // `?lang=` makes the Pages Function store the choice and redirect.
     if (isServerLocalizedPage(pathname)) {
-      window.location.assign(
-        `${stripLocalePrefix(pathname)}?lang=${next}${window.location.hash}`,
-      );
+      const url = new URL(window.location.href);
+      url.pathname = stripLocalePrefix(pathname);
+      url.searchParams.set("lang", next);
+      window.location.assign(url);
       return;
     }
     updateLocale(next);
@@ -94,11 +101,10 @@ export function LanguageProvider({
       /* Keep the choice in memory when cookies are unavailable. */
     }
     const nextPath =
-      localePath(next, stripLocalePrefix(pathname)) + window.location.hash;
-    // A soft replace, not history.replaceState: server-rendered sections (the
-    // homepage's notes and blog teaser) read the locale from the request, so
-    // they need the new path's payload. Client state and scroll are kept.
-    router.replace(nextPath, { scroll: false });
+      localePath(next, stripLocalePrefix(pathname)) + window.location.search + window.location.hash;
+    // All non-article content has build-time bilingual data. Native history
+    // integrates with usePathname and keeps React instances/form state alive.
+    window.history.replaceState(null, "", nextPath);
   }
   return (
     <LanguageContext.Provider value={{ locale, setLocale }}>
