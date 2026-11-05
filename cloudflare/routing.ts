@@ -14,7 +14,7 @@ export function personalizedRedirect(url: URL, locale?: Locale) {
 export function routeLanguage(request: Request, country?: string | null): Response | null {
   const url = new URL(request.url);
   const { pathname } = url;
-  if (/^\/(?:api|_vercel|_next)(?:\/|$)/.test(pathname) || pathname.includes(".")) return null;
+  if (/^\/(?:api|_next)(?:\/|$)/.test(pathname) || pathname.includes(".")) return null;
   const explicit = url.searchParams.get("lang");
   if (explicit === "en" || explicit === "es") {
     url.searchParams.delete("lang");

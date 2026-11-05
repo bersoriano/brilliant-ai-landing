@@ -54,5 +54,4 @@ command (`npm run build`) is set in the dashboard.
 | `POST /api/inquiry`, valid body, no transport | 502 `unconfigured` (form offers the email draft); GET is 405 |
 
 Still required at cutover: production salt and delivery credentials, a
-controlled real submission, PostHog ingestion, custom domain and DNS, and
-replacing Vercel Analytics (it only collects on Vercel).
+controlled real submission, PostHog ingestion, and custom domain and DNS. Vercel Analytics is removed: it only collects on Vercel.
