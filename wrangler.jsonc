@@ -6,7 +6,7 @@
   "d1_databases": [{
     "binding": "INQUIRY_RATE_LIMIT",
     "database_name": "brilliant-inquiry-rate-limit",
-    "database_id": "00000000-0000-0000-0000-000000000001",
+    "database_id": "0070b7d2-6f7e-453b-a858-cf60f5a06479",
     "migrations_dir": "cloudflare/migrations"
   }],
   "env": {
@@ -14,7 +14,7 @@
       "d1_databases": [{
         "binding": "INQUIRY_RATE_LIMIT",
         "database_name": "brilliant-inquiry-rate-limit-preview",
-        "database_id": "00000000-0000-0000-0000-000000000002",
+        "database_id": "e2b8bfda-d70f-46be-b92a-1a1a4ffdb932",
         "migrations_dir": "cloudflare/migrations"
       }]
     }
