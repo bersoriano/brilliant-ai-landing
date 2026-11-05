@@ -3,6 +3,7 @@
   "name": "brilliant-ai",
   "pages_build_output_dir": "./out",
   "compatibility_date": "2026-10-29",
+  "vars": { "NEXT_PUBLIC_SITE_URL": "https://brilliant.dev" },
   "d1_databases": [{
     "binding": "INQUIRY_RATE_LIMIT",
     "database_name": "brilliant-inquiry-rate-limit",
@@ -11,6 +12,7 @@
   }],
   "env": {
     "preview": {
+      "vars": { "NEXT_PUBLIC_SITE_URL": "https://brilliant.dev" },
       "d1_databases": [{
         "binding": "INQUIRY_RATE_LIMIT",
         "database_name": "brilliant-inquiry-rate-limit-preview",
