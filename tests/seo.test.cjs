@@ -34,14 +34,14 @@ test("Post metadata keeps its own localized canonical, language alternates, and 
   assert.equal(meta.alternates.languages["es-MX"], "/es/blog/invoice-exceptions");
   assert.equal(meta.openGraph.type, "article");
   assert.equal(meta.openGraph.locale, "es_MX");
-  assert.equal(meta.openGraph.images[0].url, "/es/og?post=invoice-exceptions");
-  assert.equal(meta.twitter.images[0], "/es/og?post=invoice-exceptions");
+  assert.equal(meta.openGraph.images[0].url, "/social/es/invoice-exceptions.png");
+  assert.equal(meta.twitter.images[0], "/social/es/invoice-exceptions.png");
   assert.equal(meta.openGraph.modifiedTime, "2026-10-17");
   assert.equal(meta.robots.index, true);
   assert.equal(seo.buildPostMetadata({ ...fixture, draft: true }).robots.index, false);
   const english = seo.buildPostMetadata({ ...fixture, locale: "en", seoTitle: undefined });
   assert.equal(english.alternates.canonical, "/blog/invoice-exceptions");
-  assert.equal(english.openGraph.images[0].url, "/og?post=invoice-exceptions");
+  assert.equal(english.openGraph.images[0].url, "/social/en/invoice-exceptions.png");
   assert.equal(english.title, `${fixture.title} | Brilliant AI`);
 });
 
@@ -58,7 +58,7 @@ test("Article schema connects author, visible dates, page, blog, and localized b
   assert.equal(article.inLanguage, "es-MX");
   assert.equal(article.datePublished, "2026-10-15");
   assert.equal(article.dateModified, "2026-10-17");
-  assert.equal(article.image.url, `${base}/es/og?post=invoice-exceptions`);
+  assert.equal(article.image.url, `${base}/social/es/invoice-exceptions.png`);
   assert.equal(article.isPartOf["@id"], `${base}/es/blog#blog`);
   assert.equal(article.mainEntityOfPage["@id"], page["@id"]);
   assert.deepEqual(crumbs.itemListElement.map((item) => item.item), [

@@ -29,7 +29,6 @@ export const CALCULATOR_ANCHOR = "#roi-calculator";
 export const NAV_LINKS = [
   { label: "Services", href: "/services" },
   { label: "How it works", href: "/#how-it-works" },
-  { label: "Security", href: "/security" },
   { label: "Blog", href: "/blog" },
 ];
 

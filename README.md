@@ -4,6 +4,10 @@ A responsive landing page for AI automation services in finance and healthcare.
 Built with Next.js 15, React 19, TypeScript, and Tailwind CSS 4. Fonts are served
 locally; the page does not depend on third-party image or font requests.
 
+Production target: statically exported Next.js on Cloudflare Pages. English and
+Spanish HTML, repository MDX, and social PNGs are built before deployment.
+Language routing and inquiry delivery are minimal Pages Functions.
+
 ## Run locally
 
 ```sh
@@ -14,8 +18,10 @@ npm run dev
 Open http://localhost:3000. To verify and serve the production build:
 
 ```sh
-npm run typecheck
 npm run build
+npm run typecheck
+npm run pages:migrate:local
+cp .dev.vars.example .dev.vars
 npm start
 ```
 
@@ -95,13 +101,12 @@ one event per section/milestone per visit, correct source sections, and no form
 values or private query parameters. Test inquiry success and failure only with
 your intended delivery transport or an intercepted local response.
 
-The contact form validates required fields and opens a **draft in the visitor’s
-email application**. The visitor sends that email. This site does not claim the
-message has been delivered, collect leads in a database, or offer a simulated
-newsletter subscription. Contact form copy makes the email behavior explicit.
-
-A native CRM submission or hosted scheduling integration requires your actual
-provider configuration. No credentials are required for the current email flow.
+The contact form submits to `/api/inquiry`, a Cloudflare Pages Function. It
+validates inputs and delivers through Resend or an HTTPS webhook. If delivery
+fails or runtime configuration is missing, the visitor can open an email draft.
+Secrets remain in Pages runtime bindings; no submissions are stored. A D1
+binding stores only HMACed client identifiers and five attempt timestamps for
+a shared sliding-minute throttle. See the [migration runbook](docs/deployment/CLOUDFLARE.md).
 
 ## Page behavior
 
@@ -170,14 +175,13 @@ For human visitors on an English URL, the first matching signal chooses Spanish:
    (quality values honored; q=0 ignored).
 4. English fallback.
 
-On Vercel, country detection uses `x-vercel-ip-country`. Other deployments can configure
-`GEO_COUNTRY_HEADER` as `cf-ipcountry`, `cloudfront-viewer-country`, or
-`x-vercel-ip-country` only behind a trusted ingress that overwrites it. Without such
-configuration, location headers are ignored. No external IP lookup or location prompt
-is used. Local development uses browser language unless a trusted header is configured.
-Do not publicly cache locale-dependent HTML across visitors; Next renders these routes
-dynamically using request headers/cookies.
+Cloudflare country detection uses trusted `request.cf.country`, never visitor
+headers. No external IP lookup or location prompt is used. Both languages are
+exported as static pages; Functions handle preference redirects with no-store
+cache headers. See [routing details](docs/i18n/MIDDLEWARE.md) and
+[deployment/cost runbook](docs/deployment/CLOUDFLARE.md).
 
 Mexican Spanish covers page copy, workflow examples, accessibility labels, privacy,
 metadata, calculator exports, and prepared email drafts. Company/product names and
-visitor-entered text remain unchanged. Currency stays USD; language does not convert amounts.
+visitor-entered text remain unchanged. Calculator currency follows language (USD/MXN) and reseeds monetary defaults;
+people/hours and entered form text survive switching. No exchange-rate conversion.

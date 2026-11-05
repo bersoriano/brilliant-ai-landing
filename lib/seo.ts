@@ -26,7 +26,7 @@ export function buildMetadata(locale: Locale, path: string): Metadata {
   const canonicalPath = localePath(locale, stripLocalePrefix(path));
   const title = pageTitle(locale, page);
   const description = pageDescription(locale, page);
-  const imagePath = locale === "es" ? "/es/og" : "/og";
+  const imagePath = `/social/${locale}/home.png`;
 
   return {
     metadataBase: new URL(getSiteUrl()),
@@ -94,7 +94,7 @@ export function buildJsonLd(locale: Locale, path: string) {
     name: SITE_NAME,
     url: siteUrl,
     email: CONTACT_EMAIL,
-    image: absoluteUrl("/og"),
+    image: absoluteUrl(`/social/${locale}/home.png`),
     logo: absoluteUrl("/brand/brilliant-icon-512.png"),
     description: t(HOME_DESCRIPTION),
     areaServed: [
@@ -258,7 +258,7 @@ export function buildJsonLd(locale: Locale, path: string) {
 }
 
 export function postImagePath(post: Pick<PostMeta, "slug" | "locale">) {
-  return `${localePath(post.locale, "/og")}?post=${encodeURIComponent(post.slug)}`;
+  return `/social/${post.locale}/${post.slug}.png`;
 }
 
 /** Keep article overrides together with the canonical and hreflang they describe. */

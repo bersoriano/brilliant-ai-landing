@@ -73,7 +73,7 @@ async function verify() {
       assert.ok(tags(html, "time").some((tag) => tag.dateTime === article.datePublished), `${path}: visible publication date`);
       assert.ok(graph.some((node) => node["@type"] === "BreadcrumbList"), `${path}: breadcrumbs`);
       const image = meta.find((tag) => tag.property === "og:image")?.content;
-      assert.equal(image, `${canonicalOrigin}${path.startsWith("/es") ? "/es" : ""}/og?post=${slug}`, `${path}: article-specific image`);
+      assert.equal(image, `${canonicalOrigin}/social/${path.startsWith("/es") ? "es" : "en"}/${slug}.png`, `${path}: article-specific image`);
     }
     if (cleanPath === "/blog") {
       const list = graph.find((node) => node["@type"] === "ItemList");

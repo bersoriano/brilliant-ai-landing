@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "brilliant-ai",
+  "pages_build_output_dir": "./out",
+  "compatibility_date": "2026-10-29",
+  "d1_databases": [{
+    "binding": "INQUIRY_RATE_LIMIT",
+    "database_name": "brilliant-inquiry-rate-limit",
+    "database_id": "00000000-0000-0000-0000-000000000001",
+    "migrations_dir": "cloudflare/migrations"
+  }],
+  "env": {
+    "preview": {
+      "d1_databases": [{
+        "binding": "INQUIRY_RATE_LIMIT",
+        "database_name": "brilliant-inquiry-rate-limit-preview",
+        "database_id": "00000000-0000-0000-0000-000000000002",
+        "migrations_dir": "cloudflare/migrations"
+      }]
+    }
+  }
+}

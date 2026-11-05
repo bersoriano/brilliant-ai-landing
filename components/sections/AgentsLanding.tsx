@@ -20,8 +20,9 @@ import styles from "./Landing.module.css";
  * playbook inside a tool the team already uses (Exhibit 1), and the rules
  * that keep every approval with a person.
  */
-export function AgentsLanding({ notes }: { notes: NoteLink[] }) {
+export function AgentsLanding({ notes: byLocale }: { notes: Record<"en" | "es", NoteLink[]> }) {
   const { t, locale } = useLanguage();
+  const notes = byLocale[locale];
   return (
     <>
       <Navbar />

@@ -19,8 +19,9 @@ import styles from "./Landing.module.css";
  * job picker (Exhibit 1) for finance and healthcare, the notes behind the
  * rules, and the contact form the picker fills in.
  */
-export function WorkflowsLanding({ notes }: { notes: NoteLink[] }) {
+export function WorkflowsLanding({ notes: byLocale }: { notes: Record<"en" | "es", NoteLink[]> }) {
   const { t, locale } = useLanguage();
+  const notes = byLocale[locale];
   return (
     <>
       <Navbar />
