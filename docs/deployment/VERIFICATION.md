@@ -53,5 +53,25 @@ command (`npm run build`) is set in the dashboard.
 | Preview headers | `x-robots-tag: noindex`, `cache-control: private, no-store`, valid TLS |
 | `POST /api/inquiry`, valid body, no transport | 502 `unconfigured` (form offers the email draft); GET is 405 |
 
-Still required at cutover: production salt and delivery credentials, a
-controlled real submission, PostHog ingestion, and custom domain and DNS. Vercel Analytics is removed: it only collects on Vercel.
+Vercel Analytics is removed: it only collects on Vercel.
+
+## Production cutover — 2026-11-05
+
+`main` at `0007eef` (PR #52, plus post #53) deployed as Pages production;
+brilliant.dev and www.brilliant.dev attached as custom domains (zone already on
+Cloudflare nameservers; MX and SPF records untouched). Production secrets:
+`INQUIRY_RATE_SALT`, `RESEND_API_KEY`, `INQUIRY_FROM_EMAIL`, `INQUIRY_TO_EMAIL`.
+Vercel automatic builds are off; its last deployment is the rollback.
+
+| Check | Result |
+| --- | --- |
+| Merged `main` locally | Typecheck, `npm test` 57/57, build 165 files, no secrets in export |
+| `node scripts/test-pages.mjs https://brilliant.dev` | Passed |
+| `TEST_BASE_URL=https://brilliant.dev npm run test:browser` | 10 passed (desktop and mobile) |
+| `npm run verify:seo -- https://brilliant.dev` | 42 pages, 8 posts in both languages, 1,074 internal links, 14 article images, sitemap, robots, 404s. It failed until zone Email Address Obfuscation was turned off; that setting rewrote `mailto:` links |
+| `www.brilliant.dev` | 301 to `https://brilliant.dev`, keeping path and query (zone Redirect Rule) |
+| 13 key URLs, both languages, new post | 200; unknown path 404 |
+| Country routing from a Mexican connection | `/security` redirects 307 to `/es/security` |
+| Production headers | `server: cloudflare`, no `x-robots-tag`, no `noindex`, canonical `https://brilliant.dev` |
+| Controlled submission (`POST /api/inquiry`, marked as a test) | 200 `{"ok":true}` |
+| PostHog | `POST us.i.posthog.com/e/` 200 from a desktop browser. Headless checks must mask `navigator.webdriver`, or PostHog drops events as bot traffic |
