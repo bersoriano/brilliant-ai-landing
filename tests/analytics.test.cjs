@@ -63,6 +63,16 @@ test("outbound payload removes URL secrets including SDK person and session fiel
   assert.equal(result.properties.utm_source, "linkedin");
 });
 
+test("Vercel Web Analytics drops Do Not Track visits and keeps only campaign tags in URLs", () => {
+  const event = { type: "pageview", url: "https://brilliant.dev/es/blog/post?email=a@b.co&utm_source=news&gclid=x&utm_campaign=oct#top" };
+  assert.equal(analytics().vercelAnalyticsEvent(event, true), null);
+  assert.deepEqual(analytics().vercelAnalyticsEvent(event, false), {
+    type: "pageview", url: "https://brilliant.dev/es/blog/post?utm_source=news&utm_campaign=oct",
+  });
+  assert.equal(analytics().vercelAnalyticsEvent({ url: "https://brilliant.dev/?q=1" }, false).url, "https://brilliant.dev/");
+  assert.equal(analytics().vercelAnalyticsEvent({ url: "not a url" }, false), null);
+});
+
 test("link classification catches booking, contact and blog clicks without exporting message bodies", () => {
   const base = "https://brilliant.dev/es";
   assert.deepEqual(analytics().linkProperties("https://haabcalendar.com/professionals/ai-automation", base), {

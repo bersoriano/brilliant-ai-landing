@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, MetadataRoute } from "next";
 import { FAQS, HOMEPAGE_FAQS } from "./faq";
 import {
   HOME_DESCRIPTION,
@@ -16,10 +16,17 @@ import {
   stripLocalePrefix,
   type Locale,
 } from "./locale";
-import { crmPrice } from "./crm";
-import { erpPrice } from "./erp";
+import { CRM_PRICE, crmPrice } from "./crm";
+import { ERP_PRICE, erpPrice } from "./erp";
 import type { PostMeta } from "./posts";
-import { absoluteUrl, CONTACT_EMAIL, getSiteUrl, SITE_NAME } from "./site";
+import { SERVICES } from "./services";
+import {
+  absoluteUrl,
+  CONTACT_EMAIL,
+  getSiteUrl,
+  SITE_NAME,
+  WHATSAPP_NUMBER,
+} from "./site";
 
 export function buildMetadata(locale: Locale, path: string): Metadata {
   const page = pageFromPath(path);
@@ -87,6 +94,7 @@ export function buildJsonLd(locale: Locale, path: string) {
   const page = pageFromPath(path);
   const inLanguage = htmlLang(locale);
   const organizationId = `${siteUrl}/#organization`;
+  const catalogId = `${canonical}#services`;
 
   const organization = {
     "@type": "Organization",
@@ -114,7 +122,13 @@ export function buildJsonLd(locale: Locale, path: string) {
       "Healthcare operations",
       "Invoice processing",
       "Patient intake",
+      "AI agents",
+      "Finance workflow automation",
+      "Healthcare workflow automation",
+      "Custom CRM",
+      "Custom ERP",
     ],
+    ...(page === "home" && { hasOfferCatalog: { "@id": catalogId } }),
   };
 
   const website = {
@@ -163,6 +177,31 @@ export function buildJsonLd(locale: Locale, path: string) {
           text: t(answer),
         },
       })),
+    });
+  }
+
+  if (page === "home") {
+    // The five offers as the homepage cards list them; each Service shares its
+    // @id with the node on its own page, so the two describe one entity.
+    graph.push({
+      "@type": "OfferCatalog",
+      "@id": catalogId,
+      name: t("Services"),
+      itemListElement: SERVICES.map((service) => {
+        const url = absoluteUrl(localePath(locale, service.path));
+        return {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            "@id": `${url}#service`,
+            name: t(service.name),
+            description: t(service.summary),
+            url,
+            provider: { "@id": organizationId },
+            areaServed: organization.areaServed,
+          },
+        };
+      }),
     });
   }
 
@@ -255,6 +294,69 @@ export function buildJsonLd(locale: Locale, path: string) {
     "@context": "https://schema.org",
     "@graph": graph,
   };
+}
+
+/** The rules every crawler gets; AI search bots are named so the welcome is explicit. */
+export const AI_SEARCH_BOTS = [
+  "OAI-SearchBot",
+  "ChatGPT-User",
+  "PerplexityBot",
+  "Claude-SearchBot",
+  "Claude-User",
+  "Googlebot",
+  "Bingbot",
+] as const;
+
+export function buildRobots(): MetadataRoute.Robots {
+  const base = getSiteUrl();
+  // A crawler that matches a named group ignores "*", so each group repeats
+  // the API rule.
+  const rule = { allow: "/", disallow: "/api/" };
+  return {
+    rules: [
+      { userAgent: "*", ...rule },
+      ...AI_SEARCH_BOTS.map((userAgent) => ({ userAgent, ...rule })),
+    ],
+    sitemap: `${base}/sitemap.xml`,
+    host: base,
+  };
+}
+
+/**
+ * /llms.txt (llmstxt.org): a plain summary for AI assistants, in English.
+ * Same honesty rules as the site: business terms only, no build stack, prices
+ * from their constants.
+ */
+export function buildLlmsTxt() {
+  const url = (path: string) => absoluteUrl(path);
+  const crm = CRM_PRICE.USD!;
+  const erp = ERP_PRICE.USD!;
+  const lines = [
+    `# ${SITE_NAME}`,
+    "",
+    `> ${SITE_NAME} builds and runs AI agents and workflows that prepare invoices, referrals, intake paperwork, and follow-ups for finance and healthcare operations teams in the United States, Canada, and Mexico. Approvals stay with a named person. Bookings run on Haab Calendar, a booking app we built.`,
+    "",
+    "Every page is also available in Mexican Spanish under /es (prices in MXN there).",
+    "",
+    "## Services",
+    `- [Services overview](${url("/services")}): All five offers, with frequently asked questions.`,
+    `- [AI Workflow Automations](${url("/workflows")}): One reliable process per repetitive task (invoices, referrals, month-end), checked against your rules, with every exception sent to a person you name.`,
+    `- [AI Agents](${url("/agents")}): Agents that find, draft, chase documents, and follow up inside the tools your team already uses, such as Outlook and Teams. Your team approves what goes out.`,
+    `- [Custom CRM](${url("/custom-crm")}): A CRM shaped to your pipeline: contacts, deals, tasks. Unlimited users, from $${crm.month}/month.`,
+    `- [Custom ERP](${url("/custom-erp")}): One business system for sales, inventory, purchasing, invoice matching, and accounting. Unlimited users, from $${erp.month}/month.`,
+    `- [Custom Software](${url("/custom-software")}): Software for the job nothing off the shelf does, priced by project and kept running by us.`,
+    `- [Finance automation](${url("/finance-automation")}): Invoice matching, month-end close, missing documents, approvals.`,
+    `- [Healthcare automation](${url("/healthcare-automation")}): Referrals, intake paperwork, billing follow-ups. Clinical decisions stay with your team.`,
+    `- [Security & data handling](${url("/security")}): How financial and patient data is scoped, logged, and approved, under your agreements and data-residency requirements.`,
+    "",
+    "## About",
+    `- [About](${url("/about")}): Onsite reviews in the United States, Canada, and Mexico, including Mexico City. Clients across Southeast Asia are served from Malaysia.`,
+    `- [Blog](${url("/blog")}): Notes on agents in regulated work, approval design, and measuring capacity.`,
+    "",
+    "## Contact",
+    `${CONTACT_EMAIL} · WhatsApp ${WHATSAPP_NUMBER}`,
+  ];
+  return `${lines.join("\n")}\n`;
 }
 
 export function postImagePath(post: Pick<PostMeta, "slug" | "locale">) {

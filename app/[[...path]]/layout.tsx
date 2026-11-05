@@ -6,6 +6,7 @@ import { buildJsonLd } from "@/lib/seo";
 import { LocalizedJsonLd } from "@/components/seo/LocalizedJsonLd";
 import { LanguageProvider, SkipLink } from "@/components/i18n/LanguageProvider";
 import { PageAnalytics } from "@/components/analytics/PageAnalytics";
+import { VercelAnalytics } from "@/components/analytics/VercelAnalytics";
 export default async function RootLayout({ children, params }: RouteProps & { children: React.ReactNode }) {
   const { locale, path } = routeInfo(await params);
   return (
@@ -17,6 +18,7 @@ export default async function RootLayout({ children, params }: RouteProps & { ch
           <SkipLink />
           {children}
         </LanguageProvider>
+        <VercelAnalytics />
       </body>
     </html>
   );

@@ -124,7 +124,7 @@ test("Pages language routing skips API and asset requests", () => {
   const { routeLanguage } = require("../cloudflare/routing.ts");
   for (const page of ["/", "/about", "/apiary"])
     assert.equal(routeLanguage(new Request(`https://example.com${page}`), "MX").status, 307);
-  for (const path of ["/api/inquiry", "/api/anything/else", "/_next/static/chunk.js", "/robots.txt", "/icon.svg"])
+  for (const path of ["/api/inquiry", "/api/anything/else", "/_vercel/insights/view", "/_next/static/chunk.js", "/robots.txt", "/icon.svg"])
     assert.equal(routeLanguage(new Request(`https://example.com${path}?lang=es`), "MX"), null);
 });
 test("Home metadata names the US, Canada, and Mexico; FAQ copy is translated", () => {

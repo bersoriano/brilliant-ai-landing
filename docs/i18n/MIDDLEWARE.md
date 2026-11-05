@@ -6,7 +6,7 @@ Existing components live in `views/`; shared locale helpers remain in `lib/local
 
 `cloudflare/routing.ts` runs in the advanced Pages Function (`out/_worker.js`):
 
-1. API, Next assets and file requests bypass language handling.
+1. API, Vercel analytics, Next assets and file requests bypass language handling.
 2. Valid `?lang=en|es` wins even for bots and Spanish URLs. Remove only `lang`,
    retain other query parameters, set a one-year Path=/ SameSite=Lax cookie,
    Secure on HTTPS, and return a private/no-store 307 to the clean locale URL.
