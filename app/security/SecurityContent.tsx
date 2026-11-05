@@ -47,6 +47,14 @@ export default function SecurityContent() {
             </p>
           </section>
           <section>
+            <h2>{t("You choose which steps use AI")}</h2>
+            <p>
+              {t(
+                "You choose which parts of a workflow use AI. Any step you want to keep for security or privacy reasons stays under your team’s control. We agree that split with you and write it into the scope.",
+              )}
+            </p>
+          </section>
+          <section>
             <h2>{t("United States — HIPAA")}</h2>
             <p>
               {t(
