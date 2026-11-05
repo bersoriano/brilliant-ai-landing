@@ -35,6 +35,19 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+.list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  list-style: square;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.list li::marker {
+  color: var(--accent);
+}
 .organizations {
   display: flex;
   flex-wrap: wrap;

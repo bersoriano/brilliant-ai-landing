@@ -19,9 +19,9 @@ a note) → FAQ (six questions, "More questions" → `/services#faq`) → Contac
 Footer, plus the sticky mobile CTA.
 
 Nav: Services (a disclosure listing the five service pages and "All
-services"), How it works (`/#how-it-works`), Security, Blog, and `NAV_CTA`.
-Anchors in the nav and footer resolve against the homepage, so they work from
-every page.
+services"), How it works (`/#how-it-works`), Blog, and `NAV_CTA`. `/security`
+is linked from the footer. Anchors in the nav and footer resolve against the
+homepage, so they work from every page.
 
 Service pages (and `/es/…`), laid out like `/custom-crm` (back link, hero with
 an exhibit, sections, repeated review CTAs, a close with WhatsApp and email):
@@ -182,11 +182,12 @@ the hero, calculator and close.
   firms", linking to `/about`. There is no logo row. Employer names (including
   Merrill Lynch) appear only on `/about`, with the "not clients or partners"
   hedge.
-- **Security:** terms are set by each client, so the page describes a process
-  the client controls: providers and training terms, scoped/logged/revocable
-  access, BAA/DPA/NDA as the client requires, HIPAA via BAA, and LFPDPPP and
-  residency written into the scope. It claims **no** certifications and
-  invites a security questionnaire.
+- **Security:** the page leads with the standards we apply (encryption, access
+  control, audit trails, data minimization, approval gates) and the regulations
+  we work under: HIPAA via BAA, LFPDPPP, NOM-004 and NOM-024, with residency
+  written into the scope. Final terms stay with the client. SOC 2 and ISO 27001
+  appear only as client requirements we scope to, never as certifications we
+  hold, and the page invites a security questionnaire.
 - **Pricing shape:** the review is free (20 min); the pilot is fixed scope,
   typically 3–6 weeks, priced after discovery; then a monthly operating
   retainer. Proposals separate implementation, third-party/API costs and
@@ -203,7 +204,7 @@ in Chrome at 360 / 390 / 700 / 900 / 1150 / 1440px, EN and ES.
 |---|---|---|
 | **8-second hero** | Above the fold at 1440×900: eyebrow names finance + healthcare, H1 names the outcome (a bigger team's capacity without hiring), sub says who runs it ("We build and run"), names the job in their nouns (invoices, referrals, follow-ups) and where it runs, then "Your team keeps every approval."; primary CTA visible (EN and ES, also at 1024×768). "See a workflow in motion" jumps to Exhibit 1, directly below the hero | Pass |
 | **Logo honesty** | Test "Employer names stay off the homepage…"; names only on `/about` with the hedge | Pass |
-| **HIPAA / LFPDPPP presence** | `/security` has "Healthcare in the United States (HIPAA)" and "Mexico: personal data and residency (LFPDPPP)"; no certification claims | Pass |
+| **HIPAA / LFPDPPP presence** | `/security` has "United States — HIPAA" and "Mexico — patient data and personal data" (LFPDPPP, NOM-004, NOM-024); no claim to hold a certification | Pass |
 | **Mexico noun test** | `/es`: CFDI, OC, RFC, provisiones, preautorización, aseguradora, CONTPAQi/SAP in tools; "Revisión en sitio en México" | Pass |
 | **Register** | Test "Mexican Spanish uses tú with the visitor, not usted or Spain forms" over the whole dictionary (the visitor addressing us stays "ustedes") | Pass |
 | **CTA friction** | One primary ask everywhere ("Book a 20-minute workflow review"); WhatsApp and email as alternates; the form requires 5 fields (name, email, organization, country, industry) plus "What task should we look at?" unless a workflow example is already selected, with phone optional; "No technical brief needed" sits beside the booking button in the contact section, and the Review step offers recording the task once instead of explaining it | Pass |

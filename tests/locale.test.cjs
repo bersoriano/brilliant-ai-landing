@@ -552,8 +552,9 @@ test("Services presents the five offers as one translated set, ahead of How it w
     assert.ok(fs.existsSync(`app${path}/page.tsx`), `${path}: page exists`);
     assert.match(fs.readFileSync("app/sitemap.ts", "utf8"), new RegExp(`"${path}"`), `${path}: in the sitemap`);
   }
-  // The nav opens the service pages and keeps How it works, Security and Blog.
-  assert.deepEqual(NAV_LINKS.map((link) => link.href), ["/services", "/#how-it-works", "/security", "/blog"]);
+  // The nav opens the service pages and keeps How it works and Blog; Security lives in the footer.
+  assert.deepEqual(NAV_LINKS.map((link) => link.href), ["/services", "/#how-it-works", "/blog"]);
+  assert.match(fs.readFileSync("components/sections/Footer.tsx", "utf8"), /localePath\(locale, "\/security"\)/, "the footer links /security");
   assert.match(fs.readFileSync("components/sections/Navbar.tsx", "utf8"), /SERVICES\.map/, "the nav lists every service");
   assert.ok(fs.existsSync("app/services/page.tsx"), "the services index exists");
 });
