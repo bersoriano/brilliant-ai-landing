@@ -33,3 +33,26 @@ project and preview/production D1 IDs are not provisioned; config contains
 explicit placeholders. Follow [runbook](CLOUDFLARE.md) before owner-approved cutover.
 No known local visitor-feature gap remains. Dynamic behavior is limited by
 Free quotas; documented fail-open/fail-closed tradeoff applies when exhausted.
+
+## Remote staging — 2026-11-05
+
+Pages project `brilliant-ai` (Git: `bersoriano/brilliant-ai-landing`), preview
+deployment `https://a7f7e5f2.brilliant-ai.pages.dev` from commit `4497500` on
+`feat/cloudflare-pages`. D1 databases `brilliant-inquiry-rate-limit` and
+`brilliant-inquiry-rate-limit-preview` are provisioned with the schema applied;
+their IDs are in `wrangler.jsonc`. Preview has `INQUIRY_RATE_SALT` and no
+delivery transport. Build variables come from `wrangler.jsonc` `vars`; the build
+command (`npm run build`) is set in the dashboard.
+
+| Check | Result |
+| --- | --- |
+| `npm run verify:seo -- <preview>` | 40 pages, 7 posts in both languages, 1,032 internal links, 14 article images, sitemap, robots, 404s |
+| `node scripts/test-pages.mjs <preview>` | Passed |
+| `TEST_BASE_URL=<preview> npm run test:browser` | 10 passed (desktop and mobile) |
+| Country routing from a Mexican connection | `/` and `/security` redirect 307 to `/es` and `/es/security` |
+| Preview headers | `x-robots-tag: noindex`, `cache-control: private, no-store`, valid TLS |
+| `POST /api/inquiry`, valid body, no transport | 502 `unconfigured` (form offers the email draft); GET is 405 |
+
+Still required at cutover: production salt and delivery credentials, a
+controlled real submission, PostHog ingestion, custom domain and DNS, and
+replacing Vercel Analytics (it only collects on Vercel).
