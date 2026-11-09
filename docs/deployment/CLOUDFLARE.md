@@ -1,8 +1,23 @@
 # Cloudflare Pages migration runbook
 
-Prepared 2026-10-29. Production Vercel and DNS are unchanged. Do not merge to a
-Vercel auto-deploy branch, attach the production domain, alter DNS, or remove
-Vercel until staging passes and the owner authorizes cutover.
+Prepared 2026-10-29. **Cut over 2026-11-05:** brilliant.dev and
+www.brilliant.dev are served by Pages project `brilliant-ai`, which deploys
+production from `main`. Vercel project `brilliant-ai-landing` is kept, with
+automatic builds off, as the rollback target. Results are in
+[VERIFICATION.md](VERIFICATION.md). Removing Vercel needs separate owner
+authorization.
+
+Gotchas found during cutover:
+- Production secrets must be type **Secret**. `wrangler.jsonc` `vars` replace
+  the dashboard's plain-text variables.
+- Secrets and variables apply only to new deployments. Retry the latest
+  deployment after changing them.
+- A Git build can sit in "Queued" indefinitely. Retry it (dashboard or
+  `POST …/deployments/<id>/retry`).
+- Zone **Email Address Obfuscation** (Scrape Shield) rewrites every `mailto:`
+  link to `/cdn-cgi/l/email-protection` and injects a script. Keep it off for
+  brilliant.dev; `verify:seo` fails while it is on.
+- `www` → apex is a zone Redirect Rule (301, keeps path and query), not code.
 
 ## Architecture and build
 
@@ -226,7 +241,9 @@ within the limits above.
 ## Rollback
 
 Before DNS cutover: leave production Vercel unchanged; fix/redeploy preview.
-After DNS cutover: restore captured web DNS targets to Vercel and verify its
+After DNS cutover: restore captured web DNS targets to Vercel (captured
+2026-11-05: apex `A 76.76.21.21`, `www CNAME cname.vercel-dns.com`; remove the
+Pages custom domains first) and verify its
 retained deployment and TLS. If deploying this branch triggered Vercel, restore
 the captured previous deployment first. Keep inquiry secrets configured on the
 old deployment. Existing language cookie and public URLs remain compatible.

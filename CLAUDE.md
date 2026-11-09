@@ -37,3 +37,6 @@ Next.js 15 (App Router), React 19, TypeScript, Tailwind 4 (imported, but styling
 
 ## Commands
 `npm run typecheck` · `npm test` · `npm run build` · `npm run dev`
+
+## Deploy
+Static export on Cloudflare Pages (project `brilliant-ai`): `main` deploys production, other branches get noindex previews. Language redirects and `/api/inquiry` run in the Pages Function (`cloudflare/`), not Next middleware or API routes. Vercel is a retained rollback with builds off. Runbook: `docs/deployment/CLOUDFLARE.md`.
