@@ -425,14 +425,16 @@ test("Every scene string and homepage data string has a Spanish entry", () => {
     assert.notEqual(translate(s, "es"), s, `missing Spanish: ${s}`);
 });
 
-test("Employer names stay off the homepage; they live on /about with the hedge", () => {
+test("Homepage employer names are confined to consultants' previous work; /about keeps the hedge", () => {
   const home = fs
     .readdirSync("components/sections")
-    .filter((f) => f.endsWith(".tsx"))
+    .filter((f) => f.endsWith(".tsx") && f !== "ConsultantExperience.tsx")
     .map((f) => fs.readFileSync(`components/sections/${f}`, "utf8"))
     .join("\n");
   for (const name of EMPLOYERS)
     assert.ok(!home.includes(name), `employer on homepage: ${name}`);
+  const experience = fs.readFileSync("components/sections/ConsultantExperience.tsx", "utf8");
+  assert.match(experience, /Our consultants have worked previously with/);
   const about = fs.readFileSync("app/about/AboutContent.tsx", "utf8");
   assert.match(about, /not current Brilliant AI clients or partners/);
 });

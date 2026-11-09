@@ -1,6 +1,7 @@
 import { InquiryProvider } from "@/components/inquiry/InquiryContext";
 import { Navbar } from "@/components/sections/Navbar";
 import { Hero } from "@/components/sections/Hero";
+import { ConsultantExperience } from "@/components/sections/ConsultantExperience";
 import { Problem } from "@/components/sections/Problem";
 import { RoiCalculator } from "@/components/sections/RoiCalculator";
 import { Services } from "@/components/sections/Services";
@@ -33,6 +34,7 @@ export default async function Home({ locale }: { locale: Locale }) {
       <InquiryProvider>
         <main id="main">
           <Hero />
+          <ConsultantExperience />
           <Problem />
           <RoiCalculator />
           <Services />

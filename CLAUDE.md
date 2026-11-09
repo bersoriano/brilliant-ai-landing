@@ -18,7 +18,7 @@ Next.js 15 (App Router), React 19, TypeScript, Tailwind 4 (imported, but styling
   - The case study renders only via `shouldRenderCaseStudy`.
   - The ROI is capacity-first (see `lib/roi.ts`).
   - Never invent stats, clients or certifications. Security copy (`/security`) describes the standards we apply and the regulations we work under, with final terms set by the client. It names SOC 2 and ISO 27001 only as client requirements we scope to, and never claims we hold SOC 2, HIPAA attestation, or CFDI/MXN invoicing.
-  - Employer names (BCG, BofA, Merrill Lynch, Banorte, BNY Mellon, Accenture, IBM) live only on `/about` with the "not clients" hedge; a test keeps them off the homepage.
+  - Employer names on the homepage live only in `ConsultantExperience`, explicitly introduced as the consultants' previous work. `/about` keeps the "not clients" hedge. Never present these companies as Brilliant clients or partners.
   - Haab Calendar (where every booking CTA lands) is Brilliant's own product, never a client or partner (a test enforces it). The custom software offer (`/custom-software`) shows it through its recorded demo (the page's Exhibit 1, fictional patient, "Sample data") and lists only features Haab ships.
   - Document scenes (`lib/scenes.ts`) are illustrative: invented names and numbers, labelled "Sample data" in the exhibit header.
   - The custom CRM offer (homepage card `#crm`, the `/custom-crm` landing, data in `lib/crm.ts`) is white-label: `/custom-crm` says "open-source foundation" (nothing else does) and never names the project, here or anywhere in this public repo (a test enforces it). List only features that foundation ships. The base-plan price lives in `CRM_PRICE`, set per currency (no FX conversion).
