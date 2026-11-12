@@ -10,7 +10,7 @@ La mayoría de los equipos que prueban agentes chocan con la misma pared. El mod
 
 El problema rara vez es el modelo. Es el entorno en el que el modelo trabaja.
 
-Ese entorno ya tiene nombre: el *harness* (el arnés). La disciplina de diseñarlo, probarlo y ajustarlo de forma continua se llama *harness engineering*.
+Ese entorno ya tiene nombre: el *harness*. La disciplina de diseñarlo, probarlo y ajustarlo de forma continua se llama *harness engineering*.
 
 La ecuación de trabajo es sencilla:
 
@@ -75,7 +75,7 @@ Los mismos principios aparecen en sectores regulados. En [Agentes de IA en finan
 
 ## Cómo se aplica a una aplicación de reservas con agentes
 
-Imagina un producto de reservas de hotel que funciona más como un agente que como un formulario tradicional de varios pasos. Alguien escribe algo como “hotel tranquilo cerca de la playa por menos de 3,500 pesos, para dos adultos y un niño, del 15 al 18 de mayo”. Los agentes buscan, comparan, apartan, reservan, modifican o cancelan.
+Imagina un producto de reservas de hotel que funciona más como un agente que como un formulario tradicional de varios pasos. Alguien escribe algo como “hotel tranquilo cerca de la playa por menos de 200 dólares, para dos adultos y un niño, del 15 al 18 de mayo”. Los agentes buscan, comparan, apartan, reservan, modifican o cancelan.
 
 Sin un harness sólido, esto falla de formas predecibles: precios vencidos, tipos de habitación equivocados, cobros dobles al reintentar, políticas parafraseadas mal o agentes de soporte viendo los datos del huésped equivocado.
 
@@ -103,7 +103,7 @@ El flujo de reserva se resume así:
 
 ![Diagrama de flujo titulado “Booking Flow with Ratchet” (flujo de reserva con trinquete: cada falla aprieta el harness). Una intención del usuario (“hotel tranquilo en la playa por menos de 200 dólares, del 15 al 18 de mayo”) pasa a los pasos del agente: guías (políticas, habilidades, AGENTS.md), razonamiento del modelo y herramientas (disponibilidad, apartado, pago). Después, los sensores revisan la revalidación del precio, la vigencia del apartado, el motor de políticas y la idempotencia. Si la revisión pasa, sale una reserva confirmada (hotel, calendario, tarjeta). Si falla, se agrega un control permanente: una guía o un sensor nuevo que regresa a los pasos del agente para la próxima vez.](/blog/harness-engineering/booking-flow-ratchet.jpg)
 
-*Ilustración del ejemplo de reservas. El diagrama está en inglés; precios y fechas son datos de ejemplo.*
+*Ilustración del ejemplo de reservas. El diagrama está en inglés; el precio y las fechas son datos de ejemplo.*
 
 El modelo propone. El harness decide qué puede convertirse en una reserva real.
 
