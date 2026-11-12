@@ -14,6 +14,8 @@ import styles from "./Blog.module.css";
  * is for" line. `<BookReview />` closes the "Next step" section with the
  * booking button, right after the line that invites the reader to the review
  * (before any sources or footnotes), so the ask keeps the PRIMARY_CTA label.
+ * `<ReviewLink>` is an inline link to the same booking page, for a calm
+ * mid-post invitation in prose; it is never a second button.
  */
 export function postComponents(locale: Locale): MDXComponents {
   const t = (source: string) => translate(source, locale);
@@ -39,6 +41,11 @@ export function postComponents(locale: Locale): MDXComponents {
           {t(PRIMARY_CTA)}
         </a>
       </p>
+    ),
+    // Inline link to the same booking page, for a mid-post invitation in
+    // prose. The button (<BookReview />) still appears once, at the end.
+    ReviewLink: ({ children }: { children?: ReactNode }) => (
+      <a href={DISCOVERY_CALL_HREF}>{children}</a>
     ),
     table: (props: ComponentProps<"table">) => (
       <div className={styles.tableWrap}>

@@ -1,0 +1,123 @@
+---
+title: "Harness engineering: por qué el sistema alrededor del modelo importa más que el modelo"
+seoTitle: "Harness engineering: el sistema alrededor del modelo"
+description: "El modelo propone; el harness decide qué se vuelve una acción real. Qué es el harness engineering y cómo se aplica a un flujo de reservas con agentes."
+date: 2026-11-12
+draft: false
+---
+
+La mayoría de los equipos que prueban agentes chocan con la misma pared. El modelo es capaz. La demo se ve bien. Luego cotiza un precio vencido, reserva el tipo de habitación equivocado, se salta una validación obligatoria o envía algo que no debía. El proyecto se atora.
+
+El problema rara vez es el modelo. Es el entorno en el que el modelo trabaja.
+
+Ese entorno ya tiene nombre: el *harness* (el arnés). La disciplina de diseñarlo, probarlo y ajustarlo de forma continua se llama *harness engineering*.
+
+La ecuación de trabajo es sencilla:
+
+> **Agente = Modelo + Harness**
+
+El modelo aporta el razonamiento. El harness aporta todo lo demás que convierte ese razonamiento en trabajo confiable, acotado y observable: instrucciones, herramientas, permisos, contexto, validaciones y registros.
+
+Este artículo explica qué significa eso en la práctica, cómo se relaciona con el resto del trabajo con IA, cómo lo están haciendo los equipos hoy y cómo se ve aplicado a un sistema de reservas de hotel operado por agentes.
+
+## Dónde encaja el harness engineering
+
+Ayuda ponerlo junto a las prácticas que llegaron antes.
+
+- **Prompt engineering** optimiza cómo redactas una sola solicitud.
+- **Context engineering** decide qué información ve el modelo en esa solicitud (documentos, memoria, datos recuperados, historial de la conversación).
+- **Harness engineering** construye el sistema operativo completo que hace confiable el trabajo de varios pasos a lo largo del tiempo.
+
+El prompt engineering vive dentro del context engineering. Ambos viven dentro del harness engineering. El *loop engineering* (cómo itera el agente y cuándo se detiene) es una parte más acotada del harness.
+
+Puedes tener un prompt bien escrito y un contexto rico y aun así terminar con un agente poco confiable si el sistema que lo rodea no limita sus acciones, no verifica sus resultados y no convierte las fallas en controles permanentes.
+
+Es la misma distinción que hacemos cuando hablamos de pasar de sistemas de registro a sistemas de acción. En [IA en el CRM](/blog/crm-systems-of-action) y [IA en el ERP](/blog/erp-systems-of-action), los agentes útiles son los que pueden trabajar a lo largo de varios pasos dentro de los límites que fija una persona. Esos límites, herramientas y validaciones son el harness.
+
+## Qué contiene realmente el harness
+
+Un harness práctico tiene algunas piezas que se repiten:
+
+- **Guías:** lo que orienta al agente antes de actuar. Archivos de instrucciones (`AGENTS.md` o su equivalente), políticas, habilidades, plantillas y ejemplos. Su trabajo es subir la probabilidad de que el primer intento salga bien.
+- **Herramientas y permisos:** las formas en que el agente puede actuar sobre sistemas reales, con límites firmes aplicados en el código y no solo en el prompt.
+- **Sensores:** validaciones que corren después de que el agente actúa. Pruebas, linters, validadores de reglas de negocio, motores de precios o de políticas y, cuando hace falta, una segunda revisión. Su trabajo es detectar problemas y devolver el error para que el agente se corrija o escale el caso.
+- **Contexto y memoria:** cómo se arma y se conserva el estado entre pasos sin meter todo en una sola ventana.
+- **Orquestación y observabilidad:** el ciclo en sí, el rastreo, el control de costos y el registro de lo que pasó.
+
+Cada control es una guía o un sensor. Algunos son computacionales (rápidos, deterministas, baratos). Otros son inferenciales (usan el juicio de un modelo). El patrón confiable es poner primero las validaciones deterministas y baratas, y dejar que el trabajo llegue a una revisión más costosa solo si ya las pasó.
+
+Cuando un agente falla, la jugada del harness engineering no es corregir solo ese caso. Es convertir la falla en una guía o un sensor nuevo, para que ese tipo de error sea más difícil o imposible la próxima vez. El harness es un trinquete: solo se aprieta.
+
+## Cómo lo están usando los equipos
+
+La práctica se popularizó con ese nombre a principios de 2026. Mitchell Hashimoto describió el hábito de dejar una corrección permanente en el entorno del agente cada vez que se equivocaba, muchas veces agregando una línea a un archivo `AGENTS.md` o una pequeña herramienta de verificación. OpenAI publicó un relato detallado de un equipo que construyó y lanzó un producto interno prácticamente sin código escrito a mano, y que entendió el trabajo de sus ingenieros como diseñar el entorno, especificar la intención y construir ciclos de retroalimentación. El sistema Minions de Stripe muestra una versión de alto volumen: agentes sin supervisión directa que producen más de mil pull requests por semana, con revisión humana pero sin código escrito por personas, dentro de entornos muy acotados y con controles deterministas.
+
+En esos casos y en muchos equipos más pequeños, los patrones comunes son:
+
+- Mantener el repositorio (o una base de conocimiento equivalente) como sistema de registro, para que los agentes no dependan de lo que solo algunas personas saben.
+- Dividir el trabajo en tareas pequeñas y verificables, con una definición clara de “terminado”.
+- Preferir controles mecánicos (esquemas, linters, motores de políticas, llaves de idempotencia) a esperar que el modelo se acuerde de una regla.
+- Acotar los permisos y registrar todo.
+- Después de cada falla real, agregar el control permanente.
+
+Los mismos principios aparecen en sectores regulados. En [Agentes de IA en finanzas y salud: preparan, no deciden](/blog/agents-in-regulated-work), los agentes que se siguen usando son los que tienen un responsable con nombre, acceso acotado, registro completo y una persona que decide. Esas son decisiones de harness. El diseño de aprobaciones de [Cómo diseñar aprobaciones que no se vuelvan el nuevo cuello de botella](/blog/approval-points-without-bottlenecks) también es trabajo de harness: llevar la evidencia a una sola decisión clara para que la revisión humana siga siendo rápida.
+
+## Cómo se aplica a una aplicación de reservas con agentes
+
+Imagina un producto de reservas de hotel que funciona más como un agente que como un formulario tradicional de varios pasos. Alguien escribe algo como “hotel tranquilo cerca de la playa por menos de 3,500 pesos, para dos adultos y un niño, del 15 al 18 de mayo”. Los agentes buscan, comparan, apartan, reservan, modifican o cancelan.
+
+Sin un harness sólido, esto falla de formas predecibles: precios vencidos, tipos de habitación equivocados, cobros dobles al reintentar, políticas parafraseadas mal o agentes de soporte viendo los datos del huésped equivocado.
+
+Así se aplica el harness.
+
+**Guías:** un archivo de instrucciones corto que apunta a documentos de políticas estructurados, una habilidad de “cómo apartar una habitación”, plantillas que obligan a que la solicitud de reserva siga un esquema fijo y ejemplos de recorridos bien hechos. El archivo de instrucciones dice cosas como “Vuelve a validar disponibilidad y precio en vivo justo antes del pago. Nunca inventes tipos de habitación. Cita el motor de políticas; no lo parafrasees”.
+
+**Herramientas y permisos:** exponen las APIs de disponibilidad, inventario, pagos y datos de usuarios. Las llamadas de pago requieren una llave de idempotencia. Las herramientas de soporte solo pueden consultar reservas del usuario autenticado. Las acciones de monto alto o las primeras de un usuario pueden pedir una aprobación adicional.
+
+**Sensores:** corren después de que el agente propone una acción:
+
+- El precio cotizado debe coincidir con el precio que se va a cobrar.
+- Debe existir un ID de apartado válido antes de intentar el pago.
+- La confirmación debe traer una referencia real del proveedor, las fechas correctas y la categoría de habitación que corresponde.
+- Un reembolso no puede ser mayor que el cargo original y debe pasar por el motor de políticas.
+- Cualquier acceso a datos de otro usuario se bloquea y se registra.
+
+Si un sensor falla, el error regresa al agente para que lo corrija o el caso escala. Después del incidente, la falla se vuelve un agregado permanente: una regla nueva en el archivo de instrucciones, una prueba estructural nueva o una restricción más estricta en una herramienta.
+
+Es el mismo patrón que usamos cuando la automatización de facturas se atora en las excepciones. El camino feliz es fácil. El valor está en el harness que maneja los casos que no cuadran y que aun así deja a una persona a cargo del último paso irreversible. Lee [Por qué la automatización de facturas se atora en las excepciones](/blog/why-invoice-automation-stalls) para ver el paralelo en cuentas por pagar.
+
+El flujo de reserva se resume así:
+
+> Intención del usuario → Las guías cargan las políticas y habilidades correctas → El modelo razona → Las herramientas actúan dentro de sus permisos → Los sensores validan → Reserva confirmada o escalamiento a una persona.
+
+El modelo propone. El harness decide qué puede convertirse en una reserva real.
+
+Si tienes un proceso donde un error del agente saldría caro de revertir, puedes <ReviewLink>agendar una revisión de 20 minutos</ReviewLink> y vemos juntos dónde van sus validaciones y aprobaciones.
+
+## Por qué importa para los equipos
+
+Gartner y otros han señalado que se espera que una buena parte de los proyectos de agentes se cancele por razones que incluyen un valor poco claro y controles de riesgo insuficientes. El harness engineering es la respuesta práctica a la parte de los controles de riesgo.
+
+También vuelve más clara la medición. Con sensores y registros puedes contar qué preparó el agente, qué pasó las validaciones, qué se escaló y cuánto tardó la revisión. Esa es la materia prima del tipo de reporte de capacidad que describimos en [Cómo medir el retorno de la automatización en horas, sin precisión falsa](/blog/measuring-capacity-reclaimed).
+
+Los equipos que tratan el harness como el producto (en lugar de tratar al modelo como el producto) suelen mantener a sus agentes en uso. Los que dependen solo de mejores prompts, por lo general no.
+
+## Cómo empezar
+
+No necesitas una plataforma perfecta desde el primer día. Empieza con un proceso que tenga volumen real y formas de fallar claras:
+
+1. Anota los puntos de decisión actuales y lo que una persona todavía debe aprobar.
+2. Pon las reglas duraderas en archivos que el agente pueda leer.
+3. Agrega primero los sensores deterministas más baratos (validación de esquemas, revalidación, idempotencia, llamadas al motor de políticas).
+4. Limita los permisos al mínimo necesario.
+5. Después de los primeros errores reales, conviértelos en guías o sensores permanentes.
+
+El harness nunca va a estar terminado. Va a estar más apretado que el mes pasado. De eso se trata.
+
+## Siguiente paso: mapea las validaciones de un proceso
+
+Elige un proceso donde un agente podría actuar sobre un sistema real. Anota cada paso que sea difícil de revertir, la validación que corre antes de él hoy y la persona que lo aprueba. Marca cuáles de esas validaciones están por escrito y cuáles solo viven en la cabeza de alguien: esas son las primeras guías y sensores que hay que construir.
+
+Con esa lista en mano, una revisión de 20 minutos suele bastar para ver si vale la pena hacer un piloto.
+
+<BookReview />
