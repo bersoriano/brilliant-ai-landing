@@ -1,0 +1,123 @@
+---
+title: "Harness engineering: why the system around the model matters more than the model"
+seoTitle: "Harness Engineering: The System Around the Model"
+description: "The model proposes; the harness decides what becomes a real action. What harness engineering is, and how it applies to an agent-driven booking flow."
+date: 2026-11-12
+draft: false
+---
+
+Most teams that try agents hit the same wall. The model is capable. The demo looks good. Then it quotes an expired price, books the wrong room type, skips a required check, or sends something it shouldn’t. The project stalls.
+
+The problem is rarely the model. It is the environment the model works inside.
+
+That environment has a name now: the harness. The discipline of designing, testing, and continuously tightening it is called harness engineering.
+
+The working equation is simple:
+
+> **Agent = Model + Harness**
+
+The model supplies reasoning. The harness supplies everything else that turns reasoning into reliable, bounded, observable work: instructions, tools, permissions, context, checks, and logs.
+
+This post explains what that means in practice, how it relates to the rest of AI work, how teams are doing it today, and what it looks like applied to an agent-driven hotel booking system.
+
+## Where harness engineering fits
+
+It helps to place it next to the practices that came before it.
+
+- **Prompt engineering** optimizes how you word a single request.
+- **Context engineering** decides what information the model sees in that request (documents, memory, retrieved data, conversation history).
+- **Harness engineering** builds the full operational system that makes multi-step work reliable over time.
+
+Prompt engineering sits inside context engineering. Both sit inside harness engineering. Loop engineering (how the agent iterates and when it stops) is a narrower subset of the harness.
+
+You can have a well-written prompt and rich context and still produce an unreliable agent if the surrounding system does not constrain actions, verify outputs, and turn failures into permanent controls.
+
+This is the same distinction we make when we talk about moving from systems of record to systems of action. In [AI in CRM](/blog/crm-systems-of-action) and [AI in ERP](/blog/erp-systems-of-action), the useful agents are the ones that can work across steps inside limits people set. Those limits, tools, and checks are the harness.
+
+## What the harness actually contains
+
+A practical harness has a few recurring parts:
+
+- **Guides:** things that shape the agent before it acts. Instruction files (`AGENTS.md` or equivalent), policies, skills, templates, and examples. Their job is to raise the chance of a good first attempt.
+- **Tools and permissions:** the ways the agent can act on real systems, with hard limits enforced in code rather than only in the prompt.
+- **Sensors:** checks that run after the agent acts. Tests, linters, business-rule validators, price or policy engines, and (where needed) a second review pass. Their job is to catch problems and feed the error back so the agent can correct itself or escalate.
+- **Context and memory:** how state is assembled and persisted across steps without stuffing everything into one window.
+- **Orchestration and observability:** the loop itself, tracing, cost controls, and the record of what happened.
+
+Every control is either a guide or a sensor. Some are computational (fast, deterministic, cheap). Some are inferential (they use model judgment). The reliable pattern is to put the cheap deterministic checks first and only let work reach more expensive review if it has already passed them.
+
+When an agent fails, the harness-engineering move is not to fix only that instance. It is to turn the failure into a new guide or sensor so the same class of mistake becomes harder or impossible next time. The harness is a ratchet: it only tightens.
+
+## How people are using it
+
+The practice became widely named in early 2026. Mitchell Hashimoto described the habit of engineering a permanent fix into the agent’s environment whenever it made a mistake, often by adding a line to an `AGENTS.md` file or a small verification tool. OpenAI published a detailed account of a team that built and shipped an internal product with essentially zero hand-written code, treating the engineers’ job as designing the environment, specifying intent, and building feedback loops. Stripe’s Minions system shows a high-volume version: unattended agents that produce more than a thousand pull requests per week, with human review but no human-written code, running inside tightly scoped environments and deterministic gates.
+
+Across these and many smaller teams, the common patterns are:
+
+- Keep the repository (or equivalent knowledge base) as the system of record so agents do not depend on tribal knowledge.
+- Break work into small, checkable tasks with a clear definition of done.
+- Prefer mechanical enforcement (schemas, linters, policy engines, idempotency keys) over hoping the model remembers a rule.
+- Scope permissions tightly and log everything.
+- After every real failure, add the permanent control.
+
+The same principles appear in regulated domains. In [AI agents in finance and healthcare: drafts, not decisions](/blog/agents-in-regulated-work), the agents that stay in use are the ones with a named owner, scoped access, full logging, and a person who decides. Those are harness decisions. The approval design in [Approval points that don’t become the new bottleneck](/blog/approval-points-without-bottlenecks) is also harness work: bringing the evidence to a single clear decision so the human loop stays fast.
+
+## Applying it to an agent-driven booking application
+
+Imagine a hotel booking product that works more like an agent than a traditional multi-step form. A user says something like “quiet hotel near the beach under $200 for two adults and a child, May 15–18.” Agents search, compare, hold, book, modify, or cancel.
+
+Without a strong harness this fails in predictable ways: expired prices, wrong room types, double charges on retry, policies paraphrased incorrectly, or support agents seeing the wrong guest’s data.
+
+Here is how the harness is applied.
+
+**Guides** include a short instruction file that points to structured policy documents, a skill for “how to place a hold,” templates that force a booking request into a fixed schema, and examples of good trajectories. The instruction file says things like “Always re-validate live availability and price immediately before payment. Never invent room types. Quote the policy engine; do not paraphrase.”
+
+**Tools and permissions** expose availability, inventory, payment, and user-data APIs. Payment calls require an idempotency key. Support tools can only query bookings belonging to the authenticated user. High-value or first-time actions can require step-up approval.
+
+**Sensors** run after the agent proposes an action:
+
+- The quoted price must match the price that will be charged.
+- A valid hold ID must exist before payment is attempted.
+- The confirmation must contain a real provider reference, correct dates, and matching room category.
+- Refund amounts cannot exceed the original charge and must pass the policy engine.
+- Any cross-user data access is blocked and logged.
+
+If a sensor fails, the error is returned to the agent for correction or the flow escalates. After the incident, the failure becomes a permanent addition: a new rule in the instruction file, a new structural test, or a tighter tool constraint.
+
+This is the same pattern we use when invoice automation stalls on exceptions. The happy path is easy. The value is in the harness that handles the cases that do not match cleanly and still keeps a person in control of the final irreversible step. See [Why invoice automation stalls on exceptions](/blog/why-invoice-automation-stalls) for the parallel in accounts payable.
+
+The booking flow can be summarized as:
+
+> User intent → Guides load the right policies and skills → Model reasons → Tools act inside permissions → Sensors validate → Confirmed booking or escalation to a person.
+
+The model proposes. The harness decides what is allowed to become a real reservation.
+
+If you have a workflow where an agent’s mistake would be expensive to undo, you can <ReviewLink>book a 20-minute workflow review</ReviewLink> and we’ll look at where its checks and approvals belong.
+
+## Why this matters for teams
+
+Gartner and others have noted that a large share of agent projects are expected to be canceled for reasons that include unclear value and inadequate risk controls. Harness engineering is the practical response to the risk-control part.
+
+It also makes measurement clearer. Once you have sensors and logs, you can count what the agent prepared, what passed checks, what escalated, and how long review took. That is the raw material for the kind of capacity reporting described in [Measuring automation ROI: hours reclaimed, without fake precision](/blog/measuring-capacity-reclaimed).
+
+Teams that treat the harness as the product (instead of treating the model as the product) tend to keep agents in use. The ones that rely on better prompts alone usually do not.
+
+## Getting started
+
+You do not need a perfect platform on day one. Start with one workflow that has real volume and clear failure modes:
+
+1. Write down the current decision points and what a person must still approve.
+2. Put the durable rules in files the agent can read.
+3. Add the cheapest deterministic sensors first (schema checks, re-validation, idempotency, policy engine calls).
+4. Scope permissions to the minimum required.
+5. After the first real mistakes, turn them into permanent guides or sensors.
+
+The harness will not be finished. It will be tighter than it was last month. That is the point.
+
+## Next step: map the checks around one workflow
+
+Pick one workflow where an agent could act on a real system. List each step that is hard to undo, the check that runs before it today, and the person who approves it. Mark which of those checks are written down and which live only in someone’s head: those are the first guides and sensors to build.
+
+With that list in hand, a 20-minute workflow review is usually enough to see whether it’s worth piloting.
+
+<BookReview />
