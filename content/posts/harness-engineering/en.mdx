@@ -44,7 +44,18 @@ A practical harness has a few recurring parts:
 - **Context and memory:** how state is assembled and persisted across steps without stuffing everything into one window.
 - **Orchestration and observability:** the loop itself, tracing, cost controls, and the record of what happened.
 
+![Diagram titled “Agent = Model + Harness.” A user intent such as “Book a hotel in Paris, May 15–18” enters the harness. The model (reasoning) sits in the center, surrounded by four harness parts: Guides (AGENTS.md, policies, skills, templates), Context and memory (user session, booking state, documents), Tools and permissions (availability API, payment, inventory, sandbox) and Sensors (price validation, idempotency checks, policy engine, tests). The result is a confirmed booking or an escalation.](/blog/harness-engineering/agent-model-harness.jpg)
+
+*Illustration of the parts described above, annotated with the booking example used later in this post.*
+
 Every control is either a guide or a sensor. Some are computational (fast, deterministic, cheap). Some are inferential (they use model judgment). The reliable pattern is to put the cheap deterministic checks first and only let work reach more expensive review if it has already passed them.
+
+|  | Guide (before the agent acts) | Sensor (after the agent acts) |
+| --- | --- | --- |
+| **Computational** (cheap, deterministic) | Templates, generators, code mods | Tests, linters, type checks, architecture rules |
+| **Inferential** (model judgment) | Conventions in `AGENTS.md`, skills, examples | AI code review, LLM-as-judge |
+
+*Examples from coding agents, following Birgitta Böckeler’s guides-and-sensors framing (see References).*
 
 When an agent fails, the harness-engineering move is not to fix only that instance. It is to turn the failure into a new guide or sensor so the same class of mistake becomes harder or impossible next time. The harness is a ratchet: it only tightens.
 
@@ -90,6 +101,10 @@ The booking flow can be summarized as:
 
 > User intent → Guides load the right policies and skills → Model reasons → Tools act inside permissions → Sensors validate → Confirmed booking or escalation to a person.
 
+![Flowchart titled “Booking Flow with Ratchet: every failure tightens the harness.” A user intent (“Quiet beach hotel under $200, May 15–18”) goes to the agent steps: guides (policies, skills, AGENTS.md), model reasoning, and tools (availability, hold, payment). Sensors then check price re-validation, hold validity, the policy engine and idempotency. A passing check leads to a confirmed booking (hotel, calendar, card). A failing check leads to “Add permanent control”: a new guide or sensor that feeds back into the agent steps for next time.](/blog/harness-engineering/booking-flow-ratchet.jpg)
+
+*Illustration of the booking example. Prices and dates are sample data.*
+
 The model proposes. The harness decides what is allowed to become a real reservation.
 
 If you have a workflow where an agent’s mistake would be expensive to undo, you can <ReviewLink>book a 20-minute workflow review</ReviewLink> and we’ll look at where its checks and approvals belong.
@@ -121,3 +136,28 @@ Pick one workflow where an agent could act on a real system. List each step that
 With that list in hand, a 20-minute workflow review is usually enough to see whether it’s worth piloting.
 
 <BookReview />
+
+## References
+
+### Origin of the term and core practice
+
+- Mitchell Hashimoto, [My AI Adoption Journey](https://mitchellh.com/writing/my-ai-adoption-journey), February 5, 2026.
+- Ryan Lopopolo (OpenAI), [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/), February 11, 2026.
+
+### Guides, sensors, and the shared vocabulary
+
+- Birgitta Böckeler, [Harness engineering for coding agent users](https://martinfowler.com/articles/harness-engineering.html), martinfowler.com, April 2, 2026.
+
+### Large-scale case studies
+
+- Alistair Gray, [Minions: Stripe’s one-shot, end-to-end coding agents](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents), Stripe Engineering, February 9, 2026.
+- Alistair Gray, [Minions: Stripe’s one-shot, end-to-end coding agents, Part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2), Stripe Engineering, February 19, 2026.
+
+### Related posts
+
+- [AI agents in finance and healthcare: drafts, not decisions](/blog/agents-in-regulated-work)
+- [Approval workflow design that doesn’t create a new bottleneck](/blog/approval-points-without-bottlenecks)
+- [AI in CRM: from system of record to system of action](/blog/crm-systems-of-action)
+- [AI in ERP: from system of record to system of action](/blog/erp-systems-of-action)
+- [Why invoice automation stalls on exceptions, and how to fix it](/blog/why-invoice-automation-stalls)
+- [Measuring automation ROI: hours reclaimed, without fake precision](/blog/measuring-capacity-reclaimed)

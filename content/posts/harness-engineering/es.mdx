@@ -44,7 +44,18 @@ Un harness práctico tiene algunas piezas que se repiten:
 - **Contexto y memoria:** cómo se arma y se conserva el estado entre pasos sin meter todo en una sola ventana.
 - **Orquestación y observabilidad:** el ciclo en sí, el rastreo, el control de costos y el registro de lo que pasó.
 
+![Diagrama titulado “Agent = Model + Harness” (agente = modelo + harness). Una intención del usuario, como “reservar un hotel en París del 15 al 18 de mayo”, entra al harness. El modelo (razonamiento) está al centro, rodeado de cuatro piezas del harness: guías (AGENTS.md, políticas, habilidades, plantillas), contexto y memoria (sesión del usuario, estado de la reserva, documentos), herramientas y permisos (API de disponibilidad, pagos, inventario, entorno aislado) y sensores (validación de precio, revisiones de idempotencia, motor de políticas, pruebas). El resultado es una reserva confirmada o un escalamiento.](/blog/harness-engineering/agent-model-harness.jpg)
+
+*Ilustración de las piezas descritas arriba, con el ejemplo de reservas que usamos más adelante. El diagrama está en inglés.*
+
 Cada control es una guía o un sensor. Algunos son computacionales (rápidos, deterministas, baratos). Otros son inferenciales (usan el juicio de un modelo). El patrón confiable es poner primero las validaciones deterministas y baratas, y dejar que el trabajo llegue a una revisión más costosa solo si ya las pasó.
+
+|  | Guía (antes de que el agente actúe) | Sensor (después de que el agente actúa) |
+| --- | --- | --- |
+| **Computacional** (barato, determinista) | Plantillas, generadores, modificaciones automáticas de código | Pruebas, linters, revisión de tipos, reglas de arquitectura |
+| **Inferencial** (juicio de un modelo) | Convenciones en `AGENTS.md`, habilidades, ejemplos | Revisión de código con IA, un modelo como evaluador (LLM-as-judge) |
+
+*Ejemplos de agentes de programación, siguiendo el marco de guías y sensores de Birgitta Böckeler (ver Referencias).*
 
 Cuando un agente falla, la jugada del harness engineering no es corregir solo ese caso. Es convertir la falla en una guía o un sensor nuevo, para que ese tipo de error sea más difícil o imposible la próxima vez. El harness es un trinquete: solo se aprieta.
 
@@ -90,6 +101,10 @@ El flujo de reserva se resume así:
 
 > Intención del usuario → Las guías cargan las políticas y habilidades correctas → El modelo razona → Las herramientas actúan dentro de sus permisos → Los sensores validan → Reserva confirmada o escalamiento a una persona.
 
+![Diagrama de flujo titulado “Booking Flow with Ratchet” (flujo de reserva con trinquete: cada falla aprieta el harness). Una intención del usuario (“hotel tranquilo en la playa por menos de 200 dólares, del 15 al 18 de mayo”) pasa a los pasos del agente: guías (políticas, habilidades, AGENTS.md), razonamiento del modelo y herramientas (disponibilidad, apartado, pago). Después, los sensores revisan la revalidación del precio, la vigencia del apartado, el motor de políticas y la idempotencia. Si la revisión pasa, sale una reserva confirmada (hotel, calendario, tarjeta). Si falla, se agrega un control permanente: una guía o un sensor nuevo que regresa a los pasos del agente para la próxima vez.](/blog/harness-engineering/booking-flow-ratchet.jpg)
+
+*Ilustración del ejemplo de reservas. El diagrama está en inglés; precios y fechas son datos de ejemplo.*
+
 El modelo propone. El harness decide qué puede convertirse en una reserva real.
 
 Si tienes un proceso donde un error del agente saldría caro de revertir, puedes <ReviewLink>agendar una revisión de 20 minutos</ReviewLink> y vemos juntos dónde van sus validaciones y aprobaciones.
@@ -121,3 +136,28 @@ Elige un proceso donde un agente podría actuar sobre un sistema real. Anota cad
 Con esa lista en mano, una revisión de 20 minutos suele bastar para ver si vale la pena hacer un piloto.
 
 <BookReview />
+
+## Referencias
+
+### Origen del término y práctica central
+
+- Mitchell Hashimoto, [My AI Adoption Journey](https://mitchellh.com/writing/my-ai-adoption-journey), 5 de febrero de 2026 (en inglés).
+- Ryan Lopopolo (OpenAI), [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/), 11 de febrero de 2026 (en inglés).
+
+### Guías, sensores y vocabulario común
+
+- Birgitta Böckeler, [Harness engineering for coding agent users](https://martinfowler.com/articles/harness-engineering.html), martinfowler.com, 2 de abril de 2026 (en inglés).
+
+### Casos a gran escala
+
+- Alistair Gray, [Minions: Stripe’s one-shot, end-to-end coding agents](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents), Stripe Engineering, 9 de febrero de 2026 (en inglés).
+- Alistair Gray, [Minions: Stripe’s one-shot, end-to-end coding agents, Part 2](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents-part-2), Stripe Engineering, 19 de febrero de 2026 (en inglés).
+
+### Artículos relacionados
+
+- [Agentes de IA en finanzas y salud: preparan, no deciden](/blog/agents-in-regulated-work)
+- [Cómo diseñar aprobaciones que no se vuelvan el nuevo cuello de botella](/blog/approval-points-without-bottlenecks)
+- [IA en el CRM: de sistema de registro a sistema de acción](/blog/crm-systems-of-action)
+- [IA en el ERP: de sistema de registro a sistema de acción](/blog/erp-systems-of-action)
+- [Por qué la automatización de facturas se atora en las excepciones](/blog/why-invoice-automation-stalls)
+- [Cómo medir el retorno de la automatización en horas, sin precisión falsa](/blog/measuring-capacity-reclaimed)
