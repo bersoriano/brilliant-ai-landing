@@ -1,0 +1,108 @@
+---
+title: "LLM or RAG? How to decide as a business owner in 2026"
+description: "Start with a commercial LLM and move to RAG only when your internal documents become the bottleneck. What each is, what it costs, and when it pays."
+date: 2026-11-14
+draft: true
+---
+
+If you run a company and you’re working out how to use AI, the most practical question isn’t “which model is best?” It’s something more concrete:
+
+**Is a commercial LLM (ChatGPT, Claude, Gemini…) enough, or do I need to build a RAG system on top of my own data?**
+
+The short answer: always start with a commercial LLM. Only invest in RAG when your documents, policies or internal information become the bottleneck.
+
+## What is each one?
+
+An **LLM** (large language model) is the language model itself. It’s the engine that generates text, summarizes, reasons and writes. It knows a lot of general knowledge, but its information is frozen at training time and it doesn’t know your private documents.
+
+**RAG** (retrieval-augmented generation) isn’t a model. It’s a technique that wraps the LLM. Before the model answers, the system searches your documents for the most relevant passages and puts them in its context. The LLM still writes the answer, but now it does so with your files in front of it.
+
+> A simple analogy: an LLM on its own is a well-read expert answering from memory. LLM + RAG is the same expert who first opens the right folder in your files, then answers.
+
+## Can one replace the other?
+
+No.
+
+- An LLM on its own can’t reliably access your private documents, update itself when your policies change, or cite sources consistently.
+- RAG can’t exist without an LLM. Retrieval only finds text; the model is what understands the question and generates the answer.
+
+You always need an LLM. RAG is the add-on for when that LLM needs information it doesn’t have.
+
+## Which is harder to implement?
+
+Using a commercial LLM is trivial: you sign up, write a prompt and get an answer. Minutes.
+
+Implementing RAG is an engineering project. You have to:
+
+1. Ingest and clean documents.
+2. Split them into chunks.
+3. Generate embeddings.
+4. Set up an index or vector database.
+5. Design the retrieval logic.
+6. Evaluate whether the right documents are being retrieved.
+7. Keep everything current and permissioned.
+
+It can take weeks or months depending on the volume and quality of the data. Many companies cut that complexity by buying a platform instead of building from scratch.
+
+## Operating costs compared
+
+The cost of running either is dominated by LLM tokens. The difference is how many tokens you send.
+
+| Approach | Typical cost per query (2026, USD) | When it fits |
+| --- | --- | --- |
+| Commercial LLM (short prompt) | $0.0003 – $0.015 | General use, low volume |
+| RAG (mid-tier model) | $0.005 – $0.015 | Repeated queries over your own documents |
+| Putting whole documents in the prompt | 10–30× more expensive | Only for very small, stable knowledge bases |
+
+In practice:
+
+- At low volume or for general tasks, a plain LLM is cheaper and much simpler.
+- At medium to high volume over a large or changing knowledge base, RAG usually comes out cheaper, because you send only the relevant passages instead of thousands of tokens of context on every call.
+- Embeddings and the vector database are usually a small part of the bill (often under 15%). The LLM is still the biggest expense.
+
+## Quick decision guide
+
+### Stick with a commercial LLM if:
+
+- You need to write, analyze, brainstorm or handle general knowledge tasks.
+- You work with a few documents you can upload or paste.
+- Query volume is low.
+- You can tolerate it occasionally making things up or not citing sources.
+
+### Consider RAG when two or more of these hold:
+
+- The knowledge base is large (hundreds or thousands of pages).
+- The information changes often.
+- You need citations or auditability (support, legal, finance, healthcare).
+- There are permission requirements or sensitive data.
+- Query volume is high.
+- Hallucinations carry a real cost to the business.
+
+## A practical path
+
+1. Start with a commercial LLM and upload your key documents.
+2. Measure where it fails (outdated data, invented answers, no citations).
+3. If the problem is clearly “it doesn’t know our documents reliably,” then evaluate RAG.
+4. For standard cases (internal search, support, policies), prefer buying or using a platform before building.
+5. Only build custom if retrieval quality is central to your product or competitive advantage.
+
+This matches what we see in practical automation: the best results come when AI is applied to well-scoped tasks and human control stays where it matters. If you’re working out how AI can help your company without over-engineering, I’d start with [What can AI actually do for your company? Lessons from startups and SMEs in 2026](/blog/what-ai-can-do-for-your-company).
+
+And if the system you build (RAG or otherwise) will touch finance, healthcare or approval workflows, remember: the model prepares and a person decides. More on that in [AI agents in finance and healthcare: drafts, not decisions](/blog/agents-in-regulated-work).
+
+## Next step: log where your LLM fails
+
+For two weeks, every time the LLM you already use gets something about your company wrong, add it to a list: what you asked, what it answered, and which document held the right answer. At the end, count how many errors come from “it doesn’t know our documents” and how many from something else. That list tells you whether RAG would solve a real problem.
+
+With that list in hand, a 20-minute workflow review is usually enough to see whether it’s worth piloting.
+
+<BookReview />
+
+## References
+
+- LLM API pricing and comparisons (November 2026): aggregated data from apicost.app, BenchLeader, Vantasoft, AIPresso and AI Pricing Guru.
+- Costs of RAG systems in production: analyses from Spendark, Innovation Insight, Ortem Tech, Spheron, NextAge and Lytvynov Production (2026).
+- RAG vs. long-context comparisons and decision frameworks: studies and guides from Meilisearch, Ikasia, Mak it Solutions, and 2026 papers on accuracy vs. cost.
+- Concepts and architectures: public documentation and analyses from providers (Anthropic, OpenAI, Google) and reviews of enterprise implementations, 2025–2026.
+
+*Prices and capabilities change often. The ranges are indicative, based on public listings from November 2026.*

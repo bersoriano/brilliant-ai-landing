@@ -1,0 +1,108 @@
+---
+title: "¿LLM o RAG? Cómo decidir como dueño de negocio en 2026"
+description: "Empieza con un LLM comercial y pasa a RAG solo cuando tus documentos internos sean el cuello de botella. Qué es cada uno, costos y cuándo conviene."
+date: 2026-11-14
+draft: true
+---
+
+Si tienes una empresa y estás evaluando cómo usar inteligencia artificial, la pregunta más práctica no es “¿cuál es el mejor modelo?”, sino algo más concreto:
+
+**¿Me basta con un LLM comercial (ChatGPT, Claude, Gemini…) o necesito montar un sistema RAG sobre mis propios datos?**
+
+La respuesta corta es: empieza siempre con un LLM comercial. Solo invierte en RAG cuando tus documentos, políticas o información interna se convierten en el cuello de botella.
+
+## ¿Qué es cada cosa?
+
+Un **LLM** (Large Language Model) es el modelo de lenguaje propiamente dicho. Es el motor que genera texto, resume, razona y escribe. Sabe mucho de conocimiento general, pero su información está congelada en el momento del entrenamiento y no conoce tus documentos privados.
+
+**RAG** (Retrieval-Augmented Generation) no es un modelo. Es una técnica que envuelve al LLM. Antes de que el modelo responda, el sistema busca en tus documentos los fragmentos más relevantes y se los pone en el contexto. El LLM sigue siendo el que escribe la respuesta, pero ahora lo hace con tus archivos delante.
+
+> Analogía simple: el LLM solo es un experto muy leído que responde de memoria. El LLM + RAG es el mismo experto que primero abre la carpeta correcta de tu archivo y después contesta.
+
+## ¿Puede uno reemplazar al otro?
+
+No.
+
+- Un LLM por sí solo no puede acceder de forma fiable a tus documentos privados, actualizarse cuando cambian tus políticas, ni citar fuentes de forma consistente.
+- RAG no puede existir sin un LLM. La recuperación solo encuentra texto; el modelo es el que entiende la pregunta y genera la respuesta.
+
+Siempre necesitas un LLM. RAG es el complemento cuando ese LLM necesita información que no tiene.
+
+## ¿Cuál es más complejo de implementar?
+
+Usar un LLM comercial es trivial: te registras, escribes un prompt y obtienes una respuesta. Minutos.
+
+Implementar RAG es un proyecto de ingeniería. Hay que:
+
+1. Ingestar y limpiar documentos.
+2. Dividirlos en fragmentos (chunking).
+3. Generar embeddings.
+4. Montar un índice o base de datos vectorial.
+5. Diseñar la lógica de recuperación.
+6. Evaluar si se están recuperando los documentos correctos.
+7. Mantener todo actualizado y con permisos.
+
+Puede llevar semanas o meses según el volumen y la calidad de los datos. Muchas empresas reducen esa complejidad comprando una plataforma en lugar de construirla desde cero.
+
+## Comparación de costos de operación
+
+El costo de correr ambos sistemas está dominado por los tokens del LLM. La diferencia es cuántos tokens le envías.
+
+| Enfoque | Costo típico por consulta (2026, USD) | Cuándo conviene |
+| --- | --- | --- |
+| LLM comercial (prompt corto) | $0.0003 – $0.015 | Uso general, bajo volumen |
+| RAG (con modelo medio) | $0.005 – $0.015 | Consultas repetidas sobre documentos propios |
+| Meter documentos enteros en el prompt | 10–30× más caro | Solo para bases muy pequeñas y estables |
+
+En la práctica:
+
+- A bajo volumen o para tareas generales, el LLM puro es más barato y mucho más simple.
+- A volumen medio-alto sobre una base de conocimiento grande o que cambia, RAG suele salir más económico porque solo envías los fragmentos relevantes en lugar de miles de tokens de contexto en cada llamada.
+- Los embeddings y la base de datos vectorial suelen ser una parte pequeña de la factura (a menudo menos del 15 %). El LLM sigue siendo el mayor gasto.
+
+## Guía rápida de decisión
+
+### Quédate con un LLM comercial si:
+
+- Necesitas escribir, analizar, hacer lluvia de ideas o tareas de conocimiento general.
+- Trabajas con pocos documentos que puedes subir o pegar.
+- El volumen de consultas es bajo.
+- Puedes tolerar que a veces invente o no cite fuentes.
+
+### Considera RAG cuando se cumplen dos o más de estas condiciones:
+
+- La base de conocimiento es grande (cientos o miles de páginas).
+- La información cambia con frecuencia.
+- Necesitas citas o auditabilidad (soporte, legal, finanzas, salud).
+- Hay requisitos de permisos o datos sensibles.
+- El volumen de consultas es alto.
+- Las alucinaciones tienen un costo real para el negocio.
+
+## Camino práctico recomendado
+
+1. Empieza con un LLM comercial y sube tus documentos clave.
+2. Mide dónde falla (datos desactualizados, inventa respuestas, no cita fuentes).
+3. Si el problema es claramente “no conoce nuestros documentos de forma fiable”, entonces evalúa RAG.
+4. Para casos estándar (búsqueda interna, soporte, políticas), prefiere comprar o usar una plataforma antes de construir.
+5. Solo construye a medida si la calidad de recuperación es parte central de tu producto o ventaja competitiva.
+
+Este enfoque se alinea con lo que vemos en automatización práctica: los mejores resultados aparecen cuando la IA se aplica a tareas acotadas y se mantiene el control humano donde importa. Si estás evaluando cómo la IA puede ayudar en tu empresa sin sobreingenierizar, te recomiendo empezar por [¿Qué puede hacer la IA por tu empresa? Lecciones de startups y pymes en 2026](/blog/what-ai-can-do-for-your-company).
+
+Y si el sistema que construyas (RAG o de otro tipo) va a interactuar con procesos de finanzas, salud o aprobaciones, recuerda que el modelo prepara y una persona decide. Más sobre eso en [Agentes de IA en finanzas y salud: preparan, no deciden](/blog/agents-in-regulated-work).
+
+## Siguiente paso: anota dónde falla tu LLM
+
+Durante dos semanas, cada vez que el LLM que ya usas se equivoque en algo de tu empresa, anótalo en una lista: qué preguntaste, qué contestó y en qué documento estaba la respuesta correcta. Al final, cuenta cuántos errores vienen de “no conoce nuestros documentos” y cuántos de otra cosa. Esa lista te dice si RAG resolvería un problema real.
+
+Con esa lista en mano, una revisión de 20 minutos suele bastar para ver si vale la pena hacer un piloto.
+
+<BookReview />
+
+## Referencias
+
+- Precios y comparativas de APIs de LLMs (noviembre de 2026): datos agregados de apicost.app, BenchLeader, Vantasoft, AIPresso y AI Pricing Guru.
+- Costos de sistemas RAG en producción: análisis de Spendark, Innovation Insight, Ortem Tech, Spheron, NextAge y Lytvynov Production (2026).
+- Comparativas RAG vs. long-context y marcos de decisión: estudios y guías de Meilisearch, Ikasia, Mak it Solutions y papers de 2026 sobre precisión vs. costo.
+- Conceptos y arquitecturas: documentación y análisis públicos de proveedores (Anthropic, OpenAI, Google) y revisiones de implementaciones empresariales 2025-2026.
+
+*Precios y capacidades cambian con frecuencia. Los rangos son orientativos con base en listados públicos de noviembre de 2026.*
