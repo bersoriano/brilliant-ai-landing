@@ -260,7 +260,7 @@ export function buildJsonLd(locale: Locale, path: string) {
   const SERVICE_TYPES: Partial<Record<typeof page, [name: string, type: string]>> = {
     workflows: ["AI Workflow Automations", "AI workflow automation"],
     agents: ["AI Agents", "AI agent implementation"],
-    software: ["Custom Software", "Custom software development"],
+    software: ["Software Ready to Use", "Booking and marketplace software"],
   };
   const serviceType = SERVICE_TYPES[page];
   if (serviceType) {
@@ -345,7 +345,7 @@ export function buildLlmsTxt() {
     `- [AI Agents](${url("/agents")}): Agents that find, draft, chase documents, and follow up inside the tools your team already uses, such as Outlook and Teams. Your team approves what goes out.`,
     `- [Custom CRM](${url("/custom-crm")}): A CRM shaped to your pipeline: contacts, deals, tasks. Unlimited users, from $${crm.month}/month.`,
     `- [Custom ERP](${url("/custom-erp")}): One business system for sales, inventory, purchasing, invoice matching, and accounting. Unlimited users, from $${erp.month}/month.`,
-    `- [Custom Software](${url("/custom-software")}): Software for the job nothing off the shelf does, priced by project and kept running by us.`,
+    `- [Software Ready to Use](${url("/custom-software")}): Software we built and run, set up for your business: Haab Calendar for bookings, Plaza Volcanes for a marketplace. Priced by project.`,
     `- [Finance automation](${url("/finance-automation")}): Invoice matching, month-end close, missing documents, approvals.`,
     `- [Healthcare automation](${url("/healthcare-automation")}): Referrals, intake paperwork, billing follow-ups. Clinical decisions stay with your team.`,
     `- [Security & data handling](${url("/security")}): How financial and patient data is scoped, logged, and approved, under your agreements and data-residency requirements.`,

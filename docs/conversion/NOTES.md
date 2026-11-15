@@ -36,9 +36,9 @@ an exhibit, sections, repeated review CTAs, a close with WhatsApp and email):
   features, setup steps, pricing).
 - `/custom-erp`: the ERP playbook (Exhibit 1), features, plain-language
   notes, setup steps, pricing from `ERP_PRICE`.
-- `/custom-software`: the Haab Calendar demo (Exhibit 1), what Haab ships,
-  pricing by project, when custom software is the right fit, and Rhino's
-  before and after.
+- `/custom-software` (Software Ready to Use): the Haab Calendar demo
+  (Exhibit 1), what Haab ships, what Plaza Volcanes ships, pricing by project,
+  when ready-to-use software is the right fit, and Rhino's before and after.
 
 Also `/security`, `/about`, `/finance-automation`, `/healthcare-automation`.
 The "what the 20 minutes covers" content is the in-page anchor `#review`.

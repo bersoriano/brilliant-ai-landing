@@ -6,6 +6,9 @@ import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
 import {
   HAAB_EXAMPLE_PATH,
   HAAB_FEATURES,
+  PLAZA_EXPLORE_PATH,
+  PLAZA_FEATURES,
+  PLAZA_URL,
   SOFTWARE_NOTES,
   haabHref,
 } from "@/lib/software";
@@ -18,13 +21,14 @@ import { Proof } from "./Proof";
 import { SoftwareVideo } from "./SoftwareVideo";
 import styles from "./Landing.module.css";
 
-/** The other four offers, checked before we build anything. */
+/** The other four offers, checked before we launch anything. */
 const ALTERNATIVES = SERVICES.filter((item) => item.id !== "software");
 
 /**
- * /custom-software: shown through Haab Calendar, our own booking app (never a
- * client or partner), and Rhino's system. It lists only what Haab ships, and
- * says when one of the other four offers is the better fit.
+ * /custom-software, the Software Ready to Use offer: shown through our own
+ * products (never a client's or a partner's), Haab Calendar for bookings and
+ * Plaza Volcanes for a marketplace, and Rhino's system. It lists only what
+ * each one ships, and says when one of the other four offers is the better fit.
  */
 export function SoftwareLanding() {
   const { t, locale } = useLanguage();
@@ -34,15 +38,15 @@ export function SoftwareLanding() {
       <main id="main">
         <LandingHero
           titleId="software-title"
-          kicker={t("Custom Software")}
+          kicker={t("Software Ready to Use")}
           title={
             <>
-              {t("Software built for one job.")}{" "}
-              <em>{t("When nothing off the shelf fits.")}</em>
+              {t("Software that already runs.")}{" "}
+              <em>{t("Ready to launch for your business.")}</em>
             </>
           }
           lead={t(
-            "When the tool your business needs doesn’t exist, we build it and keep it running.",
+            "We built a booking app and a marketplace, and we run both ourselves. We set one up for your business and keep it running.",
           )}
           secondary={
             <a className="text-link" href="#fit">
@@ -96,13 +100,52 @@ export function SoftwareLanding() {
         </div>
 
         <section
+          className={`shell section grid-12 ${styles.why}`}
+          aria-labelledby="plaza-title"
+        >
+          <div className={styles.head}>
+            <Kicker>{t("Our own marketplace")}</Kicker>
+            <h2 id="plaza-title" className="h2-sm">
+              {t("What Plaza Volcanes does today")}
+            </h2>
+            <p className="body">
+              {t(
+                "Plaza Volcanes is our own: a marketplace in Spanish where independent shops in Mexico open a storefront and sell. We can launch one like it for your sellers.",
+              )}
+            </p>
+            <a
+              className="text-link text-link--accent"
+              href={PLAZA_URL}
+              rel="noopener noreferrer"
+            >
+              {t("See Plaza Volcanes")} <Icon name="arrow" size={16} />
+            </a>
+            <a
+              className="text-link"
+              href={`${PLAZA_URL}${PLAZA_EXPLORE_PATH}`}
+              rel="noopener noreferrer"
+            >
+              {t("Browse the live marketplace")} <Icon name="arrow" size={16} />
+            </a>
+          </div>
+          <ul className={styles.reasons}>
+            {PLAZA_FEATURES.map(([title, line]) => (
+              <li key={title}>
+                <h3 className={styles.itemTitle}>{t(title)}</h3>
+                <p className="body">{t(line)}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section
           className={`shell section grid-12 ${styles.custom}`}
           aria-labelledby="process-title"
         >
           <div className={styles.customCopy}>
-            <Kicker>{t("How we build it")}</Kicker>
+            <Kicker>{t("How we launch it")}</Kicker>
             <h2 id="process-title" className="h2-sm">
-              {t("Built around your process.")} <em>{t("Kept running by us.")}</em>
+              {t("Ready to use.")} <em>{t("Kept running by us.")}</em>
             </h2>
             {SOFTWARE_NOTES.map(([title, body]) => (
               <div key={title} className={styles.noteBlock}>
@@ -115,7 +158,7 @@ export function SoftwareLanding() {
             <p className="label">{t("Pricing")}</p>
             <h3 className="h3">{t("Priced by project.")}</h3>
             <p className="body">
-              {t("You approve the scope and the quote before we build anything.")}
+              {t("You approve the scope and the quote before we launch anything.")}
             </p>
             <p className="caption">{t("Quoted before we start.")}</p>
             <a className="button" href={DISCOVERY_CALL_HREF}>
@@ -137,7 +180,7 @@ export function SoftwareLanding() {
               </h2>
               <p className="body">
                 {t(
-                  "If a workflow, an agent, the CRM, or the ERP covers the job, we’ll recommend it. We build software when none of them fits the work your team and your clients do.",
+                  "If a workflow, an agent, the CRM, or the ERP covers the job, we’ll recommend it. Software Ready to Use is for bookings and marketplaces: work your clients or your sellers do on their own.",
                 )}
               </p>
             </div>
@@ -157,9 +200,9 @@ export function SoftwareLanding() {
               ))}
               <li>
                 <h3 className={styles.itemTitle}>
-                  {t("When nothing off the shelf fits")}
+                  {t("Bookings and marketplaces, ready to launch")}
                 </h3>
-                <p className="body">{t("Custom Software")}</p>
+                <p className="body">{t("Software Ready to Use")}</p>
               </li>
             </ul>
           </div>
@@ -170,7 +213,7 @@ export function SoftwareLanding() {
         <LandingClose
           title={
             <>
-              {t("Bring the job nothing fits.")}{" "}
+              {t("Bring the booking or marketplace you have in mind.")}{" "}
               <em>{t("We’ll tell you what it takes.")}</em>
             </>
           }
