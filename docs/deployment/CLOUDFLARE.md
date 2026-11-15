@@ -52,7 +52,9 @@ Build settings (public; copied into browser JS, so never put secrets here):
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Monitored public mailbox; default `hello@brilliant.dev` |
 | `NEXT_PUBLIC_POSTHOG_KEY` | Public project token; omit to disable analytics |
 | `NEXT_PUBLIC_POSTHOG_HOST` | Existing US/EU ingestion host |
-| `NEXT_PUBLIC_POSTHOG_DEBUG` | Normally `false`; production builds initialize when token exists |
+| `NEXT_PUBLIC_POSTHOG_DEBUG` | Normally `false`; production builds initialize when token exists, on the `NEXT_PUBLIC_SITE_URL` host only |
+| `NEXT_PUBLIC_GA_ID` | GA4 Measurement ID (`G-…`) in `wrangler.jsonc`; empty disables Google Analytics. Same production-host rule. In GA, turn **Enhanced measurement off** for the web stream: its automatic events read the raw URL (query strings included) and duplicate the site's own `page_view`, scroll and click events |
+| `NEXT_PUBLIC_GA_DEBUG` | Normally `false`; `true` sends events from localhost/previews with `debug_mode` for GA DebugView |
 | `NODE_VERSION` | `22` in Pages build settings |
 
 Runtime settings, separately for **preview and production**:
@@ -204,8 +206,11 @@ within the limits above.
    country-based routing through real Cloudflare ingress, caching headers,
    EN/ES pages and article bodies, images, footer explicit-language links,
    calculator/download, menu/Escape, booking/WhatsApp URLs, inquiry mocked
-   success/failure and fallback. Preview Pages may add `X-Robots-Tag: noindex`;
-   preserve production canonical URLs and do not remove preview protection.
+   success/failure and fallback. Preview hosts (`*.brilliant-ai.pages.dev`)
+   send `X-Robots-Tag: noindex` (Function for HTML, `_headers` for static
+   files); the production alias `brilliant-ai.pages.dev` 308-redirects to
+   `NEXT_PUBLIC_SITE_URL`. Preserve production canonical URLs and do not remove
+   preview protection. Analytics stays off on these hosts by design.
    Actual distributed-edge geo, account quotas, sender verification and live
    PostHog ingestion require staging verification; local emulation cannot prove them.
 7. Record preview URL, commit SHA, test results, D1 IDs, existing DNS records/TTLs,

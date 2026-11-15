@@ -8,6 +8,7 @@ import {
   localePath,
   ogLocale,
   pageFromPath,
+  socialImagePath,
   stripLocalePrefix,
   type Locale,
 } from "@/lib/locale";
@@ -29,7 +30,7 @@ function syncDocumentSeo(locale: Locale, pathname: string) {
       window.location.origin,
   ).origin;
   const canonicalUrl = `${origin}${canonicalPath === "/" ? "" : canonicalPath}`;
-  const imageUrl = `${origin}/social/${locale}/home.png`;
+  const imageUrl = `${origin}${socialImagePath(locale, pathname)}`;
   document.documentElement.lang = htmlLang(locale);
   document.title = title;
   if (page === "home") document.querySelector('meta[name="keywords"]')

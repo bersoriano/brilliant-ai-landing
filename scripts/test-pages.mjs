@@ -13,10 +13,12 @@ r = await get('/es/services?lang=en');
 assert.equal(new URL(r.headers.get('location')).pathname, '/services');
 r = await get('/services?x=1', { cookie: 'brilliant-language=es' });
 assert.equal(new URL(r.headers.get('location')).pathname, '/es/services');
-for (const path of ['/services', '/es/services']) {
+// HTML always revalidates (no-store would also break the back/forward cache).
+for (const [path, cache] of [['/services', /^private, no-cache$/], ['/es/services', /^public, max-age=0, must-revalidate$/]]) {
   r = await get(path, { 'user-agent': 'Googlebot', cookie: 'brilliant-language=es' });
   assert.equal(r.status, 200);
-  assert.match(r.headers.get('cache-control'), /no-store/);
+  assert.match(r.headers.get('cache-control'), cache, path);
+  if (!origin.includes('.pages.dev')) assert.equal(r.headers.get('x-robots-tag'), null, `${path}: indexable`);
 }
 r = await get('/services/?x=1');
 assert.equal(r.status, 308);

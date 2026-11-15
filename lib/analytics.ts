@@ -1,8 +1,33 @@
 import { localeFromPathname, stripLocalePrefix } from "./locale";
-import { CONTACT_EMAIL, DISCOVERY_CALL_HREF, WHATSAPP_HREF } from "./site";
+import { CONTACT_EMAIL, DISCOVERY_CALL_HREF, getSiteUrl, WHATSAPP_HREF } from "./site";
 
 const CAMPAIGN_TAGS = ["utm_source", "utm_medium", "utm_campaign"];
 const CLICK_IDS = new Set("gad_source mc_cid gclid gclsrc dclid gbraid wbraid fbclid msclkid twclid li_fat_id igshid ttclid rdt_cid epik qclid sccid oppref bfcid irclid _kx".split(" "));
+
+/** Measure only the canonical host: previews and the pages.dev alias stay out of the numbers. */
+export function isProductionHost(href: string) {
+  try {
+    return new URL(href).hostname === new URL(getSiteUrl()).hostname;
+  } catch {
+    return false;
+  }
+}
+
+/** A page address with every query parameter removed except the campaign tags. */
+export function campaignUrl(href: string) {
+  try {
+    const url = new URL(href);
+    const kept = new URLSearchParams();
+    for (const key of CAMPAIGN_TAGS) {
+      const value = url.searchParams.get(key)?.trim().slice(0, 200);
+      if (value) kept.set(key, value);
+    }
+    const query = kept.toString();
+    return `${url.origin}${url.pathname}${query ? `?${query}` : ""}`;
+  } catch {
+    return "";
+  }
+}
 
 export function pageProperties(href: string) {
   const { pathname } = new URL(href);

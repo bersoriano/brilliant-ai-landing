@@ -16,53 +16,63 @@ const ogLogo = () =>
     (png) => `data:image/png;base64,${png.toString("base64")}`,
   );
 
+const loadAssets = () => Promise.all([
+  ogFont("BricolageGrotesque-600.woff"),
+  ogFont("Geist-Regular.ttf"),
+  ogFont("GeistMono-Regular.ttf"),
+  ogLogo(),
+]);
+type Assets = Awaited<ReturnType<typeof loadAssets>>;
+const options = ([bricolage, geist, geistMono]: Assets) => ({
+  ...size,
+  headers: imageHeaders,
+  fonts: [
+    { name: "Bricolage Grotesque", data: bricolage, style: "normal" as const, weight: 600 as const },
+    { name: "Geist", data: geist, style: "normal" as const, weight: 400 as const },
+    { name: "Geist Mono", data: geistMono, style: "normal" as const, weight: 400 as const },
+  ],
+});
+
+/** A headline card: kicker, headline, footer line and logo. Used by posts and inner pages. */
+export async function renderCard({ kicker, title, footer }: { kicker: string; title: string; footer: string }) {
+  const assets = await loadAssets();
+  const logo = assets[3];
+  return new ImageResponse(
+    (
+      <div style={{
+        width: "100%", height: "100%", display: "flex", flexDirection: "column",
+        background: "#0B1520", color: "#EEF0EE", padding: "64px 76px",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18, color: "#86C5C0", fontFamily: "Geist Mono", fontSize: 22 }}>
+          <div style={{ width: 32, height: 4, background: "#86C5C0" }} />
+          {kicker}
+        </div>
+        <div style={{
+          display: "flex", flex: 1, alignItems: "center", fontFamily: "Bricolage Grotesque",
+          fontWeight: 600, fontSize: title.length > 65 ? 64 : 74,
+          lineHeight: 1.12, letterSpacing: -1,
+        }}>
+          {title}
+        </div>
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          borderTop: "1px solid #2C3C4D", paddingTop: 24,
+          fontFamily: "Geist", fontSize: 22, color: "#A9B3BC",
+        }}>
+          <span>{footer}</span>
+          <img src={logo} width={220} height={60} style={{ margin: "-12px -8px -12px 0" }} />
+        </div>
+      </div>
+    ),
+    options(assets),
+  );
+}
+
 export async function renderSocialImage(locale: Locale, post: Post | null = null) {
   const t = (source: string) => translate(source, locale);
-  const [bricolage, geist, geistMono, logo] = await Promise.all([
-    ogFont("BricolageGrotesque-600.woff"),
-    ogFont("Geist-Regular.ttf"),
-    ogFont("GeistMono-Regular.ttf"),
-    ogLogo(),
-  ]);
-  if (post) {
-    return new ImageResponse(
-      (
-        <div style={{
-          width: "100%", height: "100%", display: "flex", flexDirection: "column",
-          background: "#0B1520", color: "#EEF0EE", padding: "64px 76px",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 18, color: "#86C5C0", fontFamily: "Geist Mono", fontSize: 22 }}>
-            <div style={{ width: 32, height: 4, background: "#86C5C0" }} />
-            {t("Blog")} / {SITE_DOMAIN}
-          </div>
-          <div style={{
-            display: "flex", flex: 1, alignItems: "center", fontFamily: "Bricolage Grotesque",
-            fontWeight: 600, fontSize: post.title.length > 65 ? 64 : 74,
-            lineHeight: 1.12, letterSpacing: -1,
-          }}>
-            {post.title}
-          </div>
-          <div style={{
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-            borderTop: "1px solid #2C3C4D", paddingTop: 24,
-            fontFamily: "Geist", fontSize: 22, color: "#A9B3BC",
-          }}>
-            <span>{post.date}</span>
-            <img src={logo} width={220} height={60} style={{ margin: "-12px -8px -12px 0" }} />
-          </div>
-        </div>
-      ),
-      {
-        ...size,
-        headers: imageHeaders,
-        fonts: [
-          { name: "Bricolage Grotesque", data: bricolage, style: "normal", weight: 600 },
-          { name: "Geist", data: geist, style: "normal", weight: 400 },
-          { name: "Geist Mono", data: geistMono, style: "normal", weight: 400 },
-        ],
-      },
-    );
-  }
+  if (post) return renderCard({ kicker: `${t("Blog")} / ${SITE_DOMAIN}`, title: post.title, footer: post.date });
+  const assets = await loadAssets();
+  const logo = assets[3];
   return new ImageResponse(
     (
       <div
@@ -136,14 +146,6 @@ export async function renderSocialImage(locale: Locale, post: Post | null = null
         </div>
       </div>
     ),
-    {
-      ...size,
-      headers: imageHeaders,
-      fonts: [
-        { name: "Bricolage Grotesque", data: bricolage, style: "normal", weight: 600 },
-        { name: "Geist", data: geist, style: "normal", weight: 400 },
-        { name: "Geist Mono", data: geistMono, style: "normal", weight: 400 },
-      ],
-    },
+    options(assets),
   );
 }

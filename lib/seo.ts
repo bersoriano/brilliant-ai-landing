@@ -13,6 +13,7 @@ import {
   localePath,
   ogLocale,
   pageFromPath,
+  socialImagePath,
   stripLocalePrefix,
   type Locale,
 } from "./locale";
@@ -33,7 +34,7 @@ export function buildMetadata(locale: Locale, path: string): Metadata {
   const canonicalPath = localePath(locale, stripLocalePrefix(path));
   const title = pageTitle(locale, page);
   const description = pageDescription(locale, page);
-  const imagePath = `/social/${locale}/home.png`;
+  const imagePath = socialImagePath(locale, path);
 
   return {
     metadataBase: new URL(getSiteUrl()),

@@ -70,10 +70,16 @@ export function ogLocale(locale: Locale) {
   return locale === "es" ? "es_MX" : "en_US";
 }
 
+/**
+ * Crawlers and link previewers get the URL they ask for, never a language
+ * redirect. Includes Google's testing tools and the AI search crawlers named
+ * in robots.txt (AI_SEARCH_BOTS in lib/seo.ts; a test keeps them covered).
+ */
+const SEARCH_BOT =
+  /googlebot|google-inspectiontool|googleother|storebot-google|adsbot-google|bingbot|yandex|baiduspider|duckduckbot|duckassistbot|applebot|twitterbot|facebookexternalhit|meta-externalagent|linkedinbot|slackbot|semrush|ahrefsbot|bytespider|amazonbot|gptbot|oai-searchbot|chatgpt-user|claudebot|claude-searchbot|claude-user|perplexitybot|perplexity-user|ccbot/i;
+
 export function isSearchBot(userAgent: string | null | undefined) {
-  return /googlebot|bingbot|yandex|baiduspider|twitterbot|facebookexternalhit|linkedinbot|slackbot|applebot|semrush|ahrefsbot|duckduckbot|bytespider|gptbot|claudebot|ccbot/i.test(
-    userAgent || "",
-  );
+  return SEARCH_BOT.test(userAgent || "");
 }
 
 export function resolveLocale({
@@ -139,6 +145,15 @@ export function pageFromPath(
   if (path === "/security") return "security";
   if (path === "/about") return "about";
   return "home";
+}
+
+/**
+ * The prebuilt 1200×630 share image for a page (scripts/prepare-pages.ts).
+ * Each page has its own; posts override this with their slug image.
+ */
+export function socialImagePath(locale: Locale, pathname: string) {
+  const page = pageFromPath(pathname);
+  return `/social/${locale}/${page === "home" || page === "post" ? "home" : `page-${page}`}.png`;
 }
 
 /**

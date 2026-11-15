@@ -111,6 +111,14 @@ test("Homepage schema lists every service, sharing @ids with the service pages",
   assert.equal(seo.buildJsonLd("en", "/about")["@graph"].find((node) => node["@type"] === "Organization").hasOfferCatalog, undefined);
 });
 
+test("Every crawler named in robots.txt skips the language redirect", () => {
+  const { isSearchBot } = require("../lib/locale.ts");
+  for (const bot of seo.AI_SEARCH_BOTS)
+    assert.ok(isSearchBot(`Mozilla/5.0 (compatible; ${bot}/1.0; +https://example.com/bot)`), bot);
+  assert.ok(isSearchBot("Mozilla/5.0 (compatible; Google-InspectionTool/1.0;)"), "URL Inspection and Rich Results Test");
+  assert.ok(!isSearchBot("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/140 Safari/537.36"));
+});
+
 test("robots.txt welcomes AI search crawlers and keeps the API closed to every group", () => {
   const robots = seo.buildRobots();
   const agents = robots.rules.map((rule) => rule.userAgent);
@@ -151,4 +159,44 @@ test("Post frontmatter rejects impossible dates, backwards updates, and empty se
   assert.throws(() => parsePost(raw('seoTitle: " "'), "sample", "en"), /seoTitle/);
   assert.throws(() => parsePost(raw("updated: 2026-10-16"), "sample", "en"), /updated/);
   assert.throws(() => parsePost(raw("").replace("2026-10-17", "2026-02-30"), "sample", "en"), /date/);
+});
+
+test("Search titles and descriptions fit Google's result snippet, in both languages", () => {
+  // Google truncates titles past about 60-65 characters and descriptions past
+  // about 155-160. Posts that need a longer headline set a shorter seoTitle.
+  const { pageTitle, pageDescription } = require("../lib/i18n.ts");
+  const { SITE_NAME } = require("../lib/site.ts");
+  const MAX_TITLE = 65;
+  const MAX_DESCRIPTION = 160;
+  const pages = ["home", "privacy", "security", "about", "finance", "healthcare", "crm", "erp",
+    "workflows", "agents", "software", "services", "blog"];
+  for (const locale of ["en", "es"]) {
+    for (const page of pages) {
+      const title = pageTitle(locale, page);
+      const description = pageDescription(locale, page);
+      assert.ok(title.length <= MAX_TITLE, `${locale} ${page} title is ${title.length} chars: ${title}`);
+      assert.ok(description.length <= MAX_DESCRIPTION, `${locale} ${page} description is ${description.length} chars`);
+    }
+  }
+  for (const slug of fs.readdirSync("content/posts")) {
+    for (const locale of ["en", "es"]) {
+      const post = parsePost(fs.readFileSync(`content/posts/${slug}/${locale}.mdx`, "utf8"), slug, locale);
+      const title = `${post.seoTitle ?? post.title} | ${SITE_NAME}`;
+      assert.ok(title.length <= MAX_TITLE, `${slug} (${locale}) title is ${title.length} chars: ${title}`);
+      assert.ok(post.description.length <= MAX_DESCRIPTION, `${slug} (${locale}) description is ${post.description.length} chars`);
+    }
+  }
+});
+
+test("Each page shares its own image; posts keep their slug image", () => {
+  const { socialImagePath } = require("../lib/locale.ts");
+  assert.equal(seo.buildMetadata("en", "/").openGraph.images[0].url, "/social/en/home.png");
+  assert.equal(seo.buildMetadata("es", "/es/custom-crm").openGraph.images[0].url, "/social/es/page-crm.png");
+  assert.equal(seo.buildMetadata("en", "/blog").twitter.images[0], "/social/en/page-blog.png");
+  // lib/routes.server.ts is server-only; read its page list from the source.
+  const PAGE_PATHS = JSON.parse(fs.readFileSync("lib/routes.server.ts", "utf8").match(/PAGE_PATHS = (\[[^\]]+\])/)[1]);
+  const images = PAGE_PATHS.map((path) => socialImagePath("en", path));
+  assert.equal(new Set(images).size, PAGE_PATHS.length, "no two pages share an image");
+  // A "page-" prefix keeps page images apart from post slugs.
+  assert.ok(images.every((image) => /\/(home|page-[a-z]+)\.png$/.test(image)));
 });

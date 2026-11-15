@@ -6,7 +6,9 @@
   "vars": {
     "NEXT_PUBLIC_SITE_URL": "https://brilliant.dev",
     "NEXT_PUBLIC_POSTHOG_KEY": "phc_sUpw7ehaHXbe5VjSwLz4eajQspLcENocL5dTu34PDUwD",
-    "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com"
+    "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com",
+    // GA4 Measurement ID (G-XXXXXXXXXX). Empty keeps Google Analytics off.
+    "NEXT_PUBLIC_GA_ID": "G-3BCEW8MTNM"
   },
   "d1_databases": [{
     "binding": "INQUIRY_RATE_LIMIT",

@@ -46,7 +46,17 @@ export default function PrivacyContent() {
         <h2>{t("Website services")}</h2>
         <p>
           {t(
-            "When enabled, PostHog measures visits, traffic sources and campaign tags, section views, blog reading progress, booking and contact link clicks, and inquiry delivery outcomes. It uses a random identifier in your browser’s session storage to connect visits within the same tab. We do not send form contents or calculator inputs to analytics, create identified visitor profiles, or record browsing sessions. Analytics respects your browser’s Do Not Track setting. Fonts are served with the website. The hosting provider may process technical request information, such as IP addresses, for website delivery, security, and diagnostics.",
+            "When enabled, PostHog measures visits, traffic sources and campaign tags, section views, blog reading progress, booking and contact link clicks, and inquiry delivery outcomes. It uses a random identifier in your browser’s session storage to connect visits within the same tab. We do not send form contents or calculator inputs to analytics, create identified visitor profiles, or record browsing sessions.",
+          )}
+        </p>
+        <p>
+          {t(
+            "When enabled, Google Analytics receives the same measurements. It sets first-party cookies (_ga, and _ga_ followed by an ID) holding a random identifier for up to 13 months, so returning visits can be counted. Page addresses reach it without query parameters other than campaign tags, Google signals and ad personalization are turned off, and Google processes this data under its own terms.",
+          )}
+        </p>
+        <p>
+          {t(
+            "PostHog and Google Analytics respect your browser’s Do Not Track setting and run only on this website’s main domain. Our hosting provider, Cloudflare, measures page loads and page speed without cookies, and may process technical request information, such as IP addresses, for website delivery, security, and diagnostics. Fonts are served with the website.",
           )}
         </p>
         <h2>{t("External services")}</h2>
