@@ -16,7 +16,7 @@ If the brief is empty, ask for the topic and stop. Otherwise fill the gaps yours
 ## Files
 
 - Follow CLAUDE.md. Create `content/posts/<slug>/en.mdx` and `content/posts/<slug>/es.mdx`. Copy the format from `content/posts/example-post/`.
-- Frontmatter in both files: `title`, `description` (one sentence, under 160 characters, used for SEO), `date` (today, YYYY-MM-DD), `draft: true`. Both files use the same `date` and `draft`.
+- Frontmatter in both files: `title`, `description` (one sentence, under 160 characters, used for SEO), `date` (today, YYYY-MM-DD), `draft: false`. Both files use the same `date` and `draft`. A new post is meant to go live as soon as it reaches `main`; use `draft: true` only while a `[TODO]` is left, and say so.
 - If the slug folder already exists, stop and ask.
 
 ## Writing
@@ -38,5 +38,5 @@ If the brief is empty, ask for the topic and stop. Otherwise fill the gaps yours
 ## Finish
 
 1. Run `npm test` and fix anything it flags.
-2. Reply with both titles and descriptions, a short outline, every `[TODO]` left, and the preview URLs (`/blog/<slug>` and `/es/blog/<slug>` under `npm run dev`; drafts show only in dev).
-3. Don't commit, and don't set `draft: false`. The user publishes.
+2. Reply with both titles and descriptions, a short outline, every `[TODO]` left, and the preview URLs (`/blog/<slug>` and `/es/blog/<slug>` under `npm run dev`).
+3. Don't commit unless asked. Once the post reaches `main` it is published (production deploy), so it must not still be a draft unless a `[TODO]` is left.
