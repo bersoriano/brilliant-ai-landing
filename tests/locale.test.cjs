@@ -506,7 +506,7 @@ test("Services presents the five offers as one translated set, ahead of How it w
   const { NAV_LINKS } = require("../lib/site.ts");
   assert.deepEqual(
     SERVICES.map((service) => service.name),
-    ["AI Workflow Automations", "AI Agents", "Custom CRM", "Custom ERP", "Custom Software"],
+    ["AI Workflow Automations", "AI Agents", "Custom CRM", "Custom ERP", "Software Ready to Use"],
   );
   const strings = [
     ...SERVICES.flatMap((service) => [service.name, service.line, service.summary, service.example]),
@@ -623,10 +623,10 @@ const SERVICE_PAGE_FILES = [
   "ErpLanding", "SoftwareLanding", "SoftwareVideo", "Landing",
 ].map((name) => `components/sections/${name}.tsx`);
 
-/** Every visitor-facing string in the custom software offer's data. */
+/** Every visitor-facing string in the Software Ready to Use offer's data. */
 function softwareStrings() {
-  const { HAAB_FEATURES, SOFTWARE_NOTES } = require("../lib/software.ts");
-  return [...HAAB_FEATURES, ...SOFTWARE_NOTES].flatMap(([title, line]) => [title, line]);
+  const { HAAB_FEATURES, PLAZA_FEATURES, SOFTWARE_NOTES } = require("../lib/software.ts");
+  return [...HAAB_FEATURES, ...PLAZA_FEATURES, ...SOFTWARE_NOTES].flatMap(([title, line]) => [title, line]);
 }
 
 /** WebVTT cues as { timing, text }; the header and blank lines are skipped. */
@@ -644,7 +644,7 @@ function vttCues(file) {
     });
 }
 
-test("Custom software showcases Haab Calendar as our own product, with its demo video", () => {
+test("Software Ready to Use showcases Haab Calendar as our own product, with its demo video", () => {
   const { HAAB_URL, HAAB_EXAMPLE_PATH, HAAB_VIDEO, captionModes, captionTracks, haabHref } = require("../lib/software.ts");
   // Haab pages take the visitor's language as ?lang=; English is the default.
   assert.equal(HAAB_URL, "https://haabcalendar.com");
@@ -698,6 +698,32 @@ test("Custom software showcases Haab Calendar as our own product, with its demo 
   ].join("\n");
   assert.doesNotMatch(copy, /Haab Calendar, (our client|cliente)/i);
   assert.match(copy, /Bookings run on Haab Calendar, a booking app we built\./);
+});
+
+test("Software Ready to Use showcases Plaza Volcanes as our own marketplace, linked live", () => {
+  const { PLAZA_URL, PLAZA_EXPLORE_PATH, PLAZA_FEATURES } = require("../lib/software.ts");
+  const { service } = require("../lib/services.ts");
+  assert.equal(PLAZA_URL, "https://plazavolcanes.com");
+  assert.equal(PLAZA_EXPLORE_PATH, "/explorar");
+  const software = fs.readFileSync("components/sections/SoftwareLanding.tsx", "utf8");
+  assert.match(software, /PLAZA_FEATURES\.map/, "/custom-software lists what Plaza Volcanes ships");
+  assert.match(software, /href=\{PLAZA_URL\}/, "links the marketplace");
+  assert.match(software, /\$\{PLAZA_URL\}\$\{PLAZA_EXPLORE_PATH\}/, "links the live catalog");
+  assert.ok(PLAZA_FEATURES.length >= 3);
+  // The homepage card names both products as ours.
+  assert.match(service("software").example, /Both are ours: Haab Calendar[^.]*Plaza Volcanes/);
+  // Plaza Volcanes ships no cart, card payments, or tracking: never promise them.
+  const features = PLAZA_FEATURES.flat().join(" ");
+  assert.doesNotMatch(features, /\b(cart|checkout|card payments?|tracking)\b/i);
+  // Honesty: Plaza Volcanes is ours, so no copy may call it a client or partner.
+  const copy = [
+    ...fs.readdirSync("components/sections").map((f) => fs.readFileSync(`components/sections/${f}`, "utf8")),
+    fs.readFileSync("lib/services.ts", "utf8"),
+    fs.readFileSync("lib/seo.ts", "utf8"),
+    JSON.stringify(dictionary),
+  ].join("\n");
+  assert.match(copy, /Plaza Volcanes is our own/);
+  assert.doesNotMatch(copy, /Plaza Volcanes[^.]*\b(client|partner|cliente|socio)\b/i);
 });
 
 test("Every service page has its own localized URL, metadata, and sitemap entry", () => {

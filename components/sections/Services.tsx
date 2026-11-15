@@ -13,7 +13,7 @@ import styles from "./Services.module.css";
 /**
  * The five offers as one set: workflows and agents for the repetitive work,
  * the CRM for clients and the pipeline, the ERP for the rest of the
- * operations, and custom software for what nothing off the shelf does. The
+ * operations, and Software Ready to Use for bookings and marketplaces. The
  * homepage shows a card for each and links its page, where the full offer
  * lives; the section closes on the review.
  */

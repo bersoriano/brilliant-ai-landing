@@ -1,11 +1,12 @@
 import type { Locale } from "./locale";
 
 /**
- * Custom software, the fifth offer in Services (/custom-software). Haab Calendar is Brilliant's
- * own booking app, shown as the example of what we build and keep running.
- * The exhibit is a one-minute recorded demo, served from our own domain. Copy
- * stays in business terms like the rest of Services: a test rejects
- * build-stack names.
+ * Software Ready to Use, the fifth offer in Services (/custom-software, the URL
+ * kept from the old "Custom Software" offer). It sells two products Brilliant
+ * built and runs itself, never a client's or a partner's: Haab Calendar
+ * (bookings) and Plaza Volcanes (a marketplace). The exhibit is Haab's
+ * one-minute recorded demo, served from our own domain. Copy stays in business
+ * terms like the rest of Services: a test rejects build-stack names.
  */
 export const HAAB_URL = "https://haabcalendar.com";
 /** A published example page on Haab: a fictional family doctor. */
@@ -82,11 +83,46 @@ export const HAAB_FEATURES: [title: string, line: string][] = [
   ["English and Spanish", "Every label and confirmation, in both languages."],
 ];
 
-/** How we build and run it: scope first, then we keep it running. */
+/**
+ * Plaza Volcanes, our own marketplace for independent shops in Mexico, shown so
+ * visitors see they can launch a marketplace with us. The site is in Spanish
+ * only (MXN), so its links take no language parameter.
+ */
+export const PLAZA_URL = "https://plazavolcanes.com";
+/** The public catalog: search, categories, and the state filter. */
+export const PLAZA_EXPLORE_PATH = "/explorar";
+
+/**
+ * What Plaza Volcanes does today. List only what it ships: it has no cart,
+ * card payments, or shipment tracking (buyer and seller agree payment and
+ * shipping inside the order).
+ */
+export const PLAZA_FEATURES: [title: string, line: string][] = [
+  ["A storefront for every shop", "Each seller gets its own page, with a link ready to share on WhatsApp."],
+  [
+    "Search, categories, and location",
+    "Buyers browse without an account and filter by category and by state.",
+  ],
+  [
+    "Orders with the conversation attached",
+    "Buyers send an order request, and payment and shipping are agreed in messages inside that order.",
+  ],
+  ["A catalog panel for sellers", "Sellers add products, keep drafts, and choose what is published."],
+  [
+    "Reviews and seller levels",
+    "Buyers review each delivery, and every shop earns a level from its response time, on-time shipping, and reviews.",
+  ],
+  [
+    "Shops reviewed, disputes recorded",
+    "New shops are reviewed before they go live, and an administrator records how each dispute ends.",
+  ],
+];
+
+/** How we launch and run it: scope first, then we keep it running. */
 export const SOFTWARE_NOTES: [title: string, body: string][] = [
   [
-    "Built around your process",
-    "We start from the work your team and your clients already do, and build only what that work needs. You approve the scope before we start.",
+    "Start from software that already runs",
+    "Bookings and marketplaces are already built and in use. We set yours up around the way your business works, and you approve the scope before we start.",
   ],
   [
     "We keep it running",

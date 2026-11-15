@@ -150,6 +150,7 @@ test("llms.txt links real pages, uses the price constants, and follows the copy 
   assert.doesNotMatch(text, CONSULTANCY_PHRASES);
   assert.doesNotMatch(text, /\b(open[- ]source|self[- ]host(ed|ing)?|python|next\.?js|react|supabase|vercel|postgres(ql)?|SOC 2|HIPAA|CFDI)\b/i);
   assert.doesNotMatch(text, /Haab Calendar[^.]*\b(client|partner)\b/i);
+  assert.doesNotMatch(text, /Plaza Volcanes[^.]*\b(client|partner)\b/i);
   assert.ok(text.endsWith("\n"));
 });
 

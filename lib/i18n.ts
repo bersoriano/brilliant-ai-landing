@@ -61,9 +61,9 @@ export const AGENTS_DESCRIPTION =
 export const ERP_DESCRIPTION =
   "Custom ERP implementation: sales, inventory, purchasing, invoice matching, and accounting in one system, shaped to your operations. Unlimited users.";
 export const SOFTWARE_DESCRIPTION =
-  "Custom software for the job nothing off the shelf does: built around your process, priced by project, kept running by us. See Haab Calendar, our booking app.";
+  "Software we built and run, ready for your business: Haab Calendar for bookings, Plaza Volcanes for marketplaces. Priced by project, kept running by us.";
 export const SERVICES_DESCRIPTION =
-  "Brilliant AI services: workflow automations, AI agents, custom CRM and ERP, and custom software for finance and healthcare. Your team keeps every approval.";
+  "Brilliant AI services: workflow automations, AI agents, CRM, ERP, and ready-to-use software for finance and healthcare. Your team keeps every approval.";
 
 export const BLOG_DESCRIPTION =
   "Practical guides to AI automation, invoice approvals, healthcare workflows, custom CRM, ERP, and measuring ROI. Keep decisions with your team.";
@@ -122,8 +122,8 @@ const TITLES: Record<PageKey, [en: string, es: string]> = {
     "Agentes de IA para tu equipo | Brilliant AI",
   ],
   software: [
-    "Custom Software Development | Brilliant AI",
-    "Desarrollo de software a la medida | Brilliant AI",
+    "Software Ready to Use: Bookings & Marketplaces | Brilliant AI",
+    "Software listo para usar: reservas y marketplaces | Brilliant AI",
   ],
   services: [
     "Services: Workflows, Agents, CRM, ERP & Software | Brilliant AI",

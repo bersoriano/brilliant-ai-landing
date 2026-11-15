@@ -1,7 +1,8 @@
 /**
  * The five offers, read as one set. Workflows and agents take the repetitive
  * work, the CRM holds clients and the pipeline, the ERP holds the rest of the
- * operations, and custom software covers what nothing off the shelf does.
+ * operations, and Software Ready to Use launches bookings or a marketplace on
+ * software we already built and run.
  * The homepage shows each as a card (the `id` stays its anchor there) and
  * links its own page, where the full offer lives. Copy stays in business
  * terms: a test rejects build-stack and technical names here.
@@ -47,12 +48,12 @@ export const SERVICES = [
   {
     id: "software",
     path: "/custom-software",
-    name: "Custom Software",
-    line: "When nothing off the shelf fits",
+    name: "Software Ready to Use",
+    line: "Bookings and marketplaces, ready to launch",
     summary:
-      "When the tool your business needs doesn’t exist, we build it and keep it running.",
+      "Software we built and already run, set up for your business and kept running by us.",
     example:
-      "Haab Calendar is our own: a booking app for clinics, studios, venues, and events, in English and Spanish.",
+      "Both are ours: Haab Calendar takes bookings, and Plaza Volcanes is a marketplace for independent shops.",
   },
 ] as const;
 
