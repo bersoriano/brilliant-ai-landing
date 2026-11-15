@@ -67,3 +67,23 @@ test('Resend priority, webhook HTTPS, rejection, network errors, throttle and li
   r = await handleInquiry(post(valid), env, { limit: async () => { throw Error('database unavailable'); }, fetch: send });
   assert.equal(r.status, 502); assert.equal((await r.json()).error, 'failed');
 });
+test('pages.dev alias moves to the canonical domain; previews stay reachable but noindex', () => {
+  const { hostPolicy, PAGES_HOST } = require('../cloudflare/routing.ts');
+  const r = hostPolicy(new URL(`https://${PAGES_HOST}/es/services?utm_source=x`), 'https://brilliant.dev');
+  assert.equal(r.status, 308);
+  assert.equal(r.headers.get('location'), 'https://brilliant.dev/es/services?utm_source=x');
+  assert.equal(hostPolicy(new URL(`https://seo-fixes.${PAGES_HOST}/`), 'https://brilliant.dev'), 'noindex');
+  assert.equal(hostPolicy(new URL(`https://1a2b3c4d.${PAGES_HOST}/blog`), 'https://brilliant.dev'), 'noindex');
+  assert.equal(hostPolicy(new URL('https://brilliant.dev/'), 'https://brilliant.dev'), null);
+  assert.equal(hostPolicy(new URL('https://evil-brilliant-ai.pages.dev/'), 'https://brilliant.dev'), null);
+});
+test('HTML revalidates on every visit without no-store, so the back/forward cache still works', () => {
+  const { pageCacheHeaders } = require('../cloudflare/routing.ts');
+  // English can redirect to /es by preference: private, revalidated each time.
+  assert.deepEqual(pageCacheHeaders('/services'), { 'Cache-Control': 'private, no-cache', Vary: 'Cookie, Accept-Language, User-Agent' });
+  assert.equal(pageCacheHeaders('/')['Cache-Control'], 'private, no-cache');
+  // Spanish never redirects: the same document for everyone.
+  assert.deepEqual(pageCacheHeaders('/es/services'), { 'Cache-Control': 'public, max-age=0, must-revalidate' });
+  assert.deepEqual(pageCacheHeaders('/es'), { 'Cache-Control': 'public, max-age=0, must-revalidate' });
+  for (const path of ['/', '/blog/x', '/es', '/es/blog/x']) assert.doesNotMatch(pageCacheHeaders(path)['Cache-Control'], /no-store/);
+});

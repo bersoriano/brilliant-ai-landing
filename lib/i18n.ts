@@ -49,21 +49,21 @@ export const ABOUT_DESCRIPTION =
 export const FINANCE_DESCRIPTION =
   "Managed AI workflow automation for finance teams: prepare invoices, track month-end close, and surface missing documents for human approval.";
 export const HEALTHCARE_DESCRIPTION =
-  "Managed AI workflow automation for healthcare administration: route referrals, prepare intake, and follow up on billing issues while clinical decisions stay with your team.";
+  "AI workflow automation for healthcare administration: route referrals, prepare intake, and follow up on billing. Clinical decisions stay with your team.";
 
 export const CRM_DESCRIPTION =
   "Custom CRM implementation on a proven open-source foundation: contacts, deals, tasks, and an assistant you can talk to. Unlimited users on the base plan.";
 
 export const WORKFLOWS_DESCRIPTION =
-  "AI workflow automation for invoices, referrals, and month-end: one reliable process per task, checked against your rules, with every exception sent to a person you name.";
+  "AI workflow automation for invoices, referrals, and month-end: one reliable process per task, checked against your rules, exceptions sent to a person you name.";
 export const AGENTS_DESCRIPTION =
-  "AI agents that find, draft, and follow up inside the tools your team already uses, with the same permissions as the person asking. Your team approves what goes out.";
+  "AI agents that find, draft, and follow up inside the tools your team already uses, with the permissions of the person asking. Your team approves what goes out.";
 export const ERP_DESCRIPTION =
-  "Custom ERP implementation: sales, inventory, purchasing, invoice matching, and accounting in one system, shaped to your operations. Unlimited users on the base plan.";
+  "Custom ERP implementation: sales, inventory, purchasing, invoice matching, and accounting in one system, shaped to your operations. Unlimited users.";
 export const SOFTWARE_DESCRIPTION =
-  "Custom software for the job nothing off the shelf does: built around your process, priced by project, and kept running by us. See Haab Calendar, our own booking app.";
+  "Custom software for the job nothing off the shelf does: built around your process, priced by project, kept running by us. See Haab Calendar, our booking app.";
 export const SERVICES_DESCRIPTION =
-  "Brilliant AI services: workflow automations, AI agents, a custom CRM, a custom ERP, and custom software for finance and healthcare teams. Your team keeps every approval.";
+  "Brilliant AI services: workflow automations, AI agents, custom CRM and ERP, and custom software for finance and healthcare. Your team keeps every approval.";
 
 export const BLOG_DESCRIPTION =
   "Practical guides to AI automation, invoice approvals, healthcare workflows, custom CRM, ERP, and measuring ROI. Keep decisions with your team.";

@@ -27,3 +27,33 @@ export function routeLanguage(request: Request, country?: string | null): Respon
   url.pathname = localePath("es", pathname).replace(/\/$/, "");
   return personalizedRedirect(url, saved === "es" ? undefined : "es");
 }
+
+/** The Pages project's own hostname. Previews live on subdomains of it. */
+export const PAGES_HOST = "brilliant-ai.pages.dev";
+
+/**
+ * The production pages.dev alias duplicates the custom domain, so it moves
+ * there permanently. Preview deployments (<branch|hash>.brilliant-ai.pages.dev)
+ * stay reachable for QA but tell crawlers to stay out.
+ */
+export function hostPolicy(url: URL, canonicalOrigin: string): Response | "noindex" | null {
+  if (url.hostname === PAGES_HOST) {
+    const target = new URL(url.pathname + url.search, canonicalOrigin);
+    // 308 keeps the method, so a stray POST is not turned into a GET.
+    return new Response(null, { status: 308, headers: { Location: target.href, "Cache-Control": "public, max-age=3600" } });
+  }
+  return url.hostname.endsWith(`.${PAGES_HOST}`) ? "noindex" : null;
+}
+
+/**
+ * HTML caching. Every request still reaches this Function (so language
+ * preferences are evaluated each time), but no-store would also disable the
+ * browser's back/forward cache. English pages may redirect a visitor to /es,
+ * so browsers revalidate them on every request and shared caches never keep
+ * them. Spanish pages never redirect: they are the same for everyone.
+ */
+export function pageCacheHeaders(pathname: string): Record<string, string> {
+  return isSpanishPath(pathname)
+    ? { "Cache-Control": "public, max-age=0, must-revalidate" }
+    : { "Cache-Control": "private, no-cache", Vary: "Cookie, Accept-Language, User-Agent" };
+}

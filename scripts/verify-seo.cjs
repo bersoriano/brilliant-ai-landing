@@ -38,6 +38,7 @@ async function verify() {
   const documents = new Map();
   const titles = new Set();
   const descriptions = new Set();
+  const shareImages = new Map();
 
   // Check the initial HTML, before any browser JavaScript runs.
   for (const path of paths) {
@@ -63,6 +64,11 @@ async function verify() {
     const alternates = tags(head, "link").filter((tag) => tag.rel === "alternate" && tag.hrefLang);
     for (const [language, expected] of [["en", urlFor(cleanPath)], ["es-MX", urlFor(`/es${cleanPath === "/" ? "" : cleanPath}`)], ["x-default", urlFor(cleanPath)]])
       assert.equal(alternates.find((tag) => tag.hrefLang === language)?.href, expected, `${path}: ${language} alternate`);
+    // Every page shares its own prebuilt image, in its own language.
+    const ogImage = meta.find((tag) => tag.property === "og:image")?.content;
+    assert.ok(ogImage?.startsWith(`${canonicalOrigin}/social/${path.startsWith("/es") ? "es" : "en"}/`), `${path}: localized share image`);
+    assert.ok(![...shareImages.values()].includes(ogImage), `${path}: share image reused from another page`);
+    shareImages.set(path, ogImage);
     const graph = jsonLd(html);
     assert.ok(graph.some((node) => node["@type"] === "Organization"), `${path}: organization schema`);
     const slug = cleanPath.match(/^\/blog\/([^/]+)$/)?.[1];
@@ -79,6 +85,12 @@ async function verify() {
       const list = graph.find((node) => node["@type"] === "ItemList");
       assert.equal(list?.numberOfItems, published.length, `${path}: all published posts listed`);
     }
+  }
+
+  for (const [path, image] of shareImages) {
+    const response = await request(new URL(image).pathname, { method: "HEAD" });
+    assert.equal(response.status, 200, `${path}: share image ${image}`);
+    assert.match(response.headers.get("content-type") || "", /^image\/png/, `${path}: share image type`);
   }
 
   // Check navigation and content links, including fragment targets.
@@ -130,7 +142,7 @@ async function verify() {
       assert.equal((await request(`${prefix}/og?post=${slug}`)).status, 404, `${slug}: image does not expose unpublished content`);
     }
   }
-  console.log(`SEO checks passed: ${paths.length} pages, ${published.length} posts in both languages, ${checkedLinks} internal links, 14 article images, sitemap, robots, nonexistent /post routes, and 404s.`);
+  console.log(`SEO checks passed: ${paths.length} pages, ${published.length} posts in both languages, ${checkedLinks} internal links, 14 article images, ${shareImages.size} share images, sitemap, robots, nonexistent /post routes, and 404s.`);
 }
 
 verify().catch((error) => { console.error(error); process.exitCode = 1; });

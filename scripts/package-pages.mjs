@@ -4,7 +4,14 @@ await build({ entryPoints: ['cloudflare/worker.ts'], outfile: 'out/_worker.js', 
 // Only extensionless requests enter Functions. Next RSC payloads, media,
 // CSS/JS/fonts and every generated PNG are served directly by Pages.
 await writeFile('out/_routes.json', JSON.stringify({ version: 1, include: ['/*'], exclude: ['/_next/*', '/brand/*', '/fonts/*', '/video/*', '/social/*', '/*.*'] }, null, 2));
-await writeFile('out/_headers', `/_next/static/*\n  Cache-Control: public, max-age=31536000, immutable\n/social/*\n  Cache-Control: public, max-age=3600, must-revalidate\n`);
+// Static files skip the Function, so pages.dev hosts (the production alias and
+// every preview) get their noindex header here; cloudflare/routing.ts covers HTML.
+await writeFile('out/_headers', [
+  '/_next/static/*', '  Cache-Control: public, max-age=31536000, immutable',
+  '/social/*', '  Cache-Control: public, max-age=3600, must-revalidate',
+  'https://brilliant-ai.pages.dev/*', '  X-Robots-Tag: noindex',
+  'https://:version.brilliant-ai.pages.dev/*', '  X-Robots-Tag: noindex',
+].join('\n') + '\n');
 // Keep Pages Free limits visible before deployment (especially videos).
 let count = 0;
 async function check(dir) {

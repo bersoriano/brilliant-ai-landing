@@ -92,24 +92,42 @@ test("article progress uses article bounds, handles short articles and clamps ov
   assert.equal(analytics().articleProgress(300, 200, 800), 100);
 });
 
-test("navigation clicks bypass batching and use an unload-safe transport", () => {
+/**
+ * Runs the real lib/analytics.client.ts in a sandbox, replacing only the
+ * external boundaries: the PostHog SDK, the page, and gtag.js.
+ */
+function loadClient({ href = "https://brilliant.dev/es", env = {}, doNotTrack = null, title = "Page" } = {}) {
+  process.env.NEXT_PUBLIC_SITE_URL = "https://brilliant.dev";
   const captures = [];
-  // Replace only the external SDK boundary. Execute the real capture wrapper:
-  // buffering this call can lose its metric when a normal anchor unloads Next.
+  const scripts = [];
   const sdk = { init() {}, register_once() {}, capture(...args) { captures.push(args); } };
+  const location = new URL(href);
+  const window = { location, navigator: { doNotTrack } };
+  const document = {
+    referrer: "https://www.google.com/search?q=private",
+    title,
+    createElement: () => ({}),
+    head: { appendChild: (script) => scripts.push(script) },
+  };
   const exported = {};
   vm.runInNewContext(ts.transpileModule(fs.readFileSync("lib/analytics.client.ts", "utf8"), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, esModuleInterop: true },
   }).outputText, {
     exports: exported, module: { exports: exported },
     require: (id) => id === "posthog-js" ? sdk : analytics(),
-    window: { location: { href: "https://brilliant.dev/es" } },
-    document: { referrer: "" },
-    process: { env: { NODE_ENV: "production", NEXT_PUBLIC_POSTHOG_KEY: "phc_test" } },
+    window, document, URL,
+    process: { env: { NODE_ENV: "production", NEXT_PUBLIC_POSTHOG_KEY: "phc_test", ...env } },
   });
   exported.initializeAnalytics();
-  exported.captureAnalytics("cta_clicked", { source_section: "crm", cta_type: "booking" });
-  exported.captureAnalytics("blog_link_clicked", { source_section: "blog", destination_path: "/es/blog/example" });
+  // gtag.js receives `arguments` objects; read them back as arrays.
+  const gtag = () => Array.from(window.dataLayer || [], (entry) => Array.from(entry));
+  return { client: exported, captures, scripts, gtag, window };
+}
+
+test("navigation clicks bypass batching and use an unload-safe transport", () => {
+  const { client, captures } = loadClient();
+  client.captureAnalytics("cta_clicked", { source_section: "crm", cta_type: "booking" });
+  client.captureAnalytics("blog_link_clicked", { source_section: "blog", destination_path: "/es/blog/example" });
   for (const [event, properties, options] of captures) {
     assert.ok(["cta_clicked", "blog_link_clicked"].includes(event));
     assert.equal(properties.page_path, "/es");
@@ -117,4 +135,51 @@ test("navigation clicks bypass batching and use an unload-safe transport", () =>
     assert.equal(options?.transport, "sendBeacon", `${event} must survive navigation`);
   }
   assert.equal(captures.length, 2);
+});
+
+test("analytics stays off on preview hosts and the pages.dev alias", () => {
+  for (const href of ["https://seo-fixes.brilliant-ai.pages.dev/", "https://brilliant-ai.pages.dev/es"]) {
+    const { client, captures, scripts } = loadClient({ href, env: { NEXT_PUBLIC_GA_ID: "G-TEST123" } });
+    client.captureAnalytics("$pageview");
+    assert.equal(client.analyticsEnabled(), false, href);
+    assert.equal(captures.length + scripts.length, 0, href);
+  }
+  // The debug flags still allow a deliberate check against a test project.
+  assert.equal(loadClient({ href: "http://localhost:3000/", env: { NEXT_PUBLIC_POSTHOG_DEBUG: "true" } }).client.analyticsEnabled(), true);
+});
+
+test("Google Analytics loads only with a valid ID, and never under Do Not Track", () => {
+  assert.equal(loadClient().scripts.length, 0, "no ID, no script");
+  assert.equal(loadClient({ env: { NEXT_PUBLIC_GA_ID: "UA-123" } }).scripts.length, 0, "GA4 IDs only");
+  assert.equal(loadClient({ env: { NEXT_PUBLIC_GA_ID: "G-TEST123" }, doNotTrack: "1" }).scripts.length, 0, "Do Not Track");
+  const { scripts, gtag } = loadClient({ href: "https://brilliant.dev/?utm_source=li&gclid=private&email=a", env: { NEXT_PUBLIC_GA_ID: "G-TEST123" } });
+  assert.equal(scripts[0].src, "https://www.googletagmanager.com/gtag/js?id=G-TEST123");
+  assert.equal(scripts[0].async, true);
+  const [, id, config] = gtag().find(([command]) => command === "config");
+  assert.equal(id, "G-TEST123");
+  assert.equal(config.send_page_view, false, "PageAnalytics sends page views");
+  assert.equal(config.allow_google_signals, false);
+  assert.equal(config.allow_ad_personalization_signals, false);
+  assert.equal(config.page_location, "https://brilliant.dev/?utm_source=li", "only campaign tags survive");
+  assert.equal(config.page_referrer, "https://www.google.com/search");
+});
+
+test("Google Analytics gets the same events, with clean addresses and the previous page as referrer", () => {
+  const { client, gtag, window } = loadClient({ href: "https://brilliant.dev/?utm_source=li&email=a", env: { NEXT_PUBLIC_GA_ID: "G-TEST123" } });
+  client.captureAnalytics("$pageview", { utm_source: "li", traffic_source: "li" });
+  window.location.href = "https://brilliant.dev/es/blog/example?email=a";
+  client.captureAnalytics("$pageview");
+  client.captureAnalytics("cta_clicked", { cta_type: "booking", source_section: "blog_body" });
+  const events = gtag().filter(([command]) => command === "event");
+  assert.deepEqual(events.map(([, name]) => name), ["page_view", "page_view", "cta_clicked"]);
+  assert.equal(events[0][2].page_location, "https://brilliant.dev/?utm_source=li");
+  assert.equal(events[0][2].page_referrer, "https://www.google.com/search");
+  assert.equal(events[0][2].traffic_source, undefined, "PostHog-only fields stay out of GA");
+  assert.equal(events[1][2].page_location, "https://brilliant.dev/es/blog/example");
+  assert.equal(events[1][2].page_referrer, "https://brilliant.dev/");
+  assert.equal(events[1][2].blog_slug, "example");
+  assert.equal(events[2][2].page_location, "https://brilliant.dev/es/blog/example");
+  assert.equal(events[2][2].cta_type, "booking");
+  assert.equal(events[2][2].transport_type, "beacon", "clicks survive navigation");
+  assert.doesNotMatch(JSON.stringify(events), /email=|gclid/);
 });
