@@ -77,8 +77,7 @@ function initializeGoogle(id: string, debug: boolean) {
     window.gtag = function gtag() {
       window.dataLayer!.push(arguments);
     };
-    window.gtag("js", new Date());
-    window.gtag("config", id, {
+    const settings = {
       ...page,
       send_page_view: false,
       allow_google_signals: false,
@@ -86,7 +85,13 @@ function initializeGoogle(id: string, debug: boolean) {
       cookie_expires: 60 * 60 * 24 * 395, // about 13 months
       ...(window.location.protocol === "https:" && { cookie_flags: "SameSite=Lax;Secure" }),
       ...(debug && { debug_mode: true }),
-    });
+    };
+    // The Google tag is a Tag Manager container whose own GA tag fires on
+    // initialization and ignores this page's config, so it would send its own
+    // page view with the raw URL. Settings queued with "set" before "js" reach it.
+    window.gtag("set", settings);
+    window.gtag("js", new Date());
+    window.gtag("config", id, settings);
     const script = document.createElement("script");
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
