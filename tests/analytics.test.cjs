@@ -155,7 +155,12 @@ test("Google Analytics loads only with a valid ID, and never under Do Not Track"
   const { scripts, gtag } = loadClient({ href: "https://brilliant.dev/?utm_source=li&gclid=private&email=a", env: { NEXT_PUBLIC_GA_ID: "G-TEST123" } });
   assert.equal(scripts[0].src, "https://www.googletagmanager.com/gtag/js?id=G-TEST123");
   assert.equal(scripts[0].async, true);
+  const commands = gtag().map(([command]) => command);
+  assert.deepEqual(commands.slice(0, 3), ["set", "js", "config"],
+    "settings are set before js, so the container's own GA tag uses them");
+  const [, setSettings] = gtag()[0];
   const [, id, config] = gtag().find(([command]) => command === "config");
+  assert.deepEqual(setSettings, config, "set and config carry the same settings");
   assert.equal(id, "G-TEST123");
   assert.equal(config.send_page_view, false, "PageAnalytics sends page views");
   assert.equal(config.allow_google_signals, false);
