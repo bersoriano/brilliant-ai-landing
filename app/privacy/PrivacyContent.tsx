@@ -56,7 +56,7 @@ export default function PrivacyContent() {
         </p>
         <p>
           {t(
-            "PostHog and Google Analytics respect your browser’s Do Not Track setting and run only on this website’s main domain. Our hosting provider, Cloudflare, measures page loads and page speed without cookies, and may process technical request information, such as IP addresses, for website delivery, security, and diagnostics. Fonts are served with the website.",
+            "PostHog and Google Analytics respect your browser’s Do Not Track and Global Privacy Control signals and run only on this website’s main domain. Our hosting provider, Cloudflare, measures page loads and page speed without cookies, and may process technical request information, such as IP addresses, for website delivery, security, and diagnostics. Fonts are served with the website.",
           )}
         </p>
         <h2>{t("External services")}</h2>

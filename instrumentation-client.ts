@@ -1,3 +1,3 @@
-import { initializeAnalytics } from "./lib/analytics.client";
+import { initAnalytics } from "./lib/analytics.client";
 
-initializeAnalytics();
+initAnalytics();
