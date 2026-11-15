@@ -35,7 +35,7 @@ These generated directories are ignored. Build fails on an asset over 25 MiB or
 more than 20,000 files. Current export: 40 localized pages, 16 PNGs, 155 files.
 Use Node 22 LTS (`.node-version`), npm with lockfile. Toolchain requires Node
 >=22; package engines also permit 24/26. This migration was tested on Node
-26.8.1. Cloudflare build setting `NODE_VERSION=22` selects the pinned LTS family.
+26.8.1. `.node-version` selects the pinned LTS family.
 Pages runtime uses Web APIs with compatibility date `2026-10-29`; no Node
 compatibility flag or server process is needed.
 
@@ -53,9 +53,39 @@ Build settings (public; copied into browser JS, so never put secrets here):
 | `NEXT_PUBLIC_POSTHOG_KEY` | Public project token; omit to disable analytics |
 | `NEXT_PUBLIC_POSTHOG_HOST` | Existing US/EU ingestion host |
 | `NEXT_PUBLIC_POSTHOG_DEBUG` | Normally `false`; production builds initialize when token exists, on the `NEXT_PUBLIC_SITE_URL` host only |
-| `NEXT_PUBLIC_GA_ID` | GA4 Measurement ID (`G-…`) in `wrangler.jsonc`; empty disables Google Analytics. Same production-host rule. In GA, turn **Enhanced measurement off** for the web stream: its automatic events read the raw URL (query strings included) and duplicate the site's own `page_view`, scroll and click events |
-| `NEXT_PUBLIC_GA_DEBUG` | Normally `false`; `true` sends events from localhost/previews with `debug_mode` for GA DebugView |
-| `NODE_VERSION` | `22` in Pages build settings |
+| `NEXT_PUBLIC_GA_ID` | GA4 Measurement ID (`G-…`) in `wrangler.jsonc` top-level `vars` (production only); empty disables Google Analytics. Same production-host rule. In GA, turn **Enhanced measurement off** for the web stream: its automatic events read the raw URL (query strings included) and duplicate the site's own `page_view`, scroll and click events. See [docs/operations/google-analytics.md](../operations/google-analytics.md) |
+| `NEXT_PUBLIC_GA_DEBUG` | Normally `false`; `true` sends events from localhost/previews with `debug_mode` for GA DebugView; ignored on the production host |
+| Node version | `.node-version` (`22`). A `NODE_VERSION` project variable is not set: `wrangler.jsonc` `vars` replaced the dashboard's plain-text variables |
+
+### How the build receives `NEXT_PUBLIC_*` (checked 2026-11-15)
+
+`wrangler.jsonc` is the source of truth for the Pages project's plain-text
+variables. On each Git deploy Pages applies its `vars` to the project: the
+top-level block becomes the **production** environment's variables and
+`env.preview.vars` the **preview** environment's. Pages exposes an
+environment's variables to the build command as ordinary environment
+variables, so `next build` inlines `NEXT_PUBLIC_*` into the browser bundle.
+Cloudflare documents `vars` as Function bindings; the build-time effect is
+confirmed here by evidence, not by the docs:
+
+- `npx wrangler pages download config brilliant-ai` lists, for production,
+  exactly the four top-level `vars` (`NEXT_PUBLIC_SITE_URL`,
+  `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`, `NEXT_PUBLIC_GA_ID`),
+  and for preview only `NEXT_PUBLIC_SITE_URL`. No other plain-text variable is
+  set, so there is no separate dashboard build variable for the GA ID.
+- The live bundle carries `G-3BCEW8MTNM`
+  (`bash ~/.claude/skills/landing-page-ga/scripts/audit.sh . --live https://brilliant.dev`).
+
+Consequences:
+
+- Change or add a public variable in `wrangler.jsonc`, not the dashboard (the
+  next deploy replaces dashboard plain-text values), then redeploy: values are
+  fixed at build time.
+- Preview builds have no GA ID or PostHog key, so previews send nothing even
+  with a debug flag. For DebugView QA on a preview, add `NEXT_PUBLIC_GA_ID` and
+  `NEXT_PUBLIC_GA_DEBUG: "true"` to `env.preview.vars` on that branch only.
+- Secrets (type **Secret**) are runtime-only and are not listed by
+  `download config`; never put a secret in `vars`.
 
 Runtime settings, separately for **preview and production**:
 
@@ -82,7 +112,7 @@ workerd tests always inject fake credentials and intercept every outbound
 request. Browser tests intercept inquiry and PostHog. Never use real test emails.
 PostHog implementation/privacy filters are unchanged: no autocapture, replay,
 form values, private query strings, URL fragments or identified profiles; DNT
-respected; session storage only. Public analytics values must exist at build.
+and Global Privacy Control respected; session storage only. Public analytics values must exist at build.
 
 ## Throttling and quotas
 

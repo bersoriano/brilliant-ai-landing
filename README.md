@@ -36,31 +36,43 @@ Copy `.env.example` to `.env.local`, then configure:
   URLs. Defaults to `https://brilliant.dev` in production when unset.
 Booking CTAs use the Haab Calendar URL in `lib/site.ts`.
 
-## PostHog analytics
+## Analytics (PostHog and Google Analytics 4)
+
+Both tools receive the same events through one capture path, `track()` in
+`lib/analytics.client.ts` (GA4 built in, PostHog in `lib/analytics.posthog.ts`).
+Event names follow the shared landing-page taxonomy; the full list, GA setup and
+the 2026-11-15 rename are in [docs/operations/google-analytics.md](docs/operations/google-analytics.md).
 
 Set `NEXT_PUBLIC_POSTHOG_KEY` to your **public project token**, and
 `NEXT_PUBLIC_POSTHOG_HOST` to `https://us.i.posthog.com` (US) or
-`https://eu.i.posthog.com` (EU). Never use a personal API key. Add these values to
-your deployment's environment and rebuild: Next.js embeds public variables at
-build time. Without a token, no PostHog requests or tracking listeners start.
-Development stays disabled unless `NEXT_PUBLIC_POSTHOG_DEBUG=true`; use a test
-project when checking locally. Setup follows the
+`https://eu.i.posthog.com` (EU). Never use a personal API key. Set
+`NEXT_PUBLIC_GA_ID` to the GA4 Measurement ID. Next.js embeds public variables at
+build time, so add them where the build reads them and rebuild. Without a token
+or ID, that tool sends nothing. Both run only on the `NEXT_PUBLIC_SITE_URL` host;
+`NEXT_PUBLIC_POSTHOG_DEBUG=true` / `NEXT_PUBLIC_GA_DEBUG=true` let localhost or a
+preview send to a test project (PostHog) or DebugView (GA). Setup follows the
 [PostHog Next.js integration](https://posthog.com/docs/libraries/next-js).
 
-All events include `page_path`, `page_type` (`landing`, `blog_index`,
+PostHog events include `page_path`, `page_type` (`landing`, `blog_index`,
 `blog_post`, or `supporting`), and `locale` (`en` or `es`). Article events also
-include `blog_slug`, which groups translations of the same post.
+include `blog_slug`, which groups translations of the same post. In GA those
+three fields travel on `page_view`; every GA event carries the clean page address.
 
-| Event | What it measures | Extra properties |
+| Event (PostHog / GA) | What it measures | Extra properties |
 | --- | --- | --- |
-| `$pageview` | Initial load and route/language changes; anchor jumps do not add views | `traffic_source`, `referring_domain`, `utm_source`, `utm_medium`, `utm_campaign` when present |
-| `section_viewed` | First time at least 25% of the section or viewport, whichever is smaller, is visible per page visit | `section_id` (existing section/service ID, `blog-list`, or indexed `blog-heading-*`) |
-| `blog_read_progress` | Article body reaches viewport at 25%, 50%, 75%, 100%; each once per page visit | `percent` |
-| `blog_link_clicked` | Internal links to blog index or articles, including homepage teaser and notes | `source_section`, `destination_path`, `destination_slug` for articles |
-| `cta_clicked` | Scheduling, business email, WhatsApp, and links to inquiry form | `source_section`, `cta_type` (`booking`, `email`, `whatsapp`, `inquiry`) |
-| `inquiry_submitted` | Validated form begins sending | No form values |
-| `inquiry_succeeded` | Inquiry endpoint confirms delivery | No form values |
-| `inquiry_failed` | Delivery fails and email fallback appears | No form values |
+| `$pageview` / `page_view` | Initial load and route/language changes; anchor jumps do not add views | PostHog only: `traffic_source`, `referring_domain`, `utm_*` when present |
+| `section_view` | First time at least 25% of the section or viewport, whichever is smaller, is visible per page visit | `section_id` (existing section/service ID, `blog-list`, or indexed `blog-heading-*`) |
+| `read_progress` | Article body reaches viewport at 25%, 50%, 75%, 100%; each once per page visit | `percent`, `content_type` (`article`) |
+| `cta_click` | Scheduling, business email, WhatsApp, and links to the inquiry form | `cta_type` (`booking`, `email`, `whatsapp`, `form`), `cta_location`, `link_domain` (outbound) |
+| `form_submit` | Validated inquiry begins sending | `form_name` (`contact`); no form values |
+| `generate_lead` | Inquiry endpoint confirms delivery | `form_name` |
+| `form_error` | Delivery fails and email fallback appears | `form_name`, `error_type` (`validation`, `rate_limited`, `server`, `network`) |
+
+Until 2026-11-15 these were `section_viewed`, `blog_read_progress`,
+`cta_clicked` (`source_section`, `cta_type` `inquiry`), `inquiry_submitted`,
+`inquiry_succeeded`, `inquiry_failed` and `blog_link_clicked` (dropped: the next
+page view shows where a visitor came from). Insights over a range that spans the
+switch need both names.
 
 `initial_traffic_source`, `initial_referring_domain`, and available
 `initial_utm_*` tags persist as event properties within the tab. `$direct` means
@@ -70,34 +82,36 @@ Random anonymous identity lives in session storage, not an analytics cookie;
 new tabs or sessions can count the same person again. This measures visits and
 engagement, not precise cross-session unique people. Reading progress records
 how much content reached the viewport, not proof that someone read it.
-Link-click events send immediately through the browser's beacon transport so
+Click events send immediately through the browser's beacon transport so
 leaving a page does not leave the click waiting for the next batch flush.
 
 Suggested PostHog insights:
 
 - Traffic: count `$pageview`, break down by `initial_traffic_source`,
   `initial_utm_campaign`, `locale`, or `page_path`.
-- Landing engagement: unique sessions with `section_viewed`, break down by
+- Landing engagement: unique sessions with `section_view`, break down by
   `section_id`, filter `page_type=landing`.
-- CTA use: count `cta_clicked`, break down by `source_section` and `cta_type`.
-- Blog engagement: `blog_read_progress`, filter `percent=100`, break down by
-  `blog_slug`; compare with blog `$pageview` and booking `cta_clicked`.
-- Inquiry funnel: `inquiry_submitted` → `inquiry_succeeded`; monitor
-  `inquiry_failed` separately. A booking click measures intent; completed
-  appointments require a separate scheduling-provider integration.
+- CTA use: count `cta_click`, break down by `cta_location` and `cta_type`.
+- Blog engagement: `read_progress`, filter `percent=100`, break down by
+  `blog_slug`; compare with blog `$pageview` and `cta_click` with `cta_type=booking`.
+- Inquiry funnel: `form_submit` → `generate_lead`; monitor `form_error`
+  separately, broken down by `error_type`. A booking click measures intent;
+  completed appointments require a separate scheduling-provider integration.
 
 Form contents, calculator values, mail draft bodies, URL query strings, and
-fragments are excluded from analytics. Only the three explicit UTM tags above
-are kept. Autocapture, session replay, heatmaps, surveys, exception capture, and
-performance capture are disabled; no identified person profiles are created.
-Browser Do Not Track is respected. The English and Spanish privacy notices
-describe this behavior.
+fragments are excluded from analytics. Only the five campaign tags (`utm_source`,
+`utm_medium`, `utm_campaign`, `utm_term`, `utm_content`) are kept, so never put
+merge tags or personal data in campaign links. Autocapture, session replay,
+heatmaps, surveys, exception capture, and performance capture are disabled; no
+identified person profiles are created. Browser Do Not Track and Global Privacy
+Control are respected: neither tool starts. The English and Spanish privacy
+notices describe this behavior.
 
 To verify, configure a test project, enable the development flag, restart, then
 open `/?utm_source=qa&utm_medium=test&utm_campaign=analytics` and inspect
 PostHog's live events. Scroll through services, use a booking CTA, open a blog
 post, scroll its body, and switch languages. Check one page view per navigation,
-one event per section/milestone per visit, correct source sections, and no form
+one event per section/milestone per visit, correct CTA locations, and no form
 values or private query parameters. Test inquiry success and failure only with
 your intended delivery transport or an intercepted local response.
 

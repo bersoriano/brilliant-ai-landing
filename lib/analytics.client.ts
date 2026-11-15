@@ -1,138 +1,193 @@
-import posthog from "posthog-js";
-import { campaignUrl, initialTrafficProperties, isProductionHost, pageProperties, sanitizeEvent } from "./analytics";
+/**
+ * Browser analytics entry point (landing-page-ga skill, assets/analytics.client.ts).
+ *
+ * - Started once from `instrumentation-client.ts`, before hydration, with no
+ *   inline <script>.
+ * - Every event goes through `track()` / `trackPageView()`, which fan out to
+ *   each destination: Google Analytics 4 here, PostHog in analytics.posthog.ts.
+ * - Strict privacy baseline: canonical host only, Do Not Track / GPC honored,
+ *   campaign-only URLs, Google signals and ad personalization off.
+ *
+ * Site-specific spots: `posthog` in AnalyticsConfig and the PostHog push in init().
+ */
+import {
+  type AnalyticsEvent,
+  type AnalyticsParams,
+  GA_ID_PATTERN,
+  campaignUrl,
+  cleanReferrer,
+  isProductionHost,
+  limitParams,
+  privacySignal,
+} from "./analytics";
+import { createPostHogDestination } from "./analytics.posthog";
 
 declare global {
   interface Window {
     dataLayer?: unknown[];
     gtag?: (...args: unknown[]) => void;
+    [disable: `ga-disable-${string}`]: boolean | undefined;
   }
 }
 
-let started = false;
-let posthogReady = false;
-let googleReady = false;
-/** Page fields sent with every Google Analytics event, refreshed on each page view. */
-let googlePage: Record<string, string> = {};
+export type AnalyticsConfig = {
+  gaId?: string;
+  siteUrl?: string;
+  /** Send from localhost/preview hosts with debug_mode for GA DebugView. Ignored on the production host. */
+  debug?: boolean;
+  /** Return false for paths whose URL is a credential (manage links, tokens, private dashboards). */
+  isTrackablePath?: (pathname: string) => boolean;
+  /** This site: PostHog as a second destination; `debug` lets localhost/previews send to a test project. */
+  posthog?: { key?: string; host?: string; debug?: boolean };
+};
 
-type Event = "$pageview" | "section_viewed" | "blog_read_progress" | "blog_link_clicked" | "cta_clicked"
-  | "inquiry_submitted" | "inquiry_succeeded" | "inquiry_failed";
+export type PageFields = { page_location: string; page_referrer: string; page_title: string };
 
-function doNotTrack() {
-  const nav = window.navigator as (Navigator & { msDoNotTrack?: string }) | undefined;
-  return [nav?.doNotTrack, (window as Window & { doNotTrack?: string }).doNotTrack, nav?.msDoNotTrack]
-    .some((value) => value === "1" || value === "yes");
-}
+export type Destination = {
+  pageView(page: PageFields, params: Record<string, string | number | boolean>): void;
+  event(name: AnalyticsEvent, params: Record<string, string | number | boolean>, beacon: boolean): void;
+  /** Stop sending for the rest of this document (a secret URL was reached). */
+  disable(): void;
+};
 
-export function initializeAnalytics() {
-  if (started || typeof window === "undefined") return;
-  started = true;
-  // Production builds also run on preview hosts; only the real domain counts.
-  const production = process.env.NODE_ENV === "production" && isProductionHost(window.location.href);
-  const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-  if (posthogKey && (production || process.env.NEXT_PUBLIC_POSTHOG_DEBUG === "true")) initializePostHog(posthogKey);
-  const googleId = process.env.NEXT_PUBLIC_GA_ID;
-  const googleDebug = process.env.NEXT_PUBLIC_GA_DEBUG === "true";
-  if (googleId && /^G-[A-Z0-9]+$/.test(googleId) && (production || googleDebug) && !doNotTrack())
-    initializeGoogle(googleId, googleDebug);
-}
-
-function initializePostHog(key: string) {
-  try {
-    posthog.init(key, {
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com",
-      defaults: "2026-05-30",
-      capture_pageview: false,
-      capture_pageleave: false,
-      autocapture: false,
-      capture_dead_clicks: false,
-      capture_heatmaps: false,
-      capture_performance: false,
-      capture_exceptions: false,
-      disable_session_recording: true,
-      disable_surveys: true,
-      advanced_disable_flags: true,
-      person_profiles: "never",
-      internal_or_test_user_hostname: null,
-      persistence: "sessionStorage",
-      respect_dnt: true,
-      save_campaign_params: false,
-      save_referrer: false,
-      before_send: (event) => event ? sanitizeEvent(event) : null,
-    });
-    posthog.register_once(initialTrafficProperties(window.location.href, document.referrer));
-    posthogReady = true;
-  } catch { /* Analytics must never prevent navigation or form delivery. */ }
+/**
+ * Next.js inlines NEXT_PUBLIC_* only for literal `process.env.NAME` reads at
+ * build time. Destructuring or dynamic keys ship `undefined` to the browser.
+ */
+function configFromEnv(): AnalyticsConfig {
+  return {
+    gaId: process.env.NEXT_PUBLIC_GA_ID,
+    siteUrl: process.env.NEXT_PUBLIC_SITE_URL,
+    debug: process.env.NEXT_PUBLIC_GA_DEBUG === "true",
+    posthog: {
+      key: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+      host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+      debug: process.env.NEXT_PUBLIC_POSTHOG_DEBUG === "true",
+    },
+  };
 }
 
 /**
- * Google Analytics 4 through gtag.js. Page views are sent by PageAnalytics,
- * once per route, so GA and PostHog count the same visits. Addresses keep
- * only campaign tags; Google signals and ad personalization stay off.
+ * A fresh analytics instance. The app uses the module-level one below; tests
+ * create their own so every case starts from a clean state.
  */
-function initializeGoogle(id: string, debug: boolean) {
-  try {
-    const page = { page_location: campaignUrl(window.location.href), page_referrer: document.referrer.split(/[?#]/, 1)[0] };
-    window.dataLayer = window.dataLayer || [];
-    // gtag.js reads the arguments object itself, so this must not be an array.
-    window.gtag = function gtag() {
-      window.dataLayer!.push(arguments);
-    };
-    const settings = {
-      ...page,
-      send_page_view: false,
-      allow_google_signals: false,
-      allow_ad_personalization_signals: false,
-      cookie_expires: 60 * 60 * 24 * 395, // about 13 months
-      ...(window.location.protocol === "https:" && { cookie_flags: "SameSite=Lax;Secure" }),
-      ...(debug && { debug_mode: true }),
-    };
-    // The Google tag is a Tag Manager container whose own GA tag fires on
-    // initialization and ignores this page's config, so it would send its own
-    // page view with the raw URL. Settings queued with "set" before "js" reach it.
-    window.gtag("set", settings);
-    window.gtag("js", new Date());
-    window.gtag("config", id, settings);
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
-    document.head.appendChild(script);
-    googlePage = page;
-    googleReady = true;
-  } catch { /* Same rule: measurement is optional. */ }
-}
+export function createAnalytics() {
+  let started = false;
+  let disabled = false;
+  let page: PageFields | undefined;
+  let trackable: (pathname: string) => boolean = () => true;
+  const destinations: Destination[] = [];
 
-function sendToGoogle(event: Event, properties: Record<string, string | number>) {
-  if (event === "$pageview") {
-    const location = campaignUrl(window.location.href);
-    // After a client-side navigation, the referrer is the previous page.
-    const referrer = googlePage.page_location && googlePage.page_location !== location
-      ? googlePage.page_location.split("?", 1)[0]
-      : googlePage.page_referrer ?? "";
-    googlePage = { page_location: location, page_referrer: referrer, page_title: document.title };
-    const { page_type, locale, blog_slug } = properties;
-    window.gtag!("event", "page_view", { ...googlePage, page_type, locale, ...(blog_slug ? { blog_slug } : {}) });
-    return;
-  }
-  const transport = event === "cta_clicked" || event === "blog_link_clicked" ? { transport_type: "beacon" } : {};
-  window.gtag!("event", event, { ...googlePage, ...properties, ...transport });
-}
-
-export function captureAnalytics(event: Event, properties: Record<string, string | number> = {}) {
-  if (!posthogReady && !googleReady) return;
-  const all = { ...pageProperties(window.location.href), ...properties };
-  if (posthogReady) {
+  function init(config: AnalyticsConfig = configFromEnv()) {
+    if (started || typeof window === "undefined") return;
+    started = true;
     try {
-      // Anchor navigation can unload the document before the batch flush runs.
-      // Send clicks immediately with synchronous compression and beacon delivery.
-      const options = event === "cta_clicked" || event === "blog_link_clicked"
-        ? { send_instantly: true, transport: "sendBeacon" as const }
-        : undefined;
-      posthog.capture(event, all, options);
-    } catch { /* Measurement is best effort; visitor actions still work. */ }
+      const href = window.location.href;
+      const production = isProductionHost(href, config.siteUrl);
+      const debug = Boolean(config.debug) && !production;
+      const posthogDebug = Boolean(config.posthog?.debug) && !production;
+      trackable = config.isTrackablePath ?? trackable;
+      if (!(production || debug || posthogDebug)) return;
+      if (privacySignal(window.navigator as Navigator & { globalPrivacyControl?: boolean })) return;
+      // A secret URL never initializes: nothing can read it later.
+      if (!trackable(window.location.pathname)) return;
+      const gaId = config.gaId?.trim();
+      if (gaId && GA_ID_PATTERN.test(gaId) && (production || debug)) destinations.push(createGoogleDestination(gaId, debug));
+      const posthogKey = config.posthog?.key?.trim();
+      if (posthogKey && (production || posthogDebug))
+        safe(() => destinations.push(createPostHogDestination(posthogKey, config.posthog?.host)));
+    } catch { /* Analytics must never break the page. */ }
   }
-  if (googleReady) {
-    try { sendToGoogle(event, all); } catch { /* Best effort, as above. */ }
+
+  function enabled() {
+    return destinations.length > 0 && !disabled;
   }
+
+  /** Call once per route (PageAnalytics does). Initial load included: config sends no page view itself. */
+  function pageView(params: AnalyticsParams = {}) {
+    if (!enabled()) return;
+    if (!trackable(window.location.pathname)) {
+      disabled = true;
+      for (const destination of destinations) safe(() => destination.disable());
+      return;
+    }
+    const location = campaignUrl(window.location.href);
+    // After a client-side navigation the referrer is the previous page, not document.referrer.
+    const referrer = page && page.page_location !== location
+      ? page.page_location.split("?", 1)[0]
+      : page?.page_referrer ?? cleanReferrer(document.referrer, window.location.href);
+    page = { page_location: location, page_referrer: referrer, page_title: document.title.slice(0, 100) };
+    const extra = limitParams(params);
+    for (const destination of destinations) safe(() => destination.pageView(page!, extra));
+  }
+
+  /** Clicks that leave the page use beacon transport so the hit survives unload. */
+  function track(event: Exclude<AnalyticsEvent, "page_view">, params: AnalyticsParams = {}, options: { beacon?: boolean } = {}) {
+    if (!enabled()) return;
+    const beacon = options.beacon ?? event === "cta_click";
+    const extra = limitParams(params);
+    for (const destination of destinations) safe(() => destination.event(event, extra, beacon));
+  }
+
+  return { init, enabled, pageView, track };
 }
 
-export function analyticsEnabled() { return posthogReady || googleReady; }
+const analytics = createAnalytics();
+export const initAnalytics = analytics.init;
+export const analyticsEnabled = analytics.enabled;
+export const trackPageView = analytics.pageView;
+export const track = analytics.track;
+
+function safe(send: () => void) {
+  try { send(); } catch { /* Best effort: visitor actions still work. */ }
+}
+
+function createGoogleDestination(id: string, debug: boolean): Destination {
+  window.dataLayer = window.dataLayer || [];
+  // gtag.js reads the `arguments` object itself: this must not push an array.
+  window.gtag = function gtag() {
+    // eslint-disable-next-line prefer-rest-params
+    window.dataLayer!.push(arguments);
+  };
+  const initial = {
+    page_location: campaignUrl(window.location.href),
+    page_referrer: cleanReferrer(document.referrer, window.location.href),
+  };
+  const settings = {
+    ...initial,
+    send_page_view: false,
+    allow_google_signals: false,
+    allow_ad_personalization_signals: false,
+    cookie_expires: 60 * 60 * 24 * 395, // about 13 months; matches the privacy notice
+    ...(window.location.protocol === "https:" && { cookie_flags: "SameSite=Lax;Secure" }),
+    ...(debug && { debug_mode: true }),
+  };
+  // The Google tag loads a container whose own GA tag can fire on
+  // initialization with default settings, ignoring `config`: an extra
+  // page_view with the raw URL and ad personalization on. Settings queued
+  // with "set" BEFORE "js" reach that tag too. Keep this order.
+  window.gtag("set", settings);
+  window.gtag("js", new Date());
+  window.gtag("config", id, settings);
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+  document.head.appendChild(script);
+
+  let current: PageFields = { ...initial, page_title: "" };
+  return {
+    pageView(next, params) {
+      current = next;
+      // Automatic hits (user_engagement, session_start) read these globals.
+      window.gtag!("set", next);
+      window.gtag!("event", "page_view", { ...next, ...params });
+    },
+    event(name, params, beacon) {
+      window.gtag!("event", name, { ...current, ...params, ...(beacon && { transport_type: "beacon" }) });
+    },
+    disable() {
+      // Google's documented opt-out flag; stays set until a full page load.
+      window[`ga-disable-${id}`] = true;
+    },
+  };
+}
