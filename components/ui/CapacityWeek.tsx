@@ -1,5 +1,5 @@
 "use client";
-// Exhibit 3 chart: the team's repetitive week, one row per person and one
+// Exhibit 2 chart: the team's repetitive week, one row per person and one
 // square per hour, filled where Brilliant handles the work. Pure CSS, no
 // chart library. Screen readers get one sentence via `summary`.
 import { useEffect, useState, type CSSProperties } from "react";

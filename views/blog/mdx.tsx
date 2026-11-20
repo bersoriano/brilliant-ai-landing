@@ -3,6 +3,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { translate } from "@/lib/i18n";
 import { localePath, type Locale } from "@/lib/locale";
 import { DISCOVERY_CALL_HREF, PRIMARY_CTA } from "@/lib/site";
+import { ArchitectureAdvisor } from "@/components/ui/ArchitectureAdvisor";
 import styles from "./Blog.module.css";
 
 /**
@@ -16,6 +17,9 @@ import styles from "./Blog.module.css";
  * (before any sources or footnotes), so the ask keeps the PRIMARY_CTA label.
  * `<ReviewLink>` is an inline link to the same booking page, for a calm
  * mid-post invitation in prose; it is never a second button.
+ * `<ArchitectureAdvisor />` embeds the homepage's architecture advisor
+ * without its review invitation (the post's own `<BookReview />` stays the
+ * only booking button) and without the link back to the post it sits in.
  */
 export function postComponents(locale: Locale): MDXComponents {
   const t = (source: string) => translate(source, locale);
@@ -47,6 +51,7 @@ export function postComponents(locale: Locale): MDXComponents {
     ReviewLink: ({ children }: { children?: ReactNode }) => (
       <a href={DISCOVERY_CALL_HREF}>{children}</a>
     ),
+    ArchitectureAdvisor: () => <ArchitectureAdvisor number={1} cta={false} guide={false} />,
     table: (props: ComponentProps<"table">) => (
       <div className={styles.tableWrap}>
         <table {...props} />

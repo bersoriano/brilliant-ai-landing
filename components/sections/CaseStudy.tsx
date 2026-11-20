@@ -36,7 +36,7 @@ export function CaseStudy() {
       <figure className={styles.exhibit} aria-labelledby="case-title">
         <div className="exhibit__head">
           <span className="exhibit__label">
-            {t("Exhibit {number}", { number: 3 })}
+            {t("Exhibit {number}", { number: 4 })}
           </span>
         </div>
         <div className={styles.headline}>

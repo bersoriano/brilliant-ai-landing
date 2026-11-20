@@ -105,7 +105,20 @@ Exhibits are numbered per page, starting at 1.
   show five and "+ N more people with the same week") and one square per
   repetitive hour, filled where Brilliant handles the work. Headline numbers:
   hours per week (accent), capacity value, payback (hours per year when no
-  budget is set). The gated case study is Exhibit 3.
+  budget is set). The gated case study is Exhibit 4.
+- **Exhibit 3 (`ArchitectureAdvisor`, homepage `#ai-architecture`, after
+  Services)**: four questions (software, access, first job, cost of a
+  mistake) as native radio groups, starting on a common finance/healthcare
+  setup; the result updates as you answer and is announced politely. It
+  shows the starting point, a "Plus: Controlled AI workflow" line when a
+  mistake is costly, a four-node diagram (starts with → AI → your systems →
+  a person, sand), why, an example, what to verify first, safeguards, and
+  the control line. The rules are a pure function (`recommend()` in
+  `lib/advisor.ts`, rule matrix in `tests/advisor.test.cjs`) and all copy is
+  data in the same file. It links its post and closes on `PRIMARY_CTA` plus
+  "Start over". The post embeds it as `<ArchitectureAdvisor />` (Exhibit 1
+  there) without the review invitation, so the post keeps one booking button.
+  Laid out by container queries, so it stacks in the post column.
 - **Services cards** (paper band, after the calculator): five cards, each the
   name, what it covers, one sentence, one example or the starting price, and
   "Learn more" to its page. Each card keeps the offer's old anchor (`#crm`,

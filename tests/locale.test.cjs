@@ -305,6 +305,7 @@ test("Every literal translation call in active UI has a Spanish dictionary entry
       "components/ui/DocumentScene.tsx",
       "components/ui/CrmBoard.tsx",
       "components/ui/AgentPlays.tsx",
+      "components/ui/ArchitectureAdvisor.tsx",
       "app/privacy/PrivacyContent.tsx",
       "app/security/SecurityContent.tsx",
       "app/about/AboutContent.tsx",
@@ -688,9 +689,11 @@ test("Software Ready to Use showcases Haab Calendar as our own product, with its
   assert.match(video, /captionTracks\(locale\)/);
   assert.match(video, /captionModes\(locale\)/, "the captions follow the language switch");
   assert.doesNotMatch(video, /autoPlay/);
-  // Exhibits are numbered per page: the homepage runs 1 (hero), 2 (calculator), 3 (case study).
+  // Exhibits are numbered per page: the homepage runs 1 (hero), 2 (calculator),
+  // 3 (architecture advisor), 4 (case study, when approved).
   assert.match(fs.readFileSync("components/sections/RoiCalculator.tsx", "utf8"), /number: 2/);
-  assert.match(fs.readFileSync("components/sections/CaseStudy.tsx", "utf8"), /number: 3/);
+  assert.match(fs.readFileSync("components/sections/AiArchitecture.tsx", "utf8"), /number=\{3\}/);
+  assert.match(fs.readFileSync("components/sections/CaseStudy.tsx", "utf8"), /number: 4/);
   // Honesty: Haab is ours, so no copy may call it a client or partner.
   const copy = [
     ...fs.readdirSync("components/sections").map((f) => fs.readFileSync(`components/sections/${f}`, "utf8")),
