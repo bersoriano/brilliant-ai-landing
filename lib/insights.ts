@@ -1,14 +1,15 @@
 /**
  * Notes the site links to: the "What we've learned" block, the calculator,
- * the service pages and the finance and healthcare pages. A test keeps each
- * one published in both languages. They are operator notes on how the work
- * runs, not strategy content.
+ * the architecture advisor, the service pages and the finance and healthcare
+ * pages. A test keeps each one published in both languages. They are
+ * operator notes on how the work runs, not strategy content.
  */
 export const INSIGHTS = {
   exceptions: "why-invoice-automation-stalls",
   measuring: "measuring-capacity-reclaimed",
   approvals: "approval-points-without-bottlenecks",
   agents: "agents-in-regulated-work",
+  architecture: "add-ai-to-legacy-business-software",
 } as const;
 
 export const FEATURED_INSIGHTS: string[] = Object.values(INSIGHTS);

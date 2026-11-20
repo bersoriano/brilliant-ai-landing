@@ -1,0 +1,12 @@
+/* Navy surface band between the mist Services band and How it works, like
+   the calculator: the homepage's interactive exhibits sit on --surface. */
+.band {
+  background: var(--surface);
+}
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 52rem;
+  margin-bottom: 48px;
+}

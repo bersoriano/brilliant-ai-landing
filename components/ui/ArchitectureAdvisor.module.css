@@ -1,0 +1,348 @@
+/* The architecture advisor. Sized by its own container, not the viewport, so
+   it stacks inside a post (760px) and splits into two columns on the
+   homepage. Selectors use two classes on purpose: inside a post, the blog's
+   `.prose ul`, `.prose li + li` and `.prose h3` rules would otherwise win. */
+.advisor {
+  container-type: inline-size;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.advisor .grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+  padding-top: 28px;
+}
+@container (min-width: 900px) {
+  .advisor .grid {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 0;
+  }
+  .advisor .questions {
+    padding-right: 36px;
+    border-right: 1px solid var(--line-strong);
+  }
+  .advisor .result {
+    padding-left: 44px;
+  }
+}
+
+/* ---------- Questions ---------- */
+.advisor .questions {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 0;
+}
+.advisor .question {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.advisor .legend {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 12px;
+  padding: 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+.advisor .number {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+.advisor .options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.advisor .option {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  min-height: 44px;
+  padding: 11px 14px;
+  border: 1px solid var(--line-strong);
+  color: var(--text-2);
+  font-size: 15px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+.advisor .option:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.advisor .option:has(:checked) {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 12%, transparent);
+  color: var(--text);
+}
+/* The ring sits on the whole option; the native radio stays the focus target. */
+.advisor .option:has(:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.advisor .radio {
+  display: grid;
+  flex: none;
+  place-content: center;
+  width: 16px;
+  height: 16px;
+  margin: 2px 0 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+}
+.advisor .radio::before {
+  width: 8px;
+  height: 8px;
+  content: "";
+  background: var(--accent);
+  transform: scale(0);
+  transition: transform 0.15s ease;
+}
+.advisor .radio:checked {
+  border-color: var(--accent);
+}
+.advisor .radio:checked::before {
+  transform: scale(1);
+}
+.advisor .radio:focus-visible {
+  outline: none;
+}
+.advisor .guide {
+  align-self: flex-start;
+  text-decoration: none;
+}
+
+/* ---------- Result ---------- */
+.advisor .result {
+  container-type: inline-size;
+  min-width: 0;
+}
+.advisor .result > * + * {
+  margin-top: 24px;
+}
+.advisor .verdict > * + * {
+  margin-top: 8px;
+}
+.advisor .name {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(30px, 3.2vw, 42px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  text-wrap: balance;
+}
+.advisor .plus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: baseline;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+.advisor .plusLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--caution);
+}
+
+/* The diagram: what starts the work → AI → your systems → a person.
+   A column of nodes in narrow containers, a row from 600px. */
+.advisor .flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 26px;
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+}
+@container (min-width: 600px) {
+  .advisor .flow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+.advisor .node {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+}
+.advisor .node[data-kind="ai"] {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 12%, var(--bg));
+}
+.advisor .node[data-kind="person"] {
+  border-color: var(--line);
+  border-left: 2px solid var(--caution);
+  background: color-mix(in oklab, var(--caution) 8%, var(--bg));
+}
+/* Arrow to the next node: drawn, not typed, so screen readers skip it. */
+.advisor .node:not(:last-child)::after {
+  position: absolute;
+  bottom: -20px;
+  left: 22px;
+  width: 14px;
+  height: 14px;
+  content: "";
+  background: var(--faint);
+  clip-path: polygon(42% 0, 58% 0, 58% 60%, 85% 60%, 50% 100%, 15% 60%, 42% 60%);
+}
+@container (min-width: 600px) {
+  .advisor .node:not(:last-child)::after {
+    top: 50%;
+    right: -20px;
+    bottom: auto;
+    left: auto;
+    transform: translateY(-50%) rotate(-90deg);
+  }
+}
+.advisor .role {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.advisor .node[data-kind="ai"] .role {
+  color: var(--accent);
+}
+.advisor .node[data-kind="person"] .role {
+  color: var(--caution);
+}
+.advisor .nodeText {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+}
+.advisor .systems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.advisor .systems > li {
+  margin: 0;
+  padding: 3px 8px;
+  border: 1px solid var(--line-strong);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--text-2);
+}
+
+.advisor .facts {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 0;
+}
+.advisor .facts > div {
+  display: grid;
+  gap: 6px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.advisor .facts dd {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+.advisor .note {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.advisor .safeguards {
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+.advisor .safeguards ul {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px 24px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+@container (min-width: 520px) {
+  .advisor .safeguards ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.advisor .safeguards li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.advisor .safeguards li svg {
+  position: relative;
+  top: 2px;
+  color: var(--accent);
+}
+
+/* ---------- Close ---------- */
+.advisor .cta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 28px;
+  border-top: 2px solid var(--text);
+}
+.advisor .ctaTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-wrap: balance;
+}
+.advisor .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  align-items: center;
+  margin-top: 4px;
+}
+.advisor .actions :global(.button--outline) {
+  min-height: 56px;
+}

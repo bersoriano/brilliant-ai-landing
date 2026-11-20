@@ -5,6 +5,7 @@ import { ConsultantExperience } from "@/components/sections/ConsultantExperience
 import { Problem } from "@/components/sections/Problem";
 import { RoiCalculator } from "@/components/sections/RoiCalculator";
 import { Services } from "@/components/sections/Services";
+import { AiArchitecture } from "@/components/sections/AiArchitecture";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Trust } from "@/components/sections/Trust";
 import { Proof } from "@/components/sections/Proof";
@@ -20,7 +21,8 @@ import { FEATURED_INSIGHTS } from "@/lib/insights";
 
 /**
  * The homepage is the conversion page: the promise, one exhibit, the
- * calculator, the five offers as cards, how it works, trust, and the review.
+ * calculator, the five offers as cards, the architecture advisor, how it
+ * works, trust, and the review.
  * Each offer's detail lives on its own page (see lib/services.ts).
  */
 export default async function Home({ locale }: { locale: Locale }) {
@@ -38,6 +40,7 @@ export default async function Home({ locale }: { locale: Locale }) {
           <Problem />
           <RoiCalculator />
           <Services />
+          <AiArchitecture />
           <HowItWorks />
           <Trust />
           <Proof />
