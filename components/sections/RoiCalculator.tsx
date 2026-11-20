@@ -187,7 +187,7 @@ export function RoiCalculator() {
                 <MoneyField
                   id="engagement-cost"
                   label={t("Budget you have in mind")}
-                  hint={t("Your figure, not our price. Drives the payback line.")}
+                  hint={t("Your number, not our price. We use it for the payback line.")}
                   ariaLabel={t("Budget you have in mind, in {currency}", { currency })}
                   max={1000000}
                   step={1000}

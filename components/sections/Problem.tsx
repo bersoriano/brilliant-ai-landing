@@ -36,9 +36,9 @@ export function Problem() {
   return (
     <section id="problem" className={styles.band} aria-labelledby="problem-title">
       <div className="shell">
-        <Kicker>{t("The busywork trap")}</Kicker>
+        <Kicker>{t("Sound familiar?")}</Kicker>
         <h2 id="problem-title" className={`h2 ${styles.title}`}>
-          {t("The work that fills your best people’s week.")}
+          {t("Where your best people’s week actually goes.")}
         </h2>
         <div className={styles.columns}>
           {PAINS.map((column) => (
@@ -60,7 +60,7 @@ export function Problem() {
         </div>
         <p className={`body ${styles.closer}`}>
           {t(
-            "None of this is a people problem. The work holding your team back is exactly the work a system was built to carry.",
+            "Your people aren’t the problem. This is exactly the kind of work a system should handle.",
           )}
         </p>
       </div>

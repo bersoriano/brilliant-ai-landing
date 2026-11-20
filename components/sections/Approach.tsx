@@ -34,7 +34,7 @@ export function Approach({
         </h2>
         <p className="body">
           {t(
-            "Three rules we hold to on every workflow, from invoices and month-end to referrals and missing documents.",
+            "Three rules we follow on every workflow, whether it’s invoices, month-end, referrals, or missing documents.",
           )}
         </p>
         <a className="text-link text-link--accent" href={DISCOVERY_CALL_HREF}>

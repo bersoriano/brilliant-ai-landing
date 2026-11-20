@@ -31,7 +31,7 @@ export default function AboutContent() {
         <h1 className="h2">{t("About Brilliant AI")}</h1>
         <p className="lead">
           {t(
-            "Brilliant AI builds and runs AI workflows for finance and healthcare operations teams in the United States, Canada, and Mexico. We take one repetitive task, pilot it on your tools, and keep it running — with your team on every approval that matters.",
+            "Brilliant AI builds and runs AI workflows for finance and healthcare operations teams in the United States, Canada, and Mexico. We pick one repetitive task, pilot it on your tools, and keep it running, while your team keeps the final say on every approval that matters.",
           )}
         </p>
         <div className={styles.sections}>
@@ -47,7 +47,7 @@ export default function AboutContent() {
             <h2 id="background-title">{t("Professional background")}</h2>
             <p>
               {t(
-                "Prior professional work includes the organizations below. These are past experience references, not current Brilliant AI clients or partners; no endorsement is implied.",
+                "Our team has previously worked at the organizations below. They are not current Brilliant AI clients or partners, and listing them doesn’t imply any endorsement.",
               )}
             </p>
             <ul className={styles.organizations}>

@@ -25,7 +25,7 @@ export default function SecurityContent() {
         <h1 className="h2">{t("How we protect financial and patient data")}</h1>
         <p className="lead">
           {t(
-            "We apply the highest technical security standards and follow the specific regulations that govern patient data in the United States and Mexico. Every engagement is built around your requirements. Your security and compliance teams set the final terms before any data is connected.",
+            "We follow established security standards and the regulations that govern patient data in the United States and Mexico. Each project is set up around your requirements, and your security and compliance teams set the final terms before any data is connected.",
           )}
         </p>
         <div className={styles.sections}>
@@ -36,8 +36,8 @@ export default function SecurityContent() {
               <li>{t("Encryption in transit (TLS 1.2 or higher, preferably TLS 1.3) and at rest (AES-256 or equivalent)")}</li>
               <li>{t("Encryption on every connection between systems, parties, or external services")}</li>
               <li>{t("Role-based access control, authentication, and least-privilege principles")}</li>
-              <li>{t("Comprehensive logging and audit trails for access and actions on every workflow")}</li>
-              <li>{t("Data minimization by design — only the documents and fields a workflow needs, agreed in writing during discovery")}</li>
+              <li>{t("Logs and audit trails for every access and action in each workflow")}</li>
+              <li>{t("Data minimization: only the documents and fields a workflow needs, agreed in writing during discovery")}</li>
               <li>{t("Human approval gates designed with your team: nothing posts, pays, or files until a person you name approves it")}</li>
             </ul>
             <p>
@@ -87,7 +87,7 @@ export default function SecurityContent() {
             <h2>{t("Where processing happens")}</h2>
             <p>
               {t(
-                "Processing starts in your own tenant and systems whenever possible. When a third-party processor is needed — a model provider, an email service, a hosting platform — we name it, and it is used only with your approval and on the terms you set, including whether your data may be used for training.",
+                "Whenever possible, processing happens in your own tenant and systems. When we need a third-party processor, such as an AI model provider, an email service, or a hosting platform, we tell you which one. We only use it with your approval and on your terms, including whether your data can be used for training.",
               )}
             </p>
             <p>
@@ -100,7 +100,7 @@ export default function SecurityContent() {
             <h2>{t("Client-specific requirements and certifications")}</h2>
             <p>
               {t(
-                "We scope security to the exact needs of each engagement. If your review, security questionnaire, or compliance program requires specific certifications (such as SOC 2 or ISO 27001), additional controls, specialized architecture, or particular attestations, we design the controls, bring in the right expertise, and produce the evidence your auditor needs as part of the work. The goal is the controls and evidence your team needs, not a fixed off-the-shelf set of claims.",
+                "We scope security to what each project actually needs. If your review, security questionnaire, or compliance program calls for specific certifications (such as SOC 2 or ISO 27001), extra controls, a specialized architecture, or particular attestations, we design those controls, bring in the right specialists, and produce the evidence your auditor needs as part of the project.",
               )}
             </p>
             <p>

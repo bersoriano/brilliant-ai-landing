@@ -37,11 +37,11 @@ export function WorkflowsLanding({ notes: byLocale }: { notes: Record<"en" | "es
               </>
             }
             lead={t(
-              "We build one reliable process around a task your team repeats — invoices, referrals, month-end packs, follow-ups — so the right information reaches the right person, ready for their approval.",
+              "Pick a task your team repeats, like invoices, referrals, month-end packs, or follow-ups. We build a process that does the legwork and hands the result to the right person to approve.",
             )}
             secondary={
               <a className="text-link" href="#solutions">
-                {t("See a workflow in motion")} <Icon name="arrow" size={16} />
+                {t("Watch a workflow run")} <Icon name="arrow" size={16} />
               </a>
             }
             aside={<WorkflowSpecimen />}

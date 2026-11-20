@@ -90,7 +90,7 @@ export function HeroVisual() {
       title={t("An invoice that doesn’t match its PO, and what your team receives")}
       titleId="exhibit-1-title"
       caption={t(
-        "A common accounts-payable pattern. Outlook and Teams stand in for the tools you already use.",
+        "A typical accounts-payable case. Outlook and Teams stand in for whatever tools you use.",
       )}
     >
       <div ref={ref} className={styles.run} data-playing={playing || undefined}>

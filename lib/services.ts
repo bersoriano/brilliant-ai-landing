@@ -14,7 +14,7 @@ export const SERVICES = [
     name: "AI Workflow Automations",
     line: "Work that arrives the same way every time",
     summary:
-      "We build one reliable process around a task your team repeats, so the right information reaches the right person, ready for their approval.",
+      "Pick a task your team repeats. We build a process that does the legwork and hands the result to the right person to approve.",
     example:
       "You approve the exceptions. Nothing posts, pays, or files until a person you name says so.",
   },
@@ -24,7 +24,7 @@ export const SERVICES = [
     name: "AI Agents",
     line: "Work that changes from day to day",
     summary:
-      "Each person on your team gets agents that find, draft, and follow up inside the tools you already use.",
+      "Everyone on your team gets agents that look things up, write drafts, and follow up, right in the tools they already use.",
     example: "“Chase the three clients still missing documents”",
   },
   {
@@ -33,7 +33,7 @@ export const SERVICES = [
     name: "Custom CRM",
     line: "Clients, deals, and your pipeline",
     summary:
-      "We set up a CRM and shape it to your pipeline, your team, and the way you already work.",
+      "We set up a CRM and tailor it to your pipeline and the way your team already sells.",
     example: "Unlimited users, from {price} a month.",
   },
   {
@@ -42,7 +42,7 @@ export const SERVICES = [
     name: "Custom ERP",
     line: "Sales, stock, purchasing, and accounting",
     summary:
-      "We set up a full business system that brings your sales, inventory, purchasing, invoicing, and accounting together.",
+      "We set up one system for your sales, inventory, purchasing, invoicing, and accounting.",
     example: "Unlimited users, from {price} a month.",
   },
   {
@@ -51,7 +51,7 @@ export const SERVICES = [
     name: "Software Ready to Use",
     line: "Bookings and marketplaces, ready to launch",
     summary:
-      "Software we built and already run, set up for your business and kept running by us.",
+      "Software we built and run ourselves, set up for your business. We keep it running.",
     example:
       "Both are ours: Haab Calendar takes bookings, and Plaza Volcanes is a marketplace for independent shops.",
   },
@@ -111,8 +111,8 @@ export const AGENT_CONTROLS: [title: string, body: string][] = [
     "An agent sees only what the person who asks can see, and acts with their access.",
   ],
   [
-    "Access is scoped, logged, and revocable.",
-    "We ask for access one workflow at a time. You can see it, and you can revoke it.",
+    "Access is limited, logged, and easy to revoke.",
+    "We ask for access one workflow at a time, and you can see it or revoke it whenever you want.",
   ],
   [
     "Nothing posts, pays, or files on its own.",

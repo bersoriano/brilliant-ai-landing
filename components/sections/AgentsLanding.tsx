@@ -36,7 +36,7 @@ export function AgentsLanding({ notes: byLocale }: { notes: Record<"en" | "es", 
             </>
           }
           lead={t(
-            "Each person on your team gets agents that find, draft, and follow up inside the tools you already use. They work with the same permissions as the person asking, and every important step waits for approval.",
+            "Everyone on your team gets agents that look things up, write drafts, and follow up, right in the tools they already use. An agent can only see and do what the person asking can, and anything important waits for approval.",
           )}
           aside={<AgentSpecimen />}
         />
@@ -51,7 +51,7 @@ export function AgentsLanding({ notes: byLocale }: { notes: Record<"en" | "es", 
               </h2>
               <p className="body">
                 {t(
-                  "An agent works in your CRM, your ERP, or the inbox where requests arrive. It finds, drafts, and follows up; a person on your team decides what happens next.",
+                  "An agent works in your CRM, your ERP, or the inbox where requests come in. It looks things up, drafts, and follows up. Someone on your team decides what happens next.",
                 )}
               </p>
               <a
@@ -88,7 +88,7 @@ export function AgentsLanding({ notes: byLocale }: { notes: Record<"en" | "es", 
           <div className={styles.head}>
             <Kicker>{t("Control stays with your team")}</Kicker>
             <h2 id="control-title" className="h2-sm">
-              {t("Agents prepare. Your team decides.")}
+              {t("Agents do the prep. Your team makes the call.")}
             </h2>
             <a
               className="text-link text-link--accent"

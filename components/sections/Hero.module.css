@@ -62,7 +62,7 @@
   font-size: clamp(3rem, 5.2vw, 4.75rem);
   line-height: 0.95;
   letter-spacing: -0.03em;
-  text-wrap: normal;
+  text-wrap: balance;
 }
 
 .title em {

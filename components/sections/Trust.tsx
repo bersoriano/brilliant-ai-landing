@@ -17,13 +17,13 @@ export function Trust() {
         <div className={styles.intro}>
           <Kicker>{t("Data and approvals")}</Kicker>
           <h2 id="trust-title" className="h2-sm">
-            {t("Your data and your approvals")} <em>{t("stay yours.")}</em>
+            {t("Your data stays yours,")} <em>{t("and so does every approval.")}</em>
           </h2>
         </div>
         <div className={styles.body}>
           <p className={`body ${styles.view}`}>
             {t(
-              "Our view: automation is only useful if your team can see what it did, stop it, and decide what it shouldn’t. So we design the approval first, and the automation around it.",
+              "Automation only helps if your team can see what it did, stop it, and keep certain decisions for themselves. That’s why we design the approval step first and build the automation around it.",
             )}
           </p>
           <a

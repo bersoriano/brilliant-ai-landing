@@ -27,11 +27,11 @@ export function Hero() {
           <div className={styles.copy}>
             <Kicker>{t("AI automation for finance and healthcare")}</Kicker>
             <h1 className={styles.title}>
-              {t("The capacity of a bigger team.")} <em>{t("Without the hiring.")}</em>
+              {t("Do the work of a bigger team,")} <em>{t("without hiring one.")}</em>
             </h1>
             <p className={styles.lead}>
               {t(
-                "We build and run AI agents that prepare invoices, referrals, and follow-ups inside the tools you already use. Your team keeps every approval.",
+                "We build and run AI agents that prepare invoices, referrals, and follow-ups in the tools you already use. Your team still signs off on every one.",
               )}
             </p>
             <div className={styles.actions}>
@@ -39,16 +39,16 @@ export function Hero() {
                 {t(PRIMARY_CTA)}
               </a>
               <a href="#exhibit-1" className="text-link">
-                {t("See a workflow in motion")} <Icon name="arrow" size={16} />
+                {t("Watch a workflow run")} <Icon name="arrow" size={16} />
               </a>
             </div>
             <p className="caption">
-              {t("Free. Bring one repetitive task; leave with a concrete next step.")}
+              {t("It’s free. Bring one task your team repeats, and we’ll tell you what we’d do with it.")}
             </p>
           </div>
         </div>
       </section>
-      {/* "See a workflow in motion" lands here: the run plays on first view */}
+      {/* "Watch a workflow run" lands here: the run plays on first view */}
       <section
         id="exhibit-1"
         className={styles.exhibitSection}

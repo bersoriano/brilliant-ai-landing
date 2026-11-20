@@ -23,10 +23,10 @@ export function ServicesIndex() {
           title={
             <>
               {t("We set up and run the systems and agents your team uses every day.")}{" "}
-              <em>{t("Shaped to the way you already work.")}</em>
+              <em>{t("We adapt them to how you already work.")}</em>
             </>
           }
-          lead={t("You keep every approval. We handle the repetitive work.")}
+          lead={t("We handle the repetitive work, and you keep the final say.")}
         />
         <section
           id="services"
@@ -43,10 +43,10 @@ export function ServicesIndex() {
         <LandingClose
           title={
             <>
-              {t("One workflow.")} <em>{t("A practical way forward.")}</em>
+              {t("Pick one workflow.")} <em>{t("We’ll tell you if it’s worth automating.")}</em>
             </>
           }
-          lead={t("A focused 20-minute conversation. No technical brief needed.")}
+          lead={t("Just a 20-minute conversation. No technical prep needed.")}
         />
       </main>
       <Footer />

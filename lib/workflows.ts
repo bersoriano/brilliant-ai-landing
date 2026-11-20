@@ -100,7 +100,7 @@ export const WORKFLOWS: Workflow[] = [
       "Ask for approval before it is recorded",
     ],
     outcome:
-      "A checked invoice, supporting documents, and any differences — together in one approval request.",
+      "A checked invoice, its supporting documents, and any differences, all in one approval request.",
     approval:
       "Your finance team approves the accounting entry. Payment stays under your control.",
   },

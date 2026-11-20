@@ -81,7 +81,7 @@ Copy marked **(existing)** already has a Spanish entry; use the exact English ke
 - `.grid-12`: copy spans 7 columns, exhibit spans 5 (column 8), vertically centered. Padding 112px top, 104px bottom.
 - **Copy:**
   - `.kicker` "AI automation for finance and healthcare".
-  - `h1`: "The capacity of a bigger team." `<em>`"Without the hiring."`</em>` (the `<em>` is block-level, so it starts its own line). The headline is long, so the hero sets its own size, clamp(48→76px), below `.display`. The copy column widens to 46rem while `.lead` keeps 38rem. At 1440×900 the H1 is 3 lines (4 in Spanish) and the CTA stays above the fold.
+  - `h1`: "Do the work of a bigger team," `<em>`"without hiring one."`</em>` (the `<em>` is block-level, so it starts its own line). The headline is long, so the hero sets its own size, clamp(48→76px), below `.display`. The copy column widens to 46rem while `.lead` keeps 38rem. At 1440×900 the H1 is 3 lines (4 in Spanish) and the CTA stays above the fold.
   - `.lead`: "We build and run AI agents that prepare invoices, referrals, and follow-ups inside the tools you already use. Your team keeps every approval." Who runs it, what it prepares, where it runs, then control as its own short sentence. The eyebrow already names the two sectors, so the lead doesn't repeat them.
   - Actions, gap 32: `.button` `t(PRIMARY_CTA)` and `.text-link` "See a workflow in motion" with an arrow → `#exhibit-1`, the run directly below the hero (it plays on first view).
   - Footnote `.caption`: "Free. Bring one repetitive task; leave with a concrete next step." (The button already says 20 minutes.)
@@ -187,7 +187,7 @@ Keep **all** calculator behavior: every input (people, hours, hourly value, oppo
   - Submit is a full-width `.button` with its existing label. Keep the privacy note as a `.caption` and the status message.
 
 ### 4.14 Footer
-- Top: Bodoni italic 20px "Less repetitive work." `<em>`"More human potential."`</em>` (existing).
+- Top: Bodoni italic 20px "We take the repetitive work" `<em>`"off your team’s plate."`</em>`.
 - Link columns in `.label` headings plus 15px links.
 - Bottom rule, then a legal row with `.caption` text, the language links and "Back to top ↑" (all existing).
 

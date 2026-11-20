@@ -112,7 +112,7 @@ export async function renderSocialImage(locale: Locale, post: Post | null = null
           }}
         >
           <span style={{ fontFamily: "Bricolage Grotesque", fontWeight: 600 }}>
-            {t("The capacity of a bigger team.")}
+            {t("Do the work of a bigger team,")}
           </span>
           <span
             style={{
@@ -121,7 +121,7 @@ export async function renderSocialImage(locale: Locale, post: Post | null = null
               color: "#86C5C0",
             }}
           >
-            {t("Without the hiring.")}
+            {t("without hiring one.")}
           </span>
         </div>
         <div

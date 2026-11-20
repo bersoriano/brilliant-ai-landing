@@ -22,7 +22,7 @@ export function OnsiteConsulting() {
           </h2>
           <p className="body">
             {t(
-              "We can sit with your team for the review, in the United States, Canada, or Mexico.",
+              "We can also come to your office for the review, in the United States, Canada, or Mexico.",
             )}
           </p>
         </div>
