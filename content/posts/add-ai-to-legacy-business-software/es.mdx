@@ -1,0 +1,146 @@
+---
+title: "Tu software es viejo. Tu IA no tiene que serlo."
+description: "Seis formas prácticas de llevar IA a tus sistemas heredados, tu ERP y tus apps modernas, sin una reescritura cara y riesgosa."
+date: 2026-11-20
+draft: false
+---
+
+Tu empresa tiene software que funciona, casi siempre. El ERP mueve la operación. Un CRM guarda la información de los clientes. Otra herramienta lleva el inventario. Los equipos tapan los huecos con hojas de cálculo, correos y un par de procesos que solo dos personas entienden del todo.
+
+Entonces alguien pregunta: **“¿Cómo le metemos IA?”**
+
+Suena a pregunta de tecnología. En realidad es una pregunta sobre cómo está diseñado el negocio. ¿Quieres respuestas más rápidas? ¿Menos traspasos manuales? ¿Ayuda para preparar el trabajo? ¿O software que pueda coordinar varios pasos por su cuenta?
+
+La buena noticia: **por lo general no necesitas reemplazar tus sistemas para empezar.** El enfoque correcto depende de lo que ya tienes y de cuánta responsabilidad le quieres dar a la IA.
+
+## Primero, decide para qué trabajo contratas a la IA
+
+No toda función de IA necesita un agente autónomo. Hay tres niveles útiles:
+
+- **Ayudar a la gente a entender:** encontrar los registros correctos, resumir documentos, explicar un retraso o generar un reporte.
+- **Ayudar a la gente a preparar:** cotejar facturas, armar el borrador de un pedido, integrar el expediente de una referencia o marcar información faltante para revisión.
+- **Ayudar a coordinar el trabajo:** revisar varios sistemas, elegir el siguiente paso y ejecutar acciones permitidas, con revisiones y aprobaciones donde haga falta.
+
+Quizá escuches los términos *aplicación agéntica* y *aplicación dirigida por agentes*. No son estándares rígidos de la industria. Una distinción útil: una **aplicación agéntica** incluye algo de IA capaz de actuar en varios pasos; en una **aplicación dirigida por agentes**, un agente coordina buena parte del proceso principal. Ninguna es mejor por definición.
+
+Así puedes elegir según seis situaciones comunes en las empresas.
+
+## 1. Tienes varios sistemas heredados de distintos proveedores
+
+**Mejor punto de partida: una capa de integración con IA.**
+
+Imagina un equipo de operaciones con un ERP viejo, un CRM aparte, un software de almacén y un sistema de facturación. Intercambian datos, pero cambiar una integración puede romper otra cosa.
+
+En lugar de reconstruir todo, una capa de integración se coloca encima de esos sistemas. Usa conexiones soportadas para reunir información, conciliar diferencias y coordinar tareas específicas.
+
+![Una capa de integración con IA conecta a las personas con el ERP, el CRM, el almacén y finanzas sin reemplazar esas aplicaciones.](/blog/add-ai-to-legacy-business-software/01-ai-integration-layer-es.svg)
+
+*Cada sistema sigue a cargo de sus propios registros y transacciones.*
+
+Un gerente de ventas podría preguntar: “¿Qué pedidos van tarde por falta de inventario y a qué clientes debemos contactar primero?”. La IA junta la información y prepara la lista de seguimiento. Si los permisos lo permiten, también podría redactar los mensajes.
+
+**Ojo con esto:** la IA no repara por arte de magia integraciones poco confiables ni registros de clientes que se contradicen. Empieza con un proceso útil y bien definido, y con acceso confiable a los datos que necesita.
+
+## 2. Un solo proveedor de ERP mueve casi todo tu negocio
+
+**Mejor punto de partida: un sidecar de IA.**
+
+Tu ERP puede manejar finanzas, compras, inventario y operaciones. Es estable, está muy personalizado y cambiarlo sale caro. Agregar una función nueva con el proveedor podría tomar meses.
+
+Un *sidecar de IA* es un servicio aparte que trabaja junto al ERP. Puede leer la información aprobada, explicarla en lenguaje cotidiano y preparar recomendaciones sin reescribir el ERP.
+
+![Un ERP central sigue a cargo de las transacciones mientras un sidecar de IA aparte responde preguntas y prepara recomendaciones.](/blog/add-ai-to-legacy-business-software/02-ai-sidecar-es.svg)
+
+*El ERP sigue a cargo de las reglas del negocio. El sidecar suma inteligencia a su alrededor.*
+
+Una gerente de compras podría preguntar: “¿Qué materiales es probable que nos falten el próximo mes?”. La IA revisa los registros permitidos y propone un plan de reabastecimiento. El equipo lo revisa; el ERP sigue siendo responsable de la orden de compra (OC) aprobada.
+
+**Ojo con esto:** las licencias del proveedor, las APIs soportadas, el acceso a los datos y los límites de seguridad siguen importando. Si la plataforma expone poca información, al principio un sidecar quizá se limite a reportes o a datos exportados.
+
+## 3. Tus aplicaciones son modernas y se comunican por APIs
+
+**Mejor punto de partida: orquestación con agentes.**
+
+Si tus sistemas ya tienen interfaces confiables, la IA puede coordinar el trabajo entre ellos. En lugar de que una persona abra tres aplicaciones y pase la información a mano, un agente puede armar los pasos necesarios y llamar a herramientas aprobadas.
+
+![Un orquestador de IA coordina los servicios de CRM, inventario y pedidos, y después pasa por las reglas del negocio y la aprobación.](/blog/add-ai-to-legacy-business-software/03-agent-driven-orchestration-es.svg)
+
+*El agente planea y coordina. Los servicios que ya tienes siguen aplicando las reglas.*
+
+Por ejemplo: “Revisa la demanda de esta semana, checa las existencias y prepara los pedidos a proveedores”. El agente consulta las aplicaciones que importan, prepara borradores y los manda a aprobación.
+
+Aquí es donde un diseño dirigido por agentes puede lucirse. Pero el agente no debe inventar cifras de inventario, saltarse permisos ni enviar un pedido sin aprobar. La flexibilidad va en la planeación; los controles firmes van en los sistemas que ejecutan las acciones.
+
+## 4. Tu software viejo no tiene una API útil
+
+**Mejor punto de partida: automatización tradicional, con IA donde ayude.**
+
+Algunas aplicaciones viejas solo se pueden operar haciendo clic pantalla por pantalla. En esos casos, la **automatización robótica de procesos (RPA)** puede repetir pasos estables, mientras la IA interpreta correos entrantes, lee documentos o ayuda a sortear situaciones que cambian.
+
+Imagina una factura que llega en PDF. La IA extrae el proveedor, los totales y la referencia a la OC. Una automatización controlada captura el borrador en una aplicación de escritorio y marca todo lo que no cuadre.
+
+Funciona, pero suele ser menos robusto que una integración soportada. Las pantallas cambian. Aparecen ventanas que interrumpen. Las sesiones caducan. Usa la automatización de pantallas cuando no haya mejores opciones, y mantén un buen manejo de errores y supervisión humana.
+
+## 5. El problema real es encontrar la información
+
+**Mejor punto de partida: búsqueda con IA y acceso confiable a los datos.**
+
+A veces lo que duele no es mover el trabajo. Es responder preguntas enterradas en políticas, contratos, hilos de correo y sistemas desconectados.
+
+Aquí, un asistente de IA conectado a información aprobada de la empresa puede ayudar más que un agente autónomo. Una técnica llamada **RAG** (retrieval-augmented generation) permite que el asistente encuentre el material relevante antes de responder, idealmente con ligas a las fuentes originales.
+
+Un equipo de operaciones en salud podría preguntar: “¿Qué documentos faltan en estos expedientes de referencia?”. Un equipo de finanzas podría preguntar: “¿Dónde está la política vigente para aprobar facturas?”.
+
+Una distinción importante: los documentos son muy buenos para explicar, pero los saldos exactos, las existencias y otras cifras en vivo deben salir de los datos oficiales del negocio, no de una búsqueda semántica que adivina.
+
+## 6. Los errores salen caros o son difíciles de revertir
+
+**Mejor punto de partida: un proceso controlado con IA adentro.**
+
+En finanzas, salud y otras operaciones sensibles, la prioridad muchas veces no es la máxima autonomía. Es una preparación confiable y una responsabilidad clara.
+
+La IA puede leer una solicitud, revisar si falta información, cotejar documentos y preparar una recomendación. Un proceso tradicional revisa las reglas obligatorias. Una persona con nombre aprueba la decisión que tiene consecuencias.
+
+Toma una factura que no coincide con su OC. La IA puede juntar la evidencia y explicar la diferencia. Pero la aprobación, el registro o el pago se quedan bajo los controles que definió la organización.
+
+Esta no es una forma menor de IA. Muchas veces es la más útil.
+
+## Guía rápida: cómo elegir
+
+![Mapa de decisión con seis patrones para implementar IA, según la restricción más importante de la organización.](/blog/add-ai-to-legacy-business-software/04-architecture-chooser-es.svg)
+
+| Si tu principal restricción es… | Empieza por explorar… |
+| --- | --- |
+| Varios sistemas desconectados de distintos proveedores | Una **capa de integración con IA** |
+| Un ERP o una plataforma empresarial dominante | Un **sidecar de IA** |
+| Servicios modernos con APIs confiables | **Orquestación con agentes** |
+| Un sistema que solo tiene interfaz de usuario | **RPA y, donde haga falta, IA de computer use** |
+| Documentos y conocimiento dispersos por todos lados | **Búsqueda con IA y RAG** |
+| Acciones sensibles o irreversibles | **Procesos controlados con apoyo de IA** |
+
+Estos son **patrones, no productos excluyentes**. Una empresa puede usar un sidecar para llegar a su ERP, RAG para entender sus políticas y un proceso de aprobación antes de hacer cambios. La combinación correcta importa más que la etiqueta.
+
+## Empieza con algo chico que demuestre que funciona
+
+Antes de elegir una plataforma o encargar una integración cara, hazle cuatro preguntas a tu equipo:
+
+1. **¿Qué tarea toma demasiado tiempo?** Elige un trabajo que se repita y tenga un responsable claro.
+2. **¿Dónde vive la información?** Identifica las herramientas, los documentos y los límites de permisos.
+3. **¿Qué puede preparar la IA con seguridad y qué debe aprobar una persona?** Diseña primero las excepciones.
+4. **¿Cómo vas a saber que ayudó?** Mide el tiempo invertido, el tiempo de revisión, los errores y cuántos casos todavía necesitan intervención.
+
+Una progresión sensata es **empezar con respuestas**, luego **borradores para revisión**, luego **acciones limitadas**, y solo después considerar procesos más amplios dirigidos por agentes. Cada etapa debe ganarse la confianza que necesita la siguiente.
+
+La meta no es volver “agéntica” a toda tu empresa. Es quitar el trabajo que no debería costar tanto esfuerzo humano, y que las personas sigan siendo responsables de las decisiones importantes.
+
+## Siguiente paso: un proceso, no un ERP nuevo
+
+Tráenos una tarea que tu equipo repita en el software que ya usa: una factura con excepción, una referencia incompleta, un seguimiento de inventario o un reporte que tarda medio día en armarse.
+
+En **Brilliant AI** ayudamos a los equipos a ver si la respuesta es un proceso, un agente, una mejor integración o una combinación. Tú te quedas con las decisiones de aprobación. Nosotros nos encargamos de facilitar el trabajo alrededor de ellas.
+
+La revisión es gratis y no necesitas un documento técnico: solo una tarea que quieras mejorar.
+
+<BookReview />
+
+*Lecturas relacionadas: [IA en el ERP: de sistema de registro a sistema de acción](/blog/erp-systems-of-action) y [Harness engineering: por qué el sistema alrededor del modelo importa más que el modelo](/blog/harness-engineering).*

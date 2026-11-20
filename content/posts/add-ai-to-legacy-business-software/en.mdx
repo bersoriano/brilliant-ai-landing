@@ -1,0 +1,146 @@
+---
+title: "Your software is old. Your AI doesn’t have to be."
+description: "Six practical ways to introduce AI into legacy software, ERP systems, and modern apps without a risky, expensive rewrite."
+date: 2026-11-20
+draft: false
+---
+
+Your business has software that works, mostly. The ERP runs the operation. A CRM holds customer information. Another tool manages inventory. Teams bridge the gaps with spreadsheets, emails, and a few processes only two people fully understand.
+
+Then someone asks: **“How do we add AI?”**
+
+It sounds like a technology question. It is actually a business design question. Do you want faster answers? Fewer manual handoffs? Help preparing work? Or software that can coordinate multiple steps on its own?
+
+The good news: **you usually do not need to replace your existing systems to begin.** The right approach depends on what you already have and how much responsibility you want AI to carry.
+
+## First, decide what job you are hiring AI to do
+
+Not every AI feature needs an autonomous agent. There are three useful levels:
+
+- **Help people understand:** Find the right records, summarize documents, explain a delay, or produce a report.
+- **Help people prepare:** Match invoices, draft an order, assemble a referral packet, or flag missing information for review.
+- **Help coordinate work:** Look across several systems, choose the next step, and carry out permitted actions, with checks and approvals where needed.
+
+You may hear the terms *agentic application* and *agent-driven application*. They are not rigid industry standards. A useful distinction is that an **agentic application** includes some AI that can take multi-step action; in an **agent-driven application**, an agent coordinates much of the main workflow. Neither is automatically better.
+
+Here’s how to choose based on six common business situations.
+
+## 1. You have several legacy systems from different vendors
+
+**Best starting point: an AI integration layer.**
+
+Picture an operations team with an older ERP, a separate CRM, warehouse software, and a billing system. They exchange data, but changing one integration risks breaking something else.
+
+Rather than rebuild everything, an integration layer sits above these systems. It uses supported connections to gather information, reconcile differences, and coordinate selected tasks.
+
+![An AI integration layer connects employees to ERP, CRM, warehouse, and finance systems without replacing the applications.](/blog/add-ai-to-legacy-business-software/01-ai-integration-layer.svg)
+
+*The existing systems remain responsible for their own records and transactions.*
+
+A sales manager could ask, “Which orders are late because of missing inventory, and which customers should we contact first?” AI brings the information together and prepares the follow-up list. If permissions allow, it could draft the messages too.
+
+**What to watch:** AI does not magically repair unreliable integrations or conflicting customer records. Start with one useful, well-defined workflow and reliable access to the necessary data.
+
+## 2. One major ERP provider runs almost your entire business
+
+**Best starting point: an AI sidecar.**
+
+Your ERP may run finance, purchasing, inventory, and operations. It is stable, highly customized, and expensive to change. Adding a new feature through the vendor could take months.
+
+An *AI sidecar* is a separate service that works alongside the ERP. It can read approved information, explain it in everyday language, and prepare recommendations without rewriting the ERP itself.
+
+![A core ERP remains responsible for transactions while a separate AI sidecar provides answers and prepares recommendations.](/blog/add-ai-to-legacy-business-software/02-ai-sidecar.svg)
+
+*The ERP stays in charge of business rules. The sidecar adds intelligence around it.*
+
+A purchasing manager could ask, “What materials are likely to run short next month?” The AI reviews the permitted records and proposes a replenishment plan. The team reviews it; the ERP remains responsible for an approved purchase order.
+
+**What to watch:** Vendor licensing, supported APIs, data access, and security boundaries still matter. If the platform exposes little information, a sidecar may initially be limited to reporting or exported data.
+
+## 3. Your applications are modern and communicate through APIs
+
+**Best starting point: agent-driven orchestration.**
+
+If your systems already have dependable interfaces, AI can coordinate work across them. Instead of a person opening three applications and moving information manually, an agent can assemble the necessary steps and call approved tools.
+
+![An AI orchestrator coordinates CRM, inventory, and order services, followed by business checks and approval.](/blog/add-ai-to-legacy-business-software/03-agent-driven-orchestration.svg)
+
+*The agent plans and coordinates. Existing services still enforce the rules.*
+
+For example: “Review this week’s demand, check stock, and prepare supplier orders.” The agent consults the relevant applications, prepares drafts, and routes them for approval.
+
+This is where agent-driven design can shine. But the agent should not invent inventory numbers, bypass permissions, or send an unapproved order. The flexibility belongs in planning; the hard controls belong in the systems that execute actions.
+
+## 4. Your old software has no useful API
+
+**Best starting point: traditional automation, with AI where it helps.**
+
+Some older applications can only be operated by clicking through screens. In those cases, **robotic process automation (RPA)** can repeat stable steps, while AI can interpret incoming emails, read documents, or help navigate variable situations.
+
+Imagine an invoice arriving as a PDF. AI extracts the supplier, totals, and purchase-order reference. A controlled automation enters the draft into a desktop application and flags anything that does not match.
+
+This works, but it is usually less robust than a supported integration. Screen layouts change. Dialogs interrupt. Sessions expire. Use UI automation when better options are unavailable, and keep meaningful error handling and human oversight.
+
+## 5. The real problem is finding information
+
+**Best starting point: AI search with trusted data access.**
+
+Sometimes the pain is not moving work. It is answering questions buried in policy documents, contracts, email threads, and disconnected systems.
+
+Here, an AI assistant connected to approved company information may help more than an autonomous agent. A technique called **retrieval-augmented generation (RAG)** lets the assistant find relevant material before answering, ideally with links to the original sources.
+
+A healthcare operations team might ask, “What documents are missing from these referral packets?” A finance team might ask, “Where is the current invoice-approval policy?”
+
+One important distinction: documents are great for explanations, but exact account balances, stock counts, and other live figures should come from authoritative business data, not a semantic search guess.
+
+## 6. Mistakes are expensive or hard to reverse
+
+**Best starting point: a controlled workflow with AI inside it.**
+
+In finance, healthcare, and other sensitive operations, the priority is often not maximum autonomy. It is reliable preparation and clear accountability.
+
+AI can read a request, check for missing information, match documents, and prepare a recommendation. A traditional workflow checks the required rules. A named person approves the consequential decision.
+
+Take an invoice that differs from its purchase order. AI can assemble the evidence and explain the mismatch. But approval, posting, or payment stays under the organization’s defined controls.
+
+This is not a lesser form of AI. It is often the more useful one.
+
+## The quick guide: how to choose
+
+![Decision map of six AI implementation patterns based on the organization’s most important constraint.](/blog/add-ai-to-legacy-business-software/04-architecture-chooser.svg)
+
+| If your main constraint is… | Start by exploring… |
+| --- | --- |
+| Several disconnected vendor systems | An **AI integration layer** |
+| One dominant ERP or enterprise platform | An **AI sidecar** |
+| Modern services with reliable APIs | **Agent-driven orchestration** |
+| A system with only a user interface | **RPA and selective computer-use AI** |
+| Documents and knowledge scattered everywhere | **AI search and RAG** |
+| Sensitive or irreversible business actions | **Controlled workflows with AI assistance** |
+
+These are **patterns, not mutually exclusive products**. A business might use a sidecar to reach its ERP, RAG to understand its policies, and an approval workflow before making changes. The right combination is more important than the label.
+
+## Start small enough to prove it works
+
+Before choosing a platform or commissioning an expensive integration, ask your team four questions:
+
+1. **What task takes too much time?** Pick one repeated job with a clear owner.
+2. **Where does the information live?** Identify the tools, documents, and permission boundaries.
+3. **What can AI safely prepare, and what must a person approve?** Design the exceptions first.
+4. **How will you know it helped?** Track time spent, review time, errors, and the number of cases still requiring intervention.
+
+A sensible progression is to **start with answers**, then **drafts for review**, then **limited actions**, and only later consider broader agent-driven workflows. Each stage should earn the trust needed for the next one.
+
+The goal is not to make your entire business “agentic.” It is to remove the work that should not require so much human effort, while keeping people responsible for important decisions.
+
+## Next step: one workflow, not a new ERP
+
+Bring us one task your team repeats across the software you already use: an invoice exception, a missing referral, an inventory follow-up, or a report that takes half a day to prepare.
+
+At **Brilliant AI**, we help teams identify whether the answer is a workflow, an agent, a better integration, or a combination. You keep the approval decisions. We focus on making the work around them easier.
+
+The review is free, and no technical brief is needed: just one task you would like to improve.
+
+<BookReview />
+
+*Related reading: [AI in ERP: from system of record to system of action](/blog/erp-systems-of-action) and [Harness engineering: why the system around the model matters more than the model](/blog/harness-engineering).*
