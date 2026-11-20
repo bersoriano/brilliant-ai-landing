@@ -22,7 +22,7 @@ export function Footer() {
           <div className={styles.brand}>
             <BrandLogo className={styles.logo} alt="" />
             <p className={styles.tagline}>
-              {t("Less repetitive work.")} <em>{t("More human potential.")}</em>
+              {t("We take the repetitive work")} <em>{t("off your team’s plate.")}</em>
             </p>
             <p className={styles.identity}>
               Brilliant AI · {SITE_DOMAIN} ·{" "}

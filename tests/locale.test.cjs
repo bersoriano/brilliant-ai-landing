@@ -434,7 +434,7 @@ test("Homepage employer names are confined to consultants' previous work; /about
   for (const name of EMPLOYERS)
     assert.ok(!home.includes(name), `employer on homepage: ${name}`);
   const experience = fs.readFileSync("components/sections/ConsultantExperience.tsx", "utf8");
-  assert.match(experience, /Our consultants have worked previously with/);
+  assert.match(experience, /Our consultants previously worked at/);
   const about = fs.readFileSync("app/about/AboutContent.tsx", "utf8");
   assert.match(about, /not current Brilliant AI clients or partners/);
 });

@@ -26,10 +26,10 @@ export function Services() {
           <Kicker>{t("Services")}</Kicker>
           <h2 id="services-title" className="h2">
             {t("We set up and run the systems and agents your team uses every day.")}{" "}
-            <em>{t("Shaped to the way you already work.")}</em>
+            <em>{t("We adapt them to how you already work.")}</em>
           </h2>
           <p className="lead">
-            {t("You keep every approval. We handle the repetitive work.")}
+            {t("We handle the repetitive work, and you keep the final say.")}
           </p>
         </header>
         <ServiceCards anchors />

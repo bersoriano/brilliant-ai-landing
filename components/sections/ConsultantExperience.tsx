@@ -10,10 +10,10 @@ export function ConsultantExperience() {
     <section className={styles.section} aria-labelledby="consultant-experience-title">
       <div className="shell">
         <h2 id="consultant-experience-title" className={styles.intro}>
-          {t("Our consultants have worked previously with")}
+          {t("Our consultants previously worked at")}
         </h2>
         <p className={styles.brands}>
-          <span>Bank of America</span>, <span>Banorte Bank</span>,{" "}
+          <span>Bank of America</span>, <span>Banorte</span>,{" "}
           <span>Bank of New York Mellon</span>, <span>BCG</span>,{" "}
           <span>Accenture</span> {t("and more.")}
         </p>

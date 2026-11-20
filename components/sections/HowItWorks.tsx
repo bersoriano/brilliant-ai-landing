@@ -9,23 +9,23 @@ const steps = [
   {
     title: "Review",
     duration: "20 min",
-    body: "Walk us through one repetitive task, or record yourself doing it once. We map the inputs, tools, handoffs, and approval points, then tell you whether it calls for a workflow, an agent, or both. If it isn’t worth automating yet, we’ll say so.",
+    body: "Walk us through one repetitive task, or record yourself doing it once. We look at where the work comes from, which tools it touches, who hands it to whom, and who signs off. Then we tell you whether it needs a workflow, an agent, or both. If it isn’t worth automating yet, we’ll tell you.",
   },
   {
     title: "Pilot",
     duration: "3–6 weeks",
-    body: "One workflow or one agent, fixed scope. Before we build, we agree in writing what it checks, what counts as an exception, and who approves. We connect approved tools, test on representative, non-sensitive data, and put the output next to your current process. You accept it, or we revise.",
+    body: "One workflow or one agent, with a fixed scope. Before we build anything, we put in writing what it checks, what counts as an exception, and who approves. We connect only the tools you’ve approved, test with realistic data that isn’t sensitive, and run it side by side with your current process. If it’s not right, we fix it until you sign off.",
   },
   {
     title: "We run it",
     duration: "Ongoing",
-    body: "We monitor it, handle exceptions, and keep it current. You can see what it handled and what it sent to your team. When the first one is working, we add the next workflow or the next person’s agent. Your team gets documentation. Running it stays with us unless you want a handover.",
+    body: "We watch it, handle the exceptions, and keep it up to date. You can see everything it handled and everything it sent to your team. Once the first one is working, we move on to the next workflow or the next person’s agent. Your team gets the documentation, and we keep running it unless you’d rather take it over.",
   },
 ];
 const reviewCovers = [
-  "The task, its inputs, and where it arrives",
+  "The task, what it needs, and where it comes in",
   "The tools and handoffs involved",
-  "Where approvals and exceptions sit",
+  "Who approves, and what counts as an exception",
   "A useful first step, and what a pilot would need",
 ];
 /** Pricing shape, not a rate card. */
@@ -33,7 +33,7 @@ const costs = [
   ["Workflow review", "Free. 20 minutes."],
   [
     "Pilot",
-    "One workflow or one agent, fixed scope, typically 3–6 weeks. Priced after discovery.",
+    "One workflow or one agent with a fixed scope, usually 3 to 6 weeks. Quoted after discovery.",
   ],
   ["Run", "A monthly retainer covering the workflows and agents we run for you."],
 ];
@@ -47,12 +47,12 @@ export function HowItWorks() {
         <div className={styles.intro}>
           <Kicker>{t("How it works")}</Kicker>
           <h2 className="h2-sm">
-            {t("Agents for your people.")}{" "}
-            <em>{t("Workflows for your processes.")}</em>
+            {t("Workflows for the routine work,")}{" "}
+            <em>{t("agents for the work that changes.")}</em>
           </h2>
           <p className="body">
             {t(
-              "You show us the job. We build it on your stack. We run it. You approve the exceptions.",
+              "You show us the job. We build it into your tools and run it, and you approve anything out of the ordinary.",
             )}
           </p>
         </div>
@@ -96,7 +96,7 @@ export function HowItWorks() {
           <h3 className="h3">{t("What it costs to start")}</h3>
           <p className="caption">
             {t(
-              "Every proposal separates implementation, third-party and API costs, and ongoing care.",
+              "Every proposal lists the build, third-party and API costs, and ongoing support separately.",
             )}
           </p>
         </div>

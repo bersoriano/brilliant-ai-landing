@@ -54,17 +54,17 @@ export function ErpLanding({ notes: byLocale }: { notes: Record<"en" | "es", Not
           kicker={t("Custom ERP")}
           title={
             <>
-              {t("A complete system for your operations.")}{" "}
-              <em>{t("Not a collection of spreadsheets and tools.")}</em>
+              {t("One system for your whole operation,")}{" "}
+              <em>{t("instead of a pile of spreadsheets and apps.")}</em>
             </>
           }
           lead={
             <>
               {t(
-                "We set up a full business system that brings your sales, inventory, purchasing, invoicing, and accounting together.",
+                "We set up one system for your sales, inventory, purchasing, invoicing, and accounting.",
               )}{" "}
               {t(
-                "It’s shaped to the way your team already works, so invoices, stock, orders, and reports live in one place, ready for the agents we build for you.",
+                "We set it up around how your team already works, so invoices, stock, orders, and reports are all in one place, where the agents we build for you can work with them.",
               )}
             </>
           }

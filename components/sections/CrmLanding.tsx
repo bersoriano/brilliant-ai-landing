@@ -77,7 +77,7 @@ export function CrmLanding() {
               </h1>
               <p className="lead">
                 {t(
-                  "We set up a full-featured CRM on a proven open-source foundation and shape it to how you sell: your stages, your fields, your permissions.",
+                  "We set up a full CRM on a proven open-source foundation and tailor it to how you sell, with your own stages, fields, and permissions.",
                 )}
               </p>
               <p className={styles.from}>
@@ -151,7 +151,7 @@ export function CrmLanding() {
           <div className={styles.assistantCopy}>
             <Kicker>{t("Talk to your CRM")}</Kicker>
             <h2 id="assistant-title" className="h2-sm">
-              {t("Ask your CRM anything.")} <em>{t("In plain language.")}</em>
+              {t("Ask your CRM anything,")} <em>{t("the way you’d ask a coworker.")}</em>
             </h2>
             <p className="body">
               {t(
@@ -228,7 +228,7 @@ export function CrmLanding() {
           aria-labelledby="custom-title"
         >
           <div className={styles.customCopy}>
-            <Kicker>{t("Customization made easy")}</Kicker>
+            <Kicker>{t("Customization")}</Kicker>
             <h2 id="custom-title" className="h2-sm">
               {t("Change it yourself.")} <em>{t("Or ask us.")}</em>
             </h2>
@@ -240,7 +240,7 @@ export function CrmLanding() {
           </div>
           <article className={styles.cell}>
             <p className="label">{t("Need something bigger?")}</p>
-            <h3 className="h3">{t("Describe it in a sentence. We build it.")}</h3>
+            <h3 className="h3">{t("Describe it in a sentence and we’ll build it.")}</h3>
             <p className="body">
               {t("Tell us what you need. We build it, test it, and explain what changed.")}
             </p>
@@ -261,8 +261,8 @@ export function CrmLanding() {
             <div className={styles.head}>
               <Kicker>{t("Why this CRM")}</Kicker>
               <h2 id="why-title" className="h2-sm">
-                {t("A working CRM on day one.")}{" "}
-                <em>{t("Shaped to you after that.")}</em>
+                {t("A working CRM on day one,")}{" "}
+                <em>{t("tailored to you from there.")}</em>
               </h2>
             </div>
             <ul className={styles.reasons}>

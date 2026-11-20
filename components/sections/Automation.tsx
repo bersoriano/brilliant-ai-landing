@@ -97,7 +97,7 @@ export function AgentSpecimen() {
         </ul>
         <Control
           text={t(
-            "If it starts with a request in plain language, an agent handles it. You stay in control of what goes out.",
+            "If the job starts with someone asking for something, an agent can take it. You still decide what goes out.",
           )}
         />
       </div>
@@ -127,11 +127,11 @@ export function WorkflowOrAgent({
       <div className={landing.head}>
         <Kicker>{t("Workflow or agent?")}</Kicker>
         <h2 id="fit-title" className="h2-sm">
-          {t("Agents for your people.")}{" "}
-          <em>{t("Workflows for your processes.")}</em>
+          {t("Workflows for the routine work,")}{" "}
+          <em>{t("agents for the work that changes.")}</em>
         </h2>
         <p className="body">
-          {t("The review tells you whether a task calls for a workflow, an agent, or both.")}
+          {t("In the review, we’ll tell you whether a task needs a workflow, an agent, or both.")}
         </p>
       </div>
       <ul className={landing.reasons}>

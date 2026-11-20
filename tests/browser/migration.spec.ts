@@ -62,12 +62,12 @@ test('inquiry mocked success and failure preserve fallback; no real delivery', a
   await page.locator('#contact-country').selectOption('US');
   await page.locator('#contact-industry').selectOption('finance');
   await page.locator('#contact-workflow').fill('Mock delivery only');
-  await page.getByRole('button', { name: 'Send workflow inquiry', exact: true }).click();
+  await page.getByRole('button', { name: 'Send request', exact: true }).click();
   await expect(page.locator('#contact [role=alert]')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Send it as an email instead' })).toHaveAttribute('href', /^mailto:.*Mock%20delivery%20only/);
   status = 200;
-  await page.getByRole('button', { name: 'Send workflow inquiry', exact: true }).click();
-  await expect(page.locator('#contact [role=status]')).toContainText('Got it');
+  await page.getByRole('button', { name: 'Send request', exact: true }).click();
+  await expect(page.locator('#contact [role=status]')).toContainText('we got your request');
 });
 
 test('blog switches complete MDX locale with query preserved; mobile layout and links intact', async ({ page }) => {

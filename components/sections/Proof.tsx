@@ -47,13 +47,13 @@ export function Proof({ variant = "teaser" }: { variant?: "teaser" | "full" }) {
             <div className={styles.story}>
               <p className="body">
                 {t(
-                  "Raw materials, finished-product stock, and sales were managed in separate software.",
+                  "Raw materials, finished goods, and sales each lived in a separate program.",
                 )}{" "}
                 {t(
-                  "We built a custom CRM from scratch, developing each part as a module and connecting them through shared APIs.",
+                  "We built them a custom CRM from scratch, one module per area, all connected through shared APIs.",
                 )}{" "}
                 {t(
-                  "Rhino works from one integrated system and can automate workflows across inventory and sales.",
+                  "Rhino runs on one system and can automate work across inventory and sales.",
                 )}
               </p>
               <a
@@ -105,7 +105,7 @@ export function Proof({ variant = "teaser" }: { variant?: "teaser" | "full" }) {
             </ul>
             <p className={styles.note}>
               {t(
-                "Raw materials, finished-product stock, and sales were managed in separate software.",
+                "Raw materials, finished goods, and sales each lived in a separate program.",
               )}
             </p>
           </div>
@@ -128,14 +128,14 @@ export function Proof({ variant = "teaser" }: { variant?: "teaser" | "full" }) {
             </div>
             <p className={styles.note}>
               {t(
-                "We built a custom CRM from scratch, developing each part as a module and connecting them through shared APIs.",
+                "We built them a custom CRM from scratch, one module per area, all connected through shared APIs.",
               )}
             </p>
             <div className={styles.now}>
               <h3 className="label">{t("Now")}</h3>
               <p>
                 {t(
-                  "Rhino works from one integrated system and can automate workflows across inventory and sales.",
+                  "Rhino runs on one system and can automate work across inventory and sales.",
                 )}
               </p>
             </div>

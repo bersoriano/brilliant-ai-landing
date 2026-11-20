@@ -126,6 +126,6 @@ export const SOFTWARE_NOTES: [title: string, body: string][] = [
   ],
   [
     "We keep it running",
-    "After launch, updates, fixes, and new features stay with us. Your team decides what changes and when.",
+    "After launch, we handle updates, fixes, and new features. Your team decides what changes and when.",
   ],
 ];

@@ -93,9 +93,9 @@ export function FinalCta() {
       <div className={styles.copy}>
         <Kicker>{t("Start with a workflow review")}</Kicker>
         <h2 className="h2">
-          {t("One workflow.")}
+          {t("Pick one workflow.")}
           <br />
-          <em>{t("A practical way forward.")}</em>
+          <em>{t("We’ll tell you if it’s worth automating.")}</em>
         </h2>
         <p className="lead">
           {t("Bring the task that keeps coming back.")}{" "}
@@ -118,7 +118,7 @@ export function FinalCta() {
           </li>
         </ul>
         <p className="caption">
-          {t("A focused 20-minute conversation. No technical brief needed.")}
+          {t("Just a 20-minute conversation. No technical prep needed.")}
         </p>
         <div>
           <a className="button" href={DISCOVERY_CALL_HREF}>
@@ -302,18 +302,18 @@ export function FinalCta() {
           type="submit"
           disabled={status === "sending"}
         >
-          {t(status === "sending" ? "Sending…" : "Send workflow inquiry")}
+          {t(status === "sending" ? "Sending…" : "Send request")}
         </button>
         <p className="caption">
           {t(
-            "Share enough to have the conversation. Do not send patient records or account numbers.",
+            "A short description is enough. Please don’t send patient records or account numbers.",
           )}
         </p>
         {status === "sent" && (
           <p role="status" className={`${styles.status} ${styles.sent}`}>
             <Icon name="check" size={16} />
             {t(
-              "Got it — your request is with us. We’ll be in touch shortly.",
+              "Thanks, we got your request. We’ll be in touch soon.",
             )}
           </p>
         )}

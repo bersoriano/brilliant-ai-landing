@@ -17,10 +17,10 @@ const content = {
     kicker: "Finance workflow automation",
     title: "Give finance more time to review, less to chase.",
     intro:
-      "Supplier invoices, close checklists, and missing documents arrive from different places. We build one managed workflow around a task your team repeats, so the right information reaches the right reviewer.",
+      "Supplier invoices, close checklists, and missing documents come in from all over. We take one task your team repeats and build a workflow around it, so each item lands with the person who reviews it.",
     examples: "Finance tasks we can help organize",
     control:
-      "Your team keeps control of accounting entries, payments, and exceptions. We agree on source systems, checks, and approval rules before connecting data; a pilot runs alongside your current process first.",
+      "Your team stays in charge of accounting entries, payments, and exceptions. Before we connect any data, we agree on the source systems, the checks, and the approval rules. The pilot runs alongside your current process first.",
     note: "exceptions",
     noteLabel: "Why invoice automation stalls",
     related: "Explore healthcare automation",
@@ -28,9 +28,9 @@ const content = {
   },
   healthcare: {
     kicker: "Healthcare workflow automation",
-    title: "Keep administrative work moving around patient care.",
+    title: "Keep the paperwork moving so staff can focus on patients.",
     intro:
-      "Referrals, intake details, and billing follow-ups often cross inboxes and systems. We build one managed administrative workflow around your existing tools, with staff reviewing exceptions and clinical decisions.",
+      "Referrals, intake details, and billing follow-ups bounce between inboxes and systems. We build one administrative workflow on top of the tools you already have, and your staff still reviews exceptions and makes every clinical decision.",
     examples: "Healthcare tasks we can help organize",
     control:
       "Your team decides what may be shared, who can access it, and which approvals remain with staff. We agree on any BAA and data-handling requirements before sensitive information is connected. Clinical records are not changed automatically.",

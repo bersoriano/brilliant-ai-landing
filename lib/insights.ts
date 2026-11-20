@@ -34,5 +34,5 @@ export const APPROACH_RULES: {
 }[] = [
   { title: "Design for the exception first.", note: "exceptions" },
   { title: "One decision per approval, where your team already works.", note: "approvals" },
-  { title: "Agents prepare. Your team decides.", note: "agents" },
+  { title: "Agents do the prep. Your team makes the call.", note: "agents" },
 ];

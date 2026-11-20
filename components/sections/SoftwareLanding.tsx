@@ -41,8 +41,8 @@ export function SoftwareLanding() {
           kicker={t("Software Ready to Use")}
           title={
             <>
-              {t("Software that already runs.")}{" "}
-              <em>{t("Ready to launch for your business.")}</em>
+              {t("Software that’s already up and running,")}{" "}
+              <em>{t("ready to launch for your business.")}</em>
             </>
           }
           lead={t(
@@ -145,7 +145,7 @@ export function SoftwareLanding() {
           <div className={styles.customCopy}>
             <Kicker>{t("How we launch it")}</Kicker>
             <h2 id="process-title" className="h2-sm">
-              {t("Ready to use.")} <em>{t("Kept running by us.")}</em>
+              {t("Ready to use,")} <em>{t("and we keep it running.")}</em>
             </h2>
             {SOFTWARE_NOTES.map(([title, body]) => (
               <div key={title} className={styles.noteBlock}>

@@ -21,11 +21,11 @@ export function Faq({
   return (
     <section id="faq" className="section section-rule shell grid-12">
       <div className={styles.intro}>
-        <Kicker>{t("A little more clarity")}</Kicker>
+        <Kicker>{t("Common questions")}</Kicker>
         <h2 className="h2-sm">
-          {t("Good questions.")}
+          {t("What people ask us")}
           <br />
-          <em>{t("Straight answers.")}</em>
+          <em>{t("before the first call.")}</em>
         </h2>
         <a href={DISCOVERY_CALL_HREF} className="text-link">
           {t(PRIMARY_CTA)} <Icon name="arrow" size={16} />

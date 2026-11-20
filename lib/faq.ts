@@ -1,35 +1,35 @@
 export const FAQS: [question: string, answer: string][] = [
   [
     "Do you work with teams in the United States, Canada, and Mexico?",
-    "Yes. We work with finance and healthcare teams in the United States, Canada, and Mexico. Onsite reviews can be arranged in all three, including Mexico City. This site is available in English and Mexican Spanish.",
+    "Yes. We work with finance and healthcare teams in all three countries, and we can come to your office for the review, including in Mexico City. The site is in English and Mexican Spanish.",
   ],
   [
     "What happens in the first workflow review?",
-    "Bring one task your team repeats. In a 20-minute conversation, we’ll talk through the inputs, tools, handoffs, and approval points. We’ll identify a useful starting point and discuss what needs deeper discovery before a pilot can be scoped. There’s no need to prepare a technical brief.",
+    "Bring one task your team repeats. In 20 minutes we’ll go over where it comes from, which tools it touches, who hands it off, and who approves it. You’ll leave knowing where we’d start and what we’d still need to look at before scoping a pilot. You don’t need to prepare anything technical.",
   ],
   [
     "Do we need an AI specialist on our team?",
-    "You need someone who knows the process and can review the results. We handle the discovery, the build, and the running of it. Your team defines what good looks like, approves access, and signs off on the output—not the infrastructure behind it.",
+    "No. You need someone who knows the process and can check the results. We handle discovery, the build, and running it. Your team decides what a good result looks like, approves access, and signs off on the output. The infrastructure is our job.",
   ],
   [
     "How long does an implementation take?",
-    "Timing depends on the workflow, integrations, data quality, and review requirements. We agree on a delivery plan after discovery, with a scoped pilot and clear acceptance criteria before expanding. Your team reviews the system before it goes live.",
+    "It depends on the workflow, the integrations, how clean your data is, and how much review you need. After discovery we agree on a delivery plan: a pilot with a set scope and clear criteria for accepting it, before anything expands. Your team reviews the system before it goes live.",
   ],
   [
     "Can you work with our existing tools?",
-    "That is the starting point. We review your existing systems and available APIs, then choose the simplest reliable integration. Access, licensing, and vendor limitations are confirmed during discovery so the scope reflects what your tools actually support.",
+    "Yes, that’s where we start. We look at the systems you have and what they let us connect to, then pick the simplest integration that will hold up. During discovery we confirm access, licensing, and any vendor limits, so the scope matches what your tools can actually do.",
   ],
   [
-    "How do you approach sensitive financial or patient data?",
-    "On your terms. We start by defining what data the workflow needs, who can access it, where it is processed, and how long it is kept. Which model providers may process it, and the BAA, DPA, or NDA we work under, are agreed with your team before sensitive data is connected. An automation does not by itself establish compliance.",
+    "How do you handle sensitive financial or patient data?",
+    "On your terms. First we agree on what data the workflow needs, who can see it, where it’s processed, and how long it’s kept. Before any sensitive data is connected, your team approves which AI providers can process it and which agreement we work under (BAA, DPA, or NDA). Keep in mind that automating a process doesn’t make it compliant on its own.",
   ],
   [
-    "What if an AI output is wrong?",
-    "We assume it sometimes will be. Every output is checked against rules your team agrees in writing, and anything that fails a check stops and goes to the person you named, with the reason. Nothing is recorded, paid, or submitted without their approval, and you can pause it at any time.",
+    "What if the AI gets something wrong?",
+    "We assume it sometimes will. Every result is checked against rules your team agrees to in writing. Anything that fails a check stops and goes to the person you named, with the reason. Nothing is recorded, paid, or submitted without their approval, and you can pause it at any time.",
   ],
   [
     "What does it cost, and what happens after launch?",
-    "The workflow review is free and takes 20 minutes. A pilot covers one workflow with a fixed scope, typically 3–6 weeks, and is priced after discovery. After launch, a monthly operating retainer keeps the workflow monitored and current. Every proposal separates implementation, third-party and API costs, and ongoing care.",
+    "The workflow review is free and takes 20 minutes. A pilot covers one workflow with a fixed scope, usually takes 3 to 6 weeks, and is quoted after discovery. After launch, a monthly retainer covers monitoring and updates. Every proposal lists the build, third-party and API costs, and ongoing support separately.",
   ],
 ];
 

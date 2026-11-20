@@ -107,7 +107,7 @@ export const CRM_ESSENTIALS: CrmFeature[] = [
   [
     "document",
     "Notes",
-    "Record the details of every call and meeting, so nothing gets lost.",
+    "Keep the details of every call and meeting in one place.",
   ],
   [
     "flow",
@@ -196,7 +196,7 @@ export const CRM_SECURITY: [title: string, body: string][] = [
   ],
   [
     "Sensitive data, settled first",
-    "Patient or client financial data? Where it lives and which agreements apply are settled before anything is imported.",
+    "Handling patient or client financial data? We agree on where it’s stored and which agreements apply before importing anything.",
   ],
 ];
 
