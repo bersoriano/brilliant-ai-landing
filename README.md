@@ -171,28 +171,16 @@ compliance certifications are invented.
 
 English is served at `/` (United States and Canada). Mexican Spanish is served at `/es`
 (Mexico). Service and supporting pages follow the same split. The sitemap and `hreflang`
-tags advertise `en-US`, `en-CA`, `es-MX`, and `x-default`. Search-engine crawlers receive
-the URL they request and are not redirected by language or location.
+tags advertise `en-US`, `en-CA`, `es-MX`, and `x-default`. The URL determines the
+language for every request.
 
-The header includes an EN / ES switch. Manual selection updates the page immediately,
-preserves calculator/form state, changes the URL to `/` or `/es`, and saves
-`brilliant-language=en|es` in a first-party cookie for one year (Path=/, SameSite=Lax,
-Secure on HTTPS). Footer English / Español links use `?lang=en|es`, which sets the cookie
-and redirects to the clean language URL. Clearing the cookie restores automatic detection
-for human visitors. With cookies blocked, selection lasts for the current page session.
-
-For human visitors on an English URL, the first matching signal chooses Spanish:
-1. Valid saved language cookie.
-2. A trusted country code for Spanish-speaking Latin America and the Caribbean,
-   including Mexico. The United States, Canada, and Brazil stay on English.
-3. The highest-priority supported English/Spanish browser language from Accept-Language
-   (quality values honored; q=0 ignored).
-4. English fallback.
-
-Cloudflare country detection uses trusted `request.cf.country`, never visitor
-headers. No external IP lookup or location prompt is used. Both languages are
-exported as static pages; Functions handle preference redirects with no-store
-cache headers. See [routing details](docs/i18n/MIDDLEWARE.md) and
+The header and footer link to each version of the current page. The switch
+highlights a different preferred language using a saved choice or the browser’s
+first supported language. Selecting a language with JavaScript saves the choice
+in `brilliant-language=en|es` for one year and preserves query and fragment when
+navigating. The calculator and form keep their state on in-place switches.
+Existing `?lang=en|es` URLs still set the cookie and redirect to the clean path.
+See [routing details](docs/i18n/MIDDLEWARE.md) and
 [deployment/cost runbook](docs/deployment/CLOUDFLARE.md).
 
 Mexican Spanish covers page copy, workflow examples, accessibility labels, privacy,

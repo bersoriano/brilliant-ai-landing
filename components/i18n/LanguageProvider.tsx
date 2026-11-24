@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, type MouseEvent } from "react";
 import { usePathname } from "next/navigation";
 import {
   LANGUAGE_COOKIE,
@@ -8,6 +8,7 @@ import {
   localePath,
   ogLocale,
   pageFromPath,
+  preferredLocale,
   socialImagePath,
   stripLocalePrefix,
   type Locale,
@@ -16,6 +17,7 @@ import { pageDescription, pageKeywords, pageTitle, translate } from "@/lib/i18n"
 import switchStyles from "./LanguageSwitch.module.css";
 const LanguageContext = createContext<{
   locale: Locale;
+  preferred?: Locale;
   setLocale: (locale: Locale) => void;
 } | null>(null);
 
@@ -77,7 +79,13 @@ export function LanguageProvider({
   children: React.ReactNode;
 }) {
   const [locale, updateLocale] = useState(initialLocale);
+  const [preferred, setPreferred] = useState<Locale>();
   const pathname = usePathname();
+  useEffect(() => {
+    const saved = document.cookie.split(";").map((cookie) => cookie.trim())
+      .find((cookie) => cookie.startsWith(`${LANGUAGE_COOKIE}=`))?.slice(LANGUAGE_COOKIE.length + 1);
+    setPreferred(preferredLocale(navigator.languages, saved));
+  }, []);
   useEffect(() => {
     updateLocale(initialLocale);
   }, [initialLocale]);
@@ -86,29 +94,29 @@ export function LanguageProvider({
     if (!isServerLocalizedPage(pathname)) syncDocumentSeo(locale, pathname);
   }, [locale, pathname]);
   function setLocale(next: Locale) {
-    // Post bodies are rendered on the server per language: load the other one.
-    // `?lang=` makes the Pages Function store the choice and redirect.
-    if (isServerLocalizedPage(pathname)) {
-      const url = new URL(window.location.href);
-      url.pathname = stripLocalePrefix(pathname);
-      url.searchParams.set("lang", next);
-      window.location.assign(url);
-      return;
-    }
-    updateLocale(next);
+    setPreferred(next);
     try {
       document.cookie = `${LANGUAGE_COOKIE}=${next}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
     } catch {
       /* Keep the choice in memory when cookies are unavailable. */
     }
-    const nextPath =
-      localePath(next, stripLocalePrefix(pathname)) + window.location.search + window.location.hash;
+    if (next === locale) return;
+    const nextPath = localePath(next, pathname) + window.location.search;
+    const { hash } = window.location;
+    // Blog bodies are localized on the server and need a full navigation.
+    if (isServerLocalizedPage(pathname)) {
+      const section = hash.startsWith("#section-") ? document.getElementById(hash.slice(1)) : null;
+      const alternateSection = section?.dataset.alternateSection;
+      window.location.assign(nextPath + (section ? (alternateSection ? `#${alternateSection}` : "") : hash));
+      return;
+    }
+    updateLocale(next);
     // All non-article content has build-time bilingual data. Native history
     // integrates with usePathname and keeps React instances/form state alive.
-    window.history.replaceState(null, "", nextPath);
+    window.history.replaceState(null, "", nextPath + hash);
   }
   return (
-    <LanguageContext.Provider value={{ locale, setLocale }}>
+    <LanguageContext.Provider value={{ locale, preferred, setLocale }}>
       {children}
     </LanguageContext.Provider>
   );
@@ -122,32 +130,34 @@ export function useLanguage() {
       translate(source, context.locale, variables),
   };
 }
-export function LanguageSwitch({ className = "" }: { className?: string }) {
-  const { locale, setLocale, t } = useLanguage();
+export function LanguageSwitch({ className = "", fullLabels = false }: { className?: string; fullLabels?: boolean }) {
+  const { locale, preferred, setLocale, t } = useLanguage();
+  const pathname = usePathname();
+  const select = (event: MouseEvent<HTMLAnchorElement>, next: Locale) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    setLocale(next);
+  };
   return (
     <div
       className={`${switchStyles.switch} ${className}`.trim()}
       role="group"
       aria-label={t("Language")}
     >
-      <button
-        type="button"
-        lang="en"
-        aria-label="EN: English"
-        aria-pressed={locale === "en"}
-        onClick={() => setLocale("en")}
-      >
-        EN
-      </button>
-      <button
-        type="button"
-        lang="es-MX"
-        aria-label="ES: Español"
-        aria-pressed={locale === "es"}
-        onClick={() => setLocale("es")}
-      >
-        ES
-      </button>
+      {([
+        { next: "en", label: "English", suggestion: "Prefer English?" },
+        { next: "es", label: "Español", suggestion: "¿Prefieres español?" },
+      ] as const).map(({ next, label, suggestion }) => {
+        const suggested = preferred === next && locale !== next;
+        return (
+          <a key={next} href={localePath(next, pathname)} lang={htmlLang(next)} hrefLang={htmlLang(next)}
+            aria-label={fullLabels ? undefined : `${next.toUpperCase()}: ${label}`} aria-current={locale === next ? "page" : undefined}
+            data-suggested={suggested || undefined} title={suggested ? suggestion : undefined}
+            onClick={(event) => select(event, next)}>
+            {fullLabels ? label : next.toUpperCase()}
+          </a>
+        );
+      })}
     </div>
   );
 }

@@ -46,8 +46,8 @@ try {
   assert.equal((await db.prepare('SELECT count(*) AS n FROM inquiry_limits').first()).n, 1);
   assert.equal((await submit('192.0.2.4', { company: 'bot' })).status, 400);
   const geo = await mf.dispatchFetch('https://example.com/services?utm=x', { redirect: 'manual', cf: { country: 'MX' } });
-  assert.equal(geo.status, 307);
-  assert.equal(geo.headers.get('location'), 'https://example.com/es/services?utm=x');
+  assert.equal(geo.status, 200);
+  assert.equal(geo.headers.get('location'), null);
   const spoof = await mf.dispatchFetch('https://example.com/services', { redirect: 'manual', headers: { 'cf-ipcountry': 'MX', 'x-vercel-ip-country': 'MX' }, cf: { country: 'US' } });
   assert.equal(spoof.status, 200);
   await mf.setOptions(convertV4MiniflareOptions({ ...options, bindings: { INQUIRY_RATE_SALT: 'test-only', INQUIRY_WEBHOOK_URL: 'https://mock-webhook.example.test/inquiry' } }));

@@ -111,14 +111,6 @@ test("Homepage schema lists every service, sharing @ids with the service pages",
   assert.equal(seo.buildJsonLd("en", "/about")["@graph"].find((node) => node["@type"] === "Organization").hasOfferCatalog, undefined);
 });
 
-test("Every crawler named in robots.txt skips the language redirect", () => {
-  const { isSearchBot } = require("../lib/locale.ts");
-  for (const bot of seo.AI_SEARCH_BOTS)
-    assert.ok(isSearchBot(`Mozilla/5.0 (compatible; ${bot}/1.0; +https://example.com/bot)`), bot);
-  assert.ok(isSearchBot("Mozilla/5.0 (compatible; Google-InspectionTool/1.0;)"), "URL Inspection and Rich Results Test");
-  assert.ok(!isSearchBot("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/140 Safari/537.36"));
-});
-
 test("robots.txt welcomes AI search crawlers and keeps the API closed to every group", () => {
   const robots = seo.buildRobots();
   const agents = robots.rules.map((rule) => rule.userAgent);

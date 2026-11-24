@@ -13,7 +13,7 @@ const pages = new Set<string>(manifest.paths);
 const slugs = manifest.slugs as Record<string, string[]>;
 
 export default {
-  async fetch(request: Request & { cf?: { country?: string } }, env: Env) {
+  async fetch(request: Request, env: Env) {
     const url = new URL(request.url);
     const host = hostPolicy(url, env.NEXT_PUBLIC_SITE_URL || "https://brilliant.dev");
     if (host instanceof Response) return host;
@@ -25,13 +25,13 @@ export default {
   },
 };
 
-async function route(request: Request & { cf?: { country?: string } }, env: Env, url: URL) {
+async function route(request: Request, env: Env, url: URL) {
   const path = url.pathname;
   if (path === "/api/inquiry" || path === "/api/inquiry/") return handleInquiry(request, env);
   // API paths never enter language routing.
   if (/^\/api(?:\/|$)/.test(path)) return new Response("Not found", { status: 404 });
   const clean = path.replace(/\/$/, "") || "/";
-  const language = routeLanguage(request, request.cf?.country);
+  const language = routeLanguage(request);
   if (language) return language;
   if (/^\/(?:es\/)?og$/.test(clean)) {
     if (!["GET", "HEAD"].includes(request.method)) return new Response("Method not allowed", { status: 405 });
@@ -50,7 +50,7 @@ async function route(request: Request & { cf?: { country?: string } }, env: Env,
   const response = await env.ASSETS.fetch(request);
   if (pages.has(clean)) {
     const result = new Response(response.body, response);
-    for (const [name, value] of Object.entries(pageCacheHeaders(clean))) result.headers.set(name, value);
+    for (const [name, value] of Object.entries(pageCacheHeaders())) result.headers.set(name, value);
     return result;
   }
   return response;

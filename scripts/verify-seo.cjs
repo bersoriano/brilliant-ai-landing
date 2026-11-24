@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const { parse } = require("yaml");
 
 const origin = (process.argv[2] || "http://127.0.0.1:3100").replace(/\/$/, "");
+const isPreview = new URL(origin).hostname.endsWith(".brilliant-ai.pages.dev");
 const decode = (value) => value.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 const attributes = (tag) => Object.fromEntries(
   [...tag.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, key, value]) => [key, decode(value)]),
@@ -44,6 +45,7 @@ async function verify() {
   for (const path of paths) {
     const response = await request(path);
     assert.equal(response.status, 200, `${path}: crawler HTTP status`);
+    if (!isPreview) assert.doesNotMatch(response.headers.get("x-robots-tag") || "", /\bnoindex\b/i, `${path}: indexable response`);
     const html = await response.text();
     documents.set(path, html);
     const head = documentHead(html);
@@ -61,6 +63,19 @@ async function verify() {
     assert.ok(!meta.some((tag) => /robots|googlebot/.test(tag.name) && /noindex/.test(tag.content)), `${path}: indexable`);
     assert.match(html, path.startsWith("/es") ? /<html[^>]+lang="es-MX"/ : /<html[^>]+lang="en"/, `${path}: document language`);
     const cleanPath = path.replace(/^\/es(?=\/|$)/, "") || "/";
+    if (cleanPath === "/" || cleanPath === "/blog" || cleanPath === `/blog/${published[0]?.slug}`) {
+      const visitor = await request(path, { headers: { ...botHeaders, "user-agent": "Mozilla/5.0", "accept-language": path.startsWith("/es") ? "en-US" : "es-MX", cookie: `brilliant-language=${path.startsWith("/es") ? "en" : "es"}` } });
+      assert.equal(visitor.status, 200, `${path}: URL language holds for visitors with a different preference`);
+      await visitor.body?.cancel();
+    }
+    if (cleanPath === "/") {
+      assert.match(html, path === "/" ? /<h1\b[^>]*>AI automation for finance and healthcare<\/h1>/i : /<h1\b[^>]*>Automatización con IA para finanzas y salud<\/h1>/i, `${path}: descriptive homepage heading`);
+      assert.ok(tags(html, "img").some(({ fetchPriority, fetchpriority, src }) => (fetchpriority ?? fetchPriority) === "high" && src === "/hero-threshold.jpg"), `${path}: hero still prioritized in HTML`);
+      assert.equal(tags(html, "video").length, 0, `${path}: no startup hero video`);
+    }
+    const languageLinks = tags(html, "a");
+    assert.ok(languageLinks.some((tag) => (tag.hreflang ?? tag.hrefLang) === "en" && tag.href === cleanPath), `${path}: English language link in initial HTML`);
+    assert.ok(languageLinks.some((tag) => (tag.hreflang ?? tag.hrefLang) === "es-MX" && tag.href === (cleanPath === "/" ? "/es" : `/es${cleanPath}`)), `${path}: Spanish language link in initial HTML`);
     const alternates = tags(head, "link").filter((tag) => tag.rel === "alternate" && tag.hrefLang);
     for (const [language, expected] of [["en", urlFor(cleanPath)], ["es-MX", urlFor(`/es${cleanPath === "/" ? "" : cleanPath}`)], ["x-default", urlFor(cleanPath)]])
       assert.equal(alternates.find((tag) => tag.hrefLang === language)?.href, expected, `${path}: ${language} alternate`);
@@ -80,10 +95,30 @@ async function verify() {
       assert.ok(graph.some((node) => node["@type"] === "BreadcrumbList"), `${path}: breadcrumbs`);
       const image = meta.find((tag) => tag.property === "og:image")?.content;
       assert.equal(image, `${canonicalOrigin}/social/${path.startsWith("/es") ? "es" : "en"}/${slug}.png`, `${path}: article-specific image`);
+      const prose = html.match(/<div\b[^>]*data-analytics-article[^>]*>[\s\S]*?<\/article>/)?.[0] || "";
+      const sections = tags(prose, "h[23]").filter((tag) => tag.id?.startsWith("section-"));
+      assert.ok(sections.length > 0 && sections.every(({ id }) => tags(prose, "a").some(({ href }) => href === `#${id}`)), `${path}: shareable article sections`);
+      if (slug === "from-open-banking-to-agentic-banking") {
+        assert.ok(tags(prose, "table").length > 0, `${path}: Amex comparison is a table`);
+        assert.ok(tags(prose, "a").some(({ href }) => href === "https://www.americanexpress.com/us/legal-disclosures/website-rules-and-regulations.html"), `${path}: Amex terms citation`);
+      }
     }
     if (cleanPath === "/blog") {
       const list = graph.find((node) => node["@type"] === "ItemList");
       assert.equal(list?.numberOfItems, published.length, `${path}: all published posts listed`);
+    }
+  }
+
+  for (const path of paths) {
+    const payload = await request(path === "/" ? "/index.txt" : `${path}.txt`, { method: "HEAD" });
+    assert.equal(payload.status, 200, `${path}: Next.js payload remains available`);
+    assert.match(payload.headers.get("x-robots-tag") || "", /\bnoindex\b/i, `${path}: Next.js payload must be noindex`);
+  }
+  for (const path of ["/robots.txt", "/llms.txt"]) {
+    const response = await request(path);
+    assert.equal(response.status, 200, path);
+    if (!isPreview) {
+      assert.doesNotMatch(response.headers.get("x-robots-tag") || "", /\bnoindex\b/i, `${path}: public crawler resource`);
     }
   }
 
@@ -96,6 +131,14 @@ async function verify() {
   // Check navigation and content links, including fragment targets.
   let checkedLinks = 0;
   for (const [path, html] of documents) {
+    const sectionsWithAlternates = tags(html, "h[2-6]").filter((tag) => tag["data-alternate-section"]);
+    if (sectionsWithAlternates.length) {
+      const alternatePath = path.startsWith("/es/") ? path.slice(3) : `/es${path}`;
+      const alternateHeadings = tags(documents.get(alternatePath), "h[2-6]");
+      for (const section of sectionsWithAlternates) {
+        assert.ok(alternateHeadings.some((tag) => tag.id === section["data-alternate-section"] && tag["data-alternate-section"] === section.id), `${path}: section ${section.id} has a reciprocal translated target`);
+      }
+    }
     for (const { href } of tags(html, "a")) {
       if (!href || !href.startsWith("/") && !href.startsWith("#")) continue;
       const url = new URL(href, `${origin}${path}`);
@@ -142,7 +185,7 @@ async function verify() {
       assert.equal((await request(`${prefix}/og?post=${slug}`)).status, 404, `${slug}: image does not expose unpublished content`);
     }
   }
-  console.log(`SEO checks passed: ${paths.length} pages, ${published.length} posts in both languages, ${checkedLinks} internal links, 14 article images, ${shareImages.size} share images, sitemap, robots, nonexistent /post routes, and 404s.`);
+  console.log(`SEO checks passed: ${paths.length} pages and noindex payloads, ${published.length} posts in both languages, ${checkedLinks} internal links, ${published.length * 2} article image URLs, ${shareImages.size} share images, sitemap, robots, nonexistent /post routes, and 404s.`);
 }
 
 verify().catch((error) => { console.error(error); process.exitCode = 1; });

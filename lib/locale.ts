@@ -2,11 +2,6 @@ export type Locale = "en" | "es";
 export const LANGUAGE_COOKIE = "brilliant-language";
 export const ES_PREFIX = "/es";
 
-/** Spanish-speaking markets we default to Mexican Spanish. Canada and Brazil are not included. */
-export const SPANISH_DEFAULT_COUNTRIES = new Set(
-  "AR BO CL CO CR CU DO EC GT HN MX NI PA PE PR PY SV UY VE".split(" "),
-);
-
 export function isLocale(value: string | undefined | null): value is Locale {
   return value === "en" || value === "es";
 }
@@ -70,46 +65,10 @@ export function ogLocale(locale: Locale) {
   return locale === "es" ? "es_MX" : "en_US";
 }
 
-/**
- * Crawlers and link previewers get the URL they ask for, never a language
- * redirect. Includes Google's testing tools and the AI search crawlers named
- * in robots.txt (AI_SEARCH_BOTS in lib/seo.ts; a test keeps them covered).
- */
-const SEARCH_BOT =
-  /googlebot|google-inspectiontool|googleother|storebot-google|adsbot-google|bingbot|yandex|baiduspider|duckduckbot|duckassistbot|applebot|twitterbot|facebookexternalhit|meta-externalagent|linkedinbot|slackbot|semrush|ahrefsbot|bytespider|amazonbot|gptbot|oai-searchbot|chatgpt-user|claudebot|claude-searchbot|claude-user|perplexitybot|perplexity-user|ccbot/i;
-
-export function isSearchBot(userAgent: string | null | undefined) {
-  return SEARCH_BOT.test(userAgent || "");
-}
-
-export function resolveLocale({
-  saved,
-  acceptLanguage,
-  country,
-}: {
-  saved?: string;
-  acceptLanguage?: string | null;
-  country?: string | null;
-}): Locale {
+/** An explicit choice takes precedence over the first supported browser language. */
+export function preferredLocale(languages: readonly string[], saved?: string): Locale | undefined {
   if (isLocale(saved)) return saved;
-  if (country && SPANISH_DEFAULT_COUNTRIES.has(country.trim().toUpperCase()))
-    return "es";
-  const languages = (acceptLanguage || "")
-    .split(",")
-    .map((entry) => {
-      const [tag, ...params] = entry.trim().toLowerCase().split(";");
-      const q = params.find((p) => p.trim().startsWith("q="));
-      return {
-        language: tag.split("-")[0],
-        quality: q ? Number(q.trim().slice(2)) : 1,
-      };
-    })
-    .filter((l) => l.quality > 0 && l.quality <= 1)
-    .sort((a, b) => b.quality - a.quality);
-  return languages.find((l) => l.language === "en" || l.language === "es")
-    ?.language === "es"
-    ? "es"
-    : "en";
+  return languages.map((language) => language.toLowerCase().split("-")[0]).find(isLocale);
 }
 
 /** Which page a (locale-prefixed or plain) path is, for titles and metadata. */

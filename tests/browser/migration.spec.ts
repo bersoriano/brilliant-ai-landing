@@ -11,7 +11,7 @@ test('language switch preserves calculator/form state, query/hash, translated no
   const errors: string[] = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.goto('/?utm_source=regression#roi-calculator');
-  await page.getByRole('button', { name: 'ES: Español', exact: true }).first().waitFor();
+  await page.getByRole('link', { name: 'ES: Español', exact: true }).first().waitFor();
   await page.locator('#contact-name').fill('Local test');
   await page.locator('#contact-email').fill('test@example.com');
   await page.locator('#contact-organization').fill('Local organization');
@@ -22,7 +22,7 @@ test('language switch preserves calculator/form state, query/hash, translated no
   await people.fill('13');
   const keywordsBefore = await page.locator('meta[name=keywords]').getAttribute('content');
   const notesBefore = await page.locator('#approach li h3').allTextContents();
-  await page.getByRole('button', { name: 'ES: Español', exact: true }).first().click();
+  await page.getByRole('link', { name: 'ES: Español', exact: true }).first().click();
   await expect(page).toHaveURL(/\/es\?utm_source=regression#roi-calculator$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'es-MX');
   await expect(people).toHaveValue('13');
@@ -40,7 +40,7 @@ test('language switch preserves calculator/form state, query/hash, translated no
   expect(graph).toContain('es-MX');
   const cookies = await page.context().cookies();
   expect(cookies.find(c => c.name === 'brilliant-language')?.value).toBe('es');
-  await page.getByRole('button', { name: 'EN: English', exact: true }).first().click();
+  await page.getByRole('link', { name: 'EN: English', exact: true }).first().click();
   await expect(people).toHaveValue('13');
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Save estimate', exact: true }).click();
@@ -73,7 +73,7 @@ test('inquiry mocked success and failure preserve fallback; no real delivery', a
 test('blog switches complete MDX locale with query preserved; mobile layout and links intact', async ({ page }) => {
   await page.goto('/blog/why-invoice-automation-stalls?utm_source=regression#main');
   const english = await page.locator('h1').textContent();
-  await page.getByRole('button', { name: 'ES: Español', exact: true }).first().click();
+  await page.getByRole('link', { name: 'ES: Español', exact: true }).first().click();
   await expect(page).toHaveURL(/\/es\/blog\/why-invoice-automation-stalls\?utm_source=regression#main$/);
   await expect(page.locator('h1')).not.toHaveText(english!);
   await expect(page.locator('html')).toHaveAttribute('lang', 'es-MX');
@@ -84,6 +84,58 @@ test('blog switches complete MDX locale with query preserved; mobile layout and 
   await expect(page.locator('video source').first()).toHaveAttribute('src', /haab-calendar-demo.mp4/);
   expect(await page.locator('a[href*="wa.me"]').count()).toBeGreaterThan(0);
   expect(await page.locator('a[href*="calendar"]').count()).toBeGreaterThan(0);
+});
+
+test('language links suggest a preference and remain usable without JavaScript', async ({ page, context, browser, baseURL }) => {
+  await context.addCookies([{ name: 'brilliant-language', value: 'es', url: baseURL! }]);
+  await page.goto('/blog');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.getByRole('link', { name: 'ES: Español', exact: true })).toHaveAttribute('data-suggested', 'true');
+  await page.goto('/blog/add-ai-to-legacy-business-software?utm_source=regression#section-the-quick-guide-how-to-choose');
+  await page.getByRole('link', { name: 'ES: Español', exact: true }).click();
+  await expect(page).toHaveURL(/\/es\/blog\/add-ai-to-legacy-business-software\?utm_source=regression#section-guia-rapida-como-elegir$/);
+  await expect(page.locator(':target')).toContainText('Guía rápida');
+
+  const noScripts = await browser.newContext({ baseURL, javaScriptEnabled: false });
+  try {
+    const article = await noScripts.newPage();
+    const path = '/blog/from-open-banking-to-agentic-banking';
+    await article.goto(path);
+    const languageLink = article.getByRole('link', { name: 'ES: Español', exact: true });
+    await expect(languageLink).toHaveAttribute('href', `/es${path}`);
+    await languageLink.click();
+    await expect(article.locator('html')).toHaveAttribute('lang', 'es-MX');
+    await expect(article.getByRole('table')).toBeVisible();
+    await article.getByRole('link', { name: 'Enlace a esta sección', exact: true }).first().click();
+    await expect(article).toHaveURL(/#section-los-bancos-estan-marcando-una-linea$/);
+  } finally {
+    await noScripts.close();
+  }
+});
+
+test('hero selects a responsive still and gates video on desktop interaction', async ({ page, baseURL }, info) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const videoRequests: string[] = [];
+  page.on('request', (request) => {
+    if (request.url().includes('horizon_video')) videoRequests.push(request.url());
+  });
+  await page.goto('/');
+  const poster = page.locator('#top picture img');
+  await expect(poster).toHaveJSProperty('complete', true);
+  const image = info.project.name === 'mobile' ? '/hero-threshold-mobile.webp' : '/hero-threshold.webp';
+  await expect(poster).toHaveJSProperty('currentSrc', new URL(image, baseURL!).href);
+  expect(await poster.evaluate((img: HTMLImageElement) => img.naturalWidth)).toBeGreaterThan(0);
+  expect(videoRequests).toEqual([]);
+  await expect(page.locator('#top video')).toHaveCount(0);
+  await page.locator('#top h1').click();
+  if (info.project.name === 'mobile') {
+    await expect(page.locator('#top video')).toHaveCount(0);
+    expect(videoRequests).toEqual([]);
+  } else {
+    await expect(page.locator('#top video')).toHaveAttribute('src', '/horizon_video.mp4');
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect(page.locator('#top video')).toHaveCount(0);
+  }
 });
 
 test('FAQ keyboard disclosure and mobile menu Escape retain accessibility', async ({ page }, info) => {

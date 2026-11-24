@@ -14,14 +14,12 @@ require.extensions[".ts"] = (module, filename) =>
     filename,
   );
 const {
-  resolveLocale,
-  SPANISH_DEFAULT_COUNTRIES,
+  preferredLocale,
   isSpanishPath,
   localePath,
   localeFromPathname,
   stripLocalePrefix,
   languageAlternatePaths,
-  isSearchBot,
   pageFromPath,
   effectiveLocalePath,
 } = require("../lib/locale.ts");
@@ -44,54 +42,12 @@ const {
 } = require("../lib/caseStudy.ts");
 const dictionary = require("../lib/es-MX.json");
 
-test("English fallback; Spanish browser preference with quality handling", () => {
-  for (const options of [
-    {},
-    { country: "US" },
-    { country: "DE" },
-    { acceptLanguage: "fr-FR" },
-    { acceptLanguage: "es;q=0,en;q=1" },
-    { acceptLanguage: "es;q=bogus,en" },
-    { acceptLanguage: "en-US,es;q=0.8" },
-  ])
-    assert.equal(resolveLocale(options), "en");
-  for (const acceptLanguage of [
-    "es-MX,es;q=0.9,en;q=0.8",
-    "en;q=0.5,es;q=1",
-    "fr-FR,es;q=0.8",
-    "ES-mx",
-  ])
-    assert.equal(resolveLocale({ acceptLanguage }), "es");
-});
-test("Spanish geo default is Mexico and Spanish-speaking Latin America, not Canada, Brazil, or the US", () => {
-  assert(SPANISH_DEFAULT_COUNTRIES.has("MX"));
-  assert(!SPANISH_DEFAULT_COUNTRIES.has("US"));
-  assert(!SPANISH_DEFAULT_COUNTRIES.has("CA"));
-  assert(!SPANISH_DEFAULT_COUNTRIES.has("BR"));
-  for (const country of SPANISH_DEFAULT_COUNTRIES)
-    assert.equal(
-      resolveLocale({ country, acceptLanguage: "en-US" }),
-      "es",
-      country,
-    );
-  for (const country of ["US", "CA", "BR", "DE"])
-    assert.equal(
-      resolveLocale({ country, acceptLanguage: "en-US" }),
-      "en",
-      country,
-    );
-  assert.equal(resolveLocale({ country: " mx " }), "es");
-});
-test("Manual choice wins over browser and country; invalid cookie ignored", () => {
-  assert.equal(
-    resolveLocale({ saved: "en", country: "MX", acceptLanguage: "es-MX" }),
-    "en",
-  );
-  assert.equal(
-    resolveLocale({ saved: "es", country: "US", acceptLanguage: "en-US" }),
-    "es",
-  );
-  assert.equal(resolveLocale({ saved: "invalid", country: "CA" }), "en");
+test("Language suggestions use a saved choice or the first supported browser language", () => {
+  assert.equal(preferredLocale(["fr-FR", "ES-mx", "en-CA"]), "es");
+  assert.equal(preferredLocale(["en-CA", "es-MX"]), "en");
+  assert.equal(preferredLocale(["es-MX"], "en"), "en");
+  assert.equal(preferredLocale(["en-US"], "es"), "es");
+  assert.equal(preferredLocale(["fr-FR"], "invalid"), undefined);
 });
 test("Locale prefixes map English and Mexican Spanish onto stable URLs", () => {
   assert.equal(localeFromPathname("/"), "en");
@@ -123,9 +79,9 @@ test("Second middleware pass preserves original Spanish URL after rewrite", () =
 test("Pages language routing skips API and asset requests", () => {
   const { routeLanguage } = require("../cloudflare/routing.ts");
   for (const page of ["/", "/about", "/apiary"])
-    assert.equal(routeLanguage(new Request(`https://example.com${page}`), "MX").status, 307);
+    assert.equal(routeLanguage(new Request(`https://example.com${page}`, { headers: { "accept-language": "es-MX" } })), null);
   for (const path of ["/api/inquiry", "/api/anything/else", "/_next/static/chunk.js", "/robots.txt", "/icon.svg"])
-    assert.equal(routeLanguage(new Request(`https://example.com${path}?lang=es`), "MX"), null);
+    assert.equal(routeLanguage(new Request(`https://example.com${path}?lang=es`)), null);
 });
 test("Home metadata names the US, Canada, and Mexico; FAQ copy is translated", () => {
   assert.match(pageTitle("en"), /Finance & Healthcare/);
@@ -166,10 +122,7 @@ test("Finance and healthcare landing URLs keep distinct, localized search metada
     assert.equal(languageAlternatePaths(item.path)["es-MX"], `/es${item.path}`);
   }
 });
-test("Search-engine user agents are detected so language URLs stay stable for crawlers", () => {
-  assert.equal(isSearchBot("Mozilla/5.0 (compatible; Googlebot/2.1)"), true);
-  assert.equal(isSearchBot("Mozilla/5.0 (Macintosh) Chrome/120.0.0.0"), false);
-});
+
 test("All workflow prose has Spanish translations, while product names and IDs stay stable", () => {
   for (const workflow of WORKFLOWS) {
     for (const field of [

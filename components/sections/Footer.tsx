@@ -1,5 +1,5 @@
 "use client";
-import { useLanguage } from "@/components/i18n/LanguageProvider";
+import { LanguageSwitch, useLanguage } from "@/components/i18n/LanguageProvider";
 import styles from "./Footer.module.css";
 import {
   CALCULATOR_ANCHOR,
@@ -76,14 +76,7 @@ export function Footer() {
             © {new Date().getFullYear()}{" "}
             {t("Brilliant AI. All rights reserved.")}
           </span>
-          <nav className={styles.languages} aria-label={t("Language")}>
-            <a href="/?lang=en" hrefLang="en" lang="en">
-              English
-            </a>
-            <a href="/?lang=es" hrefLang="es-MX" lang="es-MX">
-              Español
-            </a>
-          </nav>
+          <LanguageSwitch className={styles.languages} fullLabels />
           <a href="#top">{t("Back to top ↑")}</a>
         </div>
       </div>
