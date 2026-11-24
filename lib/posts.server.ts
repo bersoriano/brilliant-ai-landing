@@ -7,6 +7,7 @@ import { evaluate } from "@mdx-js/mdx";
 import remarkGfm from "remark-gfm";
 import type { MDXContent } from "mdx/types";
 import type { Locale } from "./locale";
+import { remarkPostSections, type PostSection } from "./post-sections";
 import {
   POSTS_DIR,
   isValidSlug,
@@ -68,7 +69,8 @@ export async function getNoteLinks(slugs: string[], locale: Locale): Promise<Not
 
 // Trusted repository MDX is compiled while exporting each localized page.
 // This cache deduplicates work within a build worker; nothing ships as runtime MDX.
-const compiled = new Map<string, Promise<MDXContent>>();
+type CompiledPost = { Content: MDXContent; sections: PostSection[] };
+const compiled = new Map<string, Promise<CompiledPost>>();
 
 // GFM footnotes (`[^id]`) render as a visible "Sources" list in the post's language.
 const FOOTNOTES: Record<Locale, { label: string; back: string }> = {
@@ -76,20 +78,21 @@ const FOOTNOTES: Record<Locale, { label: string; back: string }> = {
   es: { label: "Fuentes", back: "Volver a la referencia" },
 };
 
-export function compilePost(post: Post): Promise<MDXContent> {
+export function compilePost(post: Post): Promise<CompiledPost> {
   const key = `${post.slug}/${post.locale}`;
   const hit = production ? compiled.get(key) : undefined;
   if (hit) return hit;
+  const sections: PostSection[] = [];
   const result = evaluate(post.body, {
     ...runtime,
-    remarkPlugins: [remarkGfm],
+    remarkPlugins: [remarkGfm, [remarkPostSections, sections]],
     remarkRehypeOptions: {
       footnoteLabel: FOOTNOTES[post.locale].label,
       footnoteLabelProperties: {},
       footnoteBackLabel: (index, rereference) =>
         `${FOOTNOTES[post.locale].back} ${index + 1}${rereference > 1 ? `-${rereference}` : ""}`,
     },
-  }).then((module) => module.default);
+  }).then((module) => ({ Content: module.default, sections }));
   if (production) compiled.set(key, result);
   return result;
 }

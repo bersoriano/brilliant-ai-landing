@@ -3,7 +3,9 @@
   display: flex;
   gap: 4px;
 }
-.switch button {
+.switch a {
+  display: grid;
+  place-items: center;
   min-width: 44px;
   min-height: 44px;
   padding: 0 6px;
@@ -16,9 +18,14 @@
   text-transform: uppercase;
   color: var(--faint);
 }
-.switch button:hover {
+.switch a:hover {
   color: var(--text-2);
 }
-.switch button[aria-pressed="true"] {
+.switch a[aria-current="page"] {
   color: var(--text);
+}
+.switch a[data-suggested] {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }

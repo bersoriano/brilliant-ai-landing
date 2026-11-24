@@ -6,15 +6,20 @@ import { translate } from "@/lib/i18n";
 import { localePath } from "@/lib/locale";
 import type { Locale } from "@/lib/locale";
 import { compilePost, getPost } from "@/lib/posts.server";
+import { alternateSections } from "@/lib/post-sections";
 import { SITE_NAME } from "@/lib/site";
 import { buildPostJsonLd } from "@/lib/seo";
 import { postComponents } from "../mdx";
 import styles from "../Blog.module.css";
 
 export default async function BlogPost({ slug, locale }: { slug: string; locale: Locale }) {
-  const post = await getPost(slug, locale);
+  const [post, translation] = await Promise.all([getPost(slug, locale), getPost(slug, locale === "en" ? "es" : "en")]);
   if (!post) notFound();
-  const Content = await compilePost(post);
+  const [{ Content, sections }, alternate] = await Promise.all([
+    compilePost(post),
+    translation ? compilePost(translation) : undefined,
+  ]);
+  const sectionLinks = alternateSections(sections, alternate?.sections ?? []);
   const t = (source: string) => translate(source, locale);
   const formatDate = (date: string) => new Intl.DateTimeFormat(
     locale === "es" ? "es-MX" : "en-US",
@@ -49,7 +54,7 @@ export default async function BlogPost({ slug, locale }: { slug: string; locale:
             </p>
           </header>
           <div className={styles.prose} data-analytics-article>
-            <Content components={postComponents(locale)} />
+            <Content components={postComponents(locale, sectionLinks)} />
           </div>
         </article>
       </main>

@@ -6,33 +6,25 @@ require.extensions['.ts'] = (m, f) => m._compile(ts.transpileModule(fs.readFileS
 const { routeLanguage } = require('../cloudflare/routing.ts');
 const request = (path, headers = {}) => new Request(`https://example.com${path}`, { headers });
 test('explicit language wins, removes lang only, sets secure cookie and prevents shared caching', () => {
-  const r = routeLanguage(request('/es/services?lang=en&utm=x', { cookie: 'brilliant-language=es' }), 'MX');
+  const r = routeLanguage(request('/es/services?lang=en&utm=x', { cookie: 'brilliant-language=es' }));
   assert.equal(r.status, 307);
   assert.equal(r.headers.get('location'), 'https://example.com/services?utm=x');
   assert.match(r.headers.get('set-cookie'), /brilliant-language=en; Path=\/; Max-Age=31536000; SameSite=Lax; Secure/);
   assert.match(r.headers.get('cache-control'), /no-store/);
 });
 test('explicit OG language preserves query compatibility and cookie', () => {
-  const r = routeLanguage(request('/og?post=why-invoice-automation-stalls&lang=es'), 'US');
+  const r = routeLanguage(request('/og?post=why-invoice-automation-stalls&lang=es'));
   assert.equal(r.headers.get('location'), 'https://example.com/es/og?post=why-invoice-automation-stalls');
   assert.match(r.headers.get('set-cookie'), /brilliant-language=es/);
 });
-test('cookie, trusted geo, quality values, English fallback; bot and Spanish exemptions', () => {
-  const cases = [
-    [{ cookie: 'brilliant-language=en', 'accept-language': 'es' }, 'MX', false],
-    [{ 'accept-language': 'en' }, 'MX', true],
-    [{ 'accept-language': 'en;q=0.2,es;q=0.9' }, null, true],
-    [{ 'accept-language': 'es;q=0,en;q=1', 'cf-ipcountry': 'MX', 'x-brilliant-path': '/es/services' }, null, false],
-    [{ 'user-agent': 'Googlebot', cookie: 'brilliant-language=es' }, 'MX', false],
-  ];
-  for (const [headers, country, redirect] of cases) {
-    const r = routeLanguage(request('/services?utm=x', headers), country);
-    assert.equal(!!r, redirect);
-    if (r) assert.equal(r.headers.get('location'), 'https://example.com/es/services?utm=x');
+test('canonical language URLs stay stable with conflicting cookies and browser preferences', () => {
+  for (const path of ['/', '/services', '/blog', '/blog/why-invoice-automation-stalls']) {
+    assert.equal(routeLanguage(request(`${path}?utm=x`, { cookie: 'brilliant-language=es', 'accept-language': 'en-US' })), null);
+    assert.equal(routeLanguage(request(path, { 'accept-language': 'es-MX', 'user-agent': 'Mozilla/5.0' })), null);
   }
-  assert.equal(routeLanguage(request('/es/services', { cookie: 'brilliant-language=en' }), 'MX'), null);
+  assert.equal(routeLanguage(request('/es/blog', { cookie: 'brilliant-language=en' })), null);
   for (const path of ['/api/inquiry?lang=es', '/api?lang=es', '/_next/a?lang=es', '/video/file.mp4?lang=es', '/og', '/es/og'])
-    assert.equal(routeLanguage(request(path), 'MX'), null);
+    assert.equal(routeLanguage(request(path)), null);
 });
 const { handleInquiry } = require('../cloudflare/inquiry.ts');
 const valid = { name: 'Ada', email: 'ada@example.com', industry: 'finance', message: 'Review process', locale: 'es' };
@@ -79,11 +71,5 @@ test('pages.dev alias moves to the canonical domain; previews stay reachable but
 });
 test('HTML revalidates on every visit without no-store, so the back/forward cache still works', () => {
   const { pageCacheHeaders } = require('../cloudflare/routing.ts');
-  // English can redirect to /es by preference: private, revalidated each time.
-  assert.deepEqual(pageCacheHeaders('/services'), { 'Cache-Control': 'private, no-cache', Vary: 'Cookie, Accept-Language, User-Agent' });
-  assert.equal(pageCacheHeaders('/')['Cache-Control'], 'private, no-cache');
-  // Spanish never redirects: the same document for everyone.
-  assert.deepEqual(pageCacheHeaders('/es/services'), { 'Cache-Control': 'public, max-age=0, must-revalidate' });
-  assert.deepEqual(pageCacheHeaders('/es'), { 'Cache-Control': 'public, max-age=0, must-revalidate' });
-  for (const path of ['/', '/blog/x', '/es', '/es/blog/x']) assert.doesNotMatch(pageCacheHeaders(path)['Cache-Control'], /no-store/);
+  assert.deepEqual(pageCacheHeaders(), { 'Cache-Control': 'public, max-age=0, must-revalidate' });
 });

@@ -7,11 +7,13 @@
   background-color: #0b1520;
 }
 
-.hero::before {
+.poster {
   position: absolute;
-  inset: 0 0 -35%;
-  content: "";
-  background: url("/hero-threshold.jpg") center 70% / cover no-repeat;
+  inset: 0 0 auto;
+  width: 100%;
+  height: 135%;
+  object-fit: cover;
+  object-position: center 70%;
   pointer-events: none;
 }
 
@@ -24,6 +26,11 @@
   object-fit: cover;
   object-position: center 70%;
   pointer-events: none;
+  opacity: 0;
+}
+
+.video[data-playing] {
+  opacity: 1;
 }
 
 .hero::after {
@@ -65,10 +72,11 @@
   text-wrap: balance;
 }
 
-.title em {
-  display: block;
-  font-style: italic;
-  font-weight: 500;
+.promise {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.15;
   color: var(--accent);
   text-wrap: balance;
 }
@@ -253,16 +261,12 @@
   }
 
   .video {
-    inset: 0 0 auto;
-    height: calc(100% + 140px);
-    object-position: 70% 70%;
+    display: none;
   }
 
-  .hero::before {
-    inset: 0;
-    background-image: url("/hero-threshold-mobile.jpg");
-    background-size: auto calc(100% + 140px);
-    background-position: 70% top;
+  .poster {
+    height: calc(100% + 140px);
+    object-position: 70% top;
   }
 
   .hero::after {
@@ -309,12 +313,8 @@
 }
 
 @media (max-width: 350px) {
-  .video {
+  .poster {
     height: calc(100% + 160px);
-  }
-
-  .hero::before {
-    background-size: auto calc(100% + 160px);
   }
 }
 

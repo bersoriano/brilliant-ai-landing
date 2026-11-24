@@ -90,7 +90,13 @@
 }
 .languages {
   display: flex;
-  gap: 16px;
+  gap: 4px;
+}
+.languages a {
+  font-family: inherit;
+  font-weight: inherit;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 @media (max-width: 900px) {

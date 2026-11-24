@@ -21,9 +21,23 @@ import styles from "./Blog.module.css";
  * without its review invitation (the post's own `<BookReview />` stays the
  * only booking button) and without the link back to the post it sits in.
  */
-export function postComponents(locale: Locale): MDXComponents {
+export function postComponents(locale: Locale, sectionLinks: Record<string, string>): MDXComponents {
   const t = (source: string) => translate(source, locale);
+  const sectionHeading = (Heading: "h2" | "h3" | "h4" | "h5" | "h6") =>
+    ({ id, children, ...props }: ComponentProps<"h2">) => (
+      <Heading id={id} data-alternate-section={id && sectionLinks[id]} {...props}>
+        {children}
+        {id?.startsWith("section-") && (
+          <a className={styles.sectionLink} href={`#${id}`} aria-label={t("Link to this section")}>#</a>
+        )}
+      </Heading>
+    );
   return {
+    h2: sectionHeading("h2"),
+    h3: sectionHeading("h3"),
+    h4: sectionHeading("h4"),
+    h5: sectionHeading("h5"),
+    h6: sectionHeading("h6"),
     a: ({ href = "", ...props }: ComponentProps<"a">) => {
       if (/^https?:\/\//.test(href))
         return <a href={href} rel="noopener noreferrer" {...props} />;

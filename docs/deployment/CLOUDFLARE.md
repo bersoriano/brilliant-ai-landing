@@ -130,11 +130,10 @@ Abusive blocked attempts still incur Function/D1 reads and expiry cleanup.
 `out/_routes.json` intentionally includes extensionless requests and excludes
 `/_next/*`, `/brand/*`, `/fonts/*`, `/video/*`, `/social/*`, and `/*.*`.
 Thus CSS/JS/fonts/media, HTML aliases, RSC `.txt`, PNGs, sitemap and robots bypass
-Functions. Both English **and Spanish HTML page requests** execute routing:
-English needs cookie/geo/browser preference; Spanish still needs `?lang=en`,
-cookie persistence and clean redirects. Bots and unknown extensionless URLs
-also invoke the Function. Normal page requests consume one invocation; automatic
-English-to-Spanish redirects generally consume two. Client-only language changes
+Functions. Generated RSC payloads get `X-Robots-Tag: noindex` from `_headers`.
+Both English and Spanish HTML requests execute routing for explicit legacy
+`?lang=` queries and URL cleanup. Each canonical URL serves its own language
+and a normal page request consumes one invocation. Client-only language changes
 on non-blog pages do not fetch another page. Legacy `/og?post=slug` and `/es/og`
 invoke the Function to select an already-built PNG (200, no image generation).
 New metadata points directly at `/social/{en|es}/{slug|home}.png`, which bypasses
@@ -266,7 +265,7 @@ within the limits above.
 5. Change only approved web DNS records, wait for Pages certificate/domain Active
    and DNS propagation. Run SEO/HTTP/browser checks on production host; verify
    preview noindex header is absent on production, existing public canonical is
-   correct, actual country routing and cookie overrides work, and runtime
+   correct, canonical language URLs are stable across preferences, and runtime
    secrets are not present in JS. Validate delivery with an owner-approved
    controlled submission, and PostHog in the intended project.
 6. Monitor Functions invocations/errors/CPU, D1 row operations, 429/502 outcomes
